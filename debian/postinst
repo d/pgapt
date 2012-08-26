@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case $1 in
+	configure)
+		dpkg-divert --add --package pgdg-buildenv --rename /usr/bin/mandb
+		test -e /usr/bin/mandb || ln -s /bin/true /usr/bin/mandb
+		;;
+esac
+
+#DEBHELPER#

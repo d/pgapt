@@ -1,0 +1,15 @@
+Source: pgdg-buildenv
+Section: misc
+Priority: optional
+Maintainer: Debian PostgreSQL Maintainers <pkg-postgresql-public@lists.alioth.debian.org>
+Uploaders: Christoph Berg <myon@debian.org>
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8~)
+#Vcs-Browser: http://anonscm.debian.org/loggerhead/pkg-postgresql/postgresql-9.2/trunk
+#Vcs-Bzr: http://bzr.debian.org/bzr/pkg-postgresql/postgresql-9.2/trunk/
+
+Package: pgdg-buildenv
+Architecture: all
+Depends: fakeroot
+Description: metapackage to install in pgdg cowbuilder chroots
+ metapackage to install in pgdg cowbuilder chroots

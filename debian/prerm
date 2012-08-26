@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case $1 in
+	remove)
+		[ -L /usr/bin/mandb ] && rm /usr/bin/mandb
+		dpkg-divert --remove --package pgdg-buildenv --rename /usr/bin/mandb
+		;;
+esac
+
+#DEBHELPER#

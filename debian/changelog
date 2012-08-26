@@ -1,0 +1,5 @@
+pgdg-buildenv (1) sid-pgdg; urgency=low
+
+  * Divert /usr/bin/mandb.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 26 Aug 2012 19:49:11 +0200
