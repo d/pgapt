@@ -1,3 +1,9 @@
+pgdg-buildenv (4) sid-pgdg; urgency=low
+
+  * Use the correct syntax: Acquire::Languages "none";
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 21:46:53 +0200
+
 pgdg-buildenv (3) sid-pgdg; urgency=low
 
   * Add Depends: debhelper postgresql-server-dev-all.
