@@ -1,0 +1,4 @@
+debian/files
+debian/pgdg-buildenv/
+debian/*.log
+debian/*.substvars
