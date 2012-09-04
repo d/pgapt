@@ -1,3 +1,9 @@
+pgdg-buildenv (3) sid-pgdg; urgency=low
+
+  * Add Depends: debhelper postgresql-server-dev-all.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 19:42:49 +0200
+
 pgdg-buildenv (2) sid-pgdg; urgency=low
 
   * Skip downloading apt translations. Suggested by Mika Prokop.
