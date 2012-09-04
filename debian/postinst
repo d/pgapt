@@ -2,8 +2,12 @@
 
 case $1 in
 	configure)
+		# disable mandb
 		dpkg-divert --add --package pgdg-buildenv --rename /usr/bin/mandb
 		test -e /usr/bin/mandb || ln -s /bin/true /usr/bin/mandb
+
+		# remove existing apt translations so apt does not try to refresh them
+		rm -vf /var/lib/apt/lists/*Translation*
 		;;
 esac
 
