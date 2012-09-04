@@ -11,7 +11,6 @@ Vcs-Git: git://github.com/ChristophBerg/pgdg-buildenv.git
 Package: pgdg-buildenv
 Architecture: all
 Depends: debhelper,
- fakeroot,
- postgresql-server-dev-all
+ fakeroot
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots

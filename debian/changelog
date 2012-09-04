@@ -1,3 +1,10 @@
+pgdg-buildenv (5) UNRELEASED; urgency=low
+
+  * Temporarily remove postgresql-server-dev-all again until all chroots are
+    properly upgraded and postgresql-common was built.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 23:03:25 +0200
+
 pgdg-buildenv (4) sid-pgdg; urgency=low
 
   * Use the correct syntax: Acquire::Languages "none";
