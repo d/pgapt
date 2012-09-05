@@ -1,7 +1,7 @@
 pgdg-buildenv (5) UNRELEASED; urgency=low
 
-  * Temporarily remove postgresql-server-dev-all again until all chroots are
-    properly upgraded and postgresql-common was built.
+  * Depend on dependencies of postgresql-server-dev-all instead of the package
+    itself. (We should not pull in any libpq or pg_config by default.)
   * Add locales needed by the postgresql-testsuite.
 
  -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 23:03:25 +0200

@@ -12,9 +12,9 @@ Package: pgdg-buildenv
 Architecture: all
 Depends: debhelper,
  fakeroot,
+# dependencies of postgresql-server-dev-all:
+ postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # testsuite:
- hunspell-en-us,
- locales,
- net-tools
+ hunspell-en-us, locales, net-tools
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots
