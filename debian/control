@@ -11,6 +11,10 @@ Vcs-Git: git://github.com/ChristophBerg/pgdg-buildenv.git
 Package: pgdg-buildenv
 Architecture: all
 Depends: debhelper,
- fakeroot
+ fakeroot,
+# testsuite:
+ hunspell-en-us,
+ locales,
+ net-tools
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots

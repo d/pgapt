@@ -1,0 +1,17 @@
+#!/bin/sh
+
+case $1 in
+	install|upgrade)
+		# needed for the postgresql-testsuite
+		if ! grep -q ru_RU /etc/locale.gen ; then
+			cat >> /etc/locale.gen <<EOF
+en_US.UTF-8
+en_US.UTF-8 UTF-8
+ru_RU ISO-8859-5
+ru_RU.UTF-8 UTF-8
+EOF
+		fi
+		;;
+esac
+
+#DEBHELPER#
