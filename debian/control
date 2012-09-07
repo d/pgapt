@@ -12,6 +12,7 @@ Package: pgdg-buildenv
 Architecture: all
 Depends: debhelper,
  fakeroot,
+ eatmydata,
 # dependencies of postgresql-server-dev-all:
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # testsuite:

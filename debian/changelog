@@ -1,3 +1,9 @@
+pgdg-buildenv (6) UNRELEASED; urgency=low
+
+  * Add eatmydata.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 07 Sep 2012 15:19:15 +0200
+
 pgdg-buildenv (5) sid-pgdg; urgency=low
 
   * Depend on dependencies of postgresql-server-dev-all instead of the package
