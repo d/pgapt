@@ -10,7 +10,7 @@ Vcs-Git: git://github.com/ChristophBerg/pgdg-buildenv.git
 
 Package: pgdg-buildenv
 Architecture: all
-Depends: debhelper,
+Depends: debhelper (>= 8~),
  fakeroot,
  eatmydata,
 # dependencies of postgresql-server-dev-all:

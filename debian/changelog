@@ -1,6 +1,7 @@
-pgdg-buildenv (6) UNRELEASED; urgency=low
+pgdg-buildenv (6) sid-pgdg; urgency=low
 
   * Add eatmydata.
+  * Depends: debhelper (>= 8~).
 
  -- Christoph Berg <myon@debian.org>  Fri, 07 Sep 2012 15:19:15 +0200
 
