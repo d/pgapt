@@ -16,6 +16,6 @@ Depends: debhelper (>= 8~),
 # dependencies of postgresql-server-dev-all:
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # testsuite:
- hunspell-en-us, locales, net-tools
+ hunspell-en-us, locales, net-tools, netcat-openbsd
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots
