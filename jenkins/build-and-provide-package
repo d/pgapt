@@ -191,8 +191,8 @@ cowbuilder_init() {
   if [ ! -d "${COWBUILDER_BASE}" ]; then
     echo "*** Creating cowbuilder base $COWBUILDER_BASE for arch $arch and distribution $COWBUILDER_DIST ***"
     case $COWBUILDER_DIST in
-      lenny) MIRROR="http://archive.debian.org/debian/" ;;
-      hardy|lucid|precise|quantal)
+      lenny|etch) MIRROR="http://archive.debian.org/debian/" ;;
+      hardy|lucid|precise|quantal|trusty)
         MIRROR="http://de.archive.ubuntu.com/ubuntu/"
         KEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
         local pbuilderrc=$(mktemp)
