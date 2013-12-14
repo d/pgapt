@@ -2,7 +2,7 @@
 
 - defaults:
     name: global
-    description: 'Do not edit this job through the web, it is generated via jenkins-job-builder!'
+    description: 'Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
     logrotate:
         daysToKeep: -1
         numToKeep: 2
@@ -10,14 +10,13 @@
         artifactNumToKeep: -1
     wrappers:
         - timestamps
-    git-branch: master
 
 # git template
 
 - job-template:
         name: '{name}-git-source'
         job-name: '{name}-source'
-        description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web, it is generated via jenkins-job-builder!'
+        description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
                 touchstone:
@@ -35,10 +34,11 @@
                                 - lucid
         scm:
                 - git:
-                        url: foo #'{git-url}'
+                        url: '{git-url}'
                         branches:
                                 - '{git-branch}'
                         basedir: source
+                        wipe-workspace: false
         builders:
                 - shell: 'generate-pgdg-source'
         publishers:
@@ -57,7 +57,7 @@
 - job-template:
         name: '{name}-svn-source'
         job-name: '{name}-source'
-        description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web, it is generated via jenkins-job-builder!'
+        description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
                 sequential: true
@@ -95,7 +95,7 @@
 
 - job-template:
         name: '{name}-binaries'
-        description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web, it is generated via jenkins-job-builder!'
+        description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
                 touchstone:
@@ -141,6 +141,7 @@
                         - project: dput
                           condition: SUCCESS
                           predefined-parameters: 'binaries=$JOB_NAME'
+                - workspace-cleanup
 
 # job groups
 
@@ -171,3 +172,10 @@
         svn-url: svn://svn.debian.org/pkg-postgresql/trunk/apgdiff
         jobs:
                 - svn-packages
+
+- project:
+        name: newpid
+        git-url: https://github.com/ChristophBerg/newpid.git
+        git-branch: master
+        jobs:
+                - git-packages
