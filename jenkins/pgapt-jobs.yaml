@@ -19,8 +19,8 @@
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
+                sequential: true
                 touchstone:
-                        sequential: true
                         expr: 'distribution=="sid"'
         axes:
                 - axis:
