@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DISTRIBUTIONS="sid wheezy squeeze lenny etch
-	precise lucid"
+	trusty precise lucid"
 FLAVORS="pgdg pgdg-testing pgdg-deprecated"
 
 for DIST in $DISTRIBUTIONS ; do
@@ -10,6 +10,8 @@ for DIST in $DISTRIBUTIONS ; do
 		case $DIST in
 			lenny|etch)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2" ;;
+			trusty)
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3" ;;
 			*)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3" ;;
 		esac

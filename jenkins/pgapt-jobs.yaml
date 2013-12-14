@@ -30,6 +30,7 @@
                                 - sid
                                 - wheezy
                                 - squeeze
+                                - trusty
                                 - precise
                                 - lucid
         scm:
@@ -71,6 +72,7 @@
                                 - sid
                                 - wheezy
                                 - squeeze
+                                - trusty
                                 - precise
                                 - lucid
         scm:
@@ -114,6 +116,7 @@
                                 - sid
                                 - wheezy
                                 - squeeze
+                                - trusty
                                 - precise
                                 - lucid
         builders:
