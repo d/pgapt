@@ -200,7 +200,11 @@ cowbuilder_init() {
         local pbuildercfg="--configfile=$pbuilderrc"
         ;;
     esac
-    sudo cowbuilder --create --basepath "${COWBUILDER_BASE}" --distribution "${COWBUILDER_DIST}" \
+    case $COWBUILDER_DIST in
+      hardy|lucid) # lucid bootstrapping fails on linux 3.x
+        local linux26="linux64 --uname-2.6" ;;
+    esac
+    ${linux26:-} sudo cowbuilder --create --basepath "${COWBUILDER_BASE}" --distribution "${COWBUILDER_DIST}" \
          ${MIRROR+--mirror $MIRROR} \
          --debootstrapopts --arch --debootstrapopts "$arch" \
          --debootstrapopts --variant=buildd ${pbuildercfg:-} \
