@@ -11,6 +11,45 @@
     wrappers:
         - timestamps
 
+# bzr template
+
+- job-template:
+        name: '{name}-bzr-source'
+        job-name: '{name}-source'
+        description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                sequential: true
+                touchstone:
+                        expr: 'distribution=="sid"'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: distribution
+                        values:
+                                - sid
+                                - wheezy
+                                - squeeze
+                                - trusty
+                                - precise
+                                - lucid
+        scm:
+                - bzr:
+                        url: '{bzr-url}'
+                        loggerhead: pool/main/p/postgresql-9.3
+        builders:
+                - shell: 'generate-pgdg-source'
+        publishers:
+                - archive:
+                        artifacts: 'result/*'
+                        latest-only: true
+                - fingerprint:
+                        record-artifacts: true
+                - ircbot:
+                        matrix-notifier: only-parent
+                - trigger:
+                        project: '{name}-binaries'
+
 # git template
 
 - job-template:
@@ -149,6 +188,12 @@
 # job groups
 
 - job-group:
+        name: bzr-packages
+        jobs:
+                - '{name}-bzr-source'
+                - '{name}-binaries'
+
+- job-group:
         name: git-packages
         jobs:
                 - '{name}-git-source'
@@ -164,9 +209,45 @@
 
 - job:
         name: apt.postgresql.org
+        scm:
+                - git:
+                        url: git://git.postgresql.org/git/pgapt.git
+                        branches:
+                                - master
+                        wipe-workspace: false
+        builders:
+                - shell: 'ssh atalia.postgresql.org "cd /srv/apt/apt.postgresql.org && sudo -u aptuser git pull"'
+        publishers:
+                - ircbot:
+                        matrix-notifier: all
 
 - job:
         name: dput
+        logrotate:
+                numToKeep: 10
+        parameters:
+                - string:
+                        name: binaries
+                        description: Name of binaries job to copy artifacts from
+                - choice:
+                        name: queue
+                        choices:
+                                - incoming
+                                - private
+                        description: Incoming queue to use
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '$binaries'
+                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - shell: 'dput-pgdg $queue'
+        publishers:
+                - ircbot:
+                        matrix-notifier: all
+                        message-type: summary-params
 
 # project jobs
 
@@ -182,3 +263,9 @@
         git-branch: master
         jobs:
                 - git-packages
+
+- project:
+        name: postgresql-9.3
+        bzr-url: http://anonscm.debian.org/bzr/pkg-postgresql/postgresql-9.3/trunk/
+        jobs:
+                - bzr-packages
