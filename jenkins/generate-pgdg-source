@@ -201,7 +201,7 @@ dch --force-distribution --distribution="$distribution-pgdg" \
   --release-heuristic log -b --newversion=$VERSION_STRING -- \
   "Rebuild for $distribution-pgdg ($BUILD_TAG, $VCS revision $VCS_REVISION)"
 
-origtargz --tar-only --path=/home/jenkins/tarballs -d
+origtargz --tar-only --path=$HOME/tarballs -d
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
