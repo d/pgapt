@@ -35,8 +35,8 @@
                                 - lucid
         scm:
                 - bzr:
-                        url: '{bzr-url}'
-                        loggerhead: pool/main/p/postgresql-9.3
+                        url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
+                        loggerhead: 'https://alioth.debian.org/scm/loggerhead/pkg-postgresql/{bzr-branch}'
         builders:
                 - shell: 'generate-pgdg-source'
         publishers:
@@ -265,7 +265,13 @@
                 - git-packages
 
 - project:
+        name: postgresql-common
+        bzr-branch: postgresql-common/trunk
+        jobs:
+                - bzr-packages
+
+- project:
         name: postgresql-9.3
-        bzr-url: http://anonscm.debian.org/bzr/pkg-postgresql/postgresql-9.3/trunk/
+        bzr-branch: postgresql-9.3/trunk
         jobs:
                 - bzr-packages
