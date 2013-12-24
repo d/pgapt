@@ -11,6 +11,41 @@
     wrappers:
         - timestamps
 
+# apt template
+
+- job-template:
+        name: '{name}-apt-source'
+        job-name: '{name}-source'
+        description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                sequential: true
+                touchstone:
+                        expr: 'distribution=="sid"'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: distribution
+                        values:
+                                - sid
+                                - wheezy
+                                - squeeze
+                                - trusty
+                                - precise
+                                - lucid
+        builders:
+                - shell: 'generate-pgdg-source'
+        publishers:
+                - archive:
+                        artifacts: 'result/*'
+                        latest-only: true
+                - fingerprint:
+                        record-artifacts: true
+                - ircbot:
+                        matrix-notifier: only-parent
+                - trigger:
+                        project: '{name}-binaries'
+
 # bzr template
 
 - job-template:
@@ -188,6 +223,12 @@
 # job groups
 
 - job-group:
+        name: apt-packages
+        jobs:
+                - '{name}-apt-source'
+                - '{name}-binaries'
+
+- job-group:
         name: bzr-packages
         jobs:
                 - '{name}-bzr-source'
@@ -256,6 +297,11 @@
         svn-url: svn://svn.debian.org/pkg-postgresql/trunk/apgdiff
         jobs:
                 - svn-packages
+
+- project:
+        name: autopkgtest
+        jobs:
+                - apt-packages
 
 - project:
         name: newpid
