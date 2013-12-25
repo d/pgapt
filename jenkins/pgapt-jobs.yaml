@@ -179,12 +179,6 @@
         axes:
                 - axis:
                         type: user-defined
-                        name: architecture
-                        values:
-                                - amd64
-                                - i386
-                - axis:
-                        type: user-defined
                         name: distribution
                         values:
                                 - sid
@@ -193,6 +187,12 @@
                                 - trusty
                                 - precise
                                 - lucid
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values:
+                                - amd64
+                                - i386
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
