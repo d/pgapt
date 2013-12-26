@@ -225,6 +225,54 @@
                           predefined-parameters: 'binaries=$JOB_NAME'
                 - workspace-cleanup
 
+# upgrade test template
+
+- job-template:
+        name: 'upgrade-{oldversion}-{newversion}'
+        description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values:
+                                - amd64
+                                - i386
+                - axis:
+                        type: user-defined
+                        name: distribution
+                        values:
+                                - sid
+                                - wheezy
+                                - squeeze
+                                - trusty
+                                - precise
+                                - lucid
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: 'postgresql-{oldversion}-binaries/distribution=$distribution'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - copyartifact:
+                        project: 'postgresql-{newversion}-binaries/distribution=$distribution'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - shell: 'postgresql-testsuite'
+        publishers:
+                - fingerprint:
+                        files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+                        matrix-notifier: only-configurations
+                - workspace-cleanup
+
 # job groups
 
 - job-group:
@@ -250,6 +298,11 @@
         jobs:
                 - '{name}-svn-source'
                 - '{name}-binaries'
+
+- job-group:
+        name: upgrade-job
+        jobs:
+                - 'upgrade-{oldversion}-{newversion}'
 
 # simple jobs
 
@@ -295,6 +348,22 @@
                         matrix-notifier: all
                         message-type: summary-params
 
+- job:
+        name: promote
+        description: 'Promotes packages from the *-pgdg-testing distributions to *-pgdg.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        logrotate:
+                numToKeep: 50
+        parameters:
+                - string:
+                        name: package
+                        description: 'Name of source package to promote (no "-source" suffix)'
+        builders:
+                - shell: 'ssh atalia.postgresql.org promote $package'
+        publishers:
+                - ircbot:
+                        matrix-notifier: all
+                        message-type: summary-params
+
 # project jobs
 
 - project:
@@ -311,6 +380,93 @@
                 - apt-packages
 
 - project:
+        name: barman
+        git-url: git://git.debian.org/collab-maint/barman.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: check-postgres
+        git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: gdal
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        jobs:
+                - apt-packages
+
+- project:
+        name: geos
+        # skip lucid because we don't have dh9
+        dist-filter: '(distribution!="lucid")'
+        jobs:
+                - apt-packages
+
+- project:
+        name: ip4r
+        git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: libdbd-pg-perl
+        dist-filter: ''
+        jobs:
+                - apt-packages
+
+- project:
+        name: newpid
+        git-url: https://github.com/ChristophBerg/newpid.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: ora2pg
+        dist-filter: ''
+        jobs:
+                - apt-packages
+
+- project:
+        name: orafce
+        svn-url: svn://svn.debian.org/pkg-postgresql/trunk/orafce
+        dist-filter: ''
+        jobs:
+                - svn-packages
+
+- project:
+        name: pgadmin3
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: pgagent
+        svn-url: svn://svn.debian.org/svn/pkg-postgresql/trunk/pgagent
+        dist-filter: ''
+        jobs:
+                - svn-packages
+
+- project:
+        name: pgbouncer
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgdg-buildenv
         git-url: https://github.com/ChristophBerg/pgdg-buildenv.git
         git-branch: master
@@ -319,8 +475,56 @@
                 - git-packages
 
 - project:
-        name: newpid
-        git-url: https://github.com/ChristophBerg/newpid.git
+        name: pgfincore
+        git-url: git://git.postgresql.org/git/pgfincore.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: pgmemcache
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
+        git-branch: master
+        dist-filter: 'distribution!="lucid"'
+        jobs:
+                - git-packages
+
+- project:
+        name: pgpool2
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
+        git-branch: master
+        dist-filter: 'distribution!="lucid"'
+        jobs:
+                - git-packages
+
+- project:
+        name: pgstatplans
+        git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: pgxnclient
+        git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
+        git-branch: master
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        jobs:
+                - git-packages
+
+- project:
+        name: phppgadmin
+        git-url: git://anonscm.debian.org/pkg-postgresql/phppgadmin.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: plr
+        git-url: git://anonscm.debian.org/pkg-postgresql/plr.git
         git-branch: master
         dist-filter: ''
         jobs:
@@ -335,11 +539,12 @@
                 - git-packages
 
 - project:
-        name: postgresql-common
-        bzr-branch: postgresql-common/trunk
-        dist-filter: ''
+        name: postgis
+        git-url: git://git.debian.org/git/pkg-grass/postgis.git
+        git-branch: master
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
-                - bzr-packages
+                - git-packages
 
 - project:
         name: postgresql-8.4
@@ -375,3 +580,138 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+
+- project:
+        name: postgresql-common
+        bzr-branch: postgresql-common/trunk
+        dist-filter: ''
+        jobs:
+                - bzr-packages
+
+- project:
+        name: postgresql-debversion
+        git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: postgresql-pgmp
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: postgresql-pllua
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: postgresql-plproxy
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plproxy.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: postgresql-plsh
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plsh.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: prefix
+        git-url: git://github.com/dimitri/prefix.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: preprepare
+        git-url: git://github.com/dimitri/preprepare.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: psqlodbc
+        git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
+        git-branch: master
+        # doesn't compile on squeeze and lucid because of multi-arch (needs a newer cdbs)
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        jobs:
+                - git-packages
+
+- project:
+        name: python-argcomplete
+        git-url: git://anonscm.debian.org/collab-maint/python-argcomplete.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: python-argh
+        git-url: git://git.debian.org/collab-maint/python-argh.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: repmgr
+        git-url: git://git.debian.org/collab-maint/repmgr.git
+        git-branch: master
+        dist-filter: 'distribution!="lucid"'
+        jobs:
+                - git-packages
+
+- project:
+        name: skytools
+        git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
+        git-branch: master
+        # fails on lucid (no dh_python2)
+        dist-filter: 'distribution!="lucid"'
+        jobs:
+                - git-packages
+
+- project:
+        name: skytools3
+        git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: slony1-2
+        git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: upgrade-9.1-9.2
+        oldversion: 9.1
+        newversion: 9.2
+        jobs:
+                - upgrade-job
+
+- project:
+        name: upgrade-9.1-9.3
+        oldversion: 9.1
+        newversion: 9.3
+        jobs:
+                - upgrade-job
