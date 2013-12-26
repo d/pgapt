@@ -25,16 +25,13 @@ fi
 # environment variable for postgresql-common testsuite
 export PG_UMASKS="077"
 
-# autopkgtest is on hold on sid atm (2013-12-03)
-#apt-get install -y autopkgtest apt-utils pbuilder newpid
+apt-get install -y autopkgtest apt-utils pbuilder newpid
 
 mkdir -p "$TMPADT/out"
 binaries=$(awk '/\.deb / { print "--binary ../" $1 }' debian/files | xargs)
 
 # launch adt-run in a new PID namespace so several testsuites can run in parallel
-# trap SIGCHLD so zombie processes get reaped (the new pid 1 needs to do that)
-newpid bash -c "trap 'echo SIGCHLD' SIGCHLD;
-	adt-run --tmp-dir $TMPADT/out --summary $TMPADT/summary \
+newpid bash -c "adt-run --tmp-dir $TMPADT/out --summary $TMPADT/summary \
 	$binaries --built-tree $PWD --- adt-virt-null" || EXIT=$?
 
 # 4 means some test failed, exit 0 here and let adtsummary2junit report the failure
