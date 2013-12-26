@@ -1,3 +1,5 @@
 repo/conf/modules-packages
 repo/conf/postgresql-packages
 web/*.html
+
+.*.swp
