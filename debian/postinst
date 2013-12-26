@@ -10,6 +10,12 @@ case $1 in
 
 		# remove existing apt translations so apt does not try to refresh them
 		rm -vf /var/lib/apt/lists/*Translation*
+
+		# don't create clusters on postgresql-* installation
+		cat > /etc/postgresql-common/createcluster.conf <<-EOF
+		create_main_cluster = false
+		start_conf = manual
+		EOF
 		;;
 esac
 
