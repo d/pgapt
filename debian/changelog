@@ -1,3 +1,11 @@
+pgdg-buildenv (8) sid-pgdg; urgency=medium
+
+  * Add autopkgtest.
+  * Install /etc/postgresql-common/createcluster.conf.
+  * Install /etc/apt/apt.conf.d/20norecommends.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 26 Dec 2013 16:51:07 +0200
+
 pgdg-buildenv (7) sid-pgdg; urgency=low
 
   * Add netcat-openbsd.

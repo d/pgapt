@@ -3,8 +3,8 @@ Section: misc
 Priority: optional
 Maintainer: Debian PostgreSQL Maintainers <pkg-postgresql-public@lists.alioth.debian.org>
 Uploaders: Christoph Berg <myon@debian.org>
-Standards-Version: 3.9.3
-Build-Depends: debhelper (>= 8~)
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9~)
 Vcs-Browser: https://github.com/ChristophBerg/pgdg-buildenv
 Vcs-Git: git://github.com/ChristophBerg/pgdg-buildenv.git
 
@@ -16,6 +16,8 @@ Depends: debhelper (>= 8~),
 # dependencies of postgresql-server-dev-all:
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # testsuite:
- hunspell-en-us, locales, net-tools, netcat-openbsd
+ hunspell-en-us, locales, net-tools, netcat-openbsd,
+# autopkgtest
+ autopkgtest
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots
