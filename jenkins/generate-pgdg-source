@@ -30,6 +30,8 @@ set -u
 [ -n "${DEBEMAIL:-}" ] || DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
 export DEBEMAIL
 
+export PG_SUPPORTED_VERSIONS="pgdg"
+
 if [ -z "${BUILD_NUMBER:-}" ] ; then
   echo "No BUILD_NUMBER defined, please run it in jenkins." >&2
   exit 1
