@@ -8,11 +8,20 @@ case $1 in
 		dpkg-divert --add --package pgdg-buildenv --rename /usr/bin/mandb
 		test -e /usr/bin/mandb || ln -s /bin/true /usr/bin/mandb
 
+		# update sources.list
+		dist=$(lsb_release -cs)
+		cat > /etc/apt/sources.list.d/pgdg.list <<-EOF
+		# do not edit, file maintained by pgdg-buildenv
+		deb http://apt.postgresql.org/pub/repos/apt/ $dist-pgdg main
+		deb http://atalia.postgresql.org/pub/repos/apt/ $dist-pgdg-testing main
+		EOF
+
 		# remove existing apt translations so apt does not try to refresh them
 		rm -vf /var/lib/apt/lists/*Translation*
 
 		# don't create clusters on postgresql-* installation
 		cat > /etc/postgresql-common/createcluster.conf <<-EOF
+		# do not edit, file maintained by pgdg-buildenv
 		create_main_cluster = false
 		start_conf = manual
 		EOF
