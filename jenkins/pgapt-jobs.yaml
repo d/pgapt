@@ -20,6 +20,7 @@
         project-type: matrix
         execution-strategy:
                 sequential: true
+                combination-filter: '{dist-filter}'
                 touchstone:
                         expr: 'distribution=="sid"'
         axes:
@@ -55,6 +56,7 @@
         project-type: matrix
         execution-strategy:
                 sequential: true
+                combination-filter: '{dist-filter}'
                 touchstone:
                         expr: 'distribution=="sid"'
         axes:
@@ -94,6 +96,7 @@
         project-type: matrix
         execution-strategy:
                 sequential: true
+                combination-filter: '{dist-filter}'
                 touchstone:
                         expr: 'distribution=="sid"'
         axes:
@@ -136,6 +139,7 @@
         project-type: matrix
         execution-strategy:
                 sequential: true
+                combination-filter: '{dist-filter}'
                 touchstone:
                         expr: 'distribution=="sid"'
         axes:
@@ -174,6 +178,7 @@
         description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
+                combination-filter: '{dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -295,29 +300,78 @@
 - project:
         name: apgdiff
         svn-url: svn://svn.debian.org/pkg-postgresql/trunk/apgdiff
+        dist-filter: ''
         jobs:
                 - svn-packages
 
 - project:
         name: autopkgtest
+        dist-filter: ''
         jobs:
                 - apt-packages
+
+- project:
+        name: pgdg-buildenv
+        git-url: https://github.com/ChristophBerg/pgdg-buildenv.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
 
 - project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
         git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: plv8
+        git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
+        git-branch: debian
+        dist-filter: 'distribution=="trusty"'
         jobs:
                 - git-packages
 
 - project:
         name: postgresql-common
         bzr-branch: postgresql-common/trunk
+        dist-filter: ''
+        jobs:
+                - bzr-packages
+
+- project:
+        name: postgresql-8.4
+        bzr-branch: postgresql-8.4/pgdg
+        dist-filter: ''
+        jobs:
+                - bzr-packages
+
+- project:
+        name: postgresql-9.0
+        bzr-branch: postgresql-9.0/pgdg
+        dist-filter: ''
+        jobs:
+                - bzr-packages
+
+- project:
+        name: postgresql-9.1
+        bzr-branch: postgresql-9.1/trunk
+        dist-filter: ''
+        jobs:
+                - bzr-packages
+
+- project:
+        name: postgresql-9.2
+        bzr-branch: postgresql-9.2/trunk
+        dist-filter: ''
         jobs:
                 - bzr-packages
 
 - project:
         name: postgresql-9.3
         bzr-branch: postgresql-9.3/trunk
+        dist-filter: ''
         jobs:
                 - bzr-packages
