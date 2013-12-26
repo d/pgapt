@@ -330,7 +330,7 @@
         name: plv8
         git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
         git-branch: debian
-        dist-filter: 'distribution=="trusty"'
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
                 - git-packages
 
