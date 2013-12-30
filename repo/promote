@@ -7,7 +7,7 @@ set -eu
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
 REPREPRO="reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
-DISTS="sid wheezy squeeze precise lucid"
+DISTS="sid wheezy squeeze trusty precise lucid"
 SENDMAIL="sendmail -t"
 
 if [ "${DEBUG:-}" ]; then
