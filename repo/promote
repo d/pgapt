@@ -2,17 +2,15 @@
 
 set -eu
 
-#DEBUG=1
+DEBUG=1
 
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
 REPREPRO="reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
 DISTS="sid wheezy squeeze trusty precise lucid"
-SENDMAIL="sendmail -t"
 
 if [ "${DEBUG:-}" ]; then
 	SUDO="echo"
-	SENDMAIL="cat"
 fi
 
 while getopts "d:" opt ; do
@@ -68,8 +66,7 @@ TO="PostgreSQL in Debian <pgsql-pkg-debian@postgresql.org>"
 
 echo "Sending mail to $TO ..."
 
-$SENDMAIL <<EOF
-From: $FROM
+TEXT="From: $FROM
 To: $TO
 Subject: $PKG updated to version $NEWVERSION
 
@@ -86,4 +83,8 @@ $OLDLSPROD
 Changelog:
 
 $CHANGES
-EOF
+"
+echo "$TEXT"
+[ -z "${DEBUG:-}" ] && echo "$TEXT" | sendmail -t
+
+exit 0
