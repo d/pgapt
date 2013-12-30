@@ -674,7 +674,7 @@
         name: repmgr
         git-url: git://git.debian.org/collab-maint/repmgr.git
         git-branch: master
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
