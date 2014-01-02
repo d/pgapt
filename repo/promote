@@ -2,7 +2,7 @@
 
 set -eu
 
-DEBUG=1
+#DEBUG=1
 
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
