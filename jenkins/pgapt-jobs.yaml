@@ -674,7 +674,8 @@
         name: repmgr
         git-url: git://git.debian.org/collab-maint/repmgr.git
         git-branch: master
-        dist-filter: ''
+        # links to the wrong pg version on lucid
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
 
