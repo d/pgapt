@@ -358,8 +358,12 @@
                 - string:
                         name: package
                         description: 'Name of source package to promote (no "-source" suffix)'
+                - string:
+                        name: distributions
+                        description: 'Distributions to promote (space-separated, default "all")'
+                        default: 'all'
         builders:
-                - shell: 'ssh atalia.postgresql.org promote $package'
+                - shell: 'ssh atalia.postgresql.org promote -d "$distributions" $package'
         publishers:
                 - ircbot:
                         matrix-notifier: all

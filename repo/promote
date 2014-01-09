@@ -7,7 +7,7 @@ set -eu
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
 REPREPRO="reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
-DISTS="sid wheezy squeeze trusty precise lucid"
+DISTS="all"
 
 if [ "${DEBUG:-}" ]; then
 	SUDO="echo"
@@ -23,6 +23,7 @@ done
 shift $(($OPTIND - 1))
 
 PKG="$1"
+[ "$DISTS" = "all" ] && DISTS="sid wheezy squeeze trusty precise lucid"
 
 NEWVERSION=$($REPREPRO -A source list sid-pgdg-testing "$PKG" | awk '{ print $3 }')
 if [ -z "$NEWVERSION" ]; then
