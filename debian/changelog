@@ -1,3 +1,9 @@
+pgdg-buildenv (10) sid-pgdg; urgency=medium
+
+  * Add newpid.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Thu, 09 Jan 2014 11:28:17 +0100
+
 pgdg-buildenv (9) sid-pgdg; urgency=medium
 
   * Update sources.list and apt preferences.

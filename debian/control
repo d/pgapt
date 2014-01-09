@@ -20,6 +20,6 @@ Depends: ${misc:Depends},
 # testsuite:
  hunspell-en-us, locales, net-tools, netcat-openbsd,
 # autopkgtest
- autopkgtest
+ autopkgtest, newpid
 Description: metapackage to install in pgdg cowbuilder chroots
  metapackage to install in pgdg cowbuilder chroots for apt.postgresql.org.
