@@ -402,14 +402,15 @@
 
 - project:
         name: gdal
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        # sid and trusty are current enough
+        dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
         jobs:
                 - apt-packages
 
 - project:
         name: geos
-        # skip lucid because we don't have dh9
-        dist-filter: '(distribution!="lucid")'
+        # sid and trusty are current enough
+        dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
         jobs:
                 - apt-packages
 
