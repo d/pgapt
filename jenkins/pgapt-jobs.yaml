@@ -225,6 +225,49 @@
                           predefined-parameters: 'binaries=$JOB_NAME'
                 - workspace-cleanup
 
+# testsuite template
+
+- job-template:
+        name: '{name}-testsuite'
+        description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values:
+                                - amd64
+                                - i386
+                - axis:
+                        type: user-defined
+                        name: distribution
+                        values:
+                                - sid
+                                - wheezy
+                                - squeeze
+                                - trusty
+                                - precise
+                                - lucid
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '{name}-binaries/architecture=$architecture,distribution=$distribution'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - shell: 'postgresql-testsuite'
+        publishers:
+                - fingerprint:
+                        files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+                        matrix-notifier: only-configurations
+                - workspace-cleanup
+
 # upgrade test template
 
 - job-template:
@@ -566,6 +609,7 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+                - '{name}-testsuite'
 
 - project:
         name: postgresql-9.0
@@ -573,6 +617,7 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+                - '{name}-testsuite'
 
 - project:
         name: postgresql-9.1
@@ -580,6 +625,7 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+                - '{name}-testsuite'
 
 - project:
         name: postgresql-9.2
@@ -587,6 +633,7 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+                - '{name}-testsuite'
 
 - project:
         name: postgresql-9.3
@@ -594,6 +641,7 @@
         dist-filter: ''
         jobs:
                 - bzr-packages
+                - '{name}-testsuite'
 
 - project:
         name: postgresql-common
