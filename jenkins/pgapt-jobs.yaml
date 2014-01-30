@@ -254,12 +254,12 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: 'postgresql-{oldversion}-binaries/distribution=$distribution'
+                        project: 'postgresql-{oldversion}-binaries/architecture=$architecture,distribution=$distribution'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
                 - copyartifact:
-                        project: 'postgresql-{newversion}-binaries/distribution=$distribution'
+                        project: 'postgresql-{newversion}-binaries/architecture=$architecture,distribution=$distribution'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
