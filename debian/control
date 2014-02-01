@@ -18,7 +18,7 @@ Depends: ${misc:Depends},
 # dependencies of postgresql-server-dev-all:
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # testsuite:
- hunspell-en-us, locales, net-tools, netcat-openbsd,
+ hunspell-en-us, locales, logrotate, net-tools, netcat-openbsd,
 # autopkgtest
  autopkgtest, newpid
 Description: metapackage to install in pgdg cowbuilder chroots

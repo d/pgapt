@@ -1,3 +1,9 @@
+pgdg-buildenv (11) sid-pgdg; urgency=medium
+
+  * Add logrotate.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 01 Feb 2014 23:45:52 +0100
+
 pgdg-buildenv (10) sid-pgdg; urgency=medium
 
   * Add newpid.
