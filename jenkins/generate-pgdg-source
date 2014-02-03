@@ -159,6 +159,12 @@ case $PACKAGE in
     esac
     ;;
 
+  pgextwlist) # depend on all contrib packages
+    for version in $(/usr/share/postgresql-common/supported-versions); do
+      sed -i -e "s/^Depends: /Depends: postgresql-contrib-$version, /" debian/tests/control
+    done
+    ;;
+
   psqlodbc)
     case ${distribution:-} in
       wheezy|precise) # odbc-postgreql conflicts with libiodbc2, skip iodbc test here
