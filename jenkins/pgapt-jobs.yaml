@@ -526,7 +526,7 @@
 - project:
         name: pgextwlist
         git-url: https://github.com/dimitri/pgextwlist.git
-        git-branch: master
+        git-branch: dev
         dist-filter: ''
         jobs:
                 - git-packages
