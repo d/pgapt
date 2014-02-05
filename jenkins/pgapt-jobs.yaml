@@ -526,8 +526,9 @@
 - project:
         name: pgextwlist
         git-url: https://github.com/dimitri/pgextwlist.git
-        git-branch: dev
-        dist-filter: ''
+        git-branch: master
+        # lucid doesn't accept the plugins symlink in the testsuite for whatever reason
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
 
