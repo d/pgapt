@@ -670,6 +670,14 @@
                 - git-packages
 
 - project:
+        name: postgresql-pljava
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pljava.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: postgresql-pllua
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
         git-branch: master
