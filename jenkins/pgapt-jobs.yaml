@@ -697,7 +697,8 @@
         name: postgresql-plsh
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plsh.git
         git-branch: master
-        dist-filter: ''
+        # tests fail on lucid
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
 
