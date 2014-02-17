@@ -111,7 +111,7 @@ EOF
 #  ;;
 #esac
 
-cat > /usr/sbin/policy-rc.d
+cat > /usr/sbin/policy-rc.d <<'EOF'
 #!/bin/sh
 
 while true; do
