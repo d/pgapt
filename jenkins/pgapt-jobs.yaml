@@ -10,6 +10,14 @@
         artifactNumToKeep: -1
     wrappers:
         - timestamps
+    distributions: &distributions
+        - sid
+        - wheezy
+        - squeeze
+        - trusty
+        - saucy
+        - precise
+        - lucid
 
 # apt template
 
@@ -27,13 +35,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         builders:
                 - shell: 'generate-pgdg-source'
         publishers:
@@ -63,13 +65,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         scm:
                 - bzr:
                         url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
@@ -103,13 +99,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         scm:
                 - git:
                         url: '{git-url}'
@@ -146,13 +136,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         scm:
                 - svn:
                         url: '{svn-url}'
@@ -191,13 +175,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -244,13 +222,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -287,13 +259,7 @@
                 - axis:
                         type: user-defined
                         name: distribution
-                        values:
-                                - sid
-                                - wheezy
-                                - squeeze
-                                - trusty
-                                - precise
-                                - lucid
+                        values: *distributions
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:

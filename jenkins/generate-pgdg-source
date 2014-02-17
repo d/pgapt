@@ -102,7 +102,8 @@ case ${distribution:-} in
   lenny)   PGDG_DISTRIBUTION="pgdg50" ;;
   etch)    PGDG_DISTRIBUTION="pgdg40" ;;
   # Ubuntu
-  trusty) PGDG_DISTRIBUTION="pgdg14.04" ;;
+  trusty)  PGDG_DISTRIBUTION="pgdg14.04" ;;
+  saucy)   PGDG_DISTRIBUTION="pgdg13.10" ;;
   precise) PGDG_DISTRIBUTION="pgdg12.4" ;;
   lucid)   PGDG_DISTRIBUTION="pgdg10.4" ;;
   *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
@@ -167,7 +168,7 @@ case $PACKAGE in
 
   psqlodbc)
     case ${distribution:-} in
-      wheezy|precise) # odbc-postgreql conflicts with libiodbc2, skip iodbc test here
+      wheezy|precise) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
         sed -i -e 's/, iodbc//' debian/tests/control
         ;;
     esac

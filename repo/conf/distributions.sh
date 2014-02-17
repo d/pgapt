@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DISTRIBUTIONS="sid wheezy squeeze lenny etch
-	trusty precise lucid"
+	trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing pgdg-deprecated"
 
 for DIST in $DISTRIBUTIONS ; do
