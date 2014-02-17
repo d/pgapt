@@ -1,3 +1,9 @@
+pgdg-buildenv (12) sid-pgdg; urgency=medium
+
+  * Use local approx cache on buildhost.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 17 Feb 2014 16:56:24 +0100
+
 pgdg-buildenv (11) sid-pgdg; urgency=medium
 
   * Add logrotate.
