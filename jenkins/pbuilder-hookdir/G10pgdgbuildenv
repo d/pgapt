@@ -27,10 +27,21 @@ case $distribution in
   lucid) echo "deb http://de.archive.ubuntu.com/ubuntu/ ${distribution}-backports universe" \
     > /etc/apt/sources.list.d/backports.list ;;
 esac
-cat > /etc/apt/sources.list.d/pgdg.list <<EOF
-deb http://apt.postgresql.org/pub/repos/apt/ ${distribution}-pgdg main
-deb http://atalia.postgresql.org/pub/repos/apt/ ${distribution}-pgdg-testing main
+
+mirror="http://apt.postgresql.org/pub/repos/apt/"
+mirror_testing="http://atalia.postgresql.org/pub/repos/apt/"
+case $(hostname) in
+	pgdg*) # use local cache on build host
+		mirror="http://atalia-approx:9999/atalia"
+		mirror_testing="$mirror"
+		;;
+esac
+cat > /etc/apt/sources.list.d/pgdg.list <<-EOF
+# do not edit, file maintained by pgdg-buildenv
+deb $mirror $dist-pgdg main
+deb $mirror_testing $dist-pgdg-testing main
 EOF
+
 cat > /etc/apt/preferences.d/pgdg.pref <<EOF
 # do not edit, file maintained by pgdg-buildenv
 Package: *
@@ -91,14 +102,28 @@ cat >> /etc/postgresql-common/supported_versions <<EOF
 pgdg
 EOF
 
-# Ubuntu handles locales differently from Debian
-case $distribution in
-  precise|lucid)
-    locale-gen en_US.UTF-8
-    locale-gen ru_RU
-    locale-gen ru_RU.UTF-8
-  ;;
+## Ubuntu handles locales differently from Debian
+#case $distribution in
+#  precise|lucid)
+#    locale-gen en_US.UTF-8
+#    locale-gen ru_RU
+#    locale-gen ru_RU.UTF-8
+#  ;;
+#esac
+
+cat > /usr/sbin/policy-rc.d
+#!/bin/sh
+
+while true; do
+case $1 in
+  -*) shift ;;
+  makedev) exit 0;;
+  x11-common) exit 0;;
+  *)  exit 101;;
 esac
+done
+EOF
+chmod +x /usr/sbin/policy-rc.d
 
 apt-get update
 apt-get install -y -o DPkg::Options::=--force-confnew pgdg-buildenv ${PKGS:-}
