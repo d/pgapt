@@ -193,7 +193,10 @@ cowbuilder_init() {
     case $COWBUILDER_DIST in
       lenny|etch) MIRROR="http://archive.debian.org/debian/" ;;
       hardy|lucid|precise|quantal|saucy|trusty)
-        MIRROR="http://de.archive.ubuntu.com/ubuntu/"
+        case $(hostname) in
+          pgdg*) MIRROR="http://ubuntu-approx:9999/ubuntu/" ;;
+          *) MIRROR="http://de.archive.ubuntu.com/ubuntu/" ;;
+        esac
         KEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
         local pbuilderrc=$(mktemp)
         echo 'COMPONENTS="main universe"' > $pbuilderrc
