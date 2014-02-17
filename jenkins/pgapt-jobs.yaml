@@ -487,10 +487,11 @@
 
 - project:
         name: orafce
-        svn-url: svn://svn.debian.org/pkg-postgresql/trunk/orafce
+        git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
+        git-branch: master
         dist-filter: ''
         jobs:
-                - svn-packages
+                - git-packages
 
 - project:
         name: pgadmin3
