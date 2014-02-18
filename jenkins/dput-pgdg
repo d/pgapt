@@ -7,6 +7,8 @@ trap "rm -rf *" 0 2 3 15
 
 ls -AlR
 
+[ "$QUEUE" = "discard" ] && exit 0
+
 set -eux
 
 CHANGES="$(find . -name '*.changes' -not -name '*_source.changes')"

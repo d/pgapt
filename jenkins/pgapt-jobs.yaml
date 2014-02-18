@@ -10,6 +10,10 @@
         artifactNumToKeep: -1
     wrappers:
         - timestamps
+    queues: &queues
+        - incoming
+        - private
+        - discard
     distributions: &distributions
         - sid
         - wheezy
@@ -26,6 +30,15 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - string:
+                        name: revision
+                        default: '1'
+                        description: Revision number to use on generated source package (number in .pgdg+N suffix)
+                - choice:
+                        name: queue
+                        choices: *queues
+                        description: Incoming queue to use
         execution-strategy:
                 sequential: true
                 combination-filter: '{dist-filter}'
@@ -46,8 +59,9 @@
                         record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger:
-                        project: '{name}-binaries'
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries'
+                          predefined-parameters: 'queue=$queue'
 
 # bzr template
 
@@ -56,6 +70,15 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - string:
+                        name: revision
+                        default: '1'
+                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
+                - choice:
+                        name: queue
+                        choices: *queues
+                        description: Incoming queue to use
         execution-strategy:
                 sequential: true
                 combination-filter: '{dist-filter}'
@@ -80,8 +103,9 @@
                         record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger:
-                        project: '{name}-binaries'
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries'
+                          predefined-parameters: 'queue=$queue'
 
 # git template
 
@@ -90,6 +114,15 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - string:
+                        name: revision
+                        default: '1'
+                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
+                - choice:
+                        name: queue
+                        choices: *queues
+                        description: Incoming queue to use
         execution-strategy:
                 sequential: true
                 combination-filter: '{dist-filter}'
@@ -117,8 +150,9 @@
                         record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger:
-                        project: '{name}-binaries'
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries'
+                          predefined-parameters: 'queue=$queue'
 
 # svn template
 
@@ -127,6 +161,15 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - string:
+                        name: revision
+                        default: '1'
+                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
+                - choice:
+                        name: queue
+                        choices: *queues
+                        description: Incoming queue to use
         execution-strategy:
                 sequential: true
                 combination-filter: '{dist-filter}'
@@ -152,8 +195,9 @@
                         record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger:
-                        project: '{name}-binaries'
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries'
+                          predefined-parameters: 'queue=$queue'
 
 # binaries template
 
@@ -161,6 +205,11 @@
         name: '{name}-binaries'
         description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - choice:
+                        name: queue
+                        choices: *queues
+                        description: Incoming queue to use
         execution-strategy:
                 combination-filter: '{dist-filter}'
                 touchstone:
@@ -200,7 +249,7 @@
                 - trigger-parameterized-builds:
                         - project: dput
                           condition: SUCCESS
-                          predefined-parameters: 'binaries=$JOB_NAME'
+                          predefined-parameters: "binaries=$JOB_NAME\nqueue=$queue"
                 - workspace-cleanup
 
 # testsuite template
@@ -340,9 +389,7 @@
                         description: Name of binaries job to copy artifacts from
                 - choice:
                         name: queue
-                        choices:
-                                - incoming
-                                - private
+                        choices: *queues
                         description: Incoming queue to use
         builders:
                 - shell: 'rm -rf *'
