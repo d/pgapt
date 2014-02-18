@@ -14,6 +14,9 @@
         - incoming
         - private
         - discard
+    architectures: &architectures
+        - amd64
+        - i386
     distributions: &distributions
         - sid
         - wheezy
@@ -218,9 +221,7 @@
                 - axis:
                         type: user-defined
                         name: architecture
-                        values:
-                                - amd64
-                                - i386
+                        values: *architectures
                 - axis:
                         type: user-defined
                         name: distribution
@@ -378,6 +379,31 @@
         publishers:
                 - ircbot:
                         matrix-notifier: all
+
+- job:
+        name: 'cowbuilder-update'
+        description: 'Update/create cowbuilder chroots.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                #combination-filter: '{dist-filter}'
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values: *architectures
+                - axis:
+                        type: user-defined
+                        name: distribution
+                        values: *distributions
+        builders:
+                - shell: 'COWBUILDER_UPDATE_ONLY=yes build-and-provide-package'
+        publishers:
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+                        matrix-notifier: only-configurations
 
 - job:
         name: dput

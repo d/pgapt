@@ -477,10 +477,12 @@ trap bailout SIGHUP SIGINT SIGQUIT SIGABRT SIGKILL SIGALRM SIGTERM
 
 checks_and_defaults
 clean_workspace
-identify_package_name
-set_base_path
-build_info
-identify_sourcefile
+if [ -z "${COWBUILDER_UPDATE_ONLY:-}" ]; then
+  identify_package_name
+  set_base_path
+  build_info
+  identify_sourcefile
+fi
 dist_and_arch_settings
 
 # do not run in repos job?
@@ -488,6 +490,7 @@ if [ -n "${PROVIDE_ONLY:-}" ] ; then
   echo "*** Config variable 'PROVIDE_ONLY' is set, ignoring request to run cowbuilder. ***"
 else
   cowbuilder_init
+  [ "${COWBUILDER_UPDATE_ONLY:-}" ] && bailout 0
   cowbuilder_run
 fi
 
