@@ -13,6 +13,8 @@ echo "Setting up pgdg-buildenv in chroot (distribution $distribution, architectu
 
 set -eux
 
+test -f /etc/debian_chroot || echo "base-$distribution-$architecture" > /etc/debian_chroot
+
 mkdir -p /etc/apt/sources.list.d
 case $distribution in
   squeeze) echo "deb http://deb/debian-backports/ ${distribution}-backports main" \
