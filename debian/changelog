@@ -1,3 +1,9 @@
+pgdg-buildenv (14) sid-pgdg; urgency=medium
+
+  * Fix postinst to exit cleanly.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 19 Feb 2014 12:28:22 +0100
+
 pgdg-buildenv (13) sid-pgdg; urgency=medium
 
   * Bump dh minimum version to 9.
