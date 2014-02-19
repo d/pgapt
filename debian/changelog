@@ -2,6 +2,7 @@ pgdg-buildenv (13) sid-pgdg; urgency=medium
 
   * Bump dh minimum version to 9.
   * Depend on dpkg-dev (>= 1.16.1~) | hardening-wrapper (lucid needs h-w).
+  * Install locales for the PostgreSQL testsuite.
 
  -- Christoph Berg <christoph.berg@credativ.de>  Wed, 19 Feb 2014 12:14:42 +0100
 

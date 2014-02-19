@@ -33,6 +33,27 @@ case $1 in
 		create_main_cluster = false
 		start_conf = manual
 		EOF
+
+		# install locales for the PostgreSQL testsuite
+		vendor=$(lsb_release -is)
+		case $vendor in
+			Ubuntu)
+				locale-gen en_US.UTF-8 ru_RU ru_RU.UTF-8
+				;;
+			*)
+				while read locale ; do
+					if ! grep -q "^$locale\$" /etc/locale.gen ; then
+						echo "$locale" >> /etc/locale.gen
+						run=1
+					fi
+				done <<-EOF
+				en_US.UTF-8 UTF-8
+				ru_RU ISO-8859-5
+				ru_RU.UTF-8 UTF-8
+				EOF
+				[ "$run" ] && locale-gen
+				;;
+		esac
 		;;
 esac
 
