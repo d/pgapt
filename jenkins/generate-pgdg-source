@@ -168,7 +168,7 @@ case $PACKAGE in
 
   psqlodbc)
     case ${distribution:-} in
-      wheezy|precise) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
+      wheezy|precise|saucy|trusty) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
         sed -i -e 's/, iodbc//' debian/tests/control
         ;;
     esac
