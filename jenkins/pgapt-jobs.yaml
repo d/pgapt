@@ -804,11 +804,11 @@
 
 - project:
         name: skytools3
-        git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
-        git-branch: master
+        #git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
+        #git-branch: debian
         dist-filter: ''
         jobs:
-                - git-packages
+                - apt-packages
 
 - project:
         name: slony1-2
