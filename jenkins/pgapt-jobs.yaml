@@ -810,7 +810,8 @@
         name: skytools3
         #git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
         #git-branch: debian
-        dist-filter: ''
+        # fails on lucid
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - apt-packages
 
