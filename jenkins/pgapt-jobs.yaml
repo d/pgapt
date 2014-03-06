@@ -548,7 +548,8 @@
 - project:
         name: pgagent
         svn-url: svn://svn.debian.org/svn/pkg-postgresql/trunk/pgagent
-        dist-filter: ''
+        # lucid doesn't install the extension (wtf)
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - svn-packages
 
