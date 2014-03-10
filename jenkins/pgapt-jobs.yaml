@@ -595,6 +595,14 @@
                 - git-packages
 
 - project:
+        name: pg-reorg
+        git-url: git://anonscm.debian.org/pkg-postgresql/pg-reorg.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgpool2
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
