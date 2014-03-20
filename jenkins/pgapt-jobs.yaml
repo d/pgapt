@@ -719,7 +719,7 @@
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
         git-branch: master
-        dist-filter: ''
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
                 - git-packages
 
