@@ -3,7 +3,7 @@
 # The MIT License
 #
 # Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
-# Copyright (c) 2012,2013 by Christoph Berg <myon@debian.org>
+# Copyright (c) 2012-2014 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,14 @@ set -x
 set -e
 set -u
 
-[ -n "${DEBEMAIL:-}" ] || DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
-export DEBEMAIL
+# which PostgreSQL major version to pull libpq et al. from (should be last stable release)
+PGLIBVER="9.3"
+# which libpq version to use in sid (latest beta)
+PGLIBVER_SID="9.3"
+# PostgreSQL devel version for building snapshots
+PGDEVVER="9.4"
+
+[ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
 
 export PG_SUPPORTED_VERSIONS="pgdg"
 
@@ -82,19 +88,19 @@ fi
 rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 
 # clean up behind a possibly broken last job
-$VCS $VCS_REVERT $REVERTS || :
+cleanup () {
+  $VCS $VCS_REVERT $REVERTS || :
+}
+trap "cleanup" 0 2 3 15
+cleanup
 
 # get newest version number from changelog
 PREVIOUS_VERSION=$(dpkg-parsechangelog --count 1 | awk '/^Version: / {print $2}')
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
-# which postgresql major version to pull libpq et al. from
-# defaults to latest stable release
-PGLIBVER="9.3"
-
 case ${distribution:-} in
   # Debian
-  sid)     PGLIBVER="9.3" # use latest beta for sid
+  sid)     PGLIBVER="$PGLIBVER_SID" # use latest beta on sid
            PGDG_DISTRIBUTION="pgdg"   ;;
   jessie)  PGDG_DISTRIBUTION="pgdg80" ;;
   wheezy)  PGDG_DISTRIBUTION="pgdg70" ;;
@@ -108,6 +114,27 @@ case ${distribution:-} in
   lucid)   PGDG_DISTRIBUTION="pgdg10.4" ;;
   *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
 esac
+
+# PostgreSQL devel version: This assumes a PostgreSQL git checkout provided by
+# Jenkins and puts a bzr checkout for the packaging in the same directory
+if [ "$PACKAGE" = "postgresql-$PGDEVVER" ]; then
+  ORIG_VERSION="$PGDEVVER~~$(date +%Y%m%d.%H%M)"
+  ORIGTAR="../${PACKAGE}_${ORIG_VERSION}.orig.tar.gz"
+  BASE_VERSION="$ORIG_VERSION-1"
+  VCS="bzr"
+  VCS_REVERT="revert"
+  if ! [ -f "$ORIGTAR" ]; then
+    rm -f ../${PACKAGE}_*orig*
+    git archive -o $ORIGTAR HEAD
+  fi
+  if [ -d .bzr ]; then
+    bzr pull
+  else
+    bzr branch "https://alioth.debian.org/scm/loggerhead/pkg-postgresql/postgresql-$PGDEVVER/trunk/"
+    mv trunk/debian trunk/.bzr* .
+    rmdir trunk
+  fi
+fi
 
 # for postgresql server packages, move all lib packages to a separate
 # component, unless we are building postgresql-$PGLIBVER
@@ -214,16 +241,13 @@ fi
 VERSION_STRING="$BASE_VERSION$SUFFIX${DOT:-.}$PGDG_DISTRIBUTION$PGDG_REVISION"
 dch --force-distribution --distribution="$distribution-pgdg" \
   --release-heuristic log -b --newversion=$VERSION_STRING -- \
-  "Rebuild for $distribution-pgdg ($BUILD_TAG, $VCS revision $VCS_REVISION)"
+  "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS revision $VCS_REVISION)"
 
 origtargz --tar-only --path=$HOME/tarballs -d
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
 dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
-
-# leave no modified files behind
-$VCS $VCS_REVERT $REVERTS || :
 
 mkdir $RESULT
 dcmd cp -alv ../${PACKAGE}_*.changes $RESULT
