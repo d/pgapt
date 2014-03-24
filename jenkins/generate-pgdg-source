@@ -118,7 +118,7 @@ esac
 # PostgreSQL devel version: This assumes a PostgreSQL git checkout provided by
 # Jenkins and puts a bzr checkout for the packaging in the same directory
 if [ "$PACKAGE" = "postgresql-$PGDEVVER" ]; then
-  ORIG_VERSION="$PGDEVVER~~$(date +%Y%m%d.%H%M)"
+  ORIG_VERSION="$PGDEVVER~~$(date -u +%Y%m%d.%H%M)"
   ORIGTAR="../${PACKAGE}_${ORIG_VERSION}.orig.tar.gz"
   BASE_VERSION="$ORIG_VERSION-1"
   VCS="bzr"
