@@ -10,21 +10,64 @@
         artifactNumToKeep: -1
     wrappers:
         - timestamps
-    queues: &queues
-        - incoming
-        - private
-        - discard
-    architectures: &architectures
-        - amd64
-        - i386
-    distributions: &distributions
-        - sid
-        - wheezy
-        - squeeze
-        - trusty
-        - saucy
-        - precise
-        - lucid
+
+- yamltemplates:
+    name: yamltemplates
+    queue_choice: &queue_choice
+            name: queue
+            choices:
+                    - incoming
+                    - private
+                    - discard
+            description: Incoming queue to use
+    source_parameters: &source_parameters
+        - string:
+                name: revision
+                default: '1'
+                description: Revision number to use on generated source package (number in .pgdg+N suffix)
+        - choice: *queue_choice
+
+    source_execution_strategy: &source_execution_strategy
+            sequential: true
+            combination-filter: '{dist-filter}'
+            touchstone:
+                    expr: 'distribution=="sid"'
+
+    arch_axis: &arch_axis
+            type: user-defined
+            name: architecture
+            values:
+                    - amd64
+                    - i386
+    dist_axis: &dist_axis
+            type: user-defined
+            name: distribution
+            values:
+                    - sid
+                    - wheezy
+                    - squeeze
+                    - trusty
+                    - saucy
+                    - precise
+                    - lucid
+
+    source_publishers: &source_publishers
+        - archive:
+                artifacts: 'result/*'
+                latest-only: true
+        - fingerprint:
+                record-artifacts: true
+        - ircbot:
+                matrix-notifier: only-parent
+        - trigger-parameterized-builds:
+                - project: '{name}-binaries'
+                  condition: SUCCESS
+                  predefined-parameters: 'queue=$queue'
+
+    ircbot_only_configs: &only_configs
+            strategy: any-failure
+            message-type: summary
+            matrix-notifier: only-configurations
 
 # apt template
 
@@ -33,39 +76,13 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters:
-                - string:
-                        name: revision
-                        default: '1'
-                        description: Revision number to use on generated source package (number in .pgdg+N suffix)
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
-        execution-strategy:
-                sequential: true
-                combination-filter: '{dist-filter}'
-                touchstone:
-                        expr: 'distribution=="sid"'
+        parameters: *source_parameters
+        execution-strategy: *source_execution_strategy
         axes:
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *dist_axis
         builders:
                 - shell: 'generate-pgdg-source'
-        publishers:
-                - archive:
-                        artifacts: 'result/*'
-                        latest-only: true
-                - fingerprint:
-                        record-artifacts: true
-                - ircbot:
-                        matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
+        publishers: *source_publishers
 
 # bzr template
 
@@ -74,43 +91,17 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters:
-                - string:
-                        name: revision
-                        default: '1'
-                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
-        execution-strategy:
-                sequential: true
-                combination-filter: '{dist-filter}'
-                touchstone:
-                        expr: 'distribution=="sid"'
+        parameters: *source_parameters
+        execution-strategy: *source_execution_strategy
         axes:
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *dist_axis
         scm:
                 - bzr:
                         url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
                         loggerhead: 'https://alioth.debian.org/scm/loggerhead/pkg-postgresql/{bzr-branch}'
         builders:
                 - shell: 'generate-pgdg-source'
-        publishers:
-                - archive:
-                        artifacts: 'result/*'
-                        latest-only: true
-                - fingerprint:
-                        record-artifacts: true
-                - ircbot:
-                        matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
+        publishers: *source_publishers
 
 # git template
 
@@ -119,25 +110,10 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters:
-                - string:
-                        name: revision
-                        default: '1'
-                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
-        execution-strategy:
-                sequential: true
-                combination-filter: '{dist-filter}'
-                touchstone:
-                        expr: 'distribution=="sid"'
+        parameters: *source_parameters
+        execution-strategy: *source_execution_strategy
         axes:
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *dist_axis
         scm:
                 - git:
                         url: '{git-url}'
@@ -147,18 +123,7 @@
                         wipe-workspace: false
         builders:
                 - shell: 'generate-pgdg-source'
-        publishers:
-                - archive:
-                        artifacts: 'result/*'
-                        latest-only: true
-                - fingerprint:
-                        record-artifacts: true
-                - ircbot:
-                        matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
+        publishers: *source_publishers
 
 # svn template
 
@@ -167,25 +132,10 @@
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters:
-                - string:
-                        name: revision
-                        default: '1'
-                        description: Revision number to use on generated source package (number in .pgdg+NN suffix)
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
-        execution-strategy:
-                sequential: true
-                combination-filter: '{dist-filter}'
-                touchstone:
-                        expr: 'distribution=="sid"'
+        parameters: *source_parameters
+        execution-strategy: *source_execution_strategy
         axes:
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *dist_axis
         scm:
                 - svn:
                         url: '{svn-url}'
@@ -193,18 +143,7 @@
                         workspaceupdater: update
         builders:
                 - shell: 'generate-pgdg-source'
-        publishers:
-                - archive:
-                        artifacts: 'result/*'
-                        latest-only: true
-                - fingerprint:
-                        record-artifacts: true
-                - ircbot:
-                        matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
+        publishers: *source_publishers
 
 # binaries template
 
@@ -213,23 +152,14 @@
         description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         parameters:
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
+                - choice: *queue_choice
         execution-strategy:
                 combination-filter: '{dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
-                - axis:
-                        type: user-defined
-                        name: architecture
-                        values: *architectures
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *arch_axis
+                - axis: *dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -247,10 +177,7 @@
                         record-artifacts: true
                 - junit:
                         results: autopkgtest.xml
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary
-                        matrix-notifier: only-configurations
+                - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: dput
                           condition: SUCCESS
@@ -267,16 +194,8 @@
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
-                - axis:
-                        type: user-defined
-                        name: architecture
-                        values:
-                                - amd64
-                                - i386
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *arch_axis
+                - axis: *dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -288,10 +207,7 @@
         publishers:
                 - fingerprint:
                         files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary
-                        matrix-notifier: only-configurations
+                - ircbot: *only_configs
                 - workspace-cleanup
 
 # upgrade test template
@@ -304,16 +220,8 @@
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
-                - axis:
-                        type: user-defined
-                        name: architecture
-                        values:
-                                - amd64
-                                - i386
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *arch_axis
+                - axis: *dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -330,10 +238,7 @@
         publishers:
                 - fingerprint:
                         files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary
-                        matrix-notifier: only-configurations
+                - ircbot: *only_configs
                 - workspace-cleanup
 
 # job groups
@@ -393,21 +298,12 @@
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
-                - axis:
-                        type: user-defined
-                        name: architecture
-                        values: *architectures
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: *distributions
+                - axis: *arch_axis
+                - axis: *dist_axis
         builders:
                 - shell: 'COWBUILDER_UPDATE_ONLY=yes build-and-provide-package'
         publishers:
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary
-                        matrix-notifier: only-configurations
+                - ircbot: *only_configs
 
 - job:
         name: dput
@@ -418,10 +314,7 @@
                 - string:
                         name: binaries
                         description: Name of binaries job to copy artifacts from
-                - choice:
-                        name: queue
-                        choices: *queues
-                        description: Incoming queue to use
+                - choice: *queue_choice
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
