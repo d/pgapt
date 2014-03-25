@@ -147,7 +147,7 @@
 
 # binaries template
 
-- job-template:
+- job-template: &binaries_template
         name: '{name}-binaries'
         description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
@@ -183,6 +183,18 @@
                           condition: SUCCESS
                           predefined-parameters: "binaries=$JOB_NAME\nqueue=$queue"
                 - workspace-cleanup
+
+- job-template:
+        <<: *binaries_template
+        name: '{name}-binaries-amd64'
+        job-name: '{name}-binaries'
+        axes:
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values:
+                                - amd64
+                - axis: *dist_axis
 
 # testsuite template
 
@@ -597,7 +609,8 @@
         git-branch: master
         dist-filter: 'distribution=="sid"'
         jobs:
-                - git-packages
+                - '{name}-git-source'
+                - '{name}-binaries-amd64'
                 - '{name}-testsuite'
 
 - project:
