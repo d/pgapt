@@ -20,18 +20,6 @@
                     - private
                     - discard
             description: Incoming queue to use
-    source_parameters: &source_parameters
-        - string:
-                name: revision
-                default: '1'
-                description: Revision number to use on generated source package (number in .pgdg+N suffix)
-        - choice: *queue_choice
-
-    source_execution_strategy: &source_execution_strategy
-            sequential: true
-            combination-filter: '{dist-filter}'
-            touchstone:
-                    expr: 'distribution=="sid"'
 
     arch_axis: &arch_axis
             type: user-defined
@@ -51,19 +39,6 @@
                     - precise
                     - lucid
 
-    source_publishers: &source_publishers
-        - archive:
-                artifacts: 'result/*'
-                latest-only: true
-        - fingerprint:
-                record-artifacts: true
-        - ircbot:
-                matrix-notifier: only-parent
-        - trigger-parameterized-builds:
-                - project: '{name}-binaries'
-                  condition: SUCCESS
-                  predefined-parameters: 'queue=$queue'
-
     ircbot_only_configs: &only_configs
             strategy: any-failure
             message-type: summary
@@ -71,49 +46,56 @@
 
 # apt template
 
-- job-template:
+- job-template: &apt_source_template
         name: '{name}-apt-source'
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters: *source_parameters
-        execution-strategy: *source_execution_strategy
+        parameters:
+                - string:
+                        name: revision
+                        default: '1'
+                        description: Revision number to use on generated source package (number in .pgdg+N suffix)
+                - choice: *queue_choice
+        execution-strategy:
+                sequential: true
+                combination-filter: '{dist-filter}'
+                touchstone:
+                        expr: 'distribution=="sid"'
         axes:
                 - axis: *dist_axis
         builders:
                 - shell: 'generate-pgdg-source'
-        publishers: *source_publishers
+        publishers:
+                - archive:
+                        artifacts: 'result/*'
+                        latest-only: true
+                - fingerprint:
+                        record-artifacts: true
+                - ircbot:
+                        matrix-notifier: only-parent
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries'
+                          condition: SUCCESS
+                          predefined-parameters: 'queue=$queue'
 
 # bzr template
 
 - job-template:
+        <<: *apt_source_template
         name: '{name}-bzr-source'
-        job-name: '{name}-source'
         description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        project-type: matrix
-        parameters: *source_parameters
-        execution-strategy: *source_execution_strategy
-        axes:
-                - axis: *dist_axis
         scm:
                 - bzr:
                         url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
                         loggerhead: 'https://alioth.debian.org/scm/loggerhead/pkg-postgresql/{bzr-branch}'
-        builders:
-                - shell: 'generate-pgdg-source'
-        publishers: *source_publishers
 
 # git template
 
 - job-template:
+        <<: *apt_source_template
         name: '{name}-git-source'
-        job-name: '{name}-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        project-type: matrix
-        parameters: *source_parameters
-        execution-strategy: *source_execution_strategy
-        axes:
-                - axis: *dist_axis
         scm:
                 - git:
                         url: '{git-url}'
@@ -121,29 +103,18 @@
                                 - '{git-branch}'
                         basedir: source
                         wipe-workspace: false
-        builders:
-                - shell: 'generate-pgdg-source'
-        publishers: *source_publishers
 
 # svn template
 
 - job-template:
+        <<: *apt_source_template
         name: '{name}-svn-source'
-        job-name: '{name}-source'
         description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        project-type: matrix
-        parameters: *source_parameters
-        execution-strategy: *source_execution_strategy
-        axes:
-                - axis: *dist_axis
         scm:
                 - svn:
                         url: '{svn-url}'
                         basedir: source
                         workspaceupdater: update
-        builders:
-                - shell: 'generate-pgdg-source'
-        publishers: *source_publishers
 
 # binaries template
 
