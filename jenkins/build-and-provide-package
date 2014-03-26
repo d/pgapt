@@ -290,7 +290,7 @@ cowbuilder_run() {
 
   case "$architecture" in
     i386)
-      linux32 sudo distribution=${distribution} architecture=${architecture} ADT=${ADT:-} \
+      linux32 sudo env distribution=${distribution} architecture=${architecture} ADT=${ADT:-} \
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
@@ -298,7 +298,7 @@ cowbuilder_run() {
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     amd64|all|*)
-      sudo distribution=${distribution} architecture=${architecture} ADT=${ADT:-} \
+      sudo env distribution=${distribution} architecture=${architecture} ADT=${ADT:-} \
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
