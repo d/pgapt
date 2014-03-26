@@ -92,7 +92,7 @@
 
 # git template
 
-- job-template:
+- job-template: &git_source_template
         <<: *apt_source_template
         name: '{name}-git-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
@@ -103,6 +103,12 @@
                                 - '{git-branch}'
                         basedir: source
                         wipe-workspace: false
+
+- job-template:
+        <<: *git_source_template
+        name: '{name}-git-source-pollscm'
+        triggers:
+                - pollscm: "0 */6 * * *"
 
 # svn template
 
@@ -604,7 +610,7 @@
         git-branch: master
         dist-filter: 'distribution=="sid"'
         jobs:
-                - '{name}-git-source'
+                - '{name}-git-source-pollscm'
                 - '{name}-binaries-amd64'
                 - '{name}-testsuite'
         next-job: postgresql-9.4-testsuite
