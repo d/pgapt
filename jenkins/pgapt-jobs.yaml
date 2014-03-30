@@ -32,8 +32,7 @@
     arch_axis: &amd64_only_axis
             type: user-defined
             name: architecture
-            values:
-                    - amd64
+            values: [amd64]
 
     dist_axis: &dist_axis
             type: user-defined
@@ -46,6 +45,11 @@
                     - saucy
                     - precise
                     - lucid
+
+    dist_axis: &sid_only_axis
+            type: user-defined
+            name: distribution
+            values: [sid]
 
     ircbot_only_configs: &only_configs
             strategy: any-failure
@@ -220,7 +224,7 @@
 
 # upgrade test template
 
-- job-template:
+- job-template: &upgrade_template
         name: 'upgrade-{oldversion}-{newversion}'
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
@@ -248,6 +252,14 @@
                         files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                 - ircbot: *only_configs
                 - workspace-cleanup
+
+- job-template:
+        <<: *upgrade_template
+        name: 'upgrade-{oldversion}-{newversion}-sid-amd64'
+        job-name: 'upgrade-{oldversion}-{newversion}'
+        axes:
+                - axis: *amd64_only_axis
+                - axis: *sid_only_axis
 
 # job groups
 
@@ -789,4 +801,4 @@
         oldversion: 9.3
         newversion: 9.4
         jobs:
-                - upgrade-job
+                - upgrade-{oldversion}-{newversion}-sid-amd64
