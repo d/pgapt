@@ -13,6 +13,7 @@
 
 - yamltemplates:
     name: yamltemplates
+
     queue_choice: &queue_choice
             name: queue
             choices:
@@ -27,6 +28,13 @@
             values:
                     - amd64
                     - i386
+
+    arch_axis: &amd64_only_axis
+            type: user-defined
+            name: architecture
+            values:
+                    - amd64
+
     dist_axis: &dist_axis
             type: user-defined
             name: distribution
@@ -166,16 +174,12 @@
         name: '{name}-binaries-amd64'
         job-name: '{name}-binaries'
         axes:
-                - axis:
-                        type: user-defined
-                        name: architecture
-                        values:
-                                - amd64
+                - axis: *amd64_only_axis
                 - axis: *dist_axis
 
 # testsuite template
 
-- job-template:
+- job-template: &testsuite_template
         name: '{name}-testsuite'
         description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
@@ -204,6 +208,14 @@
                           condition: SUCCESS
                           predefined-parameters: "binaries={name}-binaries\nqueue=$queue"
                 - workspace-cleanup
+
+- job-template:
+        <<: *testsuite_template
+        name: '{name}-testsuite-amd64'
+        job-name: '{name}-testsuite'
+        axes:
+                - axis: *amd64_only_axis
+                - axis: *dist_axis
 
 # upgrade test template
 
@@ -612,7 +624,7 @@
         jobs:
                 - '{name}-git-source-pollscm'
                 - '{name}-binaries-amd64'
-                - '{name}-testsuite'
+                - '{name}-testsuite-amd64'
         next-job: postgresql-9.4-testsuite
         noadt: 'ADT=skip '
 
@@ -751,6 +763,13 @@
                 - git-packages
 
 - project:
+        name: upgrade-8.4-9.4
+        oldversion: 8.4
+        newversion: 9.4
+        jobs:
+                - upgrade-job
+
+- project:
         name: upgrade-9.1-9.2
         oldversion: 9.1
         newversion: 9.2
@@ -761,13 +780,6 @@
         name: upgrade-9.1-9.3
         oldversion: 9.1
         newversion: 9.3
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-8.4-9.4
-        oldversion: 8.4
-        newversion: 9.4
         jobs:
                 - upgrade-job
 
