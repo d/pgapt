@@ -5,6 +5,7 @@ set -eux
 case ${distribution} in
 	squeeze)
 		PGVERSION="8.4"
+		EXTENSION="LANGUAGE"
 		OLDDIST="squeeze"
 		OLDPERL="5.10"
 		NEWDIST="wheezy"
@@ -12,6 +13,7 @@ case ${distribution} in
 		;;
 	wheezy)
 		PGVERSION="9.1"
+		EXTENSION="EXTENSION"
 		OLDDIST="wheezy"
 		OLDPERL="5.14"
 		NEWDIST="sid"
@@ -31,7 +33,7 @@ if [ ! -f /usr/share/doc/postgresql-plperl-$PGVERSION/copyright ]; then
 fi
 
 : "*** Creating PostgreSQL cluster"
-trap "service postgresql stop" 0 2 3 15
+trap "service postgresql stop; cat /var/log/postgresql/postgresql-$PGVERSION-main.log" 0 2 3 15
 if ! [ -f /etc/postgresql/$PGVERSION/main/postgresql.conf ]; then
 	export PGPORT=$(perl -le 'print 1024 + int(rand(64000))')
 	pg_createcluster --port=$PGPORT --start-conf=auto $PGVERSION main
@@ -42,10 +44,10 @@ export PGDATABASE="postgres"
 
 : "*** Creating plperl functions"
 psql <<'EOF'
-CREATE EXTENSION plperl;
+CREATE $EXTENSION plperl;
 CREATE OR REPLACE FUNCTION perl_version() RETURNS text AS
 $$ return sprintf "%vd", $^V; $$ LANGUAGE plperl;
-CREATE EXTENSION plperlu;
+CREATE $EXTENSION plperlu;
 CREATE OR REPLACE FUNCTION perl_versionu() RETURNS text AS
 $$ return sprintf "%vd", $^V; $$ LANGUAGE plperlu;
 EOF
