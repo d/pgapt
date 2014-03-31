@@ -43,13 +43,13 @@ su -c "createuser --superuser $USER" postgres
 export PGDATABASE="postgres"
 
 : "*** Creating plperl functions"
-psql <<'EOF'
+psql <<EOF
 CREATE $EXTENSION plperl;
 CREATE OR REPLACE FUNCTION perl_version() RETURNS text AS
-$$ return sprintf "%vd", $^V; $$ LANGUAGE plperl;
+'return sprintf "%vd", $^V;' LANGUAGE plperl;
 CREATE $EXTENSION plperlu;
 CREATE OR REPLACE FUNCTION perl_versionu() RETURNS text AS
-$$ return sprintf "%vd", $^V; $$ LANGUAGE plperlu;
+'return sprintf "%vd", $^V;' LANGUAGE plperlu;
 EOF
 
 : "*** Perl version on $OLDDIST is $OLDPERL"
