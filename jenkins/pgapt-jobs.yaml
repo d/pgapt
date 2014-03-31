@@ -386,6 +386,22 @@
                         matrix-notifier: all
                         message-type: summary-params
 
+- job:
+        name: upgrade-plperl
+        description: 'Test plperl upgrades.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        project-type: matrix
+        execution-strategy:
+                touchstone:
+                        expr: '(distribution=="wheezy") && (architecture=="amd64")'
+        axes:
+                - axis: *arch_axis
+                - axis:
+                        type: user-defined
+                        name: architecture
+                        values: [wheezy, squeeze]
+        builders:
+                - shell: 'cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
+
 # project jobs
 
 - project:
