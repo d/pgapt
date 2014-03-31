@@ -397,10 +397,10 @@
                 - axis: *arch_axis
                 - axis:
                         type: user-defined
-                        name: architecture
+                        name: distribution
                         values: [wheezy, squeeze]
         builders:
-                - shell: 'cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
+                - shell: 'sudo cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
 
 # project jobs
 

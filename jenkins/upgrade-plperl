@@ -48,7 +48,7 @@ psql -c 'SELECT perl_versionu()' | fgrep $OLDPERL
 : "*** Upgrading from $OLDDIST to $NEWDIST"
 sed -i -e "s/$OLDDIST/$NEWDIST/g" -e '/security.*sid/d' /etc/apt/sources.list
 apt-get update
-apt-get install postgresql-plperl-$PGVERSION
+apt-get install -y postgresql-plperl-$PGVERSION
 
 : "*** Restarting PostgreSQL (this should actually not be necessary)"
 service postgresql restart
