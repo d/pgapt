@@ -11,27 +11,36 @@ case ${distribution} in
 		NEWPERL="5.14"
 		;;
 	wheezy)
+		PGVERSION="9.1"
 		OLDDIST="wheezy"
 		OLDPERL="5.14"
 		NEWDIST="sid"
 		NEWPERL="5.18"
-		PGVERSION="9.1"
 		;;
 esac
 
-: "*** Removing pgdg sources.list"
-rm -f /etc/apt/sources.list.d/pgdg.list
-apt-get update
+if [ -f /etc/apt/sources.list.d/pgdg.list ]; then
+	: "*** Removing pgdg sources.list"
+	rm -f /etc/apt/sources.list.d/pgdg.list
+	apt-get update
+fi
 
+if [ ! -f /usr/share/doc/postgresql-plperl-$PGVERSION/copyright ]; then
+	: "*** Installing plperl"
+	apt-get install -y postgresql-plperl-$PGVERSION
+fi
+
+: "*** Creating PostgreSQL cluster"
 trap "service postgresql stop" 0 2 3 15
-
-apt-get install -y postgresql-plperl-$PGVERSION
-test -f /etc/postgresql/$PGVERSION/main/postgresql.conf || \
-	pg_createcluster --start-conf=auto $PGVERSION main
+if ! [ -f /etc/postgresql/$PGVERSION/main/postgresql.conf ]; then
+	export PGPORT=$(perl -le 'print 1024 + int(rand(64000))')
+	pg_createcluster --port=$PGPORT --start-conf=auto $PGVERSION main
+fi
 service postgresql start
 su -c "createuser --superuser $USER" postgres
 export PGDATABASE="postgres"
 
+: "*** Creating plperl functions"
 psql <<'EOF'
 CREATE EXTENSION plperl;
 CREATE OR REPLACE FUNCTION perl_version() RETURNS text AS
