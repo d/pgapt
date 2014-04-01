@@ -31,6 +31,7 @@ if [ ! -f /usr/share/doc/postgresql-plperl-$PGVERSION/copyright ]; then
 	: "*** Installing plperl"
 	apt-get install -y postgresql-plperl-$PGVERSION
 fi
+dpkg -l 'postgresql*'
 
 : "*** Creating PostgreSQL cluster"
 trap "service postgresql stop; cat /var/log/postgresql/postgresql-$PGVERSION-main.log" 0 2 3 15
@@ -58,8 +59,15 @@ psql -c 'SELECT perl_versionu()' | fgrep $OLDPERL
 
 : "*** Upgrading from $OLDDIST to $NEWDIST"
 sed -i -e "s/$OLDDIST/$NEWDIST/g" -e '/security.*sid/d' /etc/apt/sources.list
+case $NEWDIST in
+	wheezy)
+		echo "deb http://ftp.de.debian.org/debian wheezy-proposed-updates main" >> /etc/apt/sources.list
+		;;
+esac
 apt-get update
+apt-cache policy postgresql-plperl-$PGVERSION
 apt-get install -y postgresql-plperl-$PGVERSION
+dpkg -l 'postgresql*'
 
 : "*** Restarting PostgreSQL (this should actually not be necessary)"
 service postgresql restart
