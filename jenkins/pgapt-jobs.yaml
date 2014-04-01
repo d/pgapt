@@ -675,6 +675,14 @@
                 - git-packages
 
 - project:
+        name: postgresql-filedump
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
         git-branch: master
