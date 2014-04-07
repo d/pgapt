@@ -346,7 +346,7 @@
         name: dput
         description: 'Push packages to the repository.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         logrotate:
-                numToKeep: 10
+                numToKeep: 50
         parameters:
                 - string:
                         name: binaries
@@ -365,6 +365,7 @@
                 - ircbot:
                         matrix-notifier: all
                         message-type: summary-params
+                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
 
 - job:
         name: promote
@@ -385,6 +386,7 @@
                 - ircbot:
                         matrix-notifier: all
                         message-type: summary-params
+                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.package} (${manager.build.environment.distributions})")'
 
 - job:
         name: upgrade-plperl
