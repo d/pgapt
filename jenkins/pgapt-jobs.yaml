@@ -29,7 +29,7 @@
                     - amd64
                     - i386
 
-    arch_axis: &amd64_only_axis
+    amd64_only_axis: &amd64_only_axis
             type: user-defined
             name: architecture
             values: [amd64]
@@ -46,7 +46,7 @@
                     - precise
                     - lucid
 
-    dist_axis: &sid_only_axis
+    sid_only_axis: &sid_only_axis
             type: user-defined
             name: distribution
             values: [sid]
@@ -55,6 +55,16 @@
             strategy: any-failure
             message-type: summary
             matrix-notifier: only-configurations
+
+    add_version_tag: &add_version_tag |
+            import java.util.regex.Matcher;
+            for (a in manager.build.getArtifacts()) {{
+                    m = (a =~ /.*_(.*)\.dsc/);
+                    if (m.matches()) {{
+                            manager.addShortText(m[0][1]);
+                            break;
+                    }}
+            }}
 
 # apt template
 
@@ -90,6 +100,7 @@
                         - project: '{name}-binaries'
                           condition: SUCCESS
                           predefined-parameters: 'queue=$queue'
+                - groovy-postbuild: *add_version_tag
 
 # bzr template
 
@@ -171,6 +182,7 @@
                         - project: '{next-job}'
                           condition: SUCCESS
                           predefined-parameters: "binaries=$JOB_NAME\nqueue=$queue"
+                - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
 - job-template:
