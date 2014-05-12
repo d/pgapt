@@ -26,8 +26,11 @@ case $distribution in
     # libtest-simple-perl: the testsuite needs a newer Test::More version
     PKGS="debhelper/${distribution}-backports libtest-simple-perl/${distribution}-backports"
   ;;
-  lucid) echo "deb http://de.archive.ubuntu.com/ubuntu/ ${distribution}-backports universe" \
-    > /etc/apt/sources.list.d/backports.list ;;
+  lucid)
+    echo "deb http://de.archive.ubuntu.com/ubuntu/ ${distribution}-backports universe" \
+      > /etc/apt/sources.list.d/backports.list
+    echo "deb http://de.archive.ubuntu.com/ubuntu/ ${distribution}-updates main universe" \
+      > /etc/apt/sources.list.d/updates.list ;;
 esac
 
 mirror="http://apt.postgresql.org/pub/repos/apt/"
