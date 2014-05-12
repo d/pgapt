@@ -32,7 +32,7 @@ PGLIBVER="9.3"
 # which libpq version to use in sid (latest beta)
 PGLIBVER_SID="9.3"
 # PostgreSQL devel version for building snapshots
-PGDEVVER="9.4"
+PGDEVVER="9.5"
 
 [ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
 
