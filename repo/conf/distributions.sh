@@ -11,11 +11,11 @@ for DIST in $DISTRIBUTIONS ; do
 			lenny|etch)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2" ;;
 			lucid)
-				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3" ;;
+				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			trusty)
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3" ;;
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			wheezy|squeeze|saucy|precise)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3" ;;
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			sid)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			*)
