@@ -507,11 +507,11 @@
 
 - project:
         name: pgagent
-        svn-url: svn://svn.debian.org/svn/pkg-postgresql/trunk/pgagent
-        # lucid doesn't install the extension (wtf)
-        dist-filter: 'distribution!="lucid"'
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
+        git-branch: master
+        dist-filter: ''
         jobs:
-                - svn-packages
+                - git-packages
 
 - project:
         name: pgbouncer
