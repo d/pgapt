@@ -509,7 +509,8 @@
         name: pgagent
         git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
         git-branch: master
-        dist-filter: ''
+        # lucid doesn't have "timeout"
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
 
