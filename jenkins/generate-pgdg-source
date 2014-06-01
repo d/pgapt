@@ -23,6 +23,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+echo "BUILD_NUMBER=${BUILD_NUMBER:-}"
+echo "JOB_NAME=${JOB_NAME:-}"
+echo "GIT_COMMIT=${GIT_COMMIT:-}"
+echo "BZR_REVISION=${BZR_REVISION:-}"
+echo "SVN_REVISION=${SVN_REVISION:-}"
+echo "distribution=${distribution:-}"
+echo "revision=${revision:-}"
+
 set -x
 set -e
 set -u
@@ -90,6 +98,13 @@ rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 # clean up behind a possibly broken last job
 cleanup () {
   $VCS $VCS_REVERT $REVERTS || :
+  case $JOB_NAME in
+    *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
+      UNRELEASED=1
+      git reset --hard
+      rm -rf .pc debian/patches/git-head
+      ;;
+  esac
 }
 trap "cleanup" 0 2 3 15
 cleanup
@@ -115,26 +130,32 @@ case ${distribution:-} in
   *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
 esac
 
-# PostgreSQL devel version: This assumes a PostgreSQL git checkout provided by
-# Jenkins and puts a bzr checkout for the packaging in the same directory
-if [ "$PACKAGE" = "postgresql-$PGDEVVER" ]; then
-  ORIG_VERSION="$PGDEVVER~$(date -u +%Y%m%d.%H%M)"
-  ORIGTAR="../${PACKAGE}_${ORIG_VERSION}.orig.tar.gz"
-  BASE_VERSION="$ORIG_VERSION-1"
-  VCS="bzr"
-  VCS_REVERT="revert"
-  if ! [ -f "$ORIGTAR" ]; then
-    rm -f ../${PACKAGE}_*orig*
-    git archive -o $ORIGTAR HEAD
-  fi
-  if [ -d .bzr ]; then
-    bzr pull
-  else
-    bzr branch "https://alioth.debian.org/scm/loggerhead/pkg-postgresql/postgresql-$PGDEVVER/trunk/"
-    mv trunk/debian trunk/.bzr* .
-    rmdir trunk
-  fi
-fi
+## PostgreSQL devel version: This assumes a PostgreSQL git checkout provided by
+## Jenkins and puts a bzr checkout for the packaging in the same directory
+#if [ "$PACKAGE" = "postgresql-$PGDEVVER" ]; then
+#  ORIG_VERSION="$PGDEVVER~$(date -u +%Y%m%d.%H%M)"
+#  ORIGTAR="../${PACKAGE}_${ORIG_VERSION}.orig.tar.gz"
+#  BASE_VERSION="$ORIG_VERSION-1"
+#  VCS="bzr"
+#  VCS_REVERT="revert"
+#  if ! [ -f "$ORIGTAR" ]; then
+#    rm -f ../${PACKAGE}_*orig*
+#    git archive -o $ORIGTAR HEAD
+#  fi
+#  if [ -d .bzr ]; then
+#    bzr pull
+#  else
+#    bzr branch "https://alioth.debian.org/scm/loggerhead/pkg-postgresql/postgresql-$PGDEVVER/trunk/"
+#    mv trunk/debian trunk/.bzr* .
+#    rmdir trunk
+#  fi
+#fi
+
+case $JOB_NAME in
+  *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
+    EDITOR=touch dpkg-source --commit . git-head
+    ;;
+esac
 
 # for postgresql server packages, move all lib packages to a separate
 # component, unless we are building postgresql-$PGLIBVER

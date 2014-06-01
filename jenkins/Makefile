@@ -13,5 +13,9 @@ update:
 	@echo "*** Updating Jenkins from pgapt-jobs.yaml ***"
 	jenkins-jobs update pgapt-jobs.yaml
 
+update-pgdgbuild:
+	@echo "*** Updating Jenkins from pgapt-jobs.yaml ***"
+	jenkins-jobs --conf jenkins_jobs.ini update pgapt-jobs.yaml
+
 clean:
 	rm -rf output output.old
