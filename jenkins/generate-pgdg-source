@@ -151,12 +151,6 @@ esac
 #  fi
 #fi
 
-case $JOB_NAME in
-  *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
-    EDITOR=touch dpkg-source --commit . git-head
-    ;;
-esac
-
 # for postgresql server packages, move all lib packages to a separate
 # component, unless we are building postgresql-$PGLIBVER
 case $PACKAGE in
@@ -268,7 +262,14 @@ origtargz --tar-only --path=$HOME/tarballs -d
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
-dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
+
+case $JOB_NAME in
+  *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
+    DBP_OPTS="--source-option=--single-debian-patch --source-option=--auto-commit --source-option=--include-removal"
+    ;;
+esac
+
+dpkg-buildpackage -uc -us -nc -d -sa -S -i -I ${DBP_OPTS:-}
 
 mkdir $RESULT
 dcmd cp -alv ../${PACKAGE}_*.changes $RESULT
