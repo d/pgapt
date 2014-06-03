@@ -20,7 +20,7 @@
                     - incoming
                     - private
                     - discard
-            description: Incoming queue to use
+            description: 'Incoming queue to use: incoming uploads to reprepro, private stages the upload in a directory, discard throws the upload away.'
 
     arch_axis: &arch_axis
             type: user-defined
@@ -74,7 +74,7 @@
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         parameters:
-                - string:
+                - string: &revision_string
                         name: revision
                         default: '1'
                         description: Revision number to use on generated source package (number in .pgdg+N suffix)
@@ -119,11 +119,18 @@
         <<: *apt_source_template
         name: '{name}-git-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        parameters:
+                - string:
+                        name: branch
+                        default: '{git-branch}'
+                        description: Git branch, tag, or commit to build
+                - string: *revision_string
+                - choice: *queue_choice
         scm:
                 - git:
                         url: '{git-url}'
                         branches:
-                                - '{git-branch}'
+                                - '$branch'
                         basedir: source
                         wipe-workspace: false
 
@@ -146,7 +153,7 @@
                                 - parent:
                                         url: '/srv/jenkins/workspace/postgresql-9.4-source-git-head/source'
                         branches:
-                                - '{git-branch}'
+                                - '$branch'
                         merge:
                                 remote: debian
                                 branch: master
@@ -422,7 +429,7 @@
         parameters:
                 - string:
                         name: binaries
-                        description: Name of binaries job to copy artifacts from
+                        description: Name of binaries job to copy artifacts from (including -binaries suffix)
                 - choice: *queue_choice
         builders:
                 - shell: 'rm -rf *'

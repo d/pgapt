@@ -29,6 +29,7 @@ echo "GIT_COMMIT=${GIT_COMMIT:-}"
 echo "BZR_REVISION=${BZR_REVISION:-}"
 echo "SVN_REVISION=${SVN_REVISION:-}"
 echo "distribution=${distribution:-}"
+echo "branch=${branch:-}"
 echo "revision=${revision:-}"
 
 set -x
