@@ -22,6 +22,13 @@
                     - discard
             description: 'Incoming queue to use: incoming uploads to reprepro, private stages the upload in a directory, discard throws the upload away.'
 
+    buildtype_choice: &buildtype_choice
+            name: buildtype
+            choices:
+                    - snapshot
+                    - normal
+            description: 'snapshot: if changelog is UNRELEASED, build a snapshot tarball'
+
     arch_axis: &arch_axis
             type: user-defined
             name: architecture
@@ -120,7 +127,7 @@
         name: '{name}-git-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
-                - string:
+                - string: &git_branch
                         name: branch
                         default: '{git-branch}'
                         description: Git branch, tag, or commit to build
@@ -139,8 +146,13 @@
         <<: *git_source_template
         name: '{source-name}-source-git-head'
         job-name: '{source-name}-source-git-head'
+        parameters:
+                - string: *git_branch
+                - string: *revision_string
+                - choice: *queue_choice
+                - choice: *buildtype_choice
         triggers:
-                - pollscm: "0 */6 * * *"
+                - pollscm: "H */6 * * *"
         axes:
                 - axis: *sid_only_axis
         scm:
@@ -742,7 +754,7 @@
                 - bzr-packages-adt
         next-job: 'postgresql-9.4-testsuite'
 
-# the PostgreSQL devel version is special:
+# the PostgreSQL devel versions:
 - project:
         name: postgresql-9.4-devel
         source-name: postgresql-9.4
@@ -755,6 +767,20 @@
                 - '{source-name}-binaries-sid-amd64'
                 - '{source-name}-testsuite-sid-amd64'
         next-job: postgresql-9.4-testsuite-sid-amd64
+        noadt: 'ADT=skip '
+
+- project:
+        name: postgresql-9.5-devel
+        source-name: postgresql-9.5
+        git-url: git://git.postgresql.org/git/postgresql.git
+        git-branch: postgresql/master
+        bzr-branch: postgresql-9.5/trunk
+        dist-filter: 'distribution=="sid"'
+        jobs:
+                - '{source-name}-source-git-head'
+                - '{source-name}-binaries-sid-amd64'
+                - '{source-name}-testsuite-sid-amd64'
+        next-job: postgresql-9.5-testsuite-sid-amd64
         noadt: 'ADT=skip '
 
 - project:

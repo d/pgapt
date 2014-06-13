@@ -28,6 +28,7 @@ echo "JOB_NAME=${JOB_NAME:-}"
 echo "GIT_COMMIT=${GIT_COMMIT:-}"
 echo "BZR_REVISION=${BZR_REVISION:-}"
 echo "SVN_REVISION=${SVN_REVISION:-}"
+echo "buildtype=${buildtype:-}"
 echo "distribution=${distribution:-}"
 echo "branch=${branch:-}"
 echo "revision=${revision:-}"
@@ -40,8 +41,6 @@ set -u
 PGLIBVER="9.3"
 # which libpq version to use in sid (latest beta)
 PGLIBVER_SID="9.3"
-# PostgreSQL devel version for building snapshots
-PGDEVVER="9.5"
 
 [ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
 
@@ -124,27 +123,6 @@ case ${distribution:-} in
   lucid)   PGDG_DISTRIBUTION="pgdg10.4" ;;
   *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
 esac
-
-## PostgreSQL devel version: This assumes a PostgreSQL git checkout provided by
-## Jenkins and puts a bzr checkout for the packaging in the same directory
-#if [ "$PACKAGE" = "postgresql-$PGDEVVER" ]; then
-#  ORIG_VERSION="$PGDEVVER~$(date -u +%Y%m%d.%H%M)"
-#  ORIGTAR="../${PACKAGE}_${ORIG_VERSION}.orig.tar.gz"
-#  BASE_VERSION="$ORIG_VERSION-1"
-#  VCS="bzr"
-#  VCS_REVERT="revert"
-#  if ! [ -f "$ORIGTAR" ]; then
-#    rm -f ../${PACKAGE}_*orig*
-#    git archive -o $ORIGTAR HEAD
-#  fi
-#  if [ -d .bzr ]; then
-#    bzr pull
-#  else
-#    bzr branch "https://alioth.debian.org/scm/loggerhead/pkg-postgresql/postgresql-$PGDEVVER/trunk/"
-#    mv trunk/debian trunk/.bzr* .
-#    rmdir trunk
-#  fi
-#fi
 
 # for postgresql server packages, move all lib packages to a separate
 # component, unless we are building postgresql-$PGLIBVER
@@ -240,16 +218,14 @@ fi
 # set $UNRELEASED to force using a ~version
 CL_DISTRIBUTION=$(dpkg-parsechangelog --count 1 | awk '/^Distribution/ {print $2}')
 if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; then
-  case $JOB_NAME in
-    *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
-      DATE="$(date -u +%Y%m%d.%H%M)"
-      BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/~$DATE-/")
-      echo "1.0" > debian/source/format
-      REVERTS="$REVERTS debian/source/format"
-      NO_ORIGTARGZ="1.0"
-      QUILT_PATCHES=debian/patches quilt push -a
-      ;;
-  esac
+  if [ "${buildtype:-}" = 'snapshot' ]; then # create a ~ orig tarball
+    DATE="$(date -u +%Y%m%d.%H%M)"
+    BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/~$DATE-/")
+    echo "1.0" > debian/source/format
+    REVERTS="$REVERTS debian/source/format"
+    NO_ORIGTARGZ="1.0"
+    QUILT_PATCHES=debian/patches quilt push -a
+  fi
   SHORT_REVISION=$(echo $VCS_REVISION | cut -c 1-7)
   SUFFIX="~${BUILD_NUMBER}.${VCS}${SHORT_REVISION}"
 else
