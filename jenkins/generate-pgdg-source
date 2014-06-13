@@ -99,13 +99,6 @@ rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 # clean up behind a possibly broken last job
 cleanup () {
   $VCS $VCS_REVERT $REVERTS || :
-  case $JOB_NAME in
-    *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
-      UNRELEASED=1
-      git reset --hard
-      rm -rf .pc debian/patches/git-head
-      ;;
-  esac
 }
 trap "cleanup" 0 2 3 15
 cleanup
@@ -246,6 +239,15 @@ fi
 # set $UNRELEASED to force using a ~version
 CL_DISTRIBUTION=$(dpkg-parsechangelog --count 1 | awk '/^Distribution/ {print $2}')
 if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; then
+  case $JOB_NAME in
+    *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
+      DATE="$(date -u +%Y%m%d.%H%M)"
+      BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/~$DATE-/")
+      echo "1.0" > debian/source/format
+      REVERTS="$REVERTS debian/source/format"
+      NO_ORIGTARGZ="1.0"
+      ;;
+  esac
   SHORT_REVISION=$(echo $VCS_REVISION | cut -c 1-7)
   SUFFIX="~${BUILD_NUMBER}.${VCS}${SHORT_REVISION}"
 else
@@ -253,24 +255,18 @@ else
 fi
 
 # $DOT defaults to '.', but can be set to '~'
-
 VERSION_STRING="$BASE_VERSION$SUFFIX${DOT:-.}$PGDG_DISTRIBUTION$PGDG_REVISION"
 dch --force-distribution --distribution="$distribution-pgdg" \
   --release-heuristic log -b --newversion=$VERSION_STRING -- \
   "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS revision $VCS_REVISION)"
 
-origtargz --tar-only --path=$HOME/tarballs -d
+[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs -d
+
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
 
-case $JOB_NAME in
-  *-git-head*) # PostgreSQL devel merged with Debian packaging in bzr
-    DBP_OPTS="--source-option=--single-debian-patch --source-option=--auto-commit --source-option=--include-removal"
-    ;;
-esac
-
-dpkg-buildpackage -uc -us -nc -d -sa -S -i -I ${DBP_OPTS:-}
+dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
 
 mkdir $RESULT
 dcmd cp -alv ../${PACKAGE}_*.changes $RESULT
