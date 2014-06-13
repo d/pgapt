@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /tmp/buildd/*/
+
+dpkg-parsechangelog --count 2
