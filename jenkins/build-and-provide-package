@@ -291,7 +291,7 @@ cowbuilder_run() {
   case "$architecture" in
     i386)
       linux32 sudo env distribution=${distribution} architecture=${architecture} \
-        ADT=${ADT:-} PG_SUPPORTED_VERSIONS=${PG_SUPPORTED_VERSIONS:-} \
+        ADT=${ADT:-} PG_SUPPORTED_VERSIONS="${PG_SUPPORTED_VERSIONS:-}" \
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
@@ -300,7 +300,7 @@ cowbuilder_run() {
       ;;
     amd64|all|*)
       sudo env distribution=${distribution} architecture=${architecture} \
-        ADT=${ADT:-} PG_SUPPORTED_VERSIONS=${PG_SUPPORTED_VERSIONS:-} \
+        ADT=${ADT:-} PG_SUPPORTED_VERSIONS="${PG_SUPPORTED_VERSIONS:-}" \
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
