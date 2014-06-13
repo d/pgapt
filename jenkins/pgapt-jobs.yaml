@@ -261,7 +261,12 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'BUILD_ONLY=yes PG_SUPPORTED_VERSIONS="9.4 9.5" build-and-provide-package'
+                - shell: |
+                        export PG_SUPPORTED_VERSIONS="9.4 9.5"
+                        for v in $PG_SUPPORTED_VERSIONS; do
+                                apt-get install -y postgresql-server-dev-$v
+                        done
+                        BUILD_ONLY=yes build-and-provide-package
 
 # testsuite template
 
