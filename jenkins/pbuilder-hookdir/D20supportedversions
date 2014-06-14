@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# if PG_SUPPORTED_VERSIONS is set, add sources.list entries for the versions
+# given so we can build against beta and devel
+
+set -e
+
+[ "${PG_SUPPORTED_VERSIONS:-}" ] || exit 0
+
+cd /etc/apt/sources.list.d
+
+SUPPORTED_VERSIONS=$(/usr/share/postgresql-common/supported-versions)
+
+while read deb url dist components; do
+	[ "$deb" = "deb" ] || continue
+	case $dist in # we are only interested in *-pgdg-testing
+		*-testing) ;;
+		*) continue ;;
+	esac
+	for v in $SUPPORTED_VERSIONS; do
+		echo "deb $url $dist $v"
+	done
+done < pgdg.list | tee pgdg-components.list
+
+apt-get update
+
+for v in $SUPPORTED_VERSIONS; do
+	PKGS="${PKGS:-} postgresql-server-dev-$v"
+done
+apt-get install $PKGS

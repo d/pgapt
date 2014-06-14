@@ -1,11 +1,6 @@
 #!/bin/sh
 
-if [ "${PG_SUPPORTED_VERSIONS:-}" ]; then
-	for v in $(/usr/share/postgresql-common/supported-versions); do
-		PKG="${PKG:-} postgresql-server-dev-$v"
-	done
-	apt-get install $PKG
-fi
+set -e
 
 cat > /etc/postgresql-common/supported_versions <<EOF
 # file managed by A20supportedversions, do not edit
