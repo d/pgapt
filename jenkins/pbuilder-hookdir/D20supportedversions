@@ -27,4 +27,4 @@ apt-get update
 for v in $SUPPORTED_VERSIONS; do
 	PKGS="${PKGS:-} postgresql-server-dev-$v"
 done
-apt-get install $PKGS
+apt-get install -y $PKGS
