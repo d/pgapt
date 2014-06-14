@@ -223,7 +223,7 @@
                         fallback-to-last-successful: true
                 - shell: 'BUILD_ONLY=yes {noadt}build-and-provide-package'
         publishers:
-                - archive:
+                - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                         latest-only: true
                 - fingerprint:
@@ -231,13 +231,38 @@
                 - junit:
                         results: autopkgtest.xml
                 - ircbot: *only_configs
-                - trigger-parameterized-builds:
+                - trigger-parameterized-builds: &next_job_trigger
                         - project: '{next-job}'
                           condition: SUCCESS
                           predefined-parameters: "binaries=$JOB_NAME\nqueue=$queue"
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
+# same as {name}-binaries, but triggers -beta and -devel builds on success
+- job-template:
+        <<: *binaries_template
+        job-name: '{name}-binaries'
+        name: '{name}-binaries-with-next'
+        publishers:
+                - archive: *binaries_archive
+                - fingerprint:
+                        record-artifacts: true
+                - junit:
+                        results: autopkgtest.xml
+                - ircbot: *only_configs
+                - trigger-parameterized-builds: *next_job_trigger
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries-beta'
+                          condition: SUCCESS
+                          predefined-parameters: "queue=$queue"
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries-devel'
+                          condition: SUCCESS
+                          predefined-parameters: "queue=$queue"
+                - groovy-postbuild: *add_version_tag
+                - workspace-cleanup
+
+# binaries triggered from -source-git-head
 - job-template:
         <<: *binaries_template
         name: '{source-name}-binaries-sid-amd64'
@@ -255,6 +280,7 @@
                 - axis: *amd64_only_axis
                 - axis: *dist_axis
 
+# binaries for building modules for PostgreSQL beta
 - job-template:
         <<: *binaries_template
         name: '{name}-binaries-beta'
@@ -263,6 +289,7 @@
                 - copyartifact: *copysource
                 - shell: 'PG_SUPPORTED_VERSIONS="9.4" BUILD_ONLY=yes build-and-provide-package'
 
+# binaries for building modules for PostgreSQL devel
 - job-template:
         <<: *binaries_template
         name: '{name}-binaries-devel'
@@ -407,18 +434,20 @@
         noadt: ''
 
 - job-group:
-        name: svn-packages
+        name: git-packages-with-next
         jobs:
-                - '{name}-svn-source'
-                - '{name}-binaries'
+                - '{name}-git-source'
+                - '{name}-binaries-with-next'
+                - '{name}-binaries-beta'
+                - '{name}-binaries-devel'
         next-job: dput
         noadt: ''
 
 - job-group:
-        name: binaries-next
+        name: svn-packages
         jobs:
-                - '{name}-binaries-beta'
-                - '{name}-binaries-devel'
+                - '{name}-svn-source'
+                - '{name}-binaries'
         next-job: dput
         noadt: ''
 
@@ -873,8 +902,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
-                - binaries-next
+                - git-packages-with-next
 
 - project:
         name: prefix
