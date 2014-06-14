@@ -5,7 +5,10 @@
 
 set -e
 
-[ "${PG_SUPPORTED_VERSIONS:-}" ] || exit 0
+# don't bother if versions are default
+case ${PG_SUPPORTED_VERSIONS:-} in
+	""|pgdg|default) exit 0 ;;
+esac
 
 cd /etc/apt/sources.list.d
 

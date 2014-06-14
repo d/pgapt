@@ -257,11 +257,22 @@
 
 - job-template:
         <<: *binaries_template
-        name: '{name}-binaries-devel'
+        name: '{name}-binaries-beta'
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'PG_SUPPORTED_VERSIONS="9.4 9.5" BUILD_ONLY=yes build-and-provide-package'
+                - shell: 'PG_SUPPORTED_VERSIONS="9.4" BUILD_ONLY=yes build-and-provide-package'
+
+- job-template:
+        <<: *binaries_template
+        name: '{name}-binaries-devel'
+        axes:
+                - axis: *amd64_only_axis
+                - axis: *sid_only_axis
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact: *copysource
+                - shell: 'PG_SUPPORTED_VERSIONS="9.5" BUILD_ONLY=yes build-and-provide-package'
 
 # testsuite template
 
@@ -404,8 +415,9 @@
         noadt: ''
 
 - job-group:
-        name: binaries-devel
+        name: binaries-next
         jobs:
+                - '{name}-binaries-beta'
                 - '{name}-binaries-devel'
         next-job: dput
         noadt: ''
@@ -863,7 +875,7 @@
         dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
-                - binaries-devel
+                - binaries-next
 
 - project:
         name: prefix
