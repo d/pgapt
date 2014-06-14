@@ -11,7 +11,7 @@ ls -AlR
 
 set -eux
 
-CHANGES="$(find . -name '*.changes' -not -name '*_source.changes')"
+CHANGES="$(find . -name '*.changes')"
 
 dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 

@@ -226,7 +226,7 @@ cowbuilder_init() {
 
 identify_build_type() {
   # defaults
-  DEBBUILDOPTS="-sa"
+  DEBBUILDOPTS="-b"
   SKIP_ARCH_BUILD=false
   DEB_HOST_ARCH="$(dpkg-architecture -qDEB_HOST_ARCH)"
 
