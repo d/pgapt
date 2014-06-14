@@ -602,7 +602,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: libdbd-pg-perl
@@ -630,7 +630,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgadmin3
@@ -680,7 +680,7 @@
         # lucid doesn't accept the plugins symlink in the testsuite for whatever reason
         dist-filter: 'distribution!="lucid"'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgfincore
@@ -688,7 +688,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgmemcache
@@ -696,7 +696,7 @@
         git-branch: master
         dist-filter: 'distribution!="lucid"'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pg-reorg
@@ -704,7 +704,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgpool2
@@ -720,7 +720,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgxnclient
@@ -744,7 +744,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: plv8
@@ -752,7 +752,7 @@
         git-branch: debian
         dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgis
@@ -854,7 +854,7 @@
         # lucid's autotools-dev doesn't contain /usr/share/perl5/Debian/Debhelper/Sequence/autotools_dev.pm
         dist-filter: 'distribution!="lucid"'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-filedump
@@ -870,7 +870,7 @@
         git-branch: master
         dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-pljava
@@ -878,7 +878,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-pllua
@@ -886,7 +886,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-plproxy
@@ -894,7 +894,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-plsh
@@ -910,7 +910,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: preprepare
@@ -918,7 +918,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: psqlodbc
