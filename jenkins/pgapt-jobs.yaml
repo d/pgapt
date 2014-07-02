@@ -715,6 +715,14 @@
                 - git-packages
 
 - project:
+        name: pgsphere
+        git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/pgsphere.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgstatplans
         git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
         git-branch: master
@@ -940,6 +948,14 @@
 - project:
         name: python-argh
         git-url: git://git.debian.org/collab-maint/python-argh.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
+        name: q3c
+        git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/q3c.git
         git-branch: master
         dist-filter: ''
         jobs:
