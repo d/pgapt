@@ -873,6 +873,14 @@
                 - git-packages
 
 - project:
+        name: postgresql-multicorn
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
         git-branch: master
