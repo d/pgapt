@@ -865,8 +865,7 @@
 - project:
         name: postgresql-debversion
         git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
-        #git-branch: debian
-        git-branch: master
+        git-branch: debian
         # lucid's autotools-dev doesn't contain /usr/share/perl5/Debian/Debhelper/Sequence/autotools_dev.pm
         dist-filter: 'distribution!="lucid"'
         jobs:
