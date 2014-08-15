@@ -238,6 +238,18 @@
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
+# same as {name}-binaries, but running sequentially
+- job-template:
+        name: '{name}-binaries-sequential'
+        job-name: '{name}-binaries'
+        <<: *binaries_template
+        description: 'Build Debian binary package of {name}, running configurations sequentially.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        execution-strategy:
+                combination-filter: '{dist-filter}'
+                sequential: true
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
+
 # same as {name}-binaries, but triggers -beta and -devel builds on success
 - job-template:
         <<: *binaries_template
@@ -434,6 +446,14 @@
         noadt: ''
 
 - job-group:
+        name: git-packages-sequential
+        jobs:
+                - '{name}-git-source'
+                - '{name}-binaries-sequential'
+        next-job: dput
+        noadt: ''
+
+- job-group:
         name: git-packages-with-next
         jobs:
                 - '{name}-git-source'
@@ -614,9 +634,11 @@
         name: libpqtypes
         git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
         git-branch: master
-        dist-filter: ''
+        # skip dists without dpkg-buildflags
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages
+                - git-packages-sequential
 
 - project:
         name: newpid
@@ -775,8 +797,9 @@
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
         git-branch: master
         dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages
+                - git-packages-sequential
 
 - project:
         name: postgresql-8.4
