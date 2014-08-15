@@ -611,6 +611,14 @@
                 - apt-packages
 
 - project:
+        name: libpqtypes
+        git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
         git-branch: master
