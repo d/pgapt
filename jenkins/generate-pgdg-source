@@ -151,6 +151,8 @@ case $PACKAGE in
     case ${distribution:-} in
       lucid|precise|saucy|trusty) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control
+        ;;
+    esac
     ;;
 
   autopkgtest|libdbd-pg-perl)
