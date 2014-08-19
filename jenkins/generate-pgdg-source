@@ -147,6 +147,12 @@ case $PACKAGE in
       debian/control
     ;;
 
+  postgresql-common)
+    case ${distribution:-} in
+      lucid|precise|saucy|trusty) # remove systemd dependency
+        sed -i -e '/dh-systemd/d' debian/control
+    ;;
+
   autopkgtest|libdbd-pg-perl)
     DOT='~' ;;
 
