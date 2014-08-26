@@ -164,6 +164,7 @@
                                         url: 'bzr::http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
                                 - parent:
                                         url: '/srv/jenkins/workspace/{source-name}-source-git-head/source'
+                        reference-repo: '$HOME/gitcache.buexcl/postgresql'
                         branches:
                                 - '$branch'
                         merge:
