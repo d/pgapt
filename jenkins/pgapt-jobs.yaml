@@ -571,6 +571,19 @@
         builders:
                 - shell: 'sudo cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
 
+- job:
+        name: gitcache-postgresql
+        description: Reference repository postgresql source jobs
+        workspace: '$HOME/gitcache.buexcl/postgresql'
+        scm:
+                - git:
+                        url: git://git.postgresql.org/git/postgresql.git
+                        branches:
+                                - master
+                        wipe-workspace: false
+        triggers:
+                - pollscm: "H */6 * * *"
+
 # project jobs
 
 - project:
