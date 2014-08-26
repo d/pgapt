@@ -26,8 +26,9 @@
             name: buildtype
             choices:
                     - snapshot
+                    - snapshot-dot
                     - normal
-            description: 'snapshot: if changelog is UNRELEASED, build a snapshot tarball'
+            description: 'snapshot: if changelog is UNRELEASED, build a snapshot tarball with a ~date version. With snapshot-dot, use a .date version.'
 
     arch_axis: &arch_axis
             type: user-defined

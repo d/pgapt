@@ -226,14 +226,18 @@ fi
 # set $UNRELEASED to force using a ~version
 CL_DISTRIBUTION=$(dpkg-parsechangelog --count 1 | awk '/^Distribution/ {print $2}')
 if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; then
-  if [ "${buildtype:-}" = 'snapshot' ]; then # create a ~ orig tarball
+  case ${buildtype:-} in
+  snapshot*) # create a ~ orig tarball
+    TILDE='~'
+    [ $buildtype = 'snapshot-dot' ] && TILDE='.'
     DATE="$(date -u +%Y%m%d.%H%M)"
-    BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/~$DATE-/")
+    BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/$TILDE$DATE-/")
     echo "1.0" > debian/source/format
     REVERTS="$REVERTS debian/source/format"
     NO_ORIGTARGZ="1.0"
     QUILT_PATCHES=debian/patches quilt push -a
-  fi
+    ;;
+  esac
   SHORT_REVISION=$(echo $VCS_REVISION | cut -c 1-7)
   SUFFIX="~${BUILD_NUMBER}.${VCS}${SHORT_REVISION}"
 else
