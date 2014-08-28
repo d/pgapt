@@ -117,6 +117,7 @@ case ${distribution:-} in
   lenny)   PGDG_DISTRIBUTION="pgdg50" ;;
   etch)    PGDG_DISTRIBUTION="pgdg40" ;;
   # Ubuntu
+  utopic)  PGDG_DISTRIBUTION="pgdg14.10" ;;
   trusty)  PGDG_DISTRIBUTION="pgdg14.04" ;;
   saucy)   PGDG_DISTRIBUTION="pgdg13.10" ;;
   precise) PGDG_DISTRIBUTION="pgdg12.4" ;;

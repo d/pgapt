@@ -233,6 +233,53 @@ DscIndices: Sources Release .gz .bz2
 Tracking: all
 Contents: percomponent nocompatsymlink
 
+Codename: utopic-pgdg
+Suite: utopic-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: utopic-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
+Codename: utopic-pgdg-testing
+Suite: utopic-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: utopic-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
+Codename: utopic-pgdg-deprecated
+Suite: utopic-pgdg-deprecated
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: utopic-pgdg-deprecated.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
 Codename: trusty-pgdg
 Suite: trusty-pgdg
 Origin: apt.postgresql.org

@@ -7,6 +7,7 @@ Allow: sid-pgdg>sid-pgdg-testing
  squeeze-pgdg>squeeze-pgdg-testing
  lenny-pgdg>lenny-pgdg-testing
  etch-pgdg>etch-pgdg-testing
+ utopic-pgdg>utopic-pgdg-testing
  trusty-pgdg>trusty-pgdg-testing
  saucy-pgdg>saucy-pgdg-testing
  precise-pgdg>precise-pgdg-testing

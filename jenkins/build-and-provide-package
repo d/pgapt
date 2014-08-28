@@ -192,7 +192,7 @@ cowbuilder_init() {
     echo "*** Creating cowbuilder base $COWBUILDER_BASE for arch $arch and distribution $COWBUILDER_DIST ***"
     case $COWBUILDER_DIST in
       lenny|etch) MIRROR="http://archive.debian.org/debian/" ;;
-      hardy|lucid|precise|quantal|saucy|trusty)
+      hardy|lucid|precise|quantal|saucy|trusty|utopic)
         case $(hostname) in
           pgdg*) MIRROR="http://ubuntu-approx:9999/ubuntu/" ;;
           *) MIRROR="http://de.archive.ubuntu.com/ubuntu/" ;;
