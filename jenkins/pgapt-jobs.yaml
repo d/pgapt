@@ -913,7 +913,8 @@
         name: postgresql-filedump
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
         git-branch: master
-        dist-filter: ''
+        # uses /usr/share/dpkg/buildflags.mk
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
                 - git-packages
 
