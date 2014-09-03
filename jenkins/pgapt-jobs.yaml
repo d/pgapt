@@ -1076,7 +1076,8 @@
 - project:
         name: wal-e
         bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
+        # needs python-swiftclient
+        dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - bzr-packages-lp
 
