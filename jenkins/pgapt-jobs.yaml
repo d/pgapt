@@ -1025,7 +1025,8 @@
 - project: # needed by wal-e
         name: python-azure
         bzr-branch: lp:~stub/ubuntu/trusty/python-azure/trunk
-        dist-filter: ''
+        # needs dh-python
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - bzr-packages-lp
 
@@ -1075,7 +1076,7 @@
 - project:
         name: wal-e
         bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
-        dist-filter: ''
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - bzr-packages-lp
 
