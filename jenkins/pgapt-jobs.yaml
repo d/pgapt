@@ -112,7 +112,7 @@
 
 # bzr template
 
-- job-template:
+- job-template: &bzr_source_template
         <<: *apt_source_template
         name: '{name}-bzr-source'
         description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
@@ -120,6 +120,14 @@
                 - bzr:
                         url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
                         loggerhead: 'https://alioth.debian.org/scm/loggerhead/pkg-postgresql/{bzr-branch}'
+
+- job-template:
+        <<: *bzr_source_template
+        name: '{name}-bzr-source-lp'
+        job-name: '{name}-bzr-source'
+        scm:
+                - bzr:
+                        url: '{bzr-branch}'
 
 # git template
 
@@ -426,6 +434,14 @@
         name: bzr-packages
         jobs:
                 - '{name}-bzr-source'
+                - '{name}-binaries'
+        next-job: dput
+        noadt: ''
+
+- job-group:
+        name: bzr-packages-lp
+        jobs:
+                - '{name}-bzr-source-lp'
                 - '{name}-binaries'
         next-job: dput
         noadt: ''
@@ -1007,6 +1023,13 @@
         jobs:
                 - git-packages
 
+- project: # needed by wal-e
+        name: python-azure
+        bzr-branch: lp:~stub/ubuntu/trusty/python-azure/trunk
+        dist-filter: ''
+        jobs:
+                - bzr-packages-lp
+
 - project:
         name: q3c
         git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/q3c.git
@@ -1049,6 +1072,13 @@
         dist-filter: ''
         jobs:
                 - git-packages
+
+- project:
+        name: wal-e
+        bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
+        dist-filter: ''
+        jobs:
+                - bzr-packages-lp
 
 - project:
         name: upgrade-8.4-9.4
