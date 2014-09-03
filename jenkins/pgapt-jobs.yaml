@@ -124,7 +124,6 @@
 - job-template:
         <<: *bzr_source_template
         name: '{name}-bzr-source-lp'
-        job-name: '{name}-bzr-source'
         scm:
                 - bzr:
                         url: '{bzr-branch}'
