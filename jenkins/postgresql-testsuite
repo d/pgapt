@@ -111,7 +111,10 @@ set -eux
 test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 
 apt-get install -y eatmydata locales logrotate net-tools hunspell-en-us newpid
-dpkg -i $TESTDIR/*.deb || apt-get install -fy
+if ! dpkg -i $TESTDIR/*.deb; then
+  apt-get install -fy
+  dpkg -i $TESTDIR/*.deb
+fi
 
 dpkg -l 'libpq*' 'postgresql*' | cat
 
