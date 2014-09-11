@@ -696,7 +696,8 @@
         name: pgadmin3
         git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
         git-branch: master
-        dist-filter: ''
+        # skip dists without /usr/share/dpkg/buildflags.mk
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
         jobs:
                 - git-packages
 
