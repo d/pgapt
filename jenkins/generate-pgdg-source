@@ -190,9 +190,15 @@ case $PACKAGE in
     done
     ;;
 
-  pgextwlist|postgresql-multicorn) # depend on all contrib packages
+  pgextwlist) # depend on all contrib packages
     for version in $(/usr/share/postgresql-common/supported-versions); do
       sed -i -e "s/^Depends: /Depends: postgresql-contrib-$version, /" debian/tests/control
+    done
+    ;;
+
+  postgresql-multicorn) # depend on all contrib/plpython packages
+    for version in $(/usr/share/postgresql-common/supported-versions); do
+      sed -i -e "s/^Depends: /Depends: postgresql-contrib-$version, postgresql-plpython-$version, postgresql-plpython3-version, /" debian/tests/control
     done
     ;;
 
