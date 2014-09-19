@@ -744,6 +744,14 @@
                 - git-packages-with-next
 
 - project:
+        name: pgloader
+        git-url: https://github.com/dimitri/pgloader.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgfincore
         git-url: git://git.postgresql.org/git/pgfincore.git
         git-branch: master
