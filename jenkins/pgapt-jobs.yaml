@@ -946,7 +946,8 @@
         name: postgresql-multicorn
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
         git-branch: master
-        dist-filter: ''
+        # needs dh-python
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - git-packages
 
