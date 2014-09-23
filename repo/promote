@@ -30,7 +30,7 @@ if [ -z "$NEWVERSION" ]; then
 	echo "ERROR: $PKG does not seem to be a source package"
 	exit 1
 fi
-INITIAL=$(echo $PKG | cut -c 1)
+INITIAL=$(echo $PKG | egrep -o '^(lib)?.')
 test -d /srv/apt/repo/pool/main/$INITIAL/$PKG/
 BINARIES=$(ls /srv/apt/repo/pool/main/$INITIAL/$PKG/*deb | sed -e 's!.*/!!' -e 's/_.*//' | sort -u)
 OTHERBINARIES=$(echo "$BINARIES" | while read b; do if [ "$b" != "$PKG" ]; then echo "$b"; fi; done)
