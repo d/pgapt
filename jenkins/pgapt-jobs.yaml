@@ -747,9 +747,11 @@
         name: pgloader
         git-url: https://github.com/dimitri/pgloader.git
         git-branch: master
-        dist-filter: ''
+        # build on sid (and maybe copy the result to other suites)
+        dist-filter: 'distribution=="sid"'
         jobs:
-                - git-packages
+                #- git-packages
+                - apt-packages
 
 - project:
         name: pgfincore
