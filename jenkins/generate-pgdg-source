@@ -156,7 +156,7 @@ case $PACKAGE in
     esac
     ;;
 
-  autopkgtest|libdbd-pg-perl)
+  autopkgtest|libdbd-pg-perl|pgloader)
     DOT='~' ;;
 
   check-postgres) # add B-D for all PostgreSQL versions, not just "postgresql"
