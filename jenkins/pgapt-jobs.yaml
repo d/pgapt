@@ -612,9 +612,11 @@
 
 - project:
         name: autopkgtest
+        git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
+        git-branch: master
         dist-filter: ''
         jobs:
-                - apt-packages
+                - git-packages
 
 - project:
         name: barman
