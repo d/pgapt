@@ -203,12 +203,13 @@ case $PACKAGE in
         *)
           # Add module (we can't use @) and -contrib dependencies
           # Depends: postgresql-9.4-python-multicorn
-          sed -i -e "s/python-multicorn, /python-multicorn, postgresql-$version-python-multicorn, postgresql-plpython-$version, /" debian/tests/control
+          sed -i -e "s/python-multicorn, /python-multicorn, postgresql-$version-python-multicorn, postgresql-plpython-$version, postgresql-contrib-$version, /" debian/tests/control
           # Depends: postgresql-9.4-python3-multicorn
-          sed -i -e "s/python3-multicorn, /python3-multicorn, postgresql-$version-python3-multicorn, postgresql-plpython3-$version, /" debian/tests/control
+          sed -i -e "s/python3-multicorn, /python3-multicorn, postgresql-$version-python3-multicorn, postgresql-plpython3-$version, postgresql-contrib-$version, /" debian/tests/control
           ;;
       esac
     done
+    cat debian/tests/control
     ;;
 
   psqlodbc)
