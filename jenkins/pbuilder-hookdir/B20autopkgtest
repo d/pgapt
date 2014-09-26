@@ -32,16 +32,6 @@ export PG_UMASKS="077"
 
 apt-get install -y autopkgtest apt-utils pbuilder newpid
 
-# install our binaries to make sure they aren't pulled from the distribution
-# (problem seen with autopkgtest 2.6 on lucid)
-debi () {
-	dpkg -i $(awk '/\.deb / { print "../" $1 }' debian/files | xargs)
-}
-if ! debi; then
-	apt-get install -f -y
-	debi
-fi
-
 mkdir -p "$TMPADT/out"
 binaries=$(awk '/\.deb / { print "--binary ../" $1 }' debian/files | xargs)
 
