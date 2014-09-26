@@ -1,3 +1,9 @@
+pgdg-buildenv (15) sid-pgdg; urgency=medium
+
+  * Pin the pgdg repos to 500 so we don't miss newer distribution packages.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 26 Sep 2014 17:36:16 +0200
+
 pgdg-buildenv (14) sid-pgdg; urgency=medium
 
   * Fix postinst to exit cleanly.

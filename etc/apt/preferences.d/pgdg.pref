@@ -1,4 +1,4 @@
 # do not edit, file maintained by pgdg-buildenv
 Package: *
 Pin: release o=apt.postgresql.org
-Pin-Priority: 900
+Pin-Priority: 500
