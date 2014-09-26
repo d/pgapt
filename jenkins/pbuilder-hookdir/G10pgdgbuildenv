@@ -51,7 +51,7 @@ cat > /etc/apt/preferences.d/pgdg.pref <<EOF
 # do not edit, file maintained by pgdg-buildenv
 Package: *
 Pin: release o=apt.postgresql.org
-Pin-Priority: 900
+Pin-Priority: 500
 EOF
 
 cat > /etc/apt/ACCC4CF8.asc <<EOK
