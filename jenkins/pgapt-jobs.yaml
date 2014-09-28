@@ -614,7 +614,8 @@
         name: autopkgtest
         git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
         git-branch: master
-        dist-filter: ''
+        # limit to distributions with python3
+        dist-filter: '(distribution!="squeeze") && (distribution!="precise") && (distribution!="lucid")'
         jobs:
                 - git-packages
 
