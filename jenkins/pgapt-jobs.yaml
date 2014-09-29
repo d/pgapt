@@ -951,9 +951,8 @@
         name: postgresql-multicorn
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
         git-branch: master
-        # temporarily disable wheezy (test failure)
         # needs dh-python
-        dist-filter: '(distribution!="wheezy") && (distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
+        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - git-packages
 
