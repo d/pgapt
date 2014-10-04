@@ -1118,6 +1118,13 @@
                 - upgrade-job
 
 - project:
+        name: upgrade-9.2-9.3
+        oldversion: 9.2
+        newversion: 9.3
+        jobs:
+                - upgrade-job
+
+- project:
         name: upgrade-9.3-9.4
         oldversion: 9.3
         newversion: 9.4
