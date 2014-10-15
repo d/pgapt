@@ -784,7 +784,8 @@
         name: pgpool2
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
-        dist-filter: 'distribution!="lucid"'
+        # precise has problems with autoreconf
+        dist-filter: '(distribution!="lucid") && (distribution!="precise")'
         jobs:
                 - git-packages
 

@@ -198,7 +198,7 @@ case $PACKAGE in
 
   pgpool2)
     case ${distribution:-} in
-      lucid|precise|saucy|trusty) # remove systemd dependency
+      squeeze|wheezy|lucid|precise|saucy|trusty) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control debian/control.in
         ;;
     esac
