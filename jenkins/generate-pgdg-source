@@ -148,7 +148,7 @@ case $PACKAGE in
       debian/control
     ;;
 
-  postgresql-common)
+  postgresql-common|pgpool2)
     case ${distribution:-} in
       lucid|precise|saucy|trusty) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control
