@@ -148,7 +148,7 @@ case $PACKAGE in
       debian/control
     ;;
 
-  postgresql-common|pgpool2)
+  postgresql-common)
     case ${distribution:-} in
       lucid|precise|saucy|trusty) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control
@@ -194,6 +194,14 @@ case $PACKAGE in
     for version in $(/usr/share/postgresql-common/supported-versions); do
       sed -i -e "s/^Depends: /Depends: postgresql-contrib-$version, /" debian/tests/control
     done
+    ;;
+
+  pgpool2)
+    case ${distribution:-} in
+      lucid|precise|saucy|trusty) # remove systemd dependency
+        sed -i -e '/dh-systemd/d' debian/control debian/control.in
+        ;;
+    esac
     ;;
 
   postgresql-multicorn)
