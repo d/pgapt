@@ -45,6 +45,53 @@ DscIndices: Sources Release .gz .bz2
 Tracking: all
 Contents: percomponent nocompatsymlink
 
+Codename: jessie-pgdg
+Suite: jessie-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: jessie-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
+Codename: jessie-pgdg-testing
+Suite: jessie-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: jessie-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
+Codename: jessie-pgdg-deprecated
+Suite: jessie-pgdg-deprecated
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.0 9.1 9.2 9.3 9.4
+SignWith: ACCC4CF8
+Log: jessie-pgdg-deprecated.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
 Codename: wheezy-pgdg
 Suite: wheezy-pgdg
 Origin: apt.postgresql.org

@@ -47,6 +47,7 @@
             name: distribution
             values:
                     - sid
+                    - jessie
                     - wheezy
                     - squeeze
                     - utopic

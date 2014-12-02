@@ -23,7 +23,7 @@ done
 shift $(($OPTIND - 1))
 
 PKG="$1"
-[ "$DISTS" = "all" ] && DISTS="sid wheezy squeeze utopic trusty precise lucid"
+[ "$DISTS" = "all" ] && DISTS="sid jessie wheezy squeeze utopic trusty precise lucid"
 
 NEWVERSION=$($REPREPRO -A source list sid-pgdg-testing "$PKG" | awk '{ print $3 }')
 if [ -z "$NEWVERSION" ]; then
