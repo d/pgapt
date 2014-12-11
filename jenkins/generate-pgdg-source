@@ -110,20 +110,23 @@ BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 case ${distribution:-} in
   # Debian
   sid)     PGLIBVER="$PGLIBVER_SID" # use latest beta on sid
-           PGDG_DISTRIBUTION="pgdg"   ;;
-  jessie)  PGDG_DISTRIBUTION="pgdg80" ;;
-  wheezy)  PGDG_DISTRIBUTION="pgdg70" ;;
-  squeeze) PGDG_DISTRIBUTION="pgdg60" ;;
-  lenny)   PGDG_DISTRIBUTION="pgdg50" ;;
-  etch)    PGDG_DISTRIBUTION="pgdg40" ;;
+           PGDG_DISTRIBUTION="pgdg"      DISTRO="debian" RELEASE="unstable" ;;
+  jessie)  PGDG_DISTRIBUTION="pgdg80"    DISTRO="debian" RELEASE="8" ;;
+  wheezy)  PGDG_DISTRIBUTION="pgdg70"    DISTRO="debian" RELEASE="7" ;;
+  squeeze) PGDG_DISTRIBUTION="pgdg60"    DISTRO="debian" RELEASE="6.0" ;;
+  lenny)   PGDG_DISTRIBUTION="pgdg50"    DISTRO="debian" RELEASE="5.0" ;;
+  etch)    PGDG_DISTRIBUTION="pgdg40"    DISTRO="debian" RELEASE="4.1" ;;
   # Ubuntu
-  utopic)  PGDG_DISTRIBUTION="pgdg14.10" ;;
-  trusty)  PGDG_DISTRIBUTION="pgdg14.04" ;;
-  saucy)   PGDG_DISTRIBUTION="pgdg13.10" ;;
-  precise) PGDG_DISTRIBUTION="pgdg12.4" ;;
-  lucid)   PGDG_DISTRIBUTION="pgdg10.4" ;;
+  utopic)  PGDG_DISTRIBUTION="pgdg14.10" DISTRO="ubuntu" RELEASE="14.10" ;;
+  trusty)  PGDG_DISTRIBUTION="pgdg14.04" DISTRO="ubuntu" RELEASE="14.04" ;;
+  saucy)   PGDG_DISTRIBUTION="pgdg13.10" DISTRO="ubuntu" RELEASE="13.10" ;;
+  precise) PGDG_DISTRIBUTION="pgdg12.4"  DISTRO="ubuntu" RELEASE="12.04" ;;
+  lucid)   PGDG_DISTRIBUTION="pgdg10.4"  DISTRO="ubuntu" RELEASE="10.04" ;;
   *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
 esac
+
+# tell /usr/share/postgresql-common/supported-versions which distro/release we are targetting
+export DISTRO RELEASE
 
 # for postgresql server packages, move all lib packages to a separate
 # component, unless we are building postgresql-$PGLIBVER
