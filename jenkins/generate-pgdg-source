@@ -98,9 +98,11 @@ rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 
 # merge with another branch
 if [ "${merge:-}" ]; then
-  git reset --hard postgresql/master
+  git remote add debian $merge || :
+  git fetch debian
+  git reset --hard origin/master
   git clean -xdf
-  git merge -m "Merge with $merge" $merge
+  git merge -m "Merge with $merge" debian/master
 fi
 
 # clean up behind a possibly broken last job

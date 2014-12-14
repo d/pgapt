@@ -160,7 +160,7 @@
                 - choice:
                         name: merge
                         choices:
-                                - debian/master
+                                - 'bzr::http://anonscm.debian.org/bzr/pkg-postgresql/{source-name}/trunk/'
                         description: 'Branch to merge with before build'
                 - string: *revision_string
                 - choice: *queue_choice
@@ -171,20 +171,10 @@
                 - axis: *sid_only_axis
         scm:
                 - git:
-                        remotes:
-                                - postgresql:
-                                        url: '{git-url}'
-                                - debian:
-                                        url: 'bzr::http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
-                                - parent:
-                                        url: '/srv/jenkins/workspace/{source-name}-source-git-head/source'
+                        url: '{git-url}'
                         reference-repo: '$HOME/gitcache.buexcl/postgresql'
                         branches:
                                 - '$branch'
-                        #merge:
-                        #        remote: debian
-                        #        branch: master
-                        shallow-clone: true
                         basedir: source
                         wipe-workspace: false
         publishers:
