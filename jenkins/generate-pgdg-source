@@ -29,8 +29,9 @@ echo "GIT_COMMIT=${GIT_COMMIT:-}"
 echo "BZR_REVISION=${BZR_REVISION:-}"
 echo "SVN_REVISION=${SVN_REVISION:-}"
 echo "buildtype=${buildtype:-}"
-echo "distribution=${distribution:-}"
+echo "distribution=${distribution:=sid}"
 echo "branch=${branch:-}"
+echo "merge=${merge:-}"
 echo "revision=${revision:-}"
 
 set -x
@@ -94,6 +95,13 @@ fi
 
 # remove artifacts from last build
 rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
+
+# merge with another branch
+if [ "${merge:-}" ]; then
+  git reset --hard postgresql/master
+  git clean -xdf
+  git merge -m "Merge with $merge" $merge
+fi
 
 # clean up behind a possibly broken last job
 cleanup () {

@@ -157,6 +157,11 @@
         job-name: '{source-name}-source-git-head'
         parameters:
                 - string: *git_branch
+                - choice:
+                        name: merge
+                        choices:
+                                - debian/master
+                        description: 'Branch to merge with before build'
                 - string: *revision_string
                 - choice: *queue_choice
                 - choice: *buildtype_choice
@@ -176,9 +181,9 @@
                         reference-repo: '$HOME/gitcache.buexcl/postgresql'
                         branches:
                                 - '$branch'
-                        merge:
-                                remote: debian
-                                branch: master
+                        #merge:
+                        #        remote: debian
+                        #        branch: master
                         shallow-clone: true
                         basedir: source
                         wipe-workspace: false
