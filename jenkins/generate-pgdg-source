@@ -100,7 +100,7 @@ rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 if [ "${merge:-}" ]; then
   git remote add debian $merge || :
   git fetch debian
-  git reset --hard origin/master
+  git reset --hard $branch
   git clean -xdf
   git merge -m "Merge with $merge" debian/master
 fi
