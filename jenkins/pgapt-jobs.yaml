@@ -788,7 +788,8 @@
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
         git-branch: master
-        dist-filter: ''
+        # needs libcgal-dev (in non-free on squeeze, in multiverse on lucid/precise, let's not care)
+        dist-filter: '(distribution!="lucid") && (distribution!="precise") && (distribution!="squeeze")'
         jobs:
                 - git-packages
 
