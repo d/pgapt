@@ -785,6 +785,14 @@
                 - git-packages
 
 - project:
+        name: pgrouting
+        git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgsphere
         git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/pgsphere.git
         git-branch: master
