@@ -163,7 +163,8 @@ case $PACKAGE in
 
   postgresql-common)
     case ${distribution:-} in
-      lucid|precise|saucy|trusty) # remove systemd dependency
+      # wheezy has dh-systemd 1.18~bpo70+1 which pbuilder things would satisfy >= 1.19...
+      lucid|precise|saucy|trusty|wheezy) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control
         ;;
     esac
