@@ -1,0 +1,2 @@
+# disable fsyncs
+force-unsafe-io

@@ -1,3 +1,9 @@
+pgdg-buildenv (16) sid-pgdg; urgency=medium
+
+  * Add /etc/dpkg/dpkg.cfg.d/01unsafeio.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 06 Jan 2015 19:55:41 +0100
+
 pgdg-buildenv (15) sid-pgdg; urgency=medium
 
   * Pin the pgdg repos to 500 so we don't miss newer distribution packages.
