@@ -3,7 +3,7 @@
 # The MIT License
 #
 # Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
-# Copyright (c) 2012-2014 by Christoph Berg <myon@debian.org>
+# Copyright (c) 2012-2015 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -110,7 +110,7 @@ set -eux
 # /var/lib/jenkins will probably not exist
 test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 
-apt-get install -y eatmydata locales logrotate net-tools hunspell-en-us newpid
+apt-get install -y locales logrotate net-tools hunspell-en-us newpid
 if ! dpkg -i $TESTDIR/*.deb; then
   apt-get install -fy
   dpkg -i $TESTDIR/*.deb
@@ -120,7 +120,7 @@ dpkg -l 'libpq*' 'postgresql*' | cat
 
 export LC_ALL='en_US.UTF-8'
 cd /usr/share/postgresql-common/
-eatmydata newpid ./testsuite -u 077
+newpid ./testsuite -u 077
 EOF
 chmod +x $TESTDIR/testsuite
 
