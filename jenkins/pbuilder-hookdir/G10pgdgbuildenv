@@ -42,7 +42,7 @@ case $(hostname) in
 		;;
 esac
 cat > /etc/apt/sources.list.d/pgdg.list <<-EOF
-# do not edit, file maintained by pgdg-buildenv
+# do not edit, file maintained by G10pgdgbuildenv
 deb $mirror $distribution-pgdg main
 deb $mirror_testing $distribution-pgdg-testing main
 EOF
