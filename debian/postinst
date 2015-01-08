@@ -8,22 +8,6 @@ case $1 in
 		dpkg-divert --add --package pgdg-buildenv --rename /usr/bin/mandb
 		test -e /usr/bin/mandb || ln -s /bin/true /usr/bin/mandb
 
-		# update sources.list
-		dist=$(lsb_release -cs)
-		mirror="http://apt.postgresql.org/pub/repos/apt/"
-		mirror_testing="http://atalia.postgresql.org/pub/repos/apt/"
-		case $(hostname) in
-			pgdg*) # use local cache on build host
-				mirror="http://atalia-approx:9999/atalia"
-				mirror_testing="$mirror"
-				;;
-		esac
-		cat > /etc/apt/sources.list.d/pgdg.list <<-EOF
-		# do not edit, file maintained by pgdg-buildenv
-		deb $mirror $dist-pgdg main
-		deb $mirror_testing $dist-pgdg-testing main
-		EOF
-
 		# remove existing apt translations so apt does not try to refresh them
 		rm -vf /var/lib/apt/lists/*Translation*
 

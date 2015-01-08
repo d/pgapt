@@ -1,3 +1,11 @@
+pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
+
+  * Don't install sources.list.d/pgdg.list from here, we can't easily figure
+    out the current release name from the postinst because sid has "jessie" in
+    there.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Thu, 08 Jan 2015 15:39:00 +0100
+
 pgdg-buildenv (16) sid-pgdg; urgency=medium
 
   * Add /etc/dpkg/dpkg.cfg.d/01unsafeio.
