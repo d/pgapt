@@ -15,9 +15,22 @@ set -eux
 
 test -f /etc/debian_chroot || echo "base-$distribution-$architecture" > /etc/debian_chroot
 
+deb="http://ftp.debian.org/debian"
+mirror="http://apt.postgresql.org/pub/repos/apt/"
+mirror_testing="http://atalia.postgresql.org/pub/repos/apt/"
+case $(hostname) in
+	pgdg*) # use local cache on build host
+		deb="http://debian-approx:9999/debian"
+		mirror="http://atalia-approx:9999/atalia"
+		mirror_testing="$mirror"
+		;;
+esac
+
 mkdir -p /etc/apt/sources.list.d
 case $distribution in
   squeeze) echo "deb http://deb/debian-backports/ ${distribution}-backports main" \
+    > /etc/apt/sources.list.d/backports.list ;;
+  wheezy) echo "deb $deb ${distribution}-backports main" \
     > /etc/apt/sources.list.d/backports.list ;;
   etch|lenny) echo "deb http://archive.debian.org/debian-backports/ ${distribution}-backports main" \
     > /etc/apt/sources.list.d/backports.list
@@ -33,14 +46,6 @@ case $distribution in
       > /etc/apt/sources.list.d/updates.list ;;
 esac
 
-mirror="http://apt.postgresql.org/pub/repos/apt/"
-mirror_testing="http://atalia.postgresql.org/pub/repos/apt/"
-case $(hostname) in
-	pgdg*) # use local cache on build host
-		mirror="http://atalia-approx:9999/atalia"
-		mirror_testing="$mirror"
-		;;
-esac
 cat > /etc/apt/sources.list.d/pgdg.list <<-EOF
 # do not edit, file maintained by G10pgdgbuildenv
 deb $mirror $distribution-pgdg main
