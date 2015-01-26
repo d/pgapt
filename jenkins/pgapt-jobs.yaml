@@ -502,7 +502,6 @@
                         wipe-workspace: false
         builders:
                 - shell: 'cd jenkins && make test && make update'
-                - shell: 'ssh atalia.postgresql.org "cd /srv/apt/apt.postgresql.org && sudo -u aptuser git pull"'
         publishers:
                 - ircbot:
                         matrix-notifier: all
