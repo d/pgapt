@@ -110,7 +110,7 @@ set -eux
 # /var/lib/jenkins will probably not exist
 test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 
-apt-get install -y locales logrotate net-tools hunspell-en-us newpid
+apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid
 if ! dpkg -i $TESTDIR/*.deb; then
   apt-get install -fy
   dpkg -i $TESTDIR/*.deb
