@@ -29,7 +29,9 @@ esac
 mkdir -p /etc/apt/sources.list.d
 case $distribution in
   squeeze) echo "deb http://deb/debian-backports/ ${distribution}-backports main" \
-    > /etc/apt/sources.list.d/backports.list ;;
+    > /etc/apt/sources.list.d/backports.list
+    PKGS="debhelper/${distribution}-backports"
+    ;;
   wheezy) echo "deb $deb ${distribution}-backports main" \
     > /etc/apt/sources.list.d/backports.list ;;
   etch|lenny) echo "deb http://archive.debian.org/debian-backports/ ${distribution}-backports main" \
