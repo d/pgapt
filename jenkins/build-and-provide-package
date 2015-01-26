@@ -176,7 +176,7 @@ cowbuilder_init() {
     local pbuildercfg="--configfile=$pbuilderrc"
   fi
 
-  $PBUILDER_HOOKDIR=/home/jenkins/apt.postgresql.org/jenkins/pbuilder-hookdir
+  PBUILDER_HOOKDIR=/home/jenkins/apt.postgresql.org/jenkins/pbuilder-hookdir
   [ -d $PBUILDER_HOOKDIR ] || bailout 1 "Pbuilder hookdir $PBUILDER_HOOKDIR is missing"
 
   # workaround for Ubuntu problem, as cowdancer is available only in universe :(
