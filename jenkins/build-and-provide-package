@@ -176,6 +176,9 @@ cowbuilder_init() {
     local pbuildercfg="--configfile=$pbuilderrc"
   fi
 
+  $PBUILDER_HOOKDIR=/home/jenkins/apt.postgresql.org/jenkins/pbuilder-hookdir
+  [ -d $PBUILDER_HOOKDIR ] || bailout 1 "Pbuilder hookdir $PBUILDER_HOOKDIR is missing"
+
   # workaround for Ubuntu problem, as cowdancer is available only in universe :(
   # https://bugs.launchpad.net/ubuntu/+source/cowdancer/+bug/237591
   # https://bugs.launchpad.net/ubuntu/+source/cowdancer/+bug/747053
@@ -212,7 +215,7 @@ cowbuilder_init() {
          --debootstrapopts --arch --debootstrapopts "$arch" \
          --debootstrapopts --variant=buildd ${pbuildercfg:-} \
          ${KEYRING+--debootstrapopts --keyring=$KEYRING} \
-         --hookdir $HOME/pbuilder-hookdir
+         --hookdir $PBUILDER_HOOKDIR
     [ $? -eq 0 ] || bailout 1 "Error: Failed to create cowbuilder base ${COWBUILDER_BASE}."
   else
     echo "*** Updating cowbuilder cow base ***"
@@ -295,7 +298,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $HOME/pbuilder-hookdir --bindmounts /tmp/adt-$$
+        --hookdir $PBUILDER_HOOKDIR --bindmounts /tmp/adt-$$
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     amd64|all|*)
@@ -304,7 +307,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $HOME/pbuilder-hookdir --bindmounts /tmp/adt-$$
+        --hookdir $PBUILDER_HOOKDIR --bindmounts /tmp/adt-$$
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     *)
