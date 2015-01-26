@@ -1,0 +1,301 @@
+Notes on the jenkins build host
+-------------------------------
+
+Packages installed:
+
+sudo
+subversion
+build-essential
+debhelper
+devscripts
+diffstat
+fakeroot
+git
+patchutils
+vim
+wdiff
+postfix
+debsums
+jenkins
+apache2
+ntp
+molly-guard
+curl
+approx
+debootstrap
+pbuilder
+cowbuilder
+tree
+python-setuptools
+python-pip
+git-bzr
+quilt
+rsync
+distro-info-data
+libwww-perl
+libcrypt-ssleay-perl
+
+
+
+/etc/approx/approx.conf
+# Here are some examples of remote repository mappings.
+# See http://www.debian.org/mirror/list for mirror sites.
+
+debian		http://ftp.de.debian.org/debian
+security	http://security.debian.org/debian-security
+ubuntu		http://de.archive.ubuntu.com/ubuntu
+atalia		http://atalia.postgresql.org/pub/repos/apt
+debian-backports	http://ftp.de.debian.org/debian-backports
+
+# The following are the default parameter values, so there is
+# no need to uncomment them unless you want a different value.
+# See approx.conf(5) for details.
+
+$cache		/home/approx
+$interval	1
+#$max_rate	unlimited
+#$max_redirects 5
+#$user		approx
+#$group		approx
+#$syslog	daemon
+#$pdiffs	true
+#$offline	false
+#$max_wait	10
+#$verbose	false
+#$debug		false
+
+
+/etc/hosts
+
+127.0.0.1	localhost debian-approx ubuntu-approx security-approx atalia-approx backports-approx
+93.94.133.133	pgdgbuild.dus.dg-i.net	pgdgbuild
+
+141.76.2.4	ftp.de.debian.org deb
+137.226.34.42	ftp2.de.debian.org
+
+
+/etc/pbuilderrc
+
+# this is your configuration file for pbuilder.
+# the file in /usr/share/pbuilder/pbuilderrc is the default template.
+# /etc/pbuilderrc is the one meant for overwriting defaults in
+# the default template
+#
+# read pbuilderrc.5 document for notes on specific options.
+MIRRORSITE=http://debian-approx:9999/debian
+APTCACHE=""
+
+
+/etc/sudoers.d/jenkins
+
+Defaults env_keep += "architecture distribution ADT DEB_BUILD_OPTIONS"
+
+#jenkins ALL=NOPASSWD: /usr/sbin/cowbuilder, /usr/sbin/chroot
+jenkins ALL=NOPASSWD: ALL
+
+
+/etc/jenkins_jobs/jenkins_jobs.ini
+
+[jenkins]
+user=jenkins
+password=xxxx
+# special vhost to preauth jenkins on localhost:80:
+url=http://localhost/jenkins/
+
+
+/etc/apache2/mods-enabled/
+lrwxrwxrwx 1 root root   30 Jan 20 12:05 headers.load -> ../mods-available/headers.load
+lrwxrwxrwx 1 root root   30 Jan 20 12:05 rewrite.load -> ../mods-available/rewrite.load
+lrwxrwxrwx 1 root root   28 Jan 20 12:10 proxy.load -> ../mods-available/proxy.load
+lrwxrwxrwx 1 root root   28 Jan 20 12:10 proxy.conf -> ../mods-available/proxy.conf
+lrwxrwxrwx 1 root root   33 Jan 20 12:10 proxy_http.load -> ../mods-available/proxy_http.load
+lrwxrwxrwx 1 root root   26 Jan 20 12:10 ssl.load -> ../mods-available/ssl.load
+lrwxrwxrwx 1 root root   26 Jan 20 12:10 ssl.conf -> ../mods-available/ssl.conf
+
+
+/etc/apache2/sites-enabled/
+lrwxrwxrwx 1 root root   26 Jan 20 12:05 000-default -> ../sites-available/default
+lrwxrwxrwx 1 root root   30 Jan 20 12:09 default-ssl -> ../sites-available/default-ssl
+lrwxrwxrwx 1 root root   28 Jan 20 12:09 localhost -> ../sites-available/localhost
+
+
+/etc/apache2/sites-available/default
+
+<VirtualHost *:80>
+	ServerAdmin cbe@dg-i.net
+
+	DocumentRoot /var/www
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	Redirect Permanent / https://pgdgbuild.dus.dg-i.net/
+</VirtualHost>
+
+
+/etc/apache2/sites-available/default-ssl
+
+<IfModule mod_ssl.c>
+<VirtualHost _default_:443>
+	ServerAdmin cbe@dg-i.net
+
+	DocumentRoot /home/jenkins/web/htdocs
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /home/jenkins/web/htdocs>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	# ... default SSL stuff
+
+	Include /etc/apache2/sites-available/pgdgbuild-common
+</VirtualHost>
+</IfModule>
+
+
+/etc/apache2/sites-available/localhost
+
+<VirtualHost localhost:80>
+	ServerAdmin cbe@dg-i.net
+
+	DocumentRoot /var/www
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	include /etc/apache2/sites-available/pgdgbuild-localhost
+</VirtualHost>
+
+
+/etc/apache2/sites-available/pgdgbuild-common
+
+ProxyPass /jenkins http://localhost:8081/jenkins
+ProxyPassReverse /jenkins http://localhost:8081/jenkins
+
+<Proxy http://localhost:8081/jenkins*>
+    AuthType basic
+    AuthName "PGDG Apt Repository Build Service"
+    AuthUserFile /home/jenkins/web/htpasswd
+    AuthGroupFile /home/jenkins/web/htgroup
+    Require group aptadmin
+
+    # prevent the client from setting this header
+    RequestHeader unset X-Forwarded-User
+    RequestHeader unset X-Forwarded-Groups
+
+    # Adds the X-Forwarded-User header that indicates the current user name.
+    # this portion came from http://old.nabble.com/Forcing-a-proxied-host-to-generate-REMOTE_USER-td2911573.html#a2914465
+    RewriteEngine On
+    # see the Apache documentation on why this has to be lookahead
+    RewriteCond %{LA-U:REMOTE_USER} (.+)
+    # this actually doesn't rewrite anything. what we do here is to set RU to the match above
+    # "NS" prevents flooding the error log
+    RewriteRule .* - [E=RU:%1,NS]
+    RequestHeader set X-Forwarded-User %{RU}e
+    RequestHeader set X-Forwarded-Proto https
+    # strip the REALM of Kerberos Login
+    # RequestHeader edit X-Forwarded-User "@REALM$" ""
+</Proxy>
+
+
+/etc/apache2/sites-available/pgdgbuild-localhost
+
+ProxyPass /jenkins http://localhost:8081/jenkins
+ProxyPassReverse /jenkins http://localhost:8081/jenkins
+
+<Proxy http://localhost:8081/jenkins*>
+    RequestHeader set X-Forwarded-User jenkins
+    RequestHeader unset X-Forwarded-Groups
+</Proxy>
+
+
+/etc/default/jenkins
+
+# defaults for jenkins continuous integration server
+
+# pulled in from the init script; makes things easier.
+NAME=jenkins
+
+# location of java
+JAVA=/usr/bin/java
+
+# arguments to pass to java
+JAVA_ARGS="-Djava.awt.headless=true"  # Allow graphs etc. to work even when an X server is present
+#JAVA_ARGS="-Xmx256m"
+#JAVA_ARGS="-Djava.net.preferIPv4Stack=true" # make jenkins listen on IPv4 address
+
+PIDFILE=/var/run/jenkins/jenkins.pid
+
+# user and group to be invoked as (default to jenkins)
+JENKINS_USER=jenkins
+JENKINS_GROUP=jenkins
+
+# location of the jenkins war file
+JENKINS_WAR=/usr/share/jenkins/jenkins.war
+
+# jenkins home location
+JENKINS_HOME=/var/lib/jenkins
+
+# set this to false if you don't want Hudson to run by itself
+# in this set up, you are expected to provide a servlet container
+# to host jenkins.
+RUN_STANDALONE=true
+
+# log location.  this may be a syslog facility.priority
+JENKINS_LOG=/var/log/jenkins/$NAME.log
+#HUDSON_LOG=daemon.info
+
+# OS LIMITS SETUP
+#   comment this out to observe /etc/security/limits.conf
+#   this is on by default because http://github.com/jenkinsci/jenkins/commit/2fb288474e980d0e7ff9c4a3b768874835a3e92e
+#   reported that Ubuntu's PAM configuration doesn't include pam_limits.so, and as a result the # of file
+#   descriptors are forced to 1024 regardless of /etc/security/limits.conf
+MAXOPENFILES=8192
+
+# set the umask to control permission bits of files that Jenkins creates.
+#   027 makes files read-only for group and inaccessible for others. comment this out to inherit setting
+#   (as of Ubuntu 12.04, by default umask comes from pam_umask(8) and /etc/login.defs
+UMASK=027
+
+# port for HTTP connector (default 8080; disable with -1)
+HTTP_PORT=8081
+
+# port for AJP connector (disabled by default)
+AJP_PORT=-1
+
+# servlet context, important if you want to use apache proxying  
+PREFIX=/jenkins
+
+# arguments to pass to jenkins.
+# --javahome=$JAVA_HOME
+# --httpPort=$HTTP_PORT (default 8080; disable with -1)
+# --httpsPort=$HTTP_PORT
+# --ajp13Port=$AJP_PORT
+# --argumentsRealm.passwd.$ADMIN_USER=[password]
+# --argumentsRealm.roles.$ADMIN_USER=admin
+# --webroot=~/.jenkins/war
+# --prefix=$PREFIX
+
+JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=$PREFIX"
