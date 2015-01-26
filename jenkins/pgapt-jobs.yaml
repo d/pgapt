@@ -511,6 +511,7 @@
         description: 'Update/create cowbuilder chroots.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
+                sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
