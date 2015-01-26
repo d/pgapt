@@ -15,7 +15,7 @@ CHANGES="$(find . -name '*.changes')"
 
 dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 
-# call processincoming.sh once for all packages uploaded
-ssh $HOST /srv/apt/processincoming.sh $QUEUE
+# call processincoming once for all packages uploaded
+ssh $HOST /srv/apt/apt.postgresql.org/repo/processincoming $QUEUE
 
 # trap will clean up here
