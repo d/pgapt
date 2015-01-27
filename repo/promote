@@ -94,6 +94,6 @@ The public mirrors serving apt.postgresql.org are synced hourly,
 the updated packages will be available there shortly.
 "
 echo "$TEXT"
-[ -z "${DEBUG:-}" ] && echo "$TEXT" | sendmail -t
+[ -z "${DEBUG:-}" ] && echo "$TEXT" | /usr/sbin/sendmail -t
 
 exit 0
