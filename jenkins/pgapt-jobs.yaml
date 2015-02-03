@@ -1095,7 +1095,8 @@
         name: slony1-2
         git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
         git-branch: master
-        dist-filter: ''
+        # lucid doesn't have Dpkg/BuildFlags.pm
+        dist-filter: 'distribution!="lucid"'
         jobs:
                 - git-packages
 
