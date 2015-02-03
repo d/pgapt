@@ -34,7 +34,7 @@ rsync
 distro-info-data
 libwww-perl
 libcrypt-ssleay-perl
-
+haveged
 
 
 /etc/approx/approx.conf
