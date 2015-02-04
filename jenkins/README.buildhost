@@ -35,6 +35,8 @@ distro-info-data
 libwww-perl
 libcrypt-ssleay-perl
 haveged
+lftp
+bzr
 
 
 /etc/approx/approx.conf
