@@ -1089,7 +1089,7 @@
         # fails on lucid
         dist-filter: 'distribution!="lucid"'
         jobs:
-                - apt-packages
+                - git-packages
 
 - project:
         name: slony1-2
