@@ -37,6 +37,7 @@ libcrypt-ssleay-perl
 haveged
 lftp
 bzr
+pristine-tar
 
 
 /etc/approx/approx.conf
