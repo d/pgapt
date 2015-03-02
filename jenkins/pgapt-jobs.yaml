@@ -149,6 +149,7 @@
                                 - '$branch'
                         basedir: source
                         wipe-workspace: false
+                        recursive-submodules: true
 
 # special git+bzr job for postgresql-devel
 - job-template:
