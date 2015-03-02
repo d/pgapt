@@ -263,6 +263,20 @@ case $PACKAGE in
         ;;
     esac
     ;;
+
+  skytools3)
+    case ${distribution:-} in
+      squeeze|wheezy|lucid|precise) # remove dh_python2 dependency
+        sed -i -e 's/ dh-python,//' debian/control debian/control.in
+        ;;
+    esac
+    case ${distribution:-} in
+      squeeze|wheezy|lucid|precise) # rwitch to standard seqnencer
+        sed -i -e 's/ --with python2//' debian/rules
+        ;;
+    esac
+    ;;
+
 esac
 
 # lenny/lucid do not support xz compression
