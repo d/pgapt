@@ -1067,7 +1067,7 @@
 
 - project:
         name: repmgr
-        git-url: git://git.debian.org/collab-maint/repmgr.git
+        git-url: git://git.debian.org/pkg-postgresql/repmgr.git
         git-branch: master
         # links to the wrong pg version on lucid
         dist-filter: 'distribution!="lucid"'
