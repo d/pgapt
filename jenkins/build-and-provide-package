@@ -248,7 +248,8 @@ identify_build_type() {
       echo "*** MAIN_ARCHITECTURE is unset. ***"
       echo "*** Host architecture [$DEB_HOST_ARCH] does not match \$architecture [${architecture:-}] ... ***"
       echo "*** ... setting binary only build and continuing with identify_build_type ***"
-      DEBBUILDOPTS="-B"
+      #DEBBUILDOPTS="-B"
+      FILTER_ARCH_ALL="yes"
     fi
   else
     if [ "${MAIN_ARCHITECTURE:-}" = "${architecture:-}" ] ;then
@@ -257,7 +258,9 @@ identify_build_type() {
       return 0
     else
       echo "*** MAIN_ARCHITECTURE [${MAIN_ARCHITECTURE:-}] does not match \$architecture [${architecture:-}], setting binary only build and continuing with identify_build_type ***"
-      DEBBUILDOPTS="-B"
+      #DEBBUILDOPTS="-B"
+      FILTER_ARCH_ALL="yes"
+    fi
     fi
   fi
 
@@ -268,6 +271,13 @@ identify_build_type() {
       break
     fi
   done
+}
+
+filter_arch_all () {
+  if [ "${FILTER_ARCH_ALL:-}" ]; then
+    echo "*** Removing arch:all packages from .changes file ..."
+    sed -i -e '/_all\.deb$/d' ${WORKSPACE}/binaries/*.changes
+  fi
 }
 
 autopkgtest_resuts () {
@@ -508,6 +518,7 @@ else
   deploy_to_releases
 fi
 
+filter_arch_all
 binaries_to_workspace
 autopkgtest_resuts
 
