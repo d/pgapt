@@ -261,7 +261,6 @@ identify_build_type() {
       #DEBBUILDOPTS="-B"
       FILTER_ARCH_ALL="yes"
     fi
-    fi
   fi
 
   for file in ${BASE_PATH}/${SOURCE_PACKAGE}_*.dsc ; do
