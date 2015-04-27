@@ -1075,6 +1075,15 @@
                 - git-packages
 
 - project:
+        name: repmgr2
+        git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
+        git-branch: master
+        # links to the wrong pg version on lucid
+        dist-filter: 'distribution!="lucid"'
+        jobs:
+                - git-packages
+
+- project:
         name: skytools
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
         git-branch: master
