@@ -936,10 +936,11 @@
 
 - project:
         name: postgresql-common
-        bzr-branch: postgresql-common/trunk
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-common.git
+        git-branch: master
         dist-filter: ''
         jobs:
-                - bzr-packages
+                - git-packages
 
 - project:
         name: postgresql-debversion
