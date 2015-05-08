@@ -53,7 +53,6 @@
                     - utopic
                     - trusty
                     - precise
-                    - lucid
 
     sid_only_axis: &sid_only_axis
             type: user-defined
@@ -612,7 +611,7 @@
         git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
         git-branch: master
         # limit to distributions with python3
-        dist-filter: '(distribution!="squeeze") && (distribution!="precise") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
                 - git-packages
 
@@ -665,7 +664,7 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
         git-branch: master
         # skip dists without dpkg-buildflags
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         # run sequentially so the tests have 5432 available
         jobs:
                 - git-packages-sequential
@@ -697,7 +696,7 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
         git-branch: master
         # skip dists without /usr/share/dpkg/buildflags.mk
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
@@ -705,8 +704,7 @@
         name: pgagent
         git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
         git-branch: master
-        # lucid doesn't have "timeout"
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -744,8 +742,7 @@
         name: pgextwlist
         git-url: https://github.com/dimitri/pgextwlist.git
         git-branch: master
-        # lucid doesn't accept the plugins symlink in the testsuite for whatever reason
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -771,7 +768,7 @@
         name: pgmemcache
         git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
         git-branch: master
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -787,7 +784,7 @@
         name: pgpool2
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
-        dist-filter: '(distribution!="lucid")'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -795,8 +792,8 @@
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
         git-branch: master
-        # needs libcgal-dev (in non-free on squeeze, in multiverse on lucid/precise, let's not care)
-        dist-filter: '(distribution!="lucid") && (distribution!="precise") && (distribution!="squeeze")'
+        # needs libcgal-dev (in non-free on squeeze, in multiverse on precise, let's not care)
+        dist-filter: '(distribution!="precise") && (distribution!="squeeze")'
         jobs:
                 - git-packages
 
@@ -820,7 +817,7 @@
         name: pgxnclient
         git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
         git-branch: master
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
@@ -844,7 +841,7 @@
         name: plv8
         git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
         git-branch: debian
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages-with-next
 
@@ -852,7 +849,7 @@
         name: postgis
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
         git-branch: master
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         # run sequentially so the tests have 5432 available
         jobs:
                 - git-packages-sequential
@@ -946,8 +943,7 @@
         name: postgresql-debversion
         git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
         git-branch: debian
-        # lucid's autotools-dev doesn't contain /usr/share/perl5/Debian/Debhelper/Sequence/autotools_dev.pm
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -956,7 +952,7 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
         git-branch: master
         # uses /usr/share/dpkg/buildflags.mk
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
@@ -965,7 +961,7 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
         git-branch: master
         # needs dh-python
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
+        dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
                 - git-packages
 
@@ -973,7 +969,7 @@
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
         git-branch: master
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages-with-next
 
@@ -1029,8 +1025,8 @@
         name: psqlodbc
         git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
         git-branch: master
-        # doesn't compile on squeeze and lucid because of multi-arch (needs a newer cdbs)
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid")'
+        # doesn't compile on squeeze because of multi-arch (needs a newer cdbs)
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
@@ -1054,7 +1050,7 @@
         name: python-azure
         bzr-branch: lp:~stub/ubuntu/trusty/python-azure/trunk
         # needs dh-python
-        dist-filter: '(distribution!="squeeze") && (distribution!="lucid") && (distribution!="precise")'
+        dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
                 - bzr-packages-lp
 
@@ -1070,8 +1066,7 @@
         name: repmgr
         git-url: git://git.debian.org/pkg-postgresql/repmgr.git
         git-branch: master
-        # links to the wrong pg version on lucid
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1079,8 +1074,7 @@
         name: repmgr2
         git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
         git-branch: master
-        # links to the wrong pg version on lucid
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1088,8 +1082,7 @@
         name: skytools
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
         git-branch: master
-        # fails on lucid (no dh_python2)
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1097,8 +1090,7 @@
         name: skytools3
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
         git-branch: debian
-        # fails on lucid
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1106,8 +1098,7 @@
         name: slony1-2
         git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
         git-branch: master
-        # lucid doesn't have Dpkg/BuildFlags.pm
-        dist-filter: 'distribution!="lucid"'
+        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1115,7 +1106,7 @@
         name: wal-e
         bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
         # needs python-swiftclient
-        dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="lucid") && (distribution!="precise")'
+        dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="precise")'
         jobs:
                 - bzr-packages-lp
 
