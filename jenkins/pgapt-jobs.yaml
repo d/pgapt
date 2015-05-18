@@ -477,6 +477,15 @@
         noadt: ''
 
 - job-group:
+        name: git-packages-adt
+        jobs:
+                - '{name}-git-source'
+                - '{name}-binaries'
+                - '{name}-testsuite'
+        #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
+        noadt: 'ADT=skip '
+
+- job-group:
         name: svn-packages
         jobs:
                 - '{name}-svn-source'
@@ -856,50 +865,56 @@
 
 - project:
         name: postgresql-8.4
-        bzr-branch: postgresql-8.4/pgdg
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 8.4
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-8.4-testsuite'
 
 - project:
         name: postgresql-9.0
-        bzr-branch: postgresql-9.0/pgdg
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.0
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-9.0-testsuite'
 
 - project:
         name: postgresql-9.1
-        bzr-branch: postgresql-9.1/trunk
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.1
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-9.1-testsuite'
 
 - project:
         name: postgresql-9.2
-        bzr-branch: postgresql-9.2/trunk
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.2
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-9.2-testsuite'
 
 - project:
         name: postgresql-9.3
-        bzr-branch: postgresql-9.3/trunk
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.3
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-9.3-testsuite'
 
 - project:
         name: postgresql-9.4
-        bzr-branch: postgresql-9.4/trunk
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.4
         dist-filter: ''
         jobs:
-                - bzr-packages-adt
+                - git-packages-adt
         next-job: 'postgresql-9.4-testsuite'
 
 # the PostgreSQL devel versions:
