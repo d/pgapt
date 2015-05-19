@@ -98,11 +98,11 @@ rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
 
 # merge with another branch
 if [ "${merge:-}" ]; then
-  git remote add debian $merge || :
+  git remote add debian https://anonscm.debian.org/git/pkg-postgresql/postgresql.git || :
   git fetch debian
   git reset --hard $branch
   git clean -xdf
-  git merge -m "Merge with $merge" debian/master
+  git merge -m "Merge with https://anonscm.debian.org/git/pkg-postgresql/postgresql.git ($merge)" debian/$merge
 fi
 
 # clean up behind a possibly broken last job

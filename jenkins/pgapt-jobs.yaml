@@ -150,7 +150,7 @@
                         wipe-workspace: false
                         recursive-submodules: true
 
-# special git+bzr job for postgresql-devel
+# special git-in-git job for postgresql-devel
 - job-template:
         <<: *git_source_template
         name: '{source-name}-source-git-head'
@@ -160,8 +160,8 @@
                 - choice:
                         name: merge
                         choices:
-                                - 'bzr::http://anonscm.debian.org/bzr/pkg-postgresql/{source-name}/trunk/'
-                        description: 'Branch to merge with before build'
+                                - '9.5'
+                        description: 'Packaging branch to merge with before build'
                 - string: *revision_string
                 - choice: *queue_choice
                 - choice: *buildtype_choice
