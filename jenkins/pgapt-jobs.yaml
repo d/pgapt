@@ -875,7 +875,7 @@
 - project:
         name: postgresql-9.0
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
-        git-branch: 9.0
+        git-branch: 9.0-pgdg
         dist-filter: ''
         jobs:
                 - git-packages-adt
