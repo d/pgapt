@@ -823,6 +823,14 @@
                 - git-packages-with-next
 
 - project:
+        name: pgtap
+        git-url: git://anonscm.debian.org/pkg-postgresql/pgtap.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgxnclient
         git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
         git-branch: master
@@ -977,6 +985,14 @@
         git-branch: master
         # needs dh-python
         dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
+        jobs:
+                - git-packages
+
+- project:
+        name: postgresql-mysql-fdw
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-mysql-fdw.git
+        git-branch: master
+        dist-filter: ''
         jobs:
                 - git-packages
 
