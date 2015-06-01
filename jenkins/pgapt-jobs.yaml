@@ -826,7 +826,7 @@
         name: pgtap
         git-url: git://anonscm.debian.org/pkg-postgresql/pgtap.git
         git-branch: master
-        dist-filter: ''
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
