@@ -1174,4 +1174,11 @@
         oldversion: 9.3
         newversion: 9.4
         jobs:
+                - upgrade-job
+
+- project:
+        name: upgrade-9.4-9.5
+        oldversion: 9.4
+        newversion: 9.5
+        jobs:
                 - upgrade-{oldversion}-{newversion}-sid-amd64
