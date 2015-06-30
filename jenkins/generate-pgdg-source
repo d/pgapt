@@ -3,7 +3,7 @@
 # The MIT License
 #
 # Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
-# Copyright (c) 2012-2015 by Christoph Berg <myon@debian.org>
+# Copyright (c) 2012-2014 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -159,16 +159,6 @@ case $PACKAGE in
     # display result
     perl -000 -ne 'if (/^(Package: lib.*)/m) { print "$1 "; print "$1\n" if /^(Section: .*)/m; }' \
       debian/control
-    ;;
-esac
-
-# tweaks to get packages in older dists working
-case $PACKAGE in
-  postgresql-9.5)
-    case ${distribution:-} in
-      wheezy|squeeze|precise)
-        sed -i -e '/sepgsql/d' debian/control debian/postgresql-contrib-9.5.install
-        REVERTS="$REVERTS debian/postgresql-contrib-9.5.install"
     ;;
 
   postgresql-common)
