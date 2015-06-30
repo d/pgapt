@@ -169,6 +169,8 @@ case $PACKAGE in
       wheezy|squeeze|precise)
         sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-9.5.install
         REVERTS="$REVERTS debian/postgresql-contrib-9.5.install"
+        ;;
+    esac
     ;;
 
   postgresql-common)
