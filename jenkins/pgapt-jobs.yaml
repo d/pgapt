@@ -561,12 +561,20 @@
         name: dput-matrixreloaded
         project-type: matrix
         execution-strategy:
-                sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '$binaries/architecture=$architecture,distribution=$distribution'
+                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - shell: 'dput-pgdg $queue'
 
 - job:
         name: promote
