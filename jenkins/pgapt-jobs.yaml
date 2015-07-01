@@ -531,7 +531,7 @@
         publishers:
                 - ircbot: *only_configs
 
-- job:
+- job: &dput
         name: dput
         description: 'Push packages to the repository.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         logrotate:
@@ -555,6 +555,18 @@
                         matrix-notifier: all
                         message-type: summary-params
                 - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
+
+- job:
+        <<: *dput
+        name: dput-matrixreloaded
+        project-type: matrix
+        execution-strategy:
+                sequential: true
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
+        axes:
+                - axis: *arch_axis
+                - axis: *dist_axis
 
 - job:
         name: promote
