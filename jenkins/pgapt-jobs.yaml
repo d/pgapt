@@ -970,17 +970,17 @@
 #        noadt: 'ADT=skip '
 
 - project:
-        name: postgresql-9.5-devel
-        source-name: postgresql-9.5
+        name: postgresql-9.6-devel
+        source-name: postgresql-9.6
         git-url: git://git.postgresql.org/git/postgresql.git
         git-branch: origin/master
-        merge-branch: 9.5
+        merge-branch: 9.6
         dist-filter: 'distribution=="sid"'
         jobs:
                 - '{source-name}-source-git-head'
                 - '{source-name}-binaries-sid-amd64'
                 - '{source-name}-testsuite-sid-amd64'
-        next-job: postgresql-9.5-testsuite-sid-amd64
+        next-job: postgresql-9.6-testsuite-sid-amd64
         noadt: 'ADT=skip '
 
 - project:
@@ -1209,5 +1209,12 @@
         name: upgrade-9.4-9.5
         oldversion: 9.4
         newversion: 9.5
+        jobs:
+                - upgrade-{oldversion}-{newversion}-sid-amd64
+
+- project:
+        name: upgrade-9.4-9.6
+        oldversion: 9.4
+        newversion: 9.6
         jobs:
                 - upgrade-{oldversion}-{newversion}-sid-amd64
