@@ -21,7 +21,7 @@ for DIST in $DISTRIBUTIONS ; do
 			jessie)
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			sid)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
 				exit 1 ;;
