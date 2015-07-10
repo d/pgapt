@@ -100,8 +100,6 @@
                 - archive:
                         artifacts: 'result/*'
                         latest-only: true
-                - fingerprint:
-                        record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
                 - trigger-parameterized-builds:
@@ -181,8 +179,6 @@
                 - archive:
                         artifacts: 'result/*'
                         latest-only: true
-                - fingerprint:
-                        record-artifacts: true
                 - ircbot:
                         matrix-notifier: only-parent
                 - trigger-parameterized-builds:
@@ -231,8 +227,6 @@
                 - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                         latest-only: true
-                - fingerprint:
-                        record-artifacts: true
                 - junit:
                         results: autopkgtest.xml
                 - ircbot: *only_configs
@@ -262,8 +256,6 @@
         name: '{name}-binaries-with-next'
         publishers:
                 - archive: *binaries_archive
-                - fingerprint:
-                        record-artifacts: true
                 - junit:
                         results: autopkgtest.xml
                 - ircbot: *only_configs
@@ -342,8 +334,6 @@
                         fallback-to-last-successful: true
                 - shell: 'postgresql-testsuite'
         publishers:
-                - fingerprint:
-                        files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                 - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: 'dput'
@@ -367,8 +357,6 @@
                         fallback-to-last-successful: true
                 - shell: 'postgresql-testsuite'
         publishers:
-                - fingerprint:
-                        files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                 - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: 'dput'
@@ -402,8 +390,6 @@
                         fallback-to-last-successful: true
                 - shell: 'postgresql-testsuite'
         publishers:
-                - fingerprint:
-                        files: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
                 - ircbot: *only_configs
                 - workspace-cleanup
 
@@ -576,26 +562,26 @@
                         fallback-to-last-successful: true
                 - shell: 'dput-pgdg $queue'
 
-- job:
-        name: promote
-        description: 'Promotes packages from the *-pgdg-testing distributions to *-pgdg.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        logrotate:
-                numToKeep: 50
-        parameters:
-                - string:
-                        name: package
-                        description: 'Name of source package to promote (no "-source" suffix)'
-                - string:
-                        name: distributions
-                        description: 'Distributions to promote (space-separated, default "all")'
-                        default: 'all'
-        builders:
-                - shell: 'ssh atalia.postgresql.org promote -d "$distributions" $package'
-        publishers:
-                - ircbot:
-                        matrix-notifier: all
-                        message-type: summary-params
-                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.package} (${manager.build.environment.distributions})")'
+#- job:
+#        name: promote
+#        description: 'Promotes packages from the *-pgdg-testing distributions to *-pgdg.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+#        logrotate:
+#                numToKeep: 50
+#        parameters:
+#                - string:
+#                        name: package
+#                        description: 'Name of source package to promote (no "-source" suffix)'
+#                - string:
+#                        name: distributions
+#                        description: 'Distributions to promote (space-separated, default "all")'
+#                        default: 'all'
+#        builders:
+#                - shell: 'ssh atalia.postgresql.org promote -d "$distributions" $package'
+#        publishers:
+#                - ircbot:
+#                        matrix-notifier: all
+#                        message-type: summary-params
+#                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.package} (${manager.build.environment.distributions})")'
 
 - job:
         name: upgrade-plperl
