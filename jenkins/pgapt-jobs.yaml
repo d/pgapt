@@ -1208,3 +1208,12 @@
         newversion: 9.6
         jobs:
                 - upgrade-{oldversion}-{newversion}-sid-amd64
+
+## pgloader dependencies
+- project:
+        name: sbcl
+        # upgrade sbcl to 1.2 on the older dists
+        dist-filter: '(distribution=="squeeze") || (distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty")'
+        jobs:
+                - apt-packages
+
