@@ -13,6 +13,7 @@ set -eux
 
 CHANGES="$(find . -name '*.changes')"
 
+dcmd chmod a+r $CHANGES
 dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 
 # call processincoming once for all packages uploaded
