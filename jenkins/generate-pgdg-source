@@ -83,7 +83,7 @@ elif [ "${SVN_REVISION:-}" ] ; then
 else
   echo "Using apt-get source"
   rm -rf $PACKAGE* source
-  apt-get source -d $PACKAGE
+  apt-get source -d $PACKAGE${apt_suite:+/$apt_suite}
   dpkg-source -x $PACKAGE*.dsc
   mv $PACKAGE-*/ source
   VCS=apt-get

@@ -87,6 +87,10 @@
                         default: '1'
                         description: Revision number to use on generated source package (number in .pgdg+N suffix)
                 - choice: *queue_choice
+                - string:
+                        name: apt_suite
+                        default: 'jessie'
+                        description: Debian release to "apt-get source" from
         execution-strategy:
                 sequential: true
                 combination-filter: '{dist-filter}'
