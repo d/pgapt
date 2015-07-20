@@ -89,7 +89,7 @@
                 - choice: *queue_choice
                 - string:
                         name: apt_suite
-                        default: 'jessie'
+                        default: '{apt-suite}'
                         description: Debian release to "apt-get source" from
         execution-strategy:
                 sequential: true
@@ -118,6 +118,9 @@
         <<: *apt_source_template
         name: '{name}-bzr-source'
         description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        parameters:
+                - string: *revision_string
+                - choice: *queue_choice
         scm:
                 - bzr:
                         url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
@@ -197,6 +200,9 @@
         <<: *apt_source_template
         name: '{name}-svn-source'
         description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        parameters:
+                - string: *revision_string
+                - choice: *queue_choice
         scm:
                 - svn:
                         url: '{svn-url}'
@@ -653,6 +659,7 @@
 - project:
         name: gdal
         # sid and trusty are current enough
+        apt-suite: ??
         dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
         jobs:
                 - apt-packages
@@ -660,6 +667,7 @@
 - project:
         name: geos
         # sid and trusty are current enough
+        apt-suite: ??
         dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
         jobs:
                 - apt-packages
@@ -674,6 +682,7 @@
 
 - project:
         name: libdbd-pg-perl
+        apt-suite: unstable
         dist-filter: ''
         jobs:
                 - apt-packages
@@ -698,6 +707,7 @@
 
 - project:
         name: ora2pg
+        apt-suite: unstable
         dist-filter: ''
         jobs:
                 - apt-packages
@@ -729,6 +739,7 @@
 
 - project:
         name: pgbadger
+        apt-suite: unstable
         dist-filter: ''
         jobs:
                 - apt-packages
@@ -769,11 +780,9 @@
         name: pgloader
         git-url: https://github.com/dimitri/pgloader.git
         git-branch: master
-        # build on sid (and maybe copy the result to other suites)
-        dist-filter: 'distribution=="sid"'
+        dist-filter: ''
         jobs:
-                #- git-packages
-                - apt-packages
+                - git-packages
 
 - project:
         name: pgfincore
@@ -1212,8 +1221,65 @@
 ## pgloader dependencies
 - project:
         name: sbcl
+        apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
         dist-filter: '(distribution=="squeeze") || (distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty")'
         jobs:
                 - apt-packages
 
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cffi }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-abnf }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-alexandria }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-anaphora }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-asdf-finalizers }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-asdf-system-connections }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-chipz }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-chunga }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-closure-common }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-command-line-arguments }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-containers }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-csv }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-curry-compose-reader-macros }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-cxml }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-daemon }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-db3 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-drakma }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-dynamic-classes }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-esrap }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-fad }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-fiveam }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-garbage-pools }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-github-v3 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-graph }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ieee-floats }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-interpol }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ironclad }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-iterate }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ixf }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-local-time }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-log }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-lparallel }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-markdown }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-md5 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-metabang-bind }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-metatilities-base }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-mssql }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-nibbles }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-parse-number }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-plus-ssl }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-postmodern }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-puri }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-py-configparser }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-qmynd }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-rfc2388 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-salza2 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-sqlite }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-backtrace }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-garbage }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-utf-8 }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-unicode }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-uuid }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-who }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-yason }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zip }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zs3 }
