@@ -1232,62 +1232,67 @@
         jobs:
                 - apt-packages
 
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: bordeaux-threads }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: buildapp }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cffi }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-abnf }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-alexandria }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-anaphora }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-asdf-finalizers }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-asdf-system-connections }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-chipz }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-chunga }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-closure-common }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-command-line-arguments }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-containers }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-csv }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-curry-compose-reader-macros }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-cxml }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-daemon }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-db3 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-drakma }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-dynamic-classes }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-esrap }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-fad }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-fiveam }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-garbage-pools }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-github-v3 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-graph }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ieee-floats }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-interpol }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ironclad }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-iterate }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-ixf }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-local-time }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-log }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-lparallel }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-markdown }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-md5 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-metabang-bind }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-metatilities-base }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-mssql }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-nibbles }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-parse-number }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-plus-ssl }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-postmodern }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-puri }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-py-configparser }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-qmynd }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-rfc2388 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-salza2 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-sqlite }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-backtrace }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-garbage }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-trivial-utf-8 }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-unicode }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-uuid }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-who }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-yason }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zip }
-- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zs3 }
+- project: &aptpkg
+        name: bordeaux-threads
+        apt-suite: 'unstable'
+        dist-filter: ''
+        jobs: [apt-packages]
+- project: { <<: *aptpkg, name: buildapp }
+- project: { <<: *aptpkg, name: cffi }
+- project: { <<: *aptpkg, name: cl-abnf }
+- project: { <<: *aptpkg, name: cl-alexandria }
+- project: { <<: *aptpkg, name: cl-anaphora }
+- project: { <<: *aptpkg, name: cl-asdf }
+- project: { <<: *aptpkg, name: cl-asdf-finalizers }
+- project: { <<: *aptpkg, name: cl-asdf-system-connections }
+- project: { <<: *aptpkg, name: cl-chipz }
+- project: { <<: *aptpkg, name: cl-chunga }
+- project: { <<: *aptpkg, name: cl-closure-common }
+- project: { <<: *aptpkg, name: cl-command-line-arguments }
+- project: { <<: *aptpkg, name: cl-containers }
+- project: { <<: *aptpkg, name: cl-csv }
+- project: { <<: *aptpkg, name: cl-curry-compose-reader-macros }
+- project: { <<: *aptpkg, name: cl-cxml }
+- project: { <<: *aptpkg, name: cl-daemon }
+- project: { <<: *aptpkg, name: cl-db3 }
+- project: { <<: *aptpkg, name: cl-drakma }
+- project: { <<: *aptpkg, name: cl-dynamic-classes }
+- project: { <<: *aptpkg, name: cl-esrap }
+- project: { <<: *aptpkg, name: cl-fad }
+- project: { <<: *aptpkg, name: cl-fiveam }
+- project: { <<: *aptpkg, name: cl-garbage-pools }
+- project: { <<: *aptpkg, name: cl-github-v3 }
+- project: { <<: *aptpkg, name: cl-graph }
+- project: { <<: *aptpkg, name: cl-ieee-floats }
+- project: { <<: *aptpkg, name: cl-interpol }
+- project: { <<: *aptpkg, name: cl-ironclad }
+- project: { <<: *aptpkg, name: cl-iterate }
+- project: { <<: *aptpkg, name: cl-ixf }
+- project: { <<: *aptpkg, name: cl-local-time }
+- project: { <<: *aptpkg, name: cl-log }
+- project: { <<: *aptpkg, name: cl-lparallel }
+- project: { <<: *aptpkg, name: cl-markdown }
+- project: { <<: *aptpkg, name: cl-md5 }
+- project: { <<: *aptpkg, name: cl-metabang-bind }
+- project: { <<: *aptpkg, name: cl-metatilities-base }
+- project: { <<: *aptpkg, name: cl-mssql }
+- project: { <<: *aptpkg, name: cl-nibbles }
+- project: { <<: *aptpkg, name: cl-parse-number }
+- project: { <<: *aptpkg, name: cl-plus-ssl }
+- project: { <<: *aptpkg, name: cl-postmodern }
+- project: { <<: *aptpkg, name: cl-puri }
+- project: { <<: *aptpkg, name: cl-py-configparser }
+- project: { <<: *aptpkg, name: cl-qmynd }
+- project: { <<: *aptpkg, name: cl-rfc2388 }
+- project: { <<: *aptpkg, name: cl-salza2 }
+- project: { <<: *aptpkg, name: cl-sqlite }
+- project: { <<: *aptpkg, name: cl-trivial-backtrace }
+- project: { <<: *aptpkg, name: cl-trivial-garbage }
+- project: { <<: *aptpkg, name: cl-trivial-utf-8 }
+- project: { <<: *aptpkg, name: cl-unicode }
+- project: { <<: *aptpkg, name: cl-uuid }
+- project: { <<: *aptpkg, name: cl-who }
+- project: { <<: *aptpkg, name: cl-yason }
+- project: { <<: *aptpkg, name: cl-zip }
+- project: { <<: *aptpkg, name: cl-zs3 }
 ##
