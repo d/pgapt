@@ -777,14 +777,6 @@
                 - git-packages-with-next
 
 - project:
-        name: pgloader
-        git-url: https://github.com/dimitri/pgloader.git
-        git-branch: master
-        dist-filter: ''
-        jobs:
-                - git-packages
-
-- project:
         name: pgfincore
         git-url: git://git.postgresql.org/git/pgfincore.git
         git-branch: master
@@ -1218,7 +1210,17 @@
         jobs:
                 - upgrade-{oldversion}-{newversion}-sid-amd64
 
-## pgloader dependencies
+## pgloader and dependencies
+- project:
+        name: pgloader
+        #git-url: https://github.com/dimitri/pgloader.git
+        #git-branch: master
+        apt-suite: unstable
+        dist-filter: ''
+        jobs:
+                #- git-packages
+                - apt-packages
+
 - project:
         name: sbcl
         apt-suite: jessie
@@ -1283,3 +1285,4 @@
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-yason }
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zip }
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-zs3 }
+##
