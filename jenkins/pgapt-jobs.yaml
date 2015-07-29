@@ -1223,7 +1223,7 @@
         name: sbcl
         apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
-        dist-filter: '(distribution=="squeeze") || (distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty")'
+        dist-filter: '(distribution=="squeeze") || (distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic")'
         jobs:
                 - apt-packages
 
