@@ -1229,6 +1229,8 @@
         jobs:
                 - apt-packages
 
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: bordeaux-threads }
+- project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: buildapp }
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cffi }
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-abnf }
 - project: { jobs: [apt-packages], apt-suite: 'unstable', dist-filter: '', name: cl-alexandria }

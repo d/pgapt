@@ -185,7 +185,7 @@ case $PACKAGE in
   autopkgtest|libdbd-pg-perl)
     DOT='~' ;;
 
-  pgloader|cffi|cl-*|sbcl) # pgloader and build-deps
+  pgloader|bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader and build-deps
     DOT='~' ;;
 
   check-postgres) # add B-D for all PostgreSQL versions, not just "postgresql"
