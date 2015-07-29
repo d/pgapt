@@ -522,6 +522,8 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        triggers:
+                - timed: "@midnight"
         builders:
                 - shell: 'COWBUILDER_UPDATE_ONLY=yes build-and-provide-package'
         publishers:
