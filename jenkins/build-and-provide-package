@@ -3,6 +3,8 @@
 #set -x
 set -u
 
+PBUILDER_BUILD="/home/pbuilder.buexcl/build"
+
 # make sure cowbuilder/pbuilder/... are available
 PATH='/bin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin'
 
@@ -307,7 +309,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts /tmp/adt-$$
+        --hookdir $PBUILDER_HOOKDIR --bindmounts "/tmp/adt-$$ $PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     amd64|all|*)
@@ -316,7 +318,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts /tmp/adt-$$
+        --hookdir $PBUILDER_HOOKDIR --bindmounts "/tmp/adt-$$ $PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     *)
