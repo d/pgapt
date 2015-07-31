@@ -1016,7 +1016,8 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                # run sequentially so we can start mysql
+                - git-packages-sequential
 
 - project:
         name: postgresql-pgmp
