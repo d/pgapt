@@ -6,13 +6,15 @@ PBUILDER_BUILD="/home/pbuilder.buexcl/build"
 
 touch /testfile.$$
 BUILD=$PBUILDER_BUILD/*/testfile.$$
-rm -f /testfile.$$
 
-if ! test -f $BUILD; then
-	echo "Could not determine our build directory in $PBUILDER_BUILD"
+if ! test -f "$BUILD"; then
+	echo "Could not determine our build directory in $PBUILDER_BUILD ($BUILD)"
+	ls $PBUILDER_BUILD $PBUILDER_BUILD/*
+	mount
 	printenv | sort
 	exit 1
 fi
+rm -f /testfile.$$
 
 COPY="$PBUILDER_BUILD/${BUILD_TAG/\//_}"
 
