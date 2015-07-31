@@ -52,7 +52,6 @@ bailout() {
 
   echo "*** Getting rid of files in $WORKSPACE/binaries/ to avoid problems in next run. ***"
   rm -f "$WORKSPACE"/binaries/*
-  sudo rm -rf /tmp/adt-$$
 
   [ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
   echo "*** Finished execution of $0 at $(date) [running ${SECONDS} seconds] ***"
@@ -281,24 +280,21 @@ filter_arch_all () {
   fi
 }
 
-autopkgtest_resuts () {
-  # copy autopkgtest results from /tmp
-  rm -rf adt autopkgtest.xml
-  sudo chmod -R go+rX /tmp/adt-$$
-  cp -a /tmp/adt-$$ adt
-  touch adt/summary # fake file if there is no testsuite
-  adtsummary2junit adt/summary > autopkgtest.xml
+# convert autopkgtest results to junit format
+autopkgtest_results () {
+  touch autopkgtest.summary # fake file if there is no testsuite
+  adtsummary2junit autopkgtest.summary > autopkgtest.xml
 }
 
 cowbuilder_run() {
   echo "*** cowbuilder build phase for arch $architecture ***"
-  mkdir -p "$WORKSPACE"/binaries/ /tmp/adt-$$
+  mkdir -p "$WORKSPACE"/binaries/
 
   # make sure we build arch specific packages only when necessary
   identify_build_type
 
   if $SKIP_ARCH_BUILD ; then
-    autopkgtest_resuts
+    autopkgtest_results
     bailout 0 "Nothing to do, architecture all binary packages only for non-primary architecture."
   fi
 
@@ -309,7 +305,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts "/tmp/adt-$$ $PBUILDER_BUILD"
+        --hookdir $PBUILDER_HOOKDIR --bindmounts "$PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     amd64|all|*)
@@ -318,7 +314,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts "/tmp/adt-$$ $PBUILDER_BUILD"
+        --hookdir $PBUILDER_HOOKDIR --bindmounts "$PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     *)
@@ -521,7 +517,7 @@ fi
 
 filter_arch_all
 binaries_to_workspace
-autopkgtest_resuts
+autopkgtest_results
 
 bailout 0
 
