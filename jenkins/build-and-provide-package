@@ -282,8 +282,13 @@ filter_arch_all () {
 
 # convert autopkgtest results to junit format
 autopkgtest_results () {
-  touch autopkgtest.summary # fake file if there is no testsuite
-  adtsummary2junit autopkgtest.summary > autopkgtest.xml
+  if test -r autopkgtest.summary; then
+    echo "Converting autopkgtest.summary to autopkgtest.xml"
+    adtsummary2junit autopkgtest.summary > autopkgtest.xml
+  else
+    echo "No autopkgtest.summary, writing empty autopkgtest.xml"
+    adtsummary2junit < /dev/null > autopkgtest.xml
+  fi
 }
 
 cowbuilder_run() {
