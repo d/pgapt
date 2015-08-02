@@ -5,9 +5,9 @@ set -eu
 PBUILDER_BUILD="/home/pbuilder.buexcl/build"
 
 touch /testfile.$$
-BUILD=$PBUILDER_BUILD/*/testfile.$$
+BUILD=$(dirname $PBUILDER_BUILD/*/testfile.$$)
 
-if ! test -f "$BUILD"; then
+if ! test -f "$BUILD/testfile.$$"; then
 	echo "Could not determine our build directory in $PBUILDER_BUILD ($BUILD)"
 	ls $PBUILDER_BUILD $PBUILDER_BUILD/*
 	mount
