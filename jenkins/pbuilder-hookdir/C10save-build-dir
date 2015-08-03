@@ -16,7 +16,7 @@ if ! test -f "$BUILD/testfile.$$"; then
 fi
 rm -f /testfile.$$
 
-COPY="$PBUILDER_BUILD/${BUILD_TAG/\//_}"
+COPY="$PBUILDER_BUILD/${BUILD_TAG:-ftbfs.$$}"
 
 echo "Preserving build chroot for inspection in $COPY"
 cp -alx $BUILD $COPY
