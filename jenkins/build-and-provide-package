@@ -3,6 +3,9 @@
 #set -x
 set -u
 
+#531885: cowbuilder: build fails with restrictive umask
+umask 022
+
 PBUILDER_BUILD="/home/pbuilder.buexcl/build"
 
 # make sure cowbuilder/pbuilder/... are available
