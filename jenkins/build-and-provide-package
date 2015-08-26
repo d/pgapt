@@ -310,7 +310,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts "$PBUILDER_BUILD"
+        --hookdir $PBUILDER_HOOKDIR # --bindmounts "$PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     amd64|all|*)
@@ -319,7 +319,7 @@ cowbuilder_run() {
         cowbuilder --buildresult "$WORKSPACE"/binaries/ \
         --build $sourcefile \
         --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}" \
-        --hookdir $PBUILDER_HOOKDIR --bindmounts "$PBUILDER_BUILD"
+        --hookdir $PBUILDER_HOOKDIR # --bindmounts "$PBUILDER_BUILD"
       [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
       ;;
     *)
