@@ -1,0 +1,5 @@
+#!/bin/sh
+
+TARGET=$(dirname $0)/..
+
+rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists $TARGET

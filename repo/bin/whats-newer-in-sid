@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BINDIR=$(dirname $0)
+DISTS=$BINDIR/../dists
+
+$BINDIR/diff-dists \
+	/var/lib/apt/lists/*_debian_dists_sid_main_source_Sources \
+	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2)

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BINDIR=$(dirname $0)
+DISTS=$BINDIR/../dists
+
+$BINDIR/diff-dists -f \
+	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2) \
+	<(bzcat $DISTS/sid-pgdg/main/source/Sources.bz2)

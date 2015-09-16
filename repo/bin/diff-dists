@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+# Diff two Sources files, comparing version numbers for each package found in the second file.
+# Usage example: ./diff-dists <debian-sid-main-Sources> <pgapt-sid-pgdg-testing-main-Sources>
+
+use strict;
+use warnings;
+
+my $fulldiff = 0;
+if (@ARGV and $ARGV[0] eq '-f') {
+	shift;
+	$fulldiff = 1;
+}
+
+die "Syntax: $0 [-f] <source1> <source2>" unless (@ARGV == 2);
+my ($source1, $source2) = @ARGV;
+my %pkgs;
+
+$/ = ''; # slurp paragraphs
+
+open S2, $source2 or die "$source2: $!";
+while (<S2>) {
+	my ($pkg) = /^Package: (.+)/m or die "$source2: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$source2: paragraph without Version: $_";
+	$pkgs{$pkg} = $ver;
+}
+close S2;
+
+open S1, $source1 or die "$source1: $!";
+while (<S1>) {
+	my ($pkg) = /^Package: (.+)/m or die "$source1: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$source1: paragraph without Version: $_";
+	if (not exists $pkgs{$pkg}) {
+		print "$pkg $ver <missing>\n" if ($fulldiff);
+		next;
+	}
+
+	my $ver2 = $pkgs{$pkg};
+	if ($ver eq $ver2 or $ver2 =~ /^\Q$ver\E[.~]pgdg\+\d$/) {
+		#print "OK: $pkg $ver $ver2\n";
+		delete $pkgs{$pkg};
+		next;
+	}
+
+	print "$pkg $ver $pkgs{$pkg}\n";
+	delete $pkgs{$pkg};
+}
+close S1;
+
+foreach my $pkg (sort keys %pkgs) {
+	print "$pkg <missing> $pkgs{$pkg}\n";
+}
