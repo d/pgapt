@@ -24,12 +24,18 @@ export PG_UMASKS="077"
 
 apt-get install -y autopkgtest apt-utils pbuilder newpid
 
-binaries=$(awk '/\.deb / { print "--binary ../" $1 }' debian/files | xargs)
-
 # launch adt-run in a new PID namespace so several testsuites can run in parallel
-newpid adt-run --summary $PWD/autopkgtest.summary \
-	$binaries --built-tree $PWD --- adt-virt-null || EXIT=$?
+newpid adt-run \
+	--summary $PWD/autopkgtest.summary \
+	/tmp/buildd/*.deb \
+	--built-tree $PWD \
+	--- adt-virt-null || EXIT=$?
 
-# 4 means some test failed, exit 0 here and let adtsummary2junit report the failure
-[ ${EXIT:-0} = 4 ] && exit 0
-exit ${EXIT:-0}
+case ${EXIT:-0} in
+	2|4|6|8) # some test failed, exit 0 here and let adtsummary2junit report the failure
+		exit 0
+		;;
+	*)
+		exit ${EXIT:-0}
+		;;
+esac
