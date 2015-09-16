@@ -1286,6 +1286,7 @@
 - project: { <<: *aptpkg, name: cl-puri }
 - project: { <<: *aptpkg, name: cl-py-configparser }
 - project: { <<: *aptpkg, name: cl-qmynd }
+- project: { <<: *aptpkg, name: cl-quri }
 - project: { <<: *aptpkg, name: cl-rfc2388 }
 - project: { <<: *aptpkg, name: cl-salza2 }
 - project: { <<: *aptpkg, name: cl-sqlite }
@@ -1293,6 +1294,7 @@
 - project: { <<: *aptpkg, name: cl-trivial-garbage }
 - project: { <<: *aptpkg, name: cl-trivial-utf-8 }
 - project: { <<: *aptpkg, name: cl-unicode }
+- project: { <<: *aptpkg, name: cl-utilities }
 - project: { <<: *aptpkg, name: cl-uuid }
 - project: { <<: *aptpkg, name: cl-who }
 - project: { <<: *aptpkg, name: cl-yason }
