@@ -628,10 +628,11 @@
 
 - project:
         name: apgdiff
-        svn-url: svn://svn.debian.org/pkg-postgresql/trunk/apgdiff
+        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/apgdiff.git
+        git-branch: master
         dist-filter: ''
         jobs:
-                - svn-packages
+                - git-packages
 
 - project:
         name: autopkgtest
