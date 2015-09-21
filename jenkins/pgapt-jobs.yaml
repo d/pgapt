@@ -217,7 +217,7 @@
         project-type: matrix
         parameters:
                 - choice: *queue_choice
-        execution-strategy:
+        execution-strategy: &binaries_execution_strategy
                 combination-filter: '{dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
@@ -254,10 +254,8 @@
         <<: *binaries_template
         description: 'Build Debian binary package of {name}, running configurations sequentially.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         execution-strategy:
-                combination-filter: '{dist-filter}'
+                <<: *binaries_execution_strategy
                 sequential: true
-                touchstone:
-                        expr: '(distribution=="sid") && (architecture=="amd64")'
 
 # same as {name}-binaries, but triggers -beta and -devel builds on success
 - job-template:
