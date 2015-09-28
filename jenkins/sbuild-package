@@ -1,0 +1,68 @@
+#!/bin/sh
+
+error () {
+  echo "Error: $@" >&2
+  exit 1
+}
+
+set -eu
+
+# find dsc to build
+PACKAGE="${JOB_NAME%%-binaries*}"
+set -- ${PACKAGE}_*.dsc
+DSC="$1"
+[ "${2:-}" ] && error "There is more than one \${PACKAGE}_*.dsc in $PWD"
+
+# exit early if package is arch:all only and we are not on amd64
+if [ "$architecture" != "amd64" ] && egrep -q '^Architecture: all$' $DSC; then
+  echo "Package is arch:all only and we are not on amd64"
+  adtsummary2junit /dev/null > autopkgtests.xml
+  exit
+fi
+
+# check if chroot exists
+schroot -l | grep -q chroot:$distribution-$architecture-sbuild || \
+  error "There is no schroot definition for chroot:$distribution-$architecture-sbuild"
+
+# decide if we should build arch:all packages
+case $architecture in
+  amd64)
+    ARCH_ALL="--arch-all" ;; # always build arch:all binaries here
+  *)
+    if egrep -q '^Testsuite: autopkgtest$' $DSC; then
+      echo "Package has Testsuite: autopkgtest, will build arch:all binaries even on $architecture. We'll throw them away at the end."
+      ARCH_ALL="--arch-all"
+      FILTER_ARCH_ALL="true"
+    fi ;;
+esac
+
+# prepare temp file for adt-run results
+ADT_SUMMARY=$(mktemp /tmp/adt.XXXXXX)
+cleanup () {
+  rm -f "$ADT_SUMMARY"
+}
+trap "cleanup" 0 2 3 15
+
+# build package and run autopkgtests inside the chroot
+# (lock against concurrent apt-get update/upgrade operations)
+# (adt-sbuild is part of pgdg-buildenv)
+LOCKDIR="/var/lock/sbuild-package"
+mkdir -p $LOCKDIR
+test -O $LOCKDIR
+(
+  set -x
+  flock --shared 9
+  DEB_ADT_SUMMARY=$ADT_SUMMARY \
+  sbuild --nolog --batch --apt-update --no-apt-distupgrade \
+    -d $distribution --arch $architecture ${ARCH_ALL:-} \
+    --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
+    $DSC
+) 9> $LOCKDIR/$distribution-$architecture.lock
+
+# remove arch:all packages that were only built for autopkgtests
+if [ "${FILTER_ARCH_ALL:-}" ]; then
+  sed -i -e '/_all\.deb$/d' *.changes
+fi
+
+# convert autopkgtest results to junit format (writes a dummy record if package doesn't have tests)
+adtsummary2junit $ADT_SUMMARY > autopkgtest.xml
