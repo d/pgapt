@@ -37,7 +37,7 @@ case $architecture in
 esac
 
 # prepare temp file for adt-run results
-ADT_SUMMARY=$(mktemp /tmp/adt.XXXXXX)
+ADT_SUMMARY=$(mktemp /var/tmp/adt.XXXXXX)
 cleanup () {
   rm -f "$ADT_SUMMARY"
 }

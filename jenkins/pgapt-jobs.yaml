@@ -232,7 +232,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
-                - shell: 'BUILD_ONLY=yes {noadt}build-and-provide-package'
+                - shell: '{noadt}sbuild-package'
         publishers:
                 - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
@@ -292,7 +292,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
-                - shell: 'BUILD_ONLY=yes {noadt}build-and-provide-package'
+                - shell: '{noadt}sbuild-package'
         axes:
                 - axis: *amd64_only_axis
                 - axis: *dist_axis
@@ -304,7 +304,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'PG_SUPPORTED_VERSIONS="9.4" BUILD_ONLY=yes build-and-provide-package'
+                - shell: 'PG_SUPPORTED_VERSIONS="9.5" sbuild-package'
 
 # binaries for building modules for PostgreSQL devel
 - job-template:
@@ -316,7 +316,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'PG_SUPPORTED_VERSIONS="9.5" BUILD_ONLY=yes build-and-provide-package'
+                - shell: 'PG_SUPPORTED_VERSIONS="9.6" sbuild-package'
 
 # testsuite template
 

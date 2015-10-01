@@ -62,6 +62,7 @@ umask 002
 	esac
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
+	apt-get clean
 	
 	dpkg -l 'libpq*' 'newpid' 'pgdg*' 'postgresql*' || :
 	EOF
