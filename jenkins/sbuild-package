@@ -16,7 +16,7 @@ DSC="$1"
 # exit early if package is arch:all only and we are not on amd64
 if [ "$architecture" != "amd64" ] && egrep -q '^Architecture: all$' $DSC; then
   echo "Package is arch:all only and we are not on amd64"
-  adtsummary2junit /dev/null > autopkgtests.xml
+  adtsummary2junit /dev/null > autopkgtest.xml
   exit
 fi
 
@@ -47,8 +47,13 @@ trap "cleanup" 0 2 3 15
 # (lock against concurrent apt-get update/upgrade operations)
 # (adt-sbuild is part of pgdg-buildenv)
 LOCKDIR="/var/lock/sbuild-package"
-mkdir -p $LOCKDIR
-test -O $LOCKDIR
+if ! test -d $LOCKDIR; then
+  mkdir $LOCKDIR
+  chgrp sbuild $LOCKDIR
+  chmod 3775 $LOCKDIR
+fi
+umask 002
+
 (
   set -x
   flock --shared 9
