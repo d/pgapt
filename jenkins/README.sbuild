@@ -1,0 +1,27 @@
+Using sbuild with jenkins
+=========================
+
+apt-get install schroot sbuild
+
+Configure chroots: ./schroot-config.sh
+                [$dist-$arch-sbuild]
+                type=directory
+                groups=sbuild
+                root-groups=sbuild
+                source-groups=sbuild
+                source-root-groups=sbuild
+                directory=/home/chroot/$dist-$arch
+                union-type=aufs
+                union-overlay-directory=/var/run
+                profile=sbuild
+                EOF
+                [ $arch = i386 ] && echo "personality=linux32"
+                echo
+
+Make sure there is enough swap
+Enlarge (/var)/run in /etc/fstab:
+tmpfs           /run            tmpfs   size=12G        0       0
+
+Bind-Mount /var/tmp in /etc/schroot/sbuild/fstab, and remove /var/lib/sbuild/build
+
+sbuild-update --keygen
