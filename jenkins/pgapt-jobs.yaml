@@ -514,7 +514,6 @@
         description: 'Update sbuild chroots'
         project-type: matrix
         execution-strategy:
-                sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
