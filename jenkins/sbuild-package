@@ -14,6 +14,7 @@
 #  gid sbuild (for sbuild as such and for /var/lock/sbuild-package)
 #  adt-sbuild available in chroot (in pgdg-buildenv package)
 #  /var/tmp bind mount in schroot fstab for retrieving adt-run summary
+#  sbuild needs to pass through DEB_* variables (default)
 # Optional:
 #  newpid installed in chroot
 #  /etc/sbuild/sbuild.conf: $build_env_cmnd = 'newnet';
@@ -24,6 +25,8 @@ error () {
 }
 
 set -eu
+
+chroot="source:$distribution-pgdg-$architecture-sbuild"
 
 # find dsc to build
 PACKAGE="${JOB_NAME%%-binaries*}"
@@ -39,8 +42,8 @@ if [ "$architecture" != "amd64" ] && egrep -q '^Architecture: all$' $DSC; then
 fi
 
 # check if chroot exists
-schroot -l | grep -q chroot:$distribution-pgdg-$architecture-sbuild || \
-  error "There is no schroot definition for chroot:$distribution-pgdg-$architecture-sbuild"
+schroot -l | grep -q $chroot || \
+  error "There is no schroot definition for $chroot"
 
 # decide if we should build arch:all packages
 case $architecture in
@@ -55,15 +58,13 @@ case $architecture in
 esac
 
 # prepare temp file for adt-run results
-ADT_SUMMARY=$(mktemp /var/tmp/adt.XXXXXX)
+export DEB_ADT_SUMMARY=$(mktemp /var/tmp/adt.XXXXXX)
 cleanup () {
-  rm -f "$ADT_SUMMARY"
+  rm -f "$DEB_ADT_SUMMARY"
 }
 trap "cleanup" 0 2 3 15
 
-# build package and run autopkgtests inside the chroot
-# (lock against concurrent apt-get update/upgrade operations)
-# (adt-sbuild is part of pgdg-buildenv)
+# lock against concurrent apt-get update/upgrade operations on the source chroot
 LOCKDIR="/var/lock/sbuild-package"
 if ! test -d $LOCKDIR; then
   mkdir $LOCKDIR
@@ -72,10 +73,10 @@ if ! test -d $LOCKDIR; then
 fi
 umask 002
 
+# build package and run autopkgtests inside the chroot
 (
   set -x
   flock --shared 9
-  DEB_ADT_SUMMARY=$ADT_SUMMARY \
   sbuild --nolog --batch --apt-update --no-apt-distupgrade \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
@@ -88,4 +89,4 @@ if [ "${FILTER_ARCH_ALL:-}" ]; then
 fi
 
 # convert autopkgtest results to junit format (writes a dummy record if package doesn't have tests)
-adtsummary2junit $ADT_SUMMARY > autopkgtest.xml
+adtsummary2junit $DEB_ADT_SUMMARY > autopkgtest.xml

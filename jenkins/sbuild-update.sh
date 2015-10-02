@@ -5,9 +5,11 @@ error () {
   exit 1
 }
 
+chroot="source:$distribution-pgdg-$architecture-sbuild"
+
 # check if chroot exists
-schroot -l | grep -q source:$distribution-pgdg-$architecture-sbuild || \
-  error "There is no schroot definition for source:$distribution-pgdg-$architecture-sbuild"
+schroot -l | grep -q $chroot || \
+  error "There is no schroot definition for $chroot"
 
 set -eux
 
@@ -39,7 +41,7 @@ umask 002
 (
   flock --exclusive 9
   cd /
-  schroot -u root -c source:$distribution-pgdg-$architecture-sbuild -- sh <<-EOF
+  schroot -u root -c $chroot -- sh <<-EOF
 	set -ex
 	
 	if ! test -f /etc/apt/sources.list.d/pgdg.list; then
