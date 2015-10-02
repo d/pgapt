@@ -1,5 +1,23 @@
 #!/bin/sh
 
+# Launch sbuild from jenkins
+# Input:
+#  .dsc source package in current directory
+#  JOB_NAME=$pkg-binaries
+#  architecture=amd64/i386
+#  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
+# Output:
+#  .changes and .deb in current directory
+#  autopkgtest.xml in current directory
+# Requirements:
+#  schroot $foo-pgdg-$arch-sbuild
+#  gid sbuild (for sbuild as such and for /var/lock/sbuild-package)
+#  adt-sbuild available in chroot (in pgdg-buildenv package)
+#  /var/tmp bind mount in schroot fstab for retrieving adt-run summary
+# Optional:
+#  newpid installed in chroot
+#  /etc/sbuild/sbuild.conf: $build_env_cmnd = 'newnet';
+
 error () {
   echo "Error: $@" >&2
   exit 1
@@ -21,8 +39,8 @@ if [ "$architecture" != "amd64" ] && egrep -q '^Architecture: all$' $DSC; then
 fi
 
 # check if chroot exists
-schroot -l | grep -q chroot:$distribution-$architecture-sbuild || \
-  error "There is no schroot definition for chroot:$distribution-$architecture-sbuild"
+schroot -l | grep -q chroot:$distribution-pgdg-$architecture-sbuild || \
+  error "There is no schroot definition for chroot:$distribution-pgdg-$architecture-sbuild"
 
 # decide if we should build arch:all packages
 case $architecture in
@@ -59,7 +77,7 @@ umask 002
   flock --shared 9
   DEB_ADT_SUMMARY=$ADT_SUMMARY \
   sbuild --nolog --batch --apt-update --no-apt-distupgrade \
-    -d $distribution --arch $architecture ${ARCH_ALL:-} \
+    -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
     $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock

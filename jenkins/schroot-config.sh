@@ -1,11 +1,14 @@
 #!/bin/sh
 
+# ./schroot-config.sh | sudo tee /etc/schroot/chroot.d/sbuild.conf
+
 set -eu
 
 for dist in sid jessie wheezy squeeze utopic trusty precise; do
 	for arch in amd64 i386; do
 		cat <<-EOF
-		[$dist-$arch-sbuild]
+		[$dist-pgdg-$arch-sbuild]
+		aliases=$dist-$arch
 		type=directory
 		groups=sbuild
 		root-groups=sbuild
