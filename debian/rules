@@ -1,4 +1,8 @@
 #!/usr/bin/make -f
 
+override_dh_install:
+	dh_install
+	chmod 440 debian/pgdg-buildenv/etc/sudoers.d/*
+
 %:
 	dh $@

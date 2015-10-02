@@ -35,3 +35,5 @@ exec sudo adt-run --summary $DEB_ADT_SUMMARY \
 	$SBUILD_BUILD_DIR/*.deb \
 	--built-tree $SBUILD_PKGBUILD_DIR \
 	--- adt-virt-null
+
+# sbuild ignores the exit code here, adtsummary2junit will translate the results so jenkins sees any failures
