@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# union-type=overlay needs Linux 4.x and schroot >= 1.6.10-2~.
+
 # ./schroot-config.sh | sudo tee /etc/schroot/chroot.d/sbuild.conf
 
 set -eu
@@ -15,8 +17,7 @@ for dist in sid jessie wheezy squeeze utopic trusty precise; do
 		source-groups=sbuild
 		source-root-groups=sbuild
 		directory=/home/chroot/$dist-$arch
-		#union-type=overlay # linux 4+
-		union-type=aufs
+		union-type=overlay
 		union-overlay-directory=/var/run
 		profile=sbuild
 		EOF
