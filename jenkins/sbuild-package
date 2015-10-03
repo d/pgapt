@@ -58,7 +58,7 @@ case $architecture in
 esac
 
 # prepare temp file for adt-run results
-export DEB_ADT_SUMMARY=$(mktemp /var/tmp/adt.XXXXXX)
+export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
 cleanup () {
   rm -f "$DEB_ADT_SUMMARY"
 }
@@ -88,5 +88,5 @@ if [ "${FILTER_ARCH_ALL:-}" ]; then
   sed -i -e '/_all\.deb$/d' *.changes
 fi
 
-# convert autopkgtest results to junit format (writes a dummy record if package doesn't have tests)
-adtsummary2junit $DEB_ADT_SUMMARY > autopkgtest.xml
+# copy autopkgtest results back (already in junit format)
+cp $DEB_ADT_SUMMARY autopkgtest.xml

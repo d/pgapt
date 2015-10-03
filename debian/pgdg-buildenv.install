@@ -1,3 +1,4 @@
 pgdg-buildenv/etc /
 jenkins/adt-sbuild usr/bin
+jenkins/adtsummary2junit usr/bin
 pgdg-buildenv/sbin usr

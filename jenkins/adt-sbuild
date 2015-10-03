@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # This is a wrapper around adt-run meant to be called from sbuild:
+# export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
 # sbuild --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' ...
 
 if [ -z "$DEB_ADT_SUMMARY" ]; then
@@ -21,6 +22,7 @@ cd "$SBUILD_PKGBUILD_DIR"
 
 if [ ! -f debian/tests/control ]; then
 	echo "Package does not have autopkgtest support (there is no debian/tests/control file)"
+	adtsummary2junit /dev/null > $DEB_ADT_SUMMARY
 	exit 0
 fi
 
@@ -29,11 +31,23 @@ if [ ! -f debian/files ]; then
 	exit 1
 fi
 
-set -x
+ADT_SUMMARY=$(mktemp /tmp/adt.XXXXXX.summary)
+trap "rm -f $ADT_SUMMARY" 0 2 3 15
 
-exec sudo adt-run --summary $DEB_ADT_SUMMARY \
+(
+set -x
+sudo adt-run --summary $ADT_SUMMARY \
 	$SBUILD_BUILD_DIR/*.deb \
 	--built-tree $SBUILD_PKGBUILD_DIR \
 	--- adt-virt-null
+) || EXIT=$?
 
-# sbuild ignores the exit code here, adtsummary2junit will translate the results so jenkins sees any failures
+case ${EXIT:-0} in
+	0|2|4|6|8) # all ok or some test failed, exit 0 here and let adtsummary2junit report the failure to jenkins
+		adtsummary2junit $ADT_SUMMARY > $DEB_ADT_SUMMARY
+		exit 0
+		;;
+esac
+
+# in reality, sbuild ignores failures here, but jenkins will complain if the junit xml result file is empty
+exit $EXIT
