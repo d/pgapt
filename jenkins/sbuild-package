@@ -77,7 +77,7 @@ umask 002
 (
   set -x
   flock --shared 9
-  sbuild --nolog --batch --apt-update --no-apt-distupgrade \
+  sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
     $DSC
