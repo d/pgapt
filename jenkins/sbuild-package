@@ -6,6 +6,7 @@
 #  JOB_NAME=$pkg-binaries
 #  architecture=amd64/i386
 #  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
+#  DEB_PG_SUPPORTED_VERSIONS (optional, defaults to pgdg)
 # Output:
 #  .changes and .deb in current directory
 #  autopkgtest.xml in current directory
@@ -57,6 +58,10 @@ case $architecture in
     fi ;;
 esac
 
+# set DEB_PG_SUPPORTED_VERSIONS
+: ${DEB_PG_SUPPORTED_VERSIONS:=pgdg}
+export DEB_PG_SUPPORTED_VERSIONS
+
 # prepare temp file for adt-run results
 export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
 cleanup () {
@@ -75,6 +80,7 @@ umask 002
 
 # build package and run autopkgtests inside the chroot
 (
+  echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
   sbuild --nolog --batch \

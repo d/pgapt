@@ -4,6 +4,15 @@
 # export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
 # sbuild --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' ...
 
+# Input:
+#  %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR
+#  DEB_ADT_SUMMARY (possibly unset)
+#  DEB_PG_SUPPORTED_VERSIONS (required)
+# Output:
+#  xml test results (or dummy result) in DEB_ADT_SUMMARY
+# Requirements:
+#  sudo DEB_PG_SUPPORTED_VERSIONS=value adt-run
+
 if [ -z "$DEB_ADT_SUMMARY" ]; then
 	echo "DEB_ADT_SUMMARY is not set, skipping tests"
 	exit
@@ -36,7 +45,8 @@ trap "rm -f $ADT_SUMMARY" 0 2 3 15
 
 (
 set -x
-sudo adt-run --summary $ADT_SUMMARY \
+sudo DEB_PG_SUPPORTED_VERSIONS="$DEB_PG_SUPPORTED_VERSIONS"
+  adt-run --summary $ADT_SUMMARY \
 	$SBUILD_BUILD_DIR/*.deb \
 	--built-tree $SBUILD_PKGBUILD_DIR \
 	--- adt-virt-null
