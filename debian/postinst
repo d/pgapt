@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -e
+
+case $1 in
+	configure)
+		# disable mandb
+		dpkg-divert --add --package pgdg-buildenv --rename /usr/bin/mandb
+		test -e /usr/bin/mandb || ln -s /bin/true /usr/bin/mandb
+
+		# remove existing apt translations so apt does not try to refresh them
+		rm -vf /var/lib/apt/lists/*Translation*
+
+		# don't create clusters on postgresql-* installation
+		cat > /etc/postgresql-common/createcluster.conf <<-EOF
+		# do not edit, file maintained by pgdg-buildenv
+		create_main_cluster = false
+		start_conf = manual
+		EOF
+
+		# install locales for the PostgreSQL testsuite
+		vendor=$(lsb_release -is)
+		case $vendor in
+			Ubuntu)
+				locale-gen en_US.UTF-8 ru_RU ru_RU.UTF-8
+				;;
+			*)
+				while read locale ; do
+					if ! grep -q "^$locale\$" /etc/locale.gen ; then
+						echo "$locale" >> /etc/locale.gen
+						run=1
+					fi
+				done <<-EOF
+				en_US.UTF-8 UTF-8
+				ru_RU ISO-8859-5
+				ru_RU.UTF-8 UTF-8
+				EOF
+				[ "$run" ] && locale-gen
+				;;
+		esac
+		;;
+esac
+
+#DEBHELPER#
+
+exit 0

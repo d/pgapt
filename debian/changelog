@@ -1,0 +1,113 @@
+pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
+
+  * Don't install sources.list.d/pgdg.list from here, we can't easily figure
+    out the current release name from the postinst because sid has "jessie" in
+    there.
+  * Add /usr/bin/adt-sbuild.
+  * Add /usr/sbin/policy-rc.d.
+  * Add /etc/sudoers.d/sbuild.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Thu, 08 Jan 2015 15:39:00 +0100
+
+pgdg-buildenv (16) sid-pgdg; urgency=medium
+
+  * Add /etc/dpkg/dpkg.cfg.d/01unsafeio.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 06 Jan 2015 19:55:41 +0100
+
+pgdg-buildenv (15) sid-pgdg; urgency=medium
+
+  * Pin the pgdg repos to 500 so we don't miss newer distribution packages.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 26 Sep 2014 17:36:16 +0200
+
+pgdg-buildenv (14) sid-pgdg; urgency=medium
+
+  * Fix postinst to exit cleanly.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 19 Feb 2014 12:28:22 +0100
+
+pgdg-buildenv (13) sid-pgdg; urgency=medium
+
+  * Bump dh minimum version to 9.
+  * Depend on dpkg-dev (>= 1.16.1~) | hardening-wrapper (lucid needs h-w).
+  * Install locales for the PostgreSQL testsuite.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 19 Feb 2014 12:14:42 +0100
+
+pgdg-buildenv (12) sid-pgdg; urgency=medium
+
+  * Use local approx cache on buildhost.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 17 Feb 2014 16:56:24 +0100
+
+pgdg-buildenv (11) sid-pgdg; urgency=medium
+
+  * Add logrotate.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 01 Feb 2014 23:45:52 +0100
+
+pgdg-buildenv (10) sid-pgdg; urgency=medium
+
+  * Add newpid.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Thu, 09 Jan 2014 11:28:17 +0100
+
+pgdg-buildenv (9) sid-pgdg; urgency=medium
+
+  * Update sources.list and apt preferences.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 26 Dec 2013 18:03:14 +0200
+
+pgdg-buildenv (8) sid-pgdg; urgency=medium
+
+  * Add autopkgtest.
+  * Install /etc/postgresql-common/createcluster.conf.
+  * Install /etc/apt/apt.conf.d/20norecommends.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 26 Dec 2013 16:51:07 +0200
+
+pgdg-buildenv (7) sid-pgdg; urgency=low
+
+  * Add netcat-openbsd.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 16 Dec 2012 15:48:54 +0100
+
+pgdg-buildenv (6) sid-pgdg; urgency=low
+
+  * Add eatmydata.
+  * Depends: debhelper (>= 8~).
+
+ -- Christoph Berg <myon@debian.org>  Fri, 07 Sep 2012 15:19:15 +0200
+
+pgdg-buildenv (5) sid-pgdg; urgency=low
+
+  * Depend on dependencies of postgresql-server-dev-all instead of the package
+    itself. (We should not pull in any libpq or pg_config by default.)
+  * Add locales needed by the postgresql-testsuite.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 05 Sep 2012 10:50:14 +0200
+
+pgdg-buildenv (4) sid-pgdg; urgency=low
+
+  * Use the correct syntax: Acquire::Languages "none";
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 21:46:53 +0200
+
+pgdg-buildenv (3) sid-pgdg; urgency=low
+
+  * Add Depends: debhelper postgresql-server-dev-all.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 19:42:49 +0200
+
+pgdg-buildenv (2) sid-pgdg; urgency=low
+
+  * Skip downloading apt translations. Suggested by Mika Prokop.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 04 Sep 2012 19:28:50 +0200
+
+pgdg-buildenv (1) sid-pgdg; urgency=low
+
+  * Divert /usr/bin/mandb.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 26 Aug 2012 19:49:11 +0200

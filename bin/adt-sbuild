@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# This is a wrapper around adt-run meant to be called from sbuild:
+# sbuild --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' ...
+
+if [ -z "$DEB_ADT_SUMMARY" ]; then
+	echo "DEB_ADT_SUMMARY is not set, skipping tests"
+	exit
+fi
+
+set -eu
+
+if ! test -f "$DEB_ADT_SUMMARY"; then
+	"Error: DEB_ADT_SUMMARY=$DEB_ADT_SUMMARY does not exist. It should have been created before invoking sbuild, and put onto a bind-mounted partition (see /etc/schroot/*/fstab)" >&2
+	exit 1
+fi
+
+SBUILD_BUILD_DIR="$1"
+SBUILD_PKGBUILD_DIR="$2"
+cd "$SBUILD_PKGBUILD_DIR"
+
+if [ ! -f debian/tests/control ]; then
+	echo "Package does not have autopkgtest support (there is no debian/tests/control file)"
+	exit 0
+fi
+
+if [ ! -f debian/files ]; then
+	echo "Error: Package source is not built, debian/files is missing"
+	exit 1
+fi
+
+set -x
+
+exec sudo adt-run --summary $DEB_ADT_SUMMARY \
+	$SBUILD_BUILD_DIR/*.deb \
+	--built-tree $SBUILD_PKGBUILD_DIR \
+	--- adt-virt-null
+
+# sbuild ignores the exit code here, adtsummary2junit will translate the results so jenkins sees any failures

@@ -3,3 +3,8 @@ repo/conf/postgresql-packages
 web/*.html
 
 .*.swp
+
+debian/files
+debian/pgdg-buildenv/
+debian/*.log
+debian/*.substvars
