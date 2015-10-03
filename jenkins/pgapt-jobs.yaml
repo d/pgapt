@@ -754,7 +754,7 @@
 
 - project:
         name: pgdg-buildenv
-        git-url: https://github.com/ChristophBerg/pgdg-buildenv.git
+        git-url: git://git.postgresql.org/git/pgapt.git
         git-branch: master
         dist-filter: ''
         jobs:

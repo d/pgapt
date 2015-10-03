@@ -1,0 +1,2 @@
+tar-ignore=repo
+tar-ignore=jenkins/output*
