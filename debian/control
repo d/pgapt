@@ -22,6 +22,6 @@ Depends: ${misc:Depends},
 # testsuite:
  hunspell-en-us, locales, logrotate, net-tools, netcat-openbsd,
 # autopkgtest
- autopkgtest, newpid
+ autopkgtest, newpid, sudo
 Description: metapackage to install in pgdg build chroots
  metapackage to install in pgdg build chroots for apt.postgresql.org

@@ -4,8 +4,8 @@ pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
     out the current release name from the postinst because sid has "jessie" in
     there.
   * Add /usr/bin/adt-sbuild.
+  * Add sudo and /etc/sudoers.d/sbuild.
   * Add /usr/sbin/policy-rc.d.
-  * Add /etc/sudoers.d/sbuild.
   * Merge repository into pgapt.git.
 
  -- Christoph Berg <christoph.berg@credativ.de>  Thu, 08 Jan 2015 15:39:00 +0100
