@@ -65,6 +65,10 @@ esac
 : ${DEB_PG_SUPPORTED_VERSIONS:=pgdg}
 export DEB_PG_SUPPORTED_VERSIONS
 
+if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
+  ADD_DEPENDS="--add-depends=postgresql-server-dev-$DEB_PG_SUPPORTED_VERSIONS"
+fi
+
 # prepare temp file for adt-run results
 export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
 cleanup () {
@@ -89,7 +93,7 @@ umask 002
   sbuild --nolog --batch --no-apt-update --no-apt-distupgrade \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
-    $DSC
+    ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
 
 # remove arch:all packages that were only built for autopkgtests
