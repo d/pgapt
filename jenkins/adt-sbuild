@@ -40,6 +40,9 @@ if [ ! -f debian/files ]; then
 	exit 1
 fi
 
+# precise's sudo doesn't remove HOME from the environment, and sbuild's /sbuild-nonexistant confuses adt-run
+unset HOME
+
 ADT_SUMMARY=$(mktemp /tmp/adt.XXXXXX.summary)
 trap "rm -f $ADT_SUMMARY" 0 2 3 15
 
