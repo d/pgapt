@@ -48,6 +48,7 @@ schroot -l | grep -q $chroot || \
 
 # update chroot
 sbuild-update.sh
+APT_UPDATE="--no-apt-update"
 
 # decide if we should build arch:all packages
 case $architecture in
@@ -66,7 +67,8 @@ esac
 export DEB_PG_SUPPORTED_VERSIONS
 
 if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
-  ADD_DEPENDS="--add-depends=postgresql-server-dev-$DEB_PG_SUPPORTED_VERSIONS"
+  APT_UPDATE="--apt-update"
+  ADD_DEPENDS="--add-depends=postgresql-server-dev-$DEB_PG_SUPPORTED_VERSIONS --chroot-setup-commands=sbuild-pgdg-components"
 fi
 
 # prepare temp file for adt-run results
@@ -90,7 +92,7 @@ umask 002
   echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
-  sbuild --nolog --batch --no-apt-update --no-apt-distupgrade \
+  sbuild --nolog --batch $APT_UPDATE --no-apt-distupgrade \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
     ${ADD_DEPENDS:-} $DSC

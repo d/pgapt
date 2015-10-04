@@ -1,0 +1,8 @@
+#!/bin/sh
+
+case $DEB_PG_SUPPORTED_VERSIONS in
+  ""|pgdg) exit 0 ;;
+esac
+
+set -x
+sudo sed -i -e "s/main/main $DEB_PG_SUPPORTED_VERSIONS/" /etc/apt/sources.list.d/pgdg.list

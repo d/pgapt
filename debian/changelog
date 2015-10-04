@@ -3,7 +3,7 @@ pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
   * Don't install sources.list.d/pgdg.list from here, we can't easily figure
     out the current release name from the postinst because sid has "jessie" in
     there.
-  * Add /usr/bin/adt-sbuild.
+  * Add /usr/bin/adt-sbuild and sbuild-pgdg-components.
   * Add sudo and /etc/sudoers.d/sbuild.
   * Add /usr/sbin/policy-rc.d.
   * Merge repository into pgapt.git.
