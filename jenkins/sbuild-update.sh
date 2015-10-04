@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 error () {
   echo "Error: $@" >&2
   exit 1
@@ -10,8 +12,6 @@ chroot="source:$distribution-pgdg-$architecture-sbuild"
 # check if chroot exists
 schroot -l | grep -q $chroot || \
   error "There is no schroot definition for $chroot"
-
-set -eux
 
 deb="http://deb/debian"
 apt1="http://apt.postgresql.org/pub/repos/apt"
@@ -39,8 +39,9 @@ fi
 umask 002
 
 (
-  flock --exclusive 9
   cd /
+  set -x
+  flock --exclusive 9
   schroot -u root -c $chroot -- sh <<-EOF
 	set -ex
 	

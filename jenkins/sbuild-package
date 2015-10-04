@@ -20,12 +20,12 @@
 #  newpid installed in chroot
 #  /etc/sbuild/sbuild.conf: $build_env_cmnd = 'newnet';
 
+set -eu
+
 error () {
   echo "Error: $@" >&2
   exit 1
 }
-
-set -eu
 
 chroot="source:$distribution-pgdg-$architecture-sbuild"
 
@@ -45,6 +45,9 @@ fi
 # check if chroot exists
 schroot -l | grep -q $chroot || \
   error "There is no schroot definition for $chroot"
+
+# update chroot
+sbuild-update.sh
 
 # decide if we should build arch:all packages
 case $architecture in
@@ -83,7 +86,7 @@ umask 002
   echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
-  sbuild --nolog --batch \
+  sbuild --nolog --batch --no-apt-update --no-apt-distupgrade \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
     --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
     $DSC
