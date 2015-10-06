@@ -63,6 +63,9 @@ if [ "$distribution" != "sid" ]; then
   RESOLVE_ALTERNATIVES="--resolve-alternatives"
 fi
 
+# disable parallel builds
+export DEB_BUILD_OPTIONS="parallel=1"
+
 # set DEB_PG_SUPPORTED_VERSIONS
 : ${DEB_PG_SUPPORTED_VERSIONS:=pgdg}
 export DEB_PG_SUPPORTED_VERSIONS
