@@ -67,11 +67,11 @@ if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
 fi
 
 # prepare temp file for adt-run results
-export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
-cleanup () {
-  rm -f "$DEB_ADT_SUMMARY"
-}
-trap "cleanup" 0 2 3 15
+if [ "${ADT:-}" != "skip" ]; then
+  export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
+  trap "rm -f $DEB_ADT_SUMMARY" 0 2 3 15
+  FINISHED_BUILD_COMMAND='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR'
+fi
 
 # lock against concurrent apt-get update/upgrade operations on the source chroot
 LOCKDIR="/var/lock/sbuild-package"
@@ -89,7 +89,7 @@ umask 002
   flock --shared 9
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
-    --finished-build-commands='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR' \
+    --finished-build-commands="$FINISHED_BUILD_COMMAND" \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
 
@@ -99,4 +99,8 @@ if [ "${FILTER_ARCH_ALL:-}" ]; then
 fi
 
 # copy autopkgtest results back (already in junit format)
-cp $DEB_ADT_SUMMARY autopkgtest.xml
+if [ "${DEB_ADT_SUMMARY:-}" ]; then
+  cp $DEB_ADT_SUMMARY autopkgtest.xml
+else
+  adtsummary2junit /dev/null > autopkgtest.xml
+fi
