@@ -2,7 +2,6 @@
 
 # The MIT License
 #
-# Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
 # Copyright (c) 2012-2015 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,86 +24,7 @@
 
 set -eux
 
-#if [ -z "${version:-}" ] ; then
-#  echo "Missing \$version parameter" >&2
-#  exit 1
-#fi
-
-dist_and_arch_settings() {
-  if [ -z "${architecture:-}" ] || [ "${architecture:-}" = "all" ] ; then
-    arch="$(dpkg-architecture -qDEB_HOST_ARCH)"
-    echo "*** No architecture set or architecture set to 'all', using system arch ${arch} ***"
-  else
-    arch="${architecture}"
-    echo "*** architecture is set to ${architecture} ***"
-  fi
-
-  # only set $arch for other functions in this script if PROVIDE_ONLY is set
-  if [ -n "${PROVIDE_ONLY:-}" ] ; then
-    echo "*** Config variable 'PROVIDE_ONLY' is set, not setting COWBUILDER_BASE, COWBUILDER_DIST and DIST ***"
-    return 0
-  fi
-
-  if [ -n "${distribution:-}" ] ; then
-    local DIST="${distribution}"
-  else
-    # default to the currently running distribution to avoid hardcoding
-    # a distribution which might not be supported by the running system
-    local distribution=$(lsb_release --short --codename 2>/dev/null)
-    [ -n "${distribution}" ] || distribution="sid"  # fallback to "sid" iff lsb_release fails
-    local DIST="$distribution"
-  fi
-
-  # if COWBUILDER_DIST is set it overrides distribution then
-  if [ -n "${COWBUILDER_DIST:-}" ]; then
-    echo "*** COWBUILDER_DIST is set to $COWBUILDER_DIST - using it for base.cow if it does not exist yet. ***"
-  else
-    echo "*** Using cowbuilder base for distribution ${DIST} ***"
-    COWBUILDER_DIST="${DIST}"
-  fi
-
-  if [ -n "${COWBUILDER_BASE:-}" ] ; then
-    echo "*** COWBUILDER_BASE is set to $COWBUILDER_BASE - using as cowbuilder base.cow ***"
-  else
-    COWBUILDER_BASE="/var/cache/pbuilder/base-${COWBUILDER_DIST}-${arch}.cow"
-    echo "*** No COWBUILDER_BASE set, using $COWBUILDER_BASE as cowbuilder base.cow ***"
-  fi
-}
-
-cowbuilder_run() {
-  echo "*** cowbuilder build phase for arch $architecture ***"
-  #mkdir -p "$WORKSPACE"/binaries/
-
-  case "$architecture" in
-    i386)
-      linux32 sudo cowbuilder \
-        "$@" \
-        --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}"
-      [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
-      ;;
-    amd64|all|*)
-      sudo cowbuilder \
-        "$@" \
-        --basepath "${COWBUILDER_BASE}" --debbuildopts "${DEBBUILDOPTS:-}"
-      [ $? -eq 0 ] || bailout 1 "Error: Failed to build with cowbuilder."
-      ;;
-    *)
-      bailout 1 "Error: Unsupported architecture: $architecture"
-      ;;
-  esac
-}
-
-dist_and_arch_settings
-
-TESTDIR=$(mktemp -d "/tmp/postgresql-testsuite.XXXXXXXX")
-trap "rm -rf $TESTDIR" 0 2 3 15
-
-# put packages in temp dir
-cp * $TESTDIR
-
-# create script to run testsuite in temp dir
-cat > $TESTDIR/testsuite <<EOF
-#!/bin/sh
+schroot -u root -c "chroot:$distribution-$architecture" -- sh <<'EOF'
 set -eux
 
 # /var/lib/jenkins will probably not exist
@@ -112,9 +32,9 @@ test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 
 # libkrb5-dev needed for postgresql-9.0 and postgresql-9.1
 apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid libkrb5-dev
-if ! dpkg -i $TESTDIR/*.deb; then
+if ! dpkg -i *.deb; then
   apt-get install -fy
-  dpkg -i $TESTDIR/*.deb
+  dpkg -i *.deb
 fi
 
 dpkg -l 'libpq*' 'postgresql*' | cat
@@ -123,11 +43,5 @@ export LC_ALL='en_US.UTF-8'
 cd /usr/share/postgresql-common/
 newpid ./testsuite -u 077
 EOF
-chmod +x $TESTDIR/testsuite
 
-# update chroot
-cowbuilder_run --update
-# run testsuite
-cowbuilder_run --bindmount $TESTDIR --execute $TESTDIR/testsuite
-
-# vim:foldmethod=marker ts=2 ft=sh ai expandtab sw=2
+# vim:sw=2
