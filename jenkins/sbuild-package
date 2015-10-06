@@ -58,6 +58,11 @@ case $architecture in
     fi ;;
 esac
 
+# resolve alternative build-dependencies on dists other than sid
+if [ "$distribution" != "sid" ]; then
+  RESOLVE_ALTERNATIVES="--resolve-alternatives"
+fi
+
 # set DEB_PG_SUPPORTED_VERSIONS
 : ${DEB_PG_SUPPORTED_VERSIONS:=pgdg}
 export DEB_PG_SUPPORTED_VERSIONS
@@ -88,7 +93,7 @@ umask 002
   set -x
   flock --shared 9
   sbuild --nolog --batch \
-    -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} \
+    -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     --finished-build-commands="${FINISHED_BUILD_COMMAND:-}" \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
