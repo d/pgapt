@@ -6,6 +6,7 @@ pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
   * Add /usr/bin/adt-sbuild and sbuild-pgdg-components.
   * Add sudo and /etc/sudoers.d/sbuild.
   * Add /usr/sbin/policy-rc.d.
+  * createcluster.conf: Set create_main_cluster = false.
   * Merge repository into pgapt.git.
 
  -- Christoph Berg <christoph.berg@credativ.de>  Thu, 08 Jan 2015 15:39:00 +0100

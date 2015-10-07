@@ -12,11 +12,7 @@ case $1 in
 		rm -vf /var/lib/apt/lists/*Translation*
 
 		# don't create clusters on postgresql-* installation
-		cat > /etc/postgresql-common/createcluster.conf <<-EOF
-		# do not edit, file maintained by pgdg-buildenv
-		create_main_cluster = false
-		start_conf = manual
-		EOF
+		sed -i -e 's/^.*create_main_cluster.*/create_main_cluster = false/' /etc/postgresql-common/createcluster.conf
 
 		# install locales for the PostgreSQL testsuite
 		vendor=$(lsb_release -is)
