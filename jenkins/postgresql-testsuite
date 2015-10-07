@@ -22,8 +22,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# lock against concurrent apt-get update/upgrade operations on the source chroot
+LOCKDIR="/var/lock/sbuild-package"
+if ! test -d $LOCKDIR; then
+  mkdir $LOCKDIR
+  chgrp sbuild $LOCKDIR
+  chmod 3775 $LOCKDIR
+fi
+umask 002
+
 set -eux
 
+flock --shared $LOCKDIR/$distribution-$architecture.lock \
 schroot -u root -c "chroot:$distribution-$architecture" -- sh <<'EOF'
 set -eux
 
