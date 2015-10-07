@@ -27,7 +27,7 @@ error () {
   exit 1
 }
 
-chroot="source:$distribution-pgdg-$architecture-sbuild"
+chroot="chroot:$distribution-pgdg-$architecture-sbuild"
 
 # find dsc to build
 PACKAGE="${JOB_NAME%%-binaries*}"
