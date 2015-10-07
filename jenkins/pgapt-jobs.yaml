@@ -571,6 +571,11 @@
                         which-build: upstream-build
                         fallback-to-last-successful: true
                 - shell: 'dput-pgdg $queue'
+        publishers:
+                - ircbot:
+                        matrix-notifier: only-parent
+                        message-type: summary-params
+                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
 
 #- job:
 #        name: promote

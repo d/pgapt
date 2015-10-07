@@ -6,7 +6,7 @@ set -eu
 
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
-REPREPRO="reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
+REPREPRO="flock $REPREPRO_BASE_DIR/db/.lock /usr/bin/reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
 DISTS="all"
 
 if [ "${DEBUG:-}" ]; then
