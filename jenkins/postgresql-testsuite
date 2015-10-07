@@ -51,7 +51,7 @@ dpkg -l 'libpq*' 'postgresql*' | cat
 
 export LC_ALL='en_US.UTF-8'
 cd /usr/share/postgresql-common/
-newnet ./testsuite -MV -u 077
+newnet ./testsuite -V -u 077
 EOF
 
 # vim:sw=2
