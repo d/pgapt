@@ -12,6 +12,10 @@ Enlarge (/var)/run in /etc/fstab:
 tmpfs           /run            tmpfs   size=12G        0       0
 
 Bind-Mount /var/tmp in /etc/schroot/sbuild/fstab, and remove /var/lib/sbuild/build there
+Do not bind-mount /dev
+Mount tmpfs in /dev/shm
+
+default/fstab: as above, but bind-mount /home (for postgresql-testsuite)
 
 sbuild-update --keygen
 distribution=$dist architecture=$arch ./sbuild-update.sh
