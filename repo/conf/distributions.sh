@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DISTRIBUTIONS="sid jessie wheezy squeeze lenny etch
-	utopic trusty saucy precise lucid"
+	wily utopic trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing pgdg-deprecated"
 
 for DIST in $DISTRIBUTIONS ; do
@@ -20,6 +20,8 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			jessie)
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
+			stretch|wily)
+				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5" ;;
 			sid)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			*)

@@ -6,7 +6,13 @@
 
 set -e
 
-for dist in sid jessie wheezy squeeze utopic trusty precise; do
+DISTS=$(perl -e 'use YAML::Syck;
+	$y = LoadFile("pgapt-jobs.yaml");
+	@d = grep { exists $_->{yamltemplates} } @$y;
+	print "@{$d[0]->{yamltemplates}->{dist_axis}->{values}}";'
+)
+
+for dist in $DISTS; do
 	for arch in amd64 i386; do
 		body="$(cat <<-EOF
 			type=directory
