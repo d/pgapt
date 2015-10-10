@@ -24,7 +24,7 @@ case $(hostname) in
     ;;
 esac
 
-PGDG_SH=$(mktemp /tmp/pgdg.XXXXXX.sh)
+PGDG_SH=$(mktemp /var/tmp/pgdg.XXXXXX.sh)
 trap "rm -f $PGDG_SH" 0 2 3 15
 cat < /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh > $PGDG_SH
 
