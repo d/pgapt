@@ -1,5 +1,6 @@
-pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
+pgdg-buildenv (17) sid-pgdg; urgency=medium
 
+  * Add build-essential.
   * Don't install sources.list.d/pgdg.list from here, we can't easily figure
     out the current release name from the postinst because sid has "jessie" in
     there.
@@ -9,7 +10,7 @@ pgdg-buildenv (17) sid-pgdg-UNRELEASED; urgency=medium
   * createcluster.conf: Set create_main_cluster = false.
   * Merge repository into pgapt.git.
 
- -- Christoph Berg <christoph.berg@credativ.de>  Thu, 08 Jan 2015 15:39:00 +0100
+ -- Christoph Berg <myon@debian.org>  Sat, 10 Oct 2015 15:27:33 +0200
 
 pgdg-buildenv (16) sid-pgdg; urgency=medium
 

@@ -12,6 +12,7 @@ Homepage: https://apt.postgresql.org/
 Package: pgdg-buildenv
 Architecture: all
 Depends: ${misc:Depends},
+ build-essential,
  debhelper (>= 9~),
  fakeroot,
  eatmydata,
