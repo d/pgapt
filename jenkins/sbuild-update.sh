@@ -7,7 +7,8 @@ error () {
   exit 1
 }
 
-chroot="source:$distribution-pgdg-$architecture-sbuild"
+# use "default" chroot here ("sbuild" doesn't get /etc/hosts copied)
+chroot="source:$distribution-$architecture"
 
 # check if chroot exists
 schroot -l | grep -q $chroot || \
@@ -20,7 +21,7 @@ case $(hostname) in
   pgdg*) # use local cache on build host
     deb="http://debian-approx:9999/debian"
     apt1="http://atalia-approx:9999/atalia"
-    apt1="$apt1"
+    apt2="$apt1"
     ;;
 esac
 
@@ -57,13 +58,17 @@ umask 002
 	  wheezy) echo "deb $deb $distribution-backports main" \
 	    > /etc/apt/sources.list.d/backports.list ;;
 	esac
+	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
+	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
+	test -e /etc/apt/apt.conf.d/50i18n || echo 'Acquire::Languages { none; };' | tee /etc/apt/apt.conf.d/50i18n
+	rm -f /var/lib/apt/lists/*_Translation-*
 	apt-get update
 	
-	apt-get -y -o DPkg::Options::=--force-confnew install eatmydata
+	[ -x /usr/bin/eatmydata ] && eatmydata="eatmydata"
 	case $distribution in
-	  squeeze) eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
+	  squeeze) \$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
 	esac
-	eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
+	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
 	apt-get clean
 	
