@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $packages = shift || 'sid-pgdg-testing';
+$packages = "dists/$packages/main/binary-amd64/Packages" unless ($packages =~ m!/!);
+
+my %pkgs;
+my %templates;
+my %pgversions;
+
+$/ = ''; # slurp paragraphs
+
+open P, $packages or die "$packages: $!";
+while (<P>) {
+	my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
+	if ($pkg =~ /-([89]\.\d)\b/) {
+		my $version = $1;
+		next if ($version < 9.1);
+		$pkgs{$pkg} = 1;
+		$pkg =~ s/-(\d{1,2}\.\d)\b/-N.N/;
+		$templates{$pkg} = 1;
+		$pgversions{$version} = 1;
+	}
+}
+close P;
+
+foreach my $template (sort keys %templates) {
+	my @missing;
+	foreach my $version (sort keys %pgversions) {
+		my $pkg = $template;
+		$pkg =~ s/-N\.N/-$version/;
+		next if ($pkgs{$pkg});
+		push @missing, $version;
+	}
+	print "$template: @missing\n" if (@missing);
+}
