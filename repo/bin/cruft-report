@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $dist = shift or die "Syntax: $0 <dist>";
+my $packages = "dists/$dist/main/binary-amd64/Packages";
+my $sources = "dists/$dist/main/source/Sources.gz";
+
+$/ = ''; # slurp paragraphs
+
+my %srcs;
+
+open S, "zcat $sources |" or die "$sources: $!";
+while (<S>) {
+	my ($pkg) = /^Package: (.+)/m or die "$sources: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$sources: paragraph without Version: $_";
+	if (exists $srcs{$pkg}) {
+		print "$pkg has more than one source: $ver $srcs{$pkg}\n";
+	}
+	$srcs{$pkg} = $ver;
+}
+close S;
+
+open P, $packages or die "$packages: $!";
+while (<P>) {
+	my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$packages: paragraph without Version: $_";
+	my ($src, $srcver) = ($pkg, $ver);
+	if (/^Source: (\S+) \((\S+)\)$/m) {
+		($src, $srcver) = ($1, $2);
+	} elsif (/^Source: (\S+)$/m) {
+		($src) = ($1);
+	}
+
+	if (not exists $srcs{$src}) {
+		print "Package $pkg ($ver) source $src does not exist\n";
+		next;
+	}
+	if ($srcs{$src} ne $srcver) {
+		print "Package $pkg ($ver) source $src ($srcver) has version $srcs{$src}\n";
+	}
+}
+close P;
