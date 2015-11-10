@@ -141,27 +141,34 @@ esac
 # tell /usr/share/postgresql-common/supported-versions which distro/release we are targetting
 export DISTRO RELEASE
 
-# for postgresql server packages, move all lib packages to a separate
-# component, unless we are building postgresql-$PGLIBVER
+# for postgresql server packages, move packages to a separate components
+# = $PGLIBVER: main
+# < $PGLIBVER: lib packages to N.N, rest to main
+# > $PGLIBVER: all packages to N.N
+set_package_component ()
+{
+  PKGPREFIX="$1" # empty ok
+  SECTION="$2"
+  echo "Setting $PKGPREFIX* packages component to '$SECTION'"
+  perl -i -000 -pe "s/^Section: (?:.+\/)?(.*)/Section: $SECTION\$1/m if (/^$PKGPREFIX/m)" \
+    debian/control
+}
+show_package_sections ()
+{
+  perl -000 -ne 'if (/^(Package: .*)/m) { print "$1 "; print "$1\n" if /^(Section: .*)/m; }' \
+    debian/control
+}
 case $PACKAGE in
-  postgresql-$PGLIBVER)
-    # remove x.y/ prefix (if any)
-    echo "Lib packages from $PACKAGE will go to the main component"
-    perl -i -000 -pe "s/^Section: (?:.+\/)?(.*)/Section: \$1/m if (/^Package: lib/m)" \
-      debian/control
-    # display result
-    perl -000 -ne 'if (/^(Package: lib.*)/m) { print "$1 "; print "$1\n" if /^(Section: .*)/m; }' \
-      debian/control
-    ;;
   postgresql-?.?|postgresql-??.?)
-    # add x.y/ prefix
-    PGVERSION=$(echo $PACKAGE | sed -e 's/^postgresql-//')
-    echo "Setting lib packages component to $PGVERSION"
-    perl -i -000 -pe "s/^Section: (?:.+\/)?(.*)/Section: $PGVERSION\/\$1/m if (/^Package: lib/m)" \
-      debian/control
-    # display result
-    perl -000 -ne 'if (/^(Package: lib.*)/m) { print "$1 "; print "$1\n" if /^(Section: .*)/m; }' \
-      debian/control
+    PGVERSION=${PACKAGE#postgresql-}
+    if dpkg --compare-versions $PGVERSION lt $PGLIBVER; then
+      set_package_component "Package: lib" "$PGVERSION\/"
+    elif dpkg --compare-versions $PGVERSION gt $PGLIBVER; then
+      set_package_component "" "$PGVERSION\/"
+    else
+      set_package_component "" ""
+    fi
+    show_package_sections
     ;;
 esac
 
