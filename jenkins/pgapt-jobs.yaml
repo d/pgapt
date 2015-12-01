@@ -851,7 +851,8 @@
         name: pgtop
         git-url: git://anonscm.debian.org/collab-maint/pgtop.git
         git-branch: master
-        dist-filter: ''
+        # needs buildflags.mk
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
