@@ -848,6 +848,14 @@
                 - git-packages
 
 - project:
+        name: pgtop
+        git-url: git://anonscm.debian.org/collab-maint/pgtop.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgxnclient
         git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
         git-branch: master
