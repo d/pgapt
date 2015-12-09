@@ -811,8 +811,9 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
         dist-filter: ''
+        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages
+                - git-packages-sequential
 
 - project:
         name: pgrouting
