@@ -704,6 +704,14 @@
                 - git-packages-sequential
 
 - project:
+        name: mimeo
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/mimeo.git
+        git-branch: debian
+        dist-filter: ''
+        jobs:
+                - git-packages-sequential
+
+- project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
         git-branch: master
