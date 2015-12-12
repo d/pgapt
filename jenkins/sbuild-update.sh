@@ -17,11 +17,13 @@ schroot -l | grep -q $chroot || \
 deb="http://deb/debian"
 apt1="http://apt.postgresql.org/pub/repos/apt"
 apt2="http://atalia.postgresql.org/pub/repos/apt"
+ubuntu="http://de.archive.ubuntu.com/ubuntu"
 case $(hostname) in
   pgdg*) # use local cache on build host
     deb="http://debian-approx:9999/debian"
     apt1="http://atalia-approx:9999/atalia"
     apt2="$apt1"
+    ubuntu="http://ubuntu-approx:9999/ubuntu"
     ;;
 esac
 
@@ -57,6 +59,8 @@ umask 002
 	    > /etc/apt/sources.list.d/backports.list ;;
 	  wheezy) echo "deb $deb $distribution-backports main" \
 	    > /etc/apt/sources.list.d/backports.list ;;
+	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
+	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
 	esac
 	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
 	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
