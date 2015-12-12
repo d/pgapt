@@ -222,6 +222,14 @@ case $PACKAGE in
     esac
     ;;
 
+  mimeo)
+    case ${distribution:-} in
+      squeeze) # pg_prove is in "pgtap" on squeeze
+        sed -i -e 's/libtap-parser-sourcehandler-pgtap-perl/pgtap/' debian/tests/control
+        ;;
+    esac
+    ;;
+
   pgagent) # depend on all PostgreSQL versions, not just "postgresql"
     for version in $(/usr/share/postgresql-common/supported-versions); do
       sed -i -e "s/^Depends: /Depends: postgresql-$version, /" debian/tests/control
