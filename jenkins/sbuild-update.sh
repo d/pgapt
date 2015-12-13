@@ -48,6 +48,10 @@ umask 002
   schroot -u root -c $chroot -- sh <<-EOF
 	set -ex
 	
+	if ! test -f $PGDG_SH; then
+		echo "$PGDG_SH not found in the chroot, did you configure a /var/tmp bindmount?"
+		exit 1
+	fi
 	if ! test -f /etc/apt/sources.list.d/pgdg.list; then
 		chmod +x $PGDG_SH
 		echo yes | $PGDG_SH
