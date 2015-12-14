@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -e
+
+DISTS=$(perl -e 'use YAML::Syck;
+	$y = LoadFile("pgapt-jobs.yaml");
+	@d = grep { exists $_->{yamltemplates} } @$y;
+	print "@{$d[0]->{yamltemplates}->{dist_axis}->{values}}";'
+)
+
+prefix="10.1"
+net=1
+
+for dist in $DISTS; do
+	for bits in 64 32; do
+		ns="newpid$dist$bits"
+		veth="veth$dist$bits"
+		ceth="ceth$dist$bits"
+
+		ip netns add $ns 2> /dev/null || :
+
+		ip link del $veth 2> /dev/null || :
+		ip link add $veth type veth peer name $ceth
+		ip link set $ceth netns $ns
+		ip a add $prefix.$net.1/24 dev $veth
+		ip link set $veth up
+		ip netns exec $ns \
+			ip link set lo up
+		ip netns exec $ns \
+			ip a add $prefix.$net.2/24 dev $ceth
+		ip netns exec $ns \
+			ip link set $ceth up
+
+		net=$((net + 1))
+	done
+done
