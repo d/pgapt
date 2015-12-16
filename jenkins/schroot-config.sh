@@ -34,6 +34,7 @@ for dist in $DISTS; do
 		echo
 
 		echo "[$dist-pgdg-$arch-sbuild]"
+		[ $dist = sid ] && echo "aliases=unstable-$arch-sbuild"
 		echo "profile=sbuild"
 		echo "$body"
 		echo
