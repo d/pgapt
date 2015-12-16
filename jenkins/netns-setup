@@ -24,13 +24,16 @@ for dist in $DISTS; do
 		ip link set $ceth netns $ns
 		ip a add $prefix.$net.1/24 dev $veth
 		ip link set $veth up
-		ip netns exec $ns \
-			ip link set lo up
-		ip netns exec $ns \
-			ip a add $prefix.$net.2/24 dev $ceth
-		ip netns exec $ns \
-			ip link set $ceth up
+		ip netns exec $ns ip link set lo up
+		ip netns exec $ns ip a add $prefix.$net.2/24 dev $ceth
+		ip netns exec $ns ip link set $ceth up
+		ip netns exec $ns ip r add default via $prefix.$net.1
 
 		net=$((net + 1))
 	done
 done
+
+iptables -vnL FORWARD | grep -q 'veth+' || \
+	iptables -A FORWARD -i veth+ -j ACCEPT
+iptables -t nat -vnL POSTROUTING | grep -q 'MASQUERADE' || \
+	iptables -t nat -A POSTROUTING -o wlan2 -j MASQUERADE

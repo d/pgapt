@@ -49,8 +49,10 @@ schroot -l | grep -q $chroot || \
 # decide if we should build arch:all packages
 case $architecture in
   amd64)
+    BITS=64
     ARCH_ALL="--arch-all" ;; # always build arch:all binaries here
   *)
+    BITS=32
     if egrep -q '^Testsuite: autopkgtest$' $DSC; then
       echo "Package has Testsuite: autopkgtest, will build arch:all binaries even on $architecture. We'll throw them away at the end."
       ARCH_ALL="--arch-all"
@@ -95,6 +97,7 @@ umask 002
   echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
+  newpid -iuN newpid$distribution$BITS \
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     --finished-build-commands="${FINISHED_BUILD_COMMAND:-}" \
