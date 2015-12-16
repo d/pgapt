@@ -1,0 +1,483 @@
+architectures:
+  - amd64
+  - i386
+
+distributions:
+  - sid
+  - jessie
+  - wheezy
+  - squeeze
+  - wily
+  - trusty
+  - precise
+
+## simple jobs
+#
+#- job:
+#        name: apt.postgresql.org
+#        description: 'Update configuration on build and repository hosts.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+#        scm:
+#                - git:
+#                        url: git://git.postgresql.org/git/pgapt.git
+#                        branches:
+#                                - master
+#                        wipe-workspace: false
+#        builders:
+#                - shell: 'cd jenkins && make test && make update'
+#        publishers:
+#                - ircbot:
+#                        matrix-notifier: all
+#
+#- job:
+#        name: 'sbuild-update'
+#        description: 'Update sbuild chroots'
+#        project-type: matrix
+#        execution-strategy:
+#                sequential: true
+#                touchstone:
+#                        expr: '(distribution=="sid") && (architecture=="amd64")'
+#        axes:
+#                - axis: *arch_axis
+#                - axis: *dist_axis
+#        triggers:
+#                - timed: "H */6 * * *"
+#        builders:
+#                - shell: 'sbuild-update.sh'
+#        publishers:
+#                - ircbot: *only_configs
+
+#- job:
+#        name: upgrade-plperl
+#        description: 'Test plperl upgrades.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+#        project-type: matrix
+#        execution-strategy:
+#                touchstone:
+#                        expr: '(distribution=="wheezy") && (architecture=="amd64")'
+#        axes:
+#                - axis: *arch_axis
+#                - axis:
+#                        type: user-defined
+#                        name: distribution
+#                        values: [wheezy, squeeze]
+#        builders:
+#                - shell: 'sudo cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
+
+#- job:
+#        name: gitcache-postgresql
+#        description: Reference repository postgresql source jobs
+#        workspace: '$HOME/gitcache.buexcl/postgresql'
+#        scm:
+#                - git:
+#                        url: git://git.postgresql.org/git/postgresql.git
+#                        branches:
+#                                - master
+#                        wipe-workspace: false
+#        triggers:
+#                - pollscm: "H */6 * * *"
+
+packages:
+  apgdiff:
+    git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/apgdiff.git
+
+  barman:
+    git-url: git://git.debian.org/collab-maint/barman.git
+
+  check-postgres:
+    git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
+
+  #gdal:
+  #  # sid and trusty are current enough
+  #  dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
+
+  #geos:
+  #  # sid and trusty are current enough
+  #  dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
+
+  ip4r:
+    git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
+    devel: true
+
+  #libdbd-pg-perl:
+  #  apt-suite: unstable
+
+  libpqtypes:
+    git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
+    # skip dists without dpkg-buildflags
+    dist-filter: '(distribution!="squeeze")'
+
+  mimeo:
+    git-url: https://anonscm.debian.org/git/pkg-postgresql/mimeo.git
+    git-branch: debian
+    devel: true
+
+  newpid:
+    git-url: https://github.com/ChristophBerg/newpid.git
+
+  #ora2pg:
+  #  apt-suite: unstable
+
+  orafce:
+    git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
+    devel: true
+
+  pgadmin3:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
+    # skip dists without /usr/share/dpkg/buildflags.mk
+    dist-filter: '(distribution!="squeeze")'
+
+  pgagent:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
+
+  #pgbadger:
+  #  apt-suite: unstable
+
+  pgbouncer:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
+
+  pgdg-buildenv:
+    git-url: git://git.postgresql.org/git/pgapt.git
+
+  pgespresso:
+    git-url: git://git.debian.org/collab-maint/pgespresso.git
+
+  pgextwlist:
+    git-url: https://github.com/dimitri/pgextwlist.git
+    devel: true
+
+  pgfincore:
+    git-url: git://git.postgresql.org/git/pgfincore.git
+    devel: true
+
+  pgmemcache:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
+    devel: true
+
+  pg-reorg:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pg-reorg.git
+    devel: true
+
+  pgpool2:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
+    devel: true
+
+  pgrouting:
+    git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
+    # needs libcgal-dev (in non-free on squeeze, in multiverse on precise, let's not care)
+    dist-filter: '(distribution!="precise") && (distribution!="squeeze")'
+
+  pgsphere:
+    git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/pgsphere.git
+
+  pgstatplans:
+    git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
+
+  pgtap:
+    git-url: git://anonscm.debian.org/pkg-postgresql/pgtap.git
+    dist-filter: '(distribution!="squeeze")'
+
+  pgtop:
+    git-url: git://anonscm.debian.org/collab-maint/pgtop.git
+    # needs buildflags.mk
+    dist-filter: '(distribution!="squeeze")'
+
+  pgxnclient:
+    git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
+    dist-filter: '(distribution!="squeeze")'
+
+  phppgadmin:
+    git-url: git://anonscm.debian.org/pkg-postgresql/phppgadmin.git
+
+  plr:
+    git-url: git://anonscm.debian.org/pkg-postgresql/plr.git
+    devel: true
+
+  plv8:
+    git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
+    git-branch: debian
+    dist-filter: '(distribution!="squeeze")'
+    devel: true
+
+  postgis:
+    git-url: git://git.debian.org/git/pkg-grass/postgis.git
+    dist-filter: '(distribution!="squeeze")'
+    devel: true
+
+  postgresql-8.4:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 8.4
+    testsuite: external
+
+  postgresql-9.0:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.0-pgdg
+    testsuite: external
+
+  postgresql-9.1:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.1
+    testsuite: external
+
+  postgresql-9.2:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.2
+    testsuite: external
+
+  postgresql-9.3:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.3
+    testsuite: external
+
+  postgresql-9.4:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.4
+    testsuite: external
+
+  postgresql-9.5:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+    git-branch: 9.5
+    testsuite: external
+
+# the PostgreSQL devel versions:
+#- project:
+#        name: postgresql-9.4-devel
+#        source-name: postgresql-9.4
+#        git-url: git://git.postgresql.org/git/postgresql.git
+#        git-branch: origin/REL9_4_STABLE
+#        merge-branch: 9.4
+#        dist-filter: 'distribution=="sid"'
+#        jobs:
+#                - '{source-name}-source-git-head'
+#                - '{source-name}-binaries-sid-amd64'
+#                - '{source-name}-testsuite-sid-amd64'
+#        next-job: postgresql-9.4-testsuite-sid-amd64
+#        noadt: 'ADT=skip '
+
+  postgresql-9.6:
+    git-url: git://git.postgresql.org/git/postgresql.git
+    git-branch: origin/master
+    merge-branch: 9.6
+    distributions: [sid]
+    architectures: [amd64]
+    testsuite: external
+
+  postgresql-common:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-common.git
+
+  postgresql-debversion:
+    git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
+    git-branch: debian
+    devel: true
+
+  postgresql-filedump:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
+    # uses /usr/share/dpkg/buildflags.mk
+    dist-filter: '(distribution!="squeeze")'
+
+  postgresql-multicorn:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
+    # needs dh-python (squeeze, precise)
+    # python foo (wheezy)
+    dist-filter: '(distribution!="wheezy") && (distribution!="squeeze") && (distribution!="precise")'
+
+  postgresql-mysql-fdw:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-mysql-fdw.git
+
+  postgresql-pgmp:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
+    dist-filter: '(distribution!="squeeze")'
+    devel: true
+
+  postgresql-pljava:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pljava.git
+    devel: true
+
+  postgresql-pllua:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
+    devel: true
+
+  postgresql-plproxy:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plproxy.git
+    devel: true
+
+  postgresql-plsh:
+    git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plsh.git
+    devel: true
+
+  powa-archivist:
+    git-url: https://github.com/credativ/powa-archivist.git
+    git-branch: debian
+    devel: true
+
+  prefix:
+    git-url: git://github.com/dimitri/prefix.git
+    devel: true
+
+  preprepare:
+    git-url: git://github.com/dimitri/preprepare.git
+    devel: true
+
+  psqlodbc:
+    git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
+    # doesn't compile on squeeze because of multi-arch (needs a newer cdbs)
+    dist-filter: '(distribution!="squeeze")'
+
+  python-argcomplete:
+    git-url: git://anonscm.debian.org/collab-maint/python-argcomplete.git
+
+  python-argh:
+    git-url: git://git.debian.org/collab-maint/python-argh.git
+
+  #python-azure:
+  #  bzr-branch: lp:~stub/ubuntu/trusty/python-azure/trunk
+  #  # needs dh-python
+  #  dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
+
+  q3c:
+    git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/q3c.git
+
+  repmgr:
+    git-url: git://git.debian.org/pkg-postgresql/repmgr.git
+
+  repmgr2:
+    git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
+
+  skytools:
+    git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
+
+  skytools3:
+    git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
+    git-branch: debian
+
+  slony1-2:
+    git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
+
+  #wal-e:
+  #  bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
+  #  # needs python-swiftclient
+  #  dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="precise")'
+
+#- project:
+#        name: upgrade-8.4-9.4
+#        oldversion: 8.4
+#        newversion: 9.4
+#        jobs:
+#                - upgrade-job
+#
+#- project:
+#        name: upgrade-9.1-9.2
+#        oldversion: 9.1
+#        newversion: 9.2
+#        jobs:
+#                - upgrade-job
+#
+#- project:
+#        name: upgrade-9.1-9.3
+#        oldversion: 9.1
+#        newversion: 9.3
+#        jobs:
+#                - upgrade-job
+#
+#- project:
+#        name: upgrade-9.2-9.3
+#        oldversion: 9.2
+#        newversion: 9.3
+#        jobs:
+#                - upgrade-job
+#
+#- project:
+#        name: upgrade-9.3-9.4
+#        oldversion: 9.3
+#        newversion: 9.4
+#        jobs:
+#                - upgrade-job
+#
+#- project:
+#        name: upgrade-9.4-9.5
+#        oldversion: 9.4
+#        newversion: 9.5
+#        jobs:
+#                - upgrade-{oldversion}-{newversion}-sid-amd64
+#
+#- project:
+#        name: upgrade-9.4-9.6
+#        oldversion: 9.4
+#        newversion: 9.6
+#        jobs:
+#                - upgrade-{oldversion}-{newversion}-sid-amd64
+
+### pgloader and dependencies
+#  - pgloader:
+#      #git-url: https://github.com/dimitri/pgloader.git
+#      apt-suite: unstable
+#      # squeeze doesn't have ruby-ronn
+#      dist-filter: 'distribution!="squeeze"'
+#
+#  - sbcl:
+#      apt-suite: jessie
+#      # upgrade sbcl to 1.2 on the older dists
+#      dist-filter: '(distribution=="squeeze") || (distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic")'
+#
+#  - bordeaux-threads: &aptpkg
+#        apt-suite: 'unstable'
+#        jobs: [apt-packages]
+#- project: { <<: *aptpkg, name: buildapp }
+#- project: { <<: *aptpkg, name: cffi }
+#- project: { <<: *aptpkg, name: cl-abnf }
+#- project: { <<: *aptpkg, name: cl-alexandria }
+#- project: { <<: *aptpkg, name: cl-anaphora }
+#- project: { <<: *aptpkg, name: cl-asdf }
+#- project: { <<: *aptpkg, name: cl-asdf-finalizers }
+#- project: { <<: *aptpkg, name: cl-asdf-system-connections }
+#- project: { <<: *aptpkg, name: cl-chipz }
+#- project: { <<: *aptpkg, name: cl-chunga }
+#- project: { <<: *aptpkg, name: cl-closure-common }
+#- project: { <<: *aptpkg, name: cl-command-line-arguments }
+#- project: { <<: *aptpkg, name: cl-containers }
+#- project: { <<: *aptpkg, name: cl-csv }
+#- project: { <<: *aptpkg, name: cl-curry-compose-reader-macros }
+#- project: { <<: *aptpkg, name: cl-cxml }
+#- project: { <<: *aptpkg, name: cl-daemon }
+#- project: { <<: *aptpkg, name: cl-db3 }
+#- project: { <<: *aptpkg, name: cl-drakma }
+#- project: { <<: *aptpkg, name: cl-dynamic-classes }
+#- project: { <<: *aptpkg, name: cl-esrap }
+#- project: { <<: *aptpkg, name: cl-fad }
+#- project: { <<: *aptpkg, name: cl-fiveam }
+#- project: { <<: *aptpkg, name: cl-garbage-pools }
+#- project: { <<: *aptpkg, name: cl-github-v3 }
+#- project: { <<: *aptpkg, name: cl-graph }
+#- project: { <<: *aptpkg, name: cl-ieee-floats }
+#- project: { <<: *aptpkg, name: cl-interpol }
+#- project: { <<: *aptpkg, name: cl-ironclad }
+#- project: { <<: *aptpkg, name: cl-iterate }
+#- project: { <<: *aptpkg, name: cl-ixf }
+#- project: { <<: *aptpkg, name: cl-local-time }
+#- project: { <<: *aptpkg, name: cl-log }
+#- project: { <<: *aptpkg, name: cl-lparallel }
+#- project: { <<: *aptpkg, name: cl-markdown }
+#- project: { <<: *aptpkg, name: cl-md5 }
+#- project: { <<: *aptpkg, name: cl-metabang-bind }
+#- project: { <<: *aptpkg, name: cl-metatilities-base }
+#- project: { <<: *aptpkg, name: cl-mssql }
+#- project: { <<: *aptpkg, name: cl-nibbles }
+#- project: { <<: *aptpkg, name: cl-parse-number }
+#- project: { <<: *aptpkg, name: cl-plus-ssl }
+#- project: { <<: *aptpkg, name: cl-postmodern }
+#- project: { <<: *aptpkg, name: cl-puri }
+#- project: { <<: *aptpkg, name: cl-py-configparser }
+#- project: { <<: *aptpkg, name: cl-qmynd }
+#- project: { <<: *aptpkg, name: cl-quri }
+#- project: { <<: *aptpkg, name: cl-rfc2388 }
+#- project: { <<: *aptpkg, name: cl-salza2 }
+#- project: { <<: *aptpkg, name: cl-sqlite }
+#- project: { <<: *aptpkg, name: cl-trivial-backtrace }
+#- project: { <<: *aptpkg, name: cl-trivial-garbage }
+#- project: { <<: *aptpkg, name: cl-trivial-utf-8 }
+#- project: { <<: *aptpkg, name: cl-unicode }
+#- project: { <<: *aptpkg, name: cl-utilities }
+#- project: { <<: *aptpkg, name: cl-uuid }
+#- project: { <<: *aptpkg, name: cl-who }
+#- project: { <<: *aptpkg, name: cl-yason }
+#- project: { <<: *aptpkg, name: cl-zip }
+#- project: { <<: *aptpkg, name: cl-zs3 }
+##

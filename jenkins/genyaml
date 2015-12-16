@@ -1,0 +1,162 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Clone 'clone';
+use YAML::Syck;
+
+my $pkg = LoadFile("packages.yaml");
+#use Data::Dumper;
+#print Dumper($pkg);
+#__END__
+my $output = LoadFile("head.yaml");
+
+my @dists = @{$pkg->{distributions}};
+my @archs = @{$pkg->{architectures}};
+
+# generate job groups
+
+foreach my $dist (@dists) {
+  #- job-group:
+  #    name: source-sid
+  #    dist: sid
+  #    jobs:
+  #        - '{name}-source-{dist}'
+  push @$output, {
+    'job-group' => {
+      name => "source-$dist",
+      dist => $dist,
+      jobs => ["{name}-source-{dist}"],
+    }
+  };
+
+  #- job-group:
+  #    name: binaries-sid-amd64
+  #    dist: sid
+  #    arch: amd64
+  #    jobs:
+  #        - '{name}-binaries-{dist}-{arch}'
+  foreach my $arch (@archs) {
+    push @$output, {
+      'job-group' => {
+	name => "binaries-$dist-$arch",
+	dist => $dist,
+	arch => $arch,
+	jobs => ["{name}-binaries-{dist}-{arch}"],
+      }
+    };
+  }
+}
+
+# extract dput_job_template
+my $dput_job_template = $output->[1]->{yamltemplates}->{dput_job_template} || die "could not find dput_job_template in head.yaml";
+my $dput_copyartifact = $dput_job_template->{builders}->[1];
+die "could not find dput_copyartifact in head.yaml" unless $dput_copyartifact->{copyartifact};
+my $build_job_template = $output->[1]->{yamltemplates}->{build_job_template} || die "could not find build_job_template in head.yaml";
+
+foreach my $package (sort keys %{$pkg->{packages}}) {
+  my $p = $pkg->{packages}->{$package}; # contents of package hash
+
+  # write project to generate source/binaries jobs
+  #- project:
+  #    name: mimeo
+  #    git-url: https://anonscm.debian.org/git/pkg-postgresql/mimeo.git
+  #    git-branch: debian
+  #    jobs:
+  #        - source-sid
+  #        - source-jessie
+  #        - binaries-sid-amd64
+  #        - binaries-sid-i386
+  #        - binaries-jessie-amd64
+  #        - binaries-jessie-i386
+
+  my $project = { name => $package };
+  if ($p->{'git-url'}) {
+    $project->{'git-url'} = $p->{'git-url'};
+    $project->{'git-branch'} = $p->{'git-branch'} || 'master';
+  }
+  foreach my $dist (@dists) {
+    push @{$project->{jobs}}, "source-$dist";
+    foreach my $arch (@archs) {
+      push @{$project->{jobs}}, "binaries-$dist-$arch";
+    }
+  }
+  push @$output, { 'project' => $project };
+
+  # write dput job
+  #- job:
+  #    <<: *dput_job_template
+  #    name: mimeo-dput
+  #    builders:
+  #        - shell: 'rm -rf *'
+  #        - copyartifact:
+  #            <<: *dput_copyartifact
+  #            project: 'mimeo-binaries-sid-amd64'
+  #        - copyartifact:
+  #            <<: *dput_copyartifact
+  #            project: 'mimeo-binaries-sid-i386'
+  #        - shell: 'dput-pgdg $queue'
+  my $dput_job = clone $dput_job_template;
+  $dput_job->{name} = "$package-dput";
+  $dput_job->{builders} = [ { shell => 'rm -rf *' } ];
+  foreach my $dist (@dists) {
+    foreach my $arch (@archs) {
+      my $copy = clone $dput_copyartifact;
+      $copy->{copyartifact}->{project} = "$package-binaries-$dist-$arch";
+      push @{$dput_job->{builders}}, $copy;
+    }
+  }
+  push @{$dput_job->{builders}}, { shell => 'dput-pgdg $queue' };
+  push @$output, { 'job' => $dput_job };
+
+  # name: 'foobar-build'
+  # project-type: flow
+  # parameters:
+  #     - choice: *queue_choice
+  #     - string:
+  #         <<: *git_branch
+  #         default: 'debian'
+  #     - string: *revision_string
+  # dsl: |
+  #     build("foobar-source-sid", branch: params["branch"], revision: params["revision"])
+  #     parallel (
+  #         { build("foobar-source-jessie", branch: params["branch"], revision: params["revision"]) },
+  #     )
+  #     build("foobar-binaries-sid-amd64")
+  #     parallel (
+  #         { build("foobar-binaries-sid-i386") },
+  #         { build("foobar-binaries-jessie-amd64") },
+  #         { build("foobar-binaries-jessie-i386") },
+  #     )
+  #     build("foobar-dput", queue: params["queue"])
+  my $build_job = clone $build_job_template;
+  $build_job->{name} = "$package-build";
+
+  my $dsl = "build(\"$package-source-sid\", branch: params[\"branch\"], revision: params[\"revision\"])\n";
+
+  $dsl .= "parallel (\n";
+  foreach my $dist (@dists) {
+    next if ($dist eq 'sid');
+    $dsl .= "    { build(\"$package-source-$dist\", branch: params[\"branch\"], revision: params[\"revision\"]) },\n";
+  }
+  $dsl .= ")\n";
+
+  $dsl .= "build(\"$package-binaries-sid-amd64\")\n";
+
+  $dsl .= "parallel (\n";
+  foreach my $dist (@dists) {
+    foreach my $arch (@archs) {
+      next if ("$dist-$arch" eq 'sid-amd64');
+      $dsl .= "    { build(\"$package-binaries-$dist-$arch\") },\n";
+    }
+  }
+  $dsl .= ")\n";
+
+  $dsl .= "build(\"$package-dput\", queue: params[\"queue\"])\n";
+
+  $build_job->{dsl} = $dsl;
+  push @$output, { 'job' => $build_job };
+
+}
+
+print Dump($output);
