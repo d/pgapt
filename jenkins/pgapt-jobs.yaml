@@ -759,6 +759,14 @@
                 - apt-packages
 
 - project:
+        name: pgbackman
+        git-url: https://github.com/rafaelma/pgbackman.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: pgbouncer
         git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
         git-branch: master
