@@ -15,7 +15,7 @@ CHANGES="$(find . -name '*.changes')"
 
 dcmd chmod a+r $CHANGES
 # work around reprepro #808558
-perl -ple 's/ (\S+)/ $1 $1-dbgsym/g if /^Binary:/' $CHANGES
+perl -i -pe 's/ (\S+)/ $1 $1-dbgsym/g if /^Binary:/' $CHANGES
 dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 
 # call processincoming once for all packages uploaded
