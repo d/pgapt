@@ -29,7 +29,9 @@ for dist in $DISTS; do
 		)"
 
 		echo "[$dist-$arch]"
-		[ $arch = amd64 ] && echo "aliases=$dist"
+		aliases="$dist"
+		[ $dist = sid ] && [ $arch = amd64 ] && aliases="$aliases,default"
+		[ $arch = amd64 ] && echo "aliases=$aliases"
 		echo "$body"
 		echo
 
