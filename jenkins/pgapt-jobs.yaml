@@ -694,6 +694,14 @@
                 - apt-packages
 
 - project:
+        name: libtap-parser-sourcehandler-pgtap-perl
+        git-url: git://anonscm.debian.org/pkg-perl/packages/libtap-parser-sourcehandler-pgtap-perl.git
+        git-branch: master
+        dist-filter: '(distribution!="squeeze")'
+        jobs:
+                - git-packages
+
+- project:
         name: libpqtypes
         git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
         git-branch: master
