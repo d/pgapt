@@ -697,6 +697,7 @@
         name: libtap-parser-sourcehandler-pgtap-perl
         git-url: git://anonscm.debian.org/pkg-perl/packages/libtap-parser-sourcehandler-pgtap-perl.git
         git-branch: master
+        # requires more recent perl
         dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
@@ -715,7 +716,8 @@
         name: mimeo
         git-url: https://anonscm.debian.org/git/pkg-postgresql/mimeo.git
         git-branch: debian
-        dist-filter: ''
+        # needs pgtap
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages-sequential
 
