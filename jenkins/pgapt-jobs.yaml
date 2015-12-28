@@ -833,6 +833,15 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-partman
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-partman.git
+        git-branch: master
+        # needs pgtap
+        dist-filter: '(distribution!="squeeze")'
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgpool2
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
