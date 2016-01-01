@@ -30,6 +30,13 @@
                     - normal
             description: 'snapshot: if changelog is UNRELEASED, build a snapshot tarball with a ~date version. With snapshot-dot, use a .date version.'
 
+    upload_choice: &upload_choice
+            name: upload
+            choices:
+                    - all
+                    - extension-only
+            description: 'all: upload all .deb files built, extension-only: upload PostgreSQL-version-specific .deb files only'
+
     arch_axis: &arch_axis
             type: user-defined
             name: architecture
@@ -196,6 +203,7 @@
         project-type: matrix
         parameters:
                 - choice: *queue_choice
+                - choice: *upload_choice
         execution-strategy: &binaries_execution_strategy
                 combination-filter: '{dist-filter}'
                 touchstone:
@@ -222,7 +230,10 @@
                 - trigger-parameterized-builds: &next_job_trigger
                         - project: '{next-job}'
                           condition: SUCCESS
-                          predefined-parameters: "binaries=$JOB_NAME\nqueue=$queue"
+                          predefined-parameters: |
+                                binaries=$JOB_NAME
+                                queue=$queue
+                                upload=$upload
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
@@ -250,11 +261,15 @@
                 - trigger-parameterized-builds:
                         - project: '{name}-binaries-beta'
                           condition: SUCCESS
-                          predefined-parameters: "queue=$queue"
+                          predefined-parameters: |
+                                queue=$queue
+                                upload=extension-only
                 - trigger-parameterized-builds:
                         - project: '{name}-binaries-devel'
                           condition: SUCCESS
-                          predefined-parameters: "queue=$queue"
+                          predefined-parameters: |
+                                queue=$queue
+                                upload=extension-only
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
@@ -325,7 +340,10 @@
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
-                          predefined-parameters: "binaries={name}-binaries\nqueue=$queue"
+                          predefined-parameters: |
+                                binaries={name}-binaries
+                                queue=$queue
+                                upload=$upload
                 - workspace-cleanup
 
 - job-template:
@@ -348,7 +366,10 @@
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
-                          predefined-parameters: "binaries={source-name}-binaries-sid-amd64\nqueue=$queue"
+                          predefined-parameters: |
+                                  binaries={source-name}-binaries-sid-amd64
+                                  queue=$queue
+                                  upload=$upload
                 - workspace-cleanup
 
 # upgrade test template
@@ -491,6 +512,7 @@
                         name: binaries
                         description: Name of binaries job to copy artifacts from (including -binaries suffix)
                 - choice: *queue_choice
+                - choice: *upload_choice
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -506,6 +528,8 @@
                         message-type: summary-params
                 - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
 
+# variant of dput that handles each configuration separately
+# (needed after using matrixreloaded on build jobs)
 - job:
         <<: *dput
         name: dput-matrixreloaded
