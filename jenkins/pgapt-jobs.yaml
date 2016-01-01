@@ -526,7 +526,7 @@
                 - ircbot:
                         matrix-notifier: all
                         message-type: summary-params
-                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
+                - groovy-postbuild: &dput_groovy 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue}, ${manager.build.environment.upload})")'
 
 # variant of dput that handles each configuration separately
 # (needed after using matrixreloaded on build jobs)
@@ -553,7 +553,7 @@
                 - ircbot:
                         matrix-notifier: only-parent
                         message-type: summary-params
-                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue})")'
+                - groovy-postbuild: *dput_groovy
 
 #- job:
 #        name: promote
