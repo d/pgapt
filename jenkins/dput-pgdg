@@ -21,7 +21,7 @@ perl -i -pe 's/ (\S+)/ $1 $1-dbgsym/g if /^Binary:/' $CHANGES
 # upload only version-specific .deb files when requested
 if [ "${upload:-all}" = "extension-only" ]; then
 	for c in $CHANGES; do
-		case $CHANGES in
+		case $c in
 			*_source.changes) continue ;;
 		esac
 		NONEXTDEBS=$(dcmd --deb echo $c | xargs -n1 | egrep -v -- '[^_]-[1-9][0-9]?\.[0-9][-_]' | sed -e 's!.*/!!')
