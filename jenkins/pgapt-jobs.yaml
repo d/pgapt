@@ -112,27 +112,6 @@
                           predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
 
-# bzr template
-
-- job-template: &bzr_source_template
-        <<: *apt_source_template
-        name: '{name}-bzr-source'
-        description: 'Build Debian source package of {name} from bzr.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        parameters:
-                - string: *revision_string
-                - choice: *queue_choice
-        scm:
-                - bzr:
-                        url: 'http://anonscm.debian.org/bzr/pkg-postgresql/{bzr-branch}/'
-                        loggerhead: 'https://alioth.debian.org/scm/loggerhead/pkg-postgresql/{bzr-branch}'
-
-- job-template:
-        <<: *bzr_source_template
-        name: '{name}-bzr-source-lp'
-        scm:
-                - bzr:
-                        url: '{bzr-branch}'
-
 # git template
 
 - job-template: &git_source_template
@@ -418,31 +397,6 @@
                 - '{name}-binaries'
         next-job: dput
         noadt: ''
-
-- job-group:
-        name: bzr-packages
-        jobs:
-                - '{name}-bzr-source'
-                - '{name}-binaries'
-        next-job: dput
-        noadt: ''
-
-- job-group:
-        name: bzr-packages-lp
-        jobs:
-                - '{name}-bzr-source-lp'
-                - '{name}-binaries'
-        next-job: dput
-        noadt: ''
-
-- job-group:
-        name: bzr-packages-adt
-        jobs:
-                - '{name}-bzr-source'
-                - '{name}-binaries'
-                - '{name}-testsuite'
-        #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
-        noadt: 'ADT=skip '
 
 - job-group:
         name: git-packages
@@ -1160,11 +1114,12 @@
 
 - project: # needed by wal-e
         name: python-azure
-        bzr-branch: lp:~stub/ubuntu/trusty/python-azure/trunk
+        git-url: bzr::lp:~stub/ubuntu/trusty/python-azure/trunk
+        git-branch: master
         # needs dh-python
         dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
-                - bzr-packages-lp
+                - git-packages
 
 - project:
         name: q3c
@@ -1216,11 +1171,12 @@
 
 - project:
         name: wal-e
-        bzr-branch: lp:~stub/ubuntu/trusty/wal-e/trunk
+        git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
+        git-branch: master
         # needs python-swiftclient
         dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="precise")'
         jobs:
-                - bzr-packages-lp
+                - git-packages
 
 - project:
         name: upgrade-8.4-9.4
