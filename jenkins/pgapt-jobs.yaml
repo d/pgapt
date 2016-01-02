@@ -776,7 +776,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgextwlist
@@ -824,9 +824,8 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
         git-branch: master
         dist-filter: ''
-        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages-sequential
+                - git-packages-with-next
 
 - project:
         name: pgrouting
@@ -843,7 +842,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgstatplans
@@ -907,9 +906,8 @@
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
         git-branch: master
         dist-filter: '(distribution!="squeeze")'
-        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages-sequential
+                - git-packages-with-next
 
 - project:
         name: postgresql-8.4
@@ -1036,7 +1034,7 @@
         # python foo (wheezy)
         dist-filter: '(distribution!="wheezy") && (distribution!="squeeze") && (distribution!="precise")'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: postgresql-mysql-fdw
@@ -1044,8 +1042,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                # run sequentially so we can start mysql
-                - git-packages-sequential
+                - git-packages-with-next
 
 - project:
         name: postgresql-pgmp
@@ -1151,7 +1148,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: repmgr
@@ -1159,7 +1156,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: repmgr2
@@ -1183,7 +1180,7 @@
         git-branch: debian
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: slony1-2
@@ -1191,7 +1188,7 @@
         git-branch: master
         dist-filter: ''
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: wal-e
