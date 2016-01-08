@@ -1103,7 +1103,7 @@
 - project:
         name: preprepare
         git-url: git://github.com/dimitri/preprepare.git
-        git-branch: master
+        git-branch: debian
         dist-filter: ''
         jobs:
                 - git-packages-with-next
