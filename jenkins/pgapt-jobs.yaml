@@ -258,12 +258,12 @@
                         results: autopkgtest.xml
                 - ircbot: *only_configs
                 - trigger-parameterized-builds: *next_job_trigger
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries-beta'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                queue=$queue
-                                upload=extension-only
+                #- trigger-parameterized-builds:
+                #        - project: '{name}-binaries-beta'
+                #          condition: SUCCESS
+                #          predefined-parameters: |
+                #                queue=$queue
+                #                upload=extension-only
                 - trigger-parameterized-builds:
                         - project: '{name}-binaries-devel'
                           condition: SUCCESS
