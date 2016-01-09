@@ -85,7 +85,6 @@
 
 - job-template: &apt_source_template
         name: '{name}-source-apt'
-        job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         child-workspace: .
@@ -124,7 +123,7 @@
 
 - job-template: &git_source_template
         <<: *apt_source_template
-        name: '{name}-source-git'
+        name: '{name}-source'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
                 - string: &git_branch
@@ -148,7 +147,6 @@
 - job-template:
         <<: *git_source_template
         name: '{source-name}-source-git-head'
-        job-name: '{source-name}-source-git-head'
         parameters:
                 - string: *git_branch
                 - choice:
@@ -202,7 +200,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
-                        project: '{name}-source/distribution=$distribution'
+                        project: '{source-job}/distribution=$distribution'
                         filter: 'result/*'
                         flatten: true
                         which-build: upstream-build
@@ -404,41 +402,46 @@
         jobs:
                 - '{name}-source-apt'
                 - '{name}-binaries'
+        source-job: '{name}-source-apt'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages
         jobs:
-                - '{name}-source-git'
+                - '{name}-source'
                 - '{name}-binaries'
+        source-job: '{name}-source'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-sequential
         jobs:
-                - '{name}-source-git'
+                - '{name}-source'
                 - '{name}-binaries-sequential'
+        source-job: '{name}-source'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-with-next
         jobs:
-                - '{name}-source-git'
+                - '{name}-source'
                 - '{name}-binaries-with-next'
                 - '{name}-binaries-beta'
                 - '{name}-binaries-devel'
+        source-job: '{name}-source'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-adt
         jobs:
-                - '{name}-source-git'
+                - '{name}-source'
                 - '{name}-binaries'
                 - '{name}-testsuite'
+        source-job: '{name}-source'
         #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
         noadt: 'ADT=skip '
 
