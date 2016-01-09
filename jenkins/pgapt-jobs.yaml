@@ -1064,7 +1064,9 @@
         name: postgresql-pllua
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
         git-branch: master
-        dist-filter: ''
+        # wheezy/precise amd64: ERROR:  cache lookup failed for type 2192165
+        # (squeeze and wheezy/precise i386 work)
+        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
         jobs:
                 - git-packages-with-next
 
