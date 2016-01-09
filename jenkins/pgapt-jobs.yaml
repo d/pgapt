@@ -84,10 +84,11 @@
 # apt template
 
 - job-template: &apt_source_template
-        name: '{name}-apt-source'
+        name: '{name}-source-apt'
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        child-workspace: .
         parameters:
                 - string: &revision_string
                         name: revision
@@ -123,7 +124,7 @@
 
 - job-template: &git_source_template
         <<: *apt_source_template
-        name: '{name}-git-source'
+        name: '{name}-source-git'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
                 - string: &git_branch
@@ -140,6 +141,8 @@
                         basedir: source
                         wipe-workspace: false
                         recursive-submodules: true
+                        clean:
+                                before: true
 
 # special git-in-git job for postgresql-devel
 - job-template:
@@ -184,7 +187,7 @@
 
 - job-template:
         <<: *apt_source_template
-        name: '{name}-svn-source'
+        name: '{name}-source-svn'
         description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
                 - string: *revision_string
@@ -414,7 +417,7 @@
 - job-group:
         name: apt-packages
         jobs:
-                - '{name}-apt-source'
+                - '{name}-source-apt'
                 - '{name}-binaries'
         next-job: dput
         noadt: ''
@@ -422,7 +425,7 @@
 - job-group:
         name: git-packages
         jobs:
-                - '{name}-git-source'
+                - '{name}-source-git'
                 - '{name}-binaries'
         next-job: dput
         noadt: ''
@@ -430,7 +433,7 @@
 - job-group:
         name: git-packages-sequential
         jobs:
-                - '{name}-git-source'
+                - '{name}-source-git'
                 - '{name}-binaries-sequential'
         next-job: dput
         noadt: ''
@@ -438,7 +441,7 @@
 - job-group:
         name: git-packages-with-next
         jobs:
-                - '{name}-git-source'
+                - '{name}-source-git'
                 - '{name}-binaries-with-next'
                 - '{name}-binaries-beta'
                 - '{name}-binaries-devel'
@@ -448,7 +451,7 @@
 - job-group:
         name: git-packages-adt
         jobs:
-                - '{name}-git-source'
+                - '{name}-source-git'
                 - '{name}-binaries'
                 - '{name}-testsuite'
         #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
@@ -457,7 +460,7 @@
 - job-group:
         name: svn-packages
         jobs:
-                - '{name}-svn-source'
+                - '{name}-source-svn'
                 - '{name}-binaries'
         next-job: dput
         noadt: ''
