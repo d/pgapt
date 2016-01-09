@@ -183,21 +183,6 @@
                           predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
 
-# svn template
-
-- job-template:
-        <<: *apt_source_template
-        name: '{name}-source-svn'
-        description: 'Build Debian source package of {name} from svn.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        parameters:
-                - string: *revision_string
-                - choice: *queue_choice
-        scm:
-                - svn:
-                        url: '{svn-url}'
-                        basedir: source
-                        workspaceupdater: update
-
 # binaries template
 
 - job-template: &binaries_template
@@ -456,14 +441,6 @@
                 - '{name}-testsuite'
         #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
         noadt: 'ADT=skip '
-
-- job-group:
-        name: svn-packages
-        jobs:
-                - '{name}-source-svn'
-                - '{name}-binaries'
-        next-job: dput
-        noadt: ''
 
 - job-group:
         name: upgrade-job
