@@ -141,8 +141,10 @@
                         basedir: source
                         wipe-workspace: false
                         recursive-submodules: true
-                        clean:
-                                before: true
+                        clean: true
+                        # with modern jjb:
+                        #clean:
+                        #        before: true
 
 # special git-in-git job for postgresql-devel
 - job-template:
