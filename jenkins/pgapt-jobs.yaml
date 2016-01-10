@@ -647,6 +647,14 @@
                 - git-packages-with-next
 
 - project:
+        name: jenkins-job-builder
+        git-url: https://github.com/ChristophBerg/jenkins-job-builder-deb.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages
+
+- project:
         name: libdbd-pg-perl
         apt-suite: unstable
         dist-filter: ''
