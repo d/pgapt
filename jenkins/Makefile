@@ -1,6 +1,5 @@
 JOBS = pgapt-jobs.yaml
-JJB = jenkins-jobs
-#JJB = jenkins-job-builder
+JJB = jenkins-job-builder
 
 # we write to output.tmp first so output.{old,new} are left untouched in case
 # JJB aborts
