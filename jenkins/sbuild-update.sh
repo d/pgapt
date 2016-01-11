@@ -61,7 +61,7 @@ umask 002
 	case $distribution in
 	  squeeze) echo "deb $deb-backports/ $distribution-backports main" \
 	    > /etc/apt/sources.list.d/backports.list ;;
-	  wheezy) echo "deb $deb $distribution-backports main" \
+	  wheezy|jessie) echo "deb $deb $distribution-backports main" \
 	    > /etc/apt/sources.list.d/backports.list ;;
 	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
