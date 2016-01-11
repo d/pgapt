@@ -1,3 +1,9 @@
+pgdg-buildenv (18) sid-pgdg; urgency=medium
+
+  * Add aptitude.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 11 Jan 2016 11:17:43 +0100
+
 pgdg-buildenv (17) sid-pgdg; urgency=medium
 
   * Add build-essential.

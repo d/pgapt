@@ -62,7 +62,7 @@ esac
 
 # resolve alternative build-dependencies on dists other than sid
 if [ "$distribution" != "sid" ]; then
-  RESOLVE_ALTERNATIVES="--resolve-alternatives"
+  RESOLVE_ALTERNATIVES="--resolve-alternatives --build-dep-resolver=aptitude"
 fi
 
 # disable parallel builds
