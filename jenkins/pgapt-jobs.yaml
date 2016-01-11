@@ -650,7 +650,7 @@
         name: jenkins-job-builder
         git-url: https://github.com/ChristophBerg/jenkins-job-builder-deb.git
         git-branch: master
-        dist-filter: ''
+        dist-filter: '(distribution=="sid") || (distribution=="jessie")'
         jobs:
                 - git-packages
 
