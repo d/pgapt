@@ -468,6 +468,7 @@
         name: 'sbuild-update'
         description: 'Update sbuild chroots'
         project-type: matrix
+        child-workspace: .
         execution-strategy:
                 sequential: true
                 touchstone:
@@ -514,7 +515,9 @@
         <<: *dput
         name: dput-matrixreloaded
         project-type: matrix
+        child-workspace: .
         execution-strategy:
+                sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
