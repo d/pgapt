@@ -61,9 +61,11 @@ case $architecture in
 esac
 
 # resolve alternative build-dependencies on dists other than sid
-if [ "$distribution" != "sid" ]; then
-  RESOLVE_ALTERNATIVES="--resolve-alternatives --build-dep-resolver=aptitude"
-fi
+case $distribution in
+	sid) ;;
+	squeeze) RESOLVE_ALTERNATIVES="--resolve-alternatives" ;; # sbuild+aptitude would want multi-arch
+	*) RESOLVE_ALTERNATIVES="--resolve-alternatives --build-dep-resolver=aptitude" ;;
+esac
 
 # disable parallel builds
 export DEB_BUILD_OPTIONS="parallel=1"
