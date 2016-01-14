@@ -270,6 +270,12 @@ case $PACKAGE in
         sed -i -e 's/libjson-c-dev | //' debian/control debian/control.in
         ;;
     esac
+    case ${distribution:-} in
+      # we do not have libsfcgal-dev before stretch or wily
+      jessie|wheezy|squeeze|wily|trusty|precise)
+        sed -i -e 's/libsfcgal-dev[^,]*,//' debian/control debian/control.in
+        ;;
+    esac
     ;;
 
   postgresql-multicorn)
