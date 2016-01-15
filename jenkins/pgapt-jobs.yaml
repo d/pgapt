@@ -749,7 +749,7 @@
         name: pgbouncer
         git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
         git-branch: master
-        dist-filter: ''
+        dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
 
