@@ -274,7 +274,7 @@ case $PACKAGE in
       # we do not have libsfcgal-dev before stretch or wily
       jessie|wheezy|squeeze|wily|trusty|precise)
         sed -i -e 's/libsfcgal-dev[^,]*,//' debian/control debian/control.in
-        sed -ie "/sfcgal/Id" debian/liblwgeom-*.symbols
+        sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
         ;;
     esac
     ;;
