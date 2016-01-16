@@ -2,7 +2,7 @@
 
 set -eu
 
-# fetch packages lists
+LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 
 case $stage in
 	production) DIST="$distribution-pgdg" ;;
@@ -10,18 +10,25 @@ case $stage in
 	*) echo "Bad stage $stage" ; exit 1 ;;
 esac
 
-echo "Fetching packages lists for $DIST ..."
-rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/$DIST .
-echo
+# include universe on ubuntu
+for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
+	[ -f "$FILE" ] || continue
+	EXTRABG="--bg $FILE"
+done
 
-# run debcheck
-
+# include N.N components on sid
 case $distribution in
-	sid) EXTRAPKG="--fg $DIST/*.*/binary-${architecture}/Packages" ;;
+	sid) EXTRAFG="--fg $DIST/*.*/binary-${architecture}/Packages" ;;
 esac
 
-echo "Running debcheck ..."
+set -x
+
+# fetch packages lists
+rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/$DIST .
+
+# run debcheck
 dose-debcheck -v -f -e \
-	--bg /home/chroot/$distribution-$architecture/var/lib/apt/lists/*_debian_dists_${distribution}_main_binary-${architecture}_Packages \
-	${EXTRAPKG:-} \
-	--fg $DIST/main/binary-${architecture}/Packages
+	--bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages \
+	${EXTRABG:-} \
+	--fg $DIST/main/binary-${architecture}/Packages \
+	${EXTRAFG:-}
