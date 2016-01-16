@@ -794,6 +794,14 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-rage-terminator
+        git-url: https://github.com/ChristophBerg/pg-rage-terminator-pkg.git
+        git-branch: master
+        dist-filter: ''
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pg-reorg
         git-url: git://anonscm.debian.org/pkg-postgresql/pg-reorg.git
         git-branch: master
