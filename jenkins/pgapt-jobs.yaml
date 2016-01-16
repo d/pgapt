@@ -465,6 +465,31 @@
                         matrix-notifier: all
 
 - job:
+        name: 'debcheck'
+        description: 'Run dose-debcheck on all distributions'
+        project-type: matrix
+        #execution-strategy:
+        #        sequential: true
+        #        touchstone:
+        #                expr: '(distribution=="sid") && (architecture=="amd64")'
+        axes:
+                - axis: *dist_axis
+                - axis: *arch_axis
+                - axis:
+                        type: user-defined
+                        name: stage
+                        values:
+                                - production
+                                - testing
+
+        #triggers:
+        #        - timed: "H */6 * * *"
+        builders:
+                - shell: 'debcheck-pgapt'
+        #publishers:
+        #        - ircbot: *only_configs
+
+- job:
         name: 'sbuild-update'
         description: 'Update sbuild chroots'
         project-type: matrix

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+
+# fetch packages lists
+
+case $stage in
+	production) DIST="$distribution-pgdg" ;;
+	testing)    DIST="$distribution-pgdg-testing" ;;
+	*) echo "Bad stage $stage" ; exit 1 ;;
+esac
+
+echo "Fetching packages lists for $DIST ..."
+rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/$DIST .
+echo
+
+# run debcheck
+
+case $distribution in
+	sid) EXTRAPKG="--fg $DIST/*.*/binary-${architecture}/Packages" ;;
+esac
+
+echo "Running debcheck ..."
+dose-debcheck -v -f -e \
+	--bg /home/chroot/$distribution-$architecture/var/lib/apt/lists/*_debian_dists_${distribution}_main_binary-${architecture}_Packages \
+	${EXTRAPKG:-} \
+	--fg $DIST/main/binary-${architecture}/Packages
