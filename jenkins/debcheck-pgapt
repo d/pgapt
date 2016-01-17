@@ -23,9 +23,10 @@ done
 
 # include latest N.N components on sid
 case $distribution in
-	sid) for C in $DISTSDIR/$DIST/?.?; do
+	sid)
+		C=$(ls -d $DISTSDIR/$DIST/?.? | tail -n 1)
+		test -s $C/binary-${architecture}/Packages && \
 		EXTRAFG="--fg $C/binary-${architecture}/Packages"
-	done
 	;;
 esac
 
@@ -39,8 +40,9 @@ $DEBCHECK ${EXTRAFG:-} \
 	|| EXIT=$?
 
 # run debcheck on N.N components
-$DEBCHECK \
-	--fg $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages \
-	|| EXIT=$?
+for P in $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages; do
+	test -s $P && PKG="${PKG:-} $P"
+done
+$DEBCHECK --fg $PKG || EXIT=$?
 
 exit ${EXIT:-0}
