@@ -475,11 +475,13 @@
         publishers:
                 - trigger:
                         project: debcheck
+                - trigger:
+                        project: builddebcheck
                 - ircbot:
                         strategy: any-failure
                         message-type: summary
 
-- job:
+- job: &debcheck
         name: 'debcheck'
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
@@ -500,6 +502,13 @@
                 - shell: 'debcheck-pgapt'
         #publishers:
         #        - ircbot: *only_configs
+
+- job:
+        <<: *debcheck
+        name: 'builddebcheck'
+        description: 'Run dose-builddebcheck on all distributions'
+        builders:
+                - shell: 'builddebcheck-pgapt'
 
 - job:
         name: 'sbuild-update'

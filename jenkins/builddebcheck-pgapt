@@ -18,29 +18,20 @@ for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Pa
 	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
 	trap "rm -f $TMPPKG" 0 2 3 15
 	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
-	EXTRABG="--bg $TMPPKG"
+	EXTRAPKG="$TMPPKG"
 done
 
-# include latest N.N components on sid
-case $distribution in
-	sid) for C in $DISTSDIR/$DIST/?.?; do
-		EXTRAFG="--fg $C/binary-${architecture}/Packages"
-	done
-	;;
-esac
-
-DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
+# include backports on debian
+for FILE in $LISTSDIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
+	[ -f "$FILE" ] || continue
+	EXTRAPKG="${EXTRAPKG:-} $FILE"
+done
 
 set -x
 
-# run debcheck on main
-$DEBCHECK ${EXTRAFG:-} \
-	--fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-	|| EXIT=$?
-
-# run debcheck on N.N components
-$DEBCHECK \
-	--fg $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages \
-	|| EXIT=$?
-
-exit ${EXIT:-0}
+# run builddebcheck
+dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
+	$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages \
+	$EXTRAPKG \
+	$DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+	$DISTSDIR/$DIST/main/source/Sources.gz
