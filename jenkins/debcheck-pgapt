@@ -3,6 +3,7 @@
 set -eu
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
+DISTSDIR="/home/jenkins/dists"
 
 case $stage in
 	production) DIST="$distribution-pgdg" ;;
@@ -13,22 +14,40 @@ esac
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
 	[ -f "$FILE" ] || continue
-	EXTRABG="--bg $FILE"
+	# work around dose-debcheck dying on a Python_ field
+	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
+	trap "rm -f $TMPPKG" 0 2 3 15
+	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
+	EXTRABG="--bg $TMPPKG"
 done
 
-# include N.N components on sid
+# include latest N.N components on sid
 case $distribution in
-	sid) EXTRAFG="--fg $DIST/*.*/binary-${architecture}/Packages" ;;
+	sid) for C in $DISTSDIR/$DIST/?.?; do
+		EXTRAFG="--fg $C/binary-${architecture}/Packages"
+	done
+	;;
 esac
+
+DEBCHECK="echo dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
 set -x
 
-# fetch packages lists
-rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/$DIST .
+# run debcheck on main
+$DEBCHECK ${EXTRAFG:-} \
+	--fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+	|| EXIT=$?
 
-# run debcheck
-dose-debcheck -v -f -e \
-	--bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages \
-	${EXTRABG:-} \
-	--fg $DIST/main/binary-${architecture}/Packages \
-	${EXTRAFG:-}
+# run debcheck on N.N components
+$DEBCHECK \
+	--fg $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages \
+	|| EXIT=$?
+
+# run builddebcheck
+dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
+	$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages \
+	$DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+	$DISTSDIR/$DIST/main/source/Sources.gz \
+	|| EXIT=$?
+
+exit ${EXIT:-0}

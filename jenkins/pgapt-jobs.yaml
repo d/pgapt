@@ -465,13 +465,27 @@
                         matrix-notifier: all
 
 - job:
+        name: 'debcheck-distsmirror'
+        description: 'Sync apt.pg.org dists/ directory and trigger debcheck'
+        triggers:
+                - timed: "H H * * *"
+        builders:
+                - shell: |
+                        rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/ /home/jenkins/dists
+        publishers:
+                - trigger:
+                        project: debcheck
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+
+- job:
         name: 'debcheck'
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
-        #execution-strategy:
-        #        sequential: true
-        #        touchstone:
-        #                expr: '(distribution=="sid") && (architecture=="amd64")'
+        child-workspace: .
+        execution-strategy:
+                sequential: true
         axes:
                 - axis: *dist_axis
                 - axis: *arch_axis
@@ -482,8 +496,6 @@
                                 - production
                                 - testing
 
-        #triggers:
-        #        - timed: "H */6 * * *"
         builders:
                 - shell: 'debcheck-pgapt'
         #publishers:
