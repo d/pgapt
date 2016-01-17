@@ -1318,7 +1318,7 @@
 - project: &aptpkg
         name: bordeaux-threads
         apt-suite: 'unstable'
-        dist-filter: ''
+        dist-filter: 'distribution!="squeeze"'
         jobs: [apt-packages]
 - project: { <<: *aptpkg, name: buildapp }
 - project: { <<: *aptpkg, name: cffi }
