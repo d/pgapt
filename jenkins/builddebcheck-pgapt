@@ -5,11 +5,8 @@ set -eu
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 DISTSDIR="/home/jenkins/dists"
 
-case $stage in
-	production) DIST="$distribution-pgdg" ;;
-	testing)    DIST="$distribution-pgdg-testing" ;;
-	*) echo "Bad stage $stage" ; exit 1 ;;
-esac
+# main package list
+PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
@@ -18,20 +15,31 @@ for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Pa
 	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
 	trap "rm -f $TMPPKG" 0 2 3 15
 	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
-	EXTRAPKG="$TMPPKG"
+	PKG="$PKG $TMPPKG"
 done
 
 # include backports on debian
 for FILE in $LISTSDIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
 	[ -f "$FILE" ] || continue
-	EXTRAPKG="${EXTRAPKG:-} $FILE"
+	PKG="$PKG $FILE"
 done
+
+# include pgdg dists
+case $stage in
+	production)
+		DIST="$distribution-pgdg"
+		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
+		PKG="$PKG $DISTSDIR/$DIST-testing/main/binary-${architecture}/Packages"
+		;;
+	testing)
+		DIST="$distribution-pgdg-testing"
+		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
+		;;
+	*) echo "Bad stage $stage" ; exit 1 ;;
+esac
 
 set -x
 
 # run builddebcheck
 dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
-	$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages \
-	$EXTRAPKG \
-	$DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-	$DISTSDIR/$DIST/main/source/Sources.gz
+	$PKG $DISTSDIR/$DIST/main/source/Sources.gz

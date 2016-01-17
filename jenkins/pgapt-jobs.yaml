@@ -486,8 +486,6 @@
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
         child-workspace: .
-        execution-strategy:
-                sequential: true
         axes:
                 - axis: *dist_axis
                 - axis: *arch_axis
