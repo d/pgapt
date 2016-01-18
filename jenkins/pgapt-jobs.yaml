@@ -10,6 +10,9 @@
         artifactNumToKeep: -1
     wrappers:
         - timestamps
+    dist-filter: ''
+    git-branch: master
+    backports: ''
 
 - yamltemplates:
     name: yamltemplates
@@ -207,7 +210,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
-                - shell: '{noadt}sbuild-package'
+                - shell: '{noadt}{backports}sbuild-package'
         publishers:
                 - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
@@ -274,7 +277,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
-                - shell: '{noadt}sbuild-package'
+                - shell: '{noadt}{backports}sbuild-package'
         axes:
                 - axis: *amd64_only_axis
                 - axis: *dist_axis
@@ -637,15 +640,12 @@
 - project:
         name: apgdiff
         git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/apgdiff.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: autopkgtest
         git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
-        git-branch: master
         # limit to distributions with python3
         dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
@@ -654,16 +654,12 @@
 - project:
         name: barman
         git-url: git://git.debian.org/collab-maint/barman.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: check-postgres
         git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -686,30 +682,26 @@
 - project:
         name: ip4r
         git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: jenkins-job-builder
         git-url: https://github.com/ChristophBerg/jenkins-job-builder-deb.git
-        git-branch: master
         dist-filter: '(distribution=="sid") || (distribution=="jessie")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
 - project:
         name: libdbd-pg-perl
         apt-suite: unstable
-        dist-filter: ''
         jobs:
                 - apt-packages
 
 - project:
         name: libtap-parser-sourcehandler-pgtap-perl
         git-url: git://anonscm.debian.org/pkg-perl/packages/libtap-parser-sourcehandler-pgtap-perl.git
-        git-branch: master
         # requires more recent perl
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -718,7 +710,6 @@
 - project:
         name: libpqtypes
         git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
-        git-branch: master
         # skip dists without dpkg-buildflags
         dist-filter: '(distribution!="squeeze")'
         # run sequentially so the tests have 5432 available
@@ -737,30 +728,24 @@
 - project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: ora2pg
         apt-suite: unstable
-        dist-filter: ''
         jobs:
                 - apt-packages
 
 - project:
         name: orafce
         git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgadmin3
         git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
-        git-branch: master
         # skip dists without /usr/share/dpkg/buildflags.mk
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -769,30 +754,24 @@
 - project:
         name: pgagent
         git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: pgbadger
         apt-suite: unstable
-        dist-filter: ''
         jobs:
                 - apt-packages
 
 - project:
         name: pgbackman
         git-url: https://github.com/rafaelma/pgbackman.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: pgbouncer
         git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
-        git-branch: master
         dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
@@ -800,63 +779,48 @@
 - project:
         name: pgdg-buildenv
         git-url: git://git.postgresql.org/git/pgapt.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: pgespresso
         git-url: git://git.debian.org/collab-maint/pgespresso.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgextwlist
         git-url: https://github.com/dimitri/pgextwlist.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgfincore
         git-url: git://git.postgresql.org/git/pgfincore.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgmemcache
         git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pg-rage-terminator
         git-url: https://github.com/ChristophBerg/pg-rage-terminator-pkg.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pg-reorg
         git-url: git://anonscm.debian.org/pkg-postgresql/pg-reorg.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pg-partman
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-partman.git
-        git-branch: master
         # needs pgtap
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -865,15 +829,12 @@
 - project:
         name: pgpool2
         git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
-        git-branch: master
         # needs libcgal-dev (in non-free on squeeze, in multiverse on precise, let's not care)
         dist-filter: '(distribution!="precise") && (distribution!="squeeze")'
         jobs:
@@ -882,23 +843,18 @@
 - project:
         name: pgsphere
         git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/pgsphere.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgstatplans
         git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgtap
         git-url: git://anonscm.debian.org/pkg-postgresql/pgtap.git
-        git-branch: master
         dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages-with-next
@@ -906,7 +862,6 @@
 - project:
         name: pgtop
         git-url: git://anonscm.debian.org/collab-maint/pgtop.git
-        git-branch: master
         # needs buildflags.mk
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -915,7 +870,6 @@
 - project:
         name: pgxnclient
         git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
-        git-branch: master
         dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages
@@ -923,16 +877,12 @@
 - project:
         name: phppgadmin
         git-url: git://anonscm.debian.org/pkg-postgresql/phppgadmin.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: plr
         git-url: git://anonscm.debian.org/pkg-postgresql/plr.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -947,8 +897,8 @@
 - project:
         name: postgis
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
-        git-branch: master
         dist-filter: '(distribution!="squeeze")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 
@@ -956,7 +906,6 @@
         name: postgresql-8.4
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 8.4
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-8.4-testsuite'
@@ -965,7 +914,6 @@
         name: postgresql-9.0
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.0-pgdg
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.0-testsuite'
@@ -974,7 +922,6 @@
         name: postgresql-9.1
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.1
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.1-testsuite'
@@ -983,7 +930,6 @@
         name: postgresql-9.2
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.2
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.2-testsuite'
@@ -992,7 +938,6 @@
         name: postgresql-9.3
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.3
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.3-testsuite'
@@ -1001,7 +946,6 @@
         name: postgresql-9.4
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.4
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.4-testsuite'
@@ -1010,7 +954,6 @@
         name: postgresql-9.5
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
         git-branch: 9.5
-        dist-filter: ''
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.5-testsuite'
@@ -1047,8 +990,6 @@
 - project:
         name: postgresql-common
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-common.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1056,14 +997,12 @@
         name: postgresql-debversion
         git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
         git-branch: debian
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-filedump
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
-        git-branch: master
         # uses /usr/share/dpkg/buildflags.mk
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -1072,7 +1011,6 @@
 - project:
         name: postgresql-multicorn
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
-        git-branch: master
         # needs dh-python (squeeze, precise)
         # python foo (wheezy)
         dist-filter: '(distribution!="wheezy") && (distribution!="squeeze") && (distribution!="precise")'
@@ -1082,15 +1020,12 @@
 - project:
         name: postgresql-mysql-fdw
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-mysql-fdw.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
-        git-branch: master
         dist-filter: '(distribution!="squeeze")'
         jobs:
                 - git-packages-with-next
@@ -1098,15 +1033,12 @@
 - project:
         name: postgresql-pljava
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pljava.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-pllua
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
-        git-branch: master
         # wheezy/precise amd64: ERROR:  cache lookup failed for type 2192165
         # (squeeze and wheezy/precise i386 work)
         dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
@@ -1116,16 +1048,12 @@
 - project:
         name: postgresql-plproxy
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plproxy.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-plsh
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plsh.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -1133,15 +1061,12 @@
         name: powa-archivist
         git-url: https://github.com/credativ/powa-archivist.git
         git-branch: debian
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: prefix
         git-url: git://github.com/dimitri/prefix.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
@@ -1149,14 +1074,12 @@
         name: preprepare
         git-url: git://github.com/dimitri/preprepare.git
         git-branch: debian
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: psqlodbc
         git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
-        git-branch: master
         # doesn't compile on squeeze because of multi-arch (needs a newer cdbs)
         dist-filter: '(distribution!="squeeze")'
         jobs:
@@ -1165,23 +1088,18 @@
 - project:
         name: python-argcomplete
         git-url: git://anonscm.debian.org/collab-maint/python-argcomplete.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: python-argh
         git-url: git://git.debian.org/collab-maint/python-argh.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project: # needed by wal-e
         name: python-azure
         git-url: bzr::lp:~stub/ubuntu/trusty/python-azure/trunk
-        git-branch: master
         # needs dh-python
         dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
@@ -1190,32 +1108,24 @@
 - project:
         name: q3c
         git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/q3c.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: repmgr
         git-url: git://git.debian.org/pkg-postgresql/repmgr.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: repmgr2
         git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
 - project:
         name: skytools
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages
 
@@ -1223,22 +1133,18 @@
         name: skytools3
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
         git-branch: debian
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: slony1-2
         git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
-        git-branch: master
-        dist-filter: ''
         jobs:
                 - git-packages-with-next
 
 - project:
         name: wal-e
         git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
-        git-branch: master
         # needs python-swiftclient
         dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="precise")'
         jobs:
@@ -1297,7 +1203,6 @@
 - project:
         name: pgloader
         #git-url: https://github.com/dimitri/pgloader.git
-        #git-branch: master
         apt-suite: unstable
         # squeeze doesn't have ruby-ronn
         dist-filter: 'distribution!="squeeze"'
