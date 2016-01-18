@@ -14,13 +14,11 @@ chroot="source:$distribution-$architecture"
 schroot -l | grep -q $chroot || \
   error "There is no schroot definition for $chroot"
 
-deb="http://deb/debian"
 apt1="http://apt.postgresql.org/pub/repos/apt"
 apt2="http://atalia.postgresql.org/pub/repos/apt"
 ubuntu="http://de.archive.ubuntu.com/ubuntu"
 case $(hostname) in
   pgdg*) # use local cache on build host
-    deb="http://debian-approx:9999/debian"
     apt1="http://atalia-approx:9999/atalia"
     apt2="$apt1"
     ubuntu="http://ubuntu-approx:9999/ubuntu"
@@ -58,11 +56,8 @@ umask 002
 	fi
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
+	rm -f /etc/apt/sources.list.d/backports.list
 	case $distribution in
-	  squeeze) echo "deb $deb-backports/ $distribution-backports main" \
-	    > /etc/apt/sources.list.d/backports.list ;;
-	  wheezy|jessie) echo "deb $deb $distribution-backports main" \
-	    > /etc/apt/sources.list.d/backports.list ;;
 	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
 	esac

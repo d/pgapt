@@ -6,7 +6,9 @@
 #  JOB_NAME=$pkg-binaries
 #  architecture=amd64/i386
 #  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
-#  DEB_PG_SUPPORTED_VERSIONS (optional, defaults to pgdg)
+#  optionally: DEB_PG_SUPPORTED_VERSIONS (defaults to pgdg)
+#  optionally: ADT=skip
+#  optionally: BACKPORTS=true
 # Output:
 #  .changes and .deb in current directory
 #  autopkgtest.xml in current directory
@@ -16,9 +18,8 @@
 #  adt-sbuild available in chroot (in pgdg-buildenv package)
 #  /var/tmp bind mount in schroot fstab for retrieving adt-run summary
 #  sbuild needs to pass through DEB_* variables (default)
-# Optional:
-#  newpid installed in chroot
-#  /etc/sbuild/sbuild.conf: $build_env_cmnd = 'newnet';
+#  "deb" resolves to some debian mirror
+#  newpid is installed on host and netns-setup was run
 
 set -eu
 
@@ -67,6 +68,19 @@ case $distribution in
 	*) RESOLVE_ALTERNATIVES="--resolve-alternatives --build-dep-resolver=aptitude" ;;
 esac
 
+# enable backports
+if [ "${BACKPORTS:-}" ]; then
+  deb="http://deb/debian"
+  case $(hostname) in
+    pgdg*) # use local cache on build host
+      deb="http://debian-approx:9999/debian" ;;
+  esac
+  case $distribution in
+    squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
+    wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
+  esac
+fi
+
 # disable parallel builds
 export DEB_BUILD_OPTIONS="parallel=1"
 
@@ -94,14 +108,17 @@ if ! test -d $LOCKDIR; then
 fi
 umask 002
 
+NEWPID="newpid -iuN newpid$distribution$BITS"
+
 # build package and run autopkgtests inside the chroot
 (
   echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
-  newpid -iuN newpid$distribution$BITS \
+  ${NEWPID:-} \
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
+    ${BACKPORTS:+--extra-repository="$BACKPORTS"} \
     --finished-build-commands="${FINISHED_BUILD_COMMAND:-}" \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
