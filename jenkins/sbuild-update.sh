@@ -68,9 +68,9 @@ umask 002
 	apt-get update
 	
 	[ -x /usr/bin/eatmydata ] && eatmydata="eatmydata"
-	case $distribution in
-	  squeeze) \$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
-	esac
+	#case $distribution in
+	#  squeeze) \$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
+	#esac
 	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
 	apt-get clean
