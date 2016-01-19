@@ -732,12 +732,6 @@
                 - git-packages
 
 - project:
-        name: ora2pg
-        apt-suite: unstable
-        jobs:
-                - apt-packages
-
-- project:
         name: orafce
         git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
         jobs:
