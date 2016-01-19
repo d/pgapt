@@ -22,3 +22,8 @@ update-pgdgbuild:
 
 clean:
 	rm -rf output output.old
+
+# package lists
+lists: packages.backports
+packages.backports: pgapt-jobs.yaml
+	perl -le 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{backports} }' > $@

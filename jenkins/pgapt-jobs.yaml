@@ -500,7 +500,9 @@
                                 - testing
 
         builders:
-                - shell: 'debcheck-pgapt'
+                - shell: |
+                    make lists
+                    debcheck-pgapt
         #publishers:
         #        - ircbot: *only_configs
 
