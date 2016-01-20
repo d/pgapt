@@ -69,8 +69,8 @@ set -x
 # run builddebcheck
 dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
 	$PKG $MAINSRC || EXIT=1
-test -s "${BPO:-}" && \
+test -s "${BPO:-}" && { \
 dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
-	$PKG $BPO $BPOSRC || EXIT=1
+	$PKG $BPO $BPOSRC || EXIT=1 ; }
 
 exit ${EXIT:-0}
