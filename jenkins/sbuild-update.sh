@@ -78,8 +78,8 @@ umask 002
 	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
 	esac
-	if [ "$BACKPORTS" ]; then
-	  echo "$BACKPORTS" > /etc/apt/sources.list.d/backports.list
+	if [ "${BACKPORTS:-}" ]; then
+	  echo "${BACKPORTS:-}" > /etc/apt/sources.list.d/backports.list
 	  if [ -d /var/lib/apt/backports ]; then
 	    cp -al /var/lib/apt/backports/* /var/lib/apt/lists
 	  fi
@@ -89,7 +89,7 @@ umask 002
 
 	# save backports lists
 	rm -rf /var/lib/apt/backports /etc/apt/sources.list.d/backports.list.disabled
-	if [ "$BACKPORTS" ]; then
+	if [ "${BACKPORTS:-}" ]; then
 	  mv /etc/apt/sources.list.d/backports.list /etc/apt/sources.list.d/backports.list.disabled
 	  mkdir -p /var/lib/apt/backports
 	  mv /var/lib/apt/lists/*backports* /var/lib/apt/backports
