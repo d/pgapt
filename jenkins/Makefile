@@ -1,6 +1,8 @@
 JOBS = pgapt-jobs.yaml
 JJB = jenkins-job-builder
 
+all: test lists
+
 # we write to output.tmp first so output.{old,new} are left untouched in case
 # JJB aborts
 test:
@@ -20,10 +22,10 @@ update-pgdgbuild:
 	@echo "*** Updating Jenkins from $(JOBS) ***"
 	$(JJB) --conf jenkins_jobs.ini update $(JOBS)
 
-clean:
-	rm -rf output output.old
-
 # package lists
 lists: packages.backports
 packages.backports: pgapt-jobs.yaml
 	perl -le 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{backports} }' > $@
+
+clean:
+	rm -rf output output.old packages.backports

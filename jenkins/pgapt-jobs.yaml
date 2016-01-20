@@ -462,7 +462,7 @@
                                 - master
                         wipe-workspace: false
         builders:
-                - shell: 'cd jenkins && make test && make update'
+                - shell: 'cd jenkins && make && make update'
         publishers:
                 - ircbot:
                         matrix-notifier: all
@@ -500,9 +500,7 @@
                                 - testing
 
         builders:
-                - shell: |
-                    make lists
-                    debcheck-pgapt
+                - shell: debcheck-pgapt
         #publishers:
         #        - ircbot: *only_configs
 

@@ -3,7 +3,9 @@
 set -eu
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
-DISTSDIR="/home/jenkins/dists"
+HOMEDIR="/home/jenkins"
+DISTSDIR="$HOMEDIR/dists"
+PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
 
 case $stage in
 	production) DIST="$distribution-pgdg" ;;
@@ -36,14 +38,14 @@ DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribut
 # packages not depending on backports
 MAINPKG=$(mktemp main_binary-${architecture}_Packages.XXXXXX)
 cat $DISTSDIR/$DIST/main/binary-${architecture}/Packages > $MAINPKG
-for pkg in $(cat packages.backports); do
+for pkg in $(cat $PGAPTDIR/packages.backports); do
   grep-dctrl --not -S $pkg $MAINPKG > $MAINPKG.tmp
   mv $MAINPKG.tmp $MAINPKG
 done
 
 # packages depending on backports
 BPOPKG=$(mktemp bpo_binary-${architecture}_Packages.XXXXXX)
-for pkg in $(cat packages.backports); do
+for pkg in $(cat $PGAPTDIR/packages.backports); do
   grep-dctrl -S $pkg $DISTSDIR/$DIST/main/binary-${architecture}/Packages >> $BPOPKG
 done
 
