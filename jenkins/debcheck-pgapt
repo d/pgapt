@@ -43,6 +43,14 @@ for pkg in $(cat $PGAPTDIR/packages.backports); do
   mv $MAINPKG.tmp $MAINPKG
 done
 
+# packages not tested in production
+if [ "$stage" = "production" ]; then
+  for pkg in cl-pgloader; do
+    grep-dctrl --not -P $pkg $MAINPKG > $MAINPKG.tmp
+    mv $MAINPKG.tmp $MAINPKG
+  done
+fi
+
 # packages depending on backports
 BPOPKG=$(mktemp bpo_binary-${architecture}_Packages.XXXXXX)
 for pkg in $(cat $PGAPTDIR/packages.backports); do
@@ -53,6 +61,7 @@ set -x
 
 # run debcheck on main
 $DEBCHECK ${EXTRAFG:-} --fg $MAINPKG || EXIT=$?
+test -s $BPOPKG && \
 $DEBCHECK ${EXTRAFG:-} --bg $DISTSDIR/$DIST/main/binary-${architecture}/Packages --fg $BPOPKG || : # we need to pull the bpo packages file from somewhere ... || EXIT=$?
 
 # run debcheck on N.N components
