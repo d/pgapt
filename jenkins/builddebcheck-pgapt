@@ -3,26 +3,48 @@
 set -eu
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
+BPODIR="/home/chroot/$distribution-$architecture/var/lib/apt/backports"
 DISTSDIR="/home/jenkins/dists"
 
 # main package list
 PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
+
+trap 'rm -f ${TMPPKG:-} ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
 
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
 	[ -f "$FILE" ] || continue
 	# work around dose-debcheck dying on a Python_ field
 	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
-	trap "rm -f $TMPPKG" 0 2 3 15
 	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
 	PKG="$PKG $TMPPKG"
 done
 
-# include backports on debian
-for FILE in $LISTSDIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
-	[ -f "$FILE" ] || continue
-	PKG="$PKG $FILE"
-done
+# packages not depending on backports
+MAINSRC=$(mktemp main_source_Sources.XXXXXX)
+zcat $DISTSDIR/$distribution-pgdg-testing/main/source/Sources.gz > $MAINSRC
+
+case $distribution in
+  squeeze|wheezy|jessie)
+    for pkg in $(cat packages.backports); do
+      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
+      mv $MAINSRC.tmp $MAINSRC
+    done
+
+    # packages depending on backports
+    BPOSRC=$(mktemp bpo_source_Sources.XXXXXX)
+    for pkg in $(cat packages.backports); do
+      zcat $DISTSDIR/$distribution-pgdg-testing/main/source/Sources.gz | \
+        grep-dctrl -S $pkg >> $BPOSRC || :
+    done
+
+    # include backports on debian
+    for FILE in $BPODIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
+      [ -f "$FILE" ] || continue
+      BPO="$FILE"
+    done
+    ;;
+esac
 
 # include pgdg dists
 case $stage in
@@ -42,4 +64,9 @@ set -x
 
 # run builddebcheck
 dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
-	$PKG $DISTSDIR/$DIST/main/source/Sources.gz
+	$PKG $MAINSRC || EXIT=1
+test -s "${BPO:-}" && \
+dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
+	$PKG $BPO $BPOSRC || EXIT=1
+
+exit ${EXIT:-0}

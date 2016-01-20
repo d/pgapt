@@ -7,6 +7,8 @@ HOMEDIR="/home/jenkins"
 DISTSDIR="$HOMEDIR/dists"
 PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
 
+test -d $PGAPTDIR && cd $PGAPTDIR
+
 case $stage in
 	production) DIST="$distribution-pgdg" ;;
 	testing)    DIST="$distribution-pgdg-testing" ;;
@@ -38,10 +40,6 @@ DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribut
 # packages not depending on backports
 MAINPKG=$(mktemp main_binary-${architecture}_Packages.XXXXXX)
 cat $DISTSDIR/$DIST/main/binary-${architecture}/Packages > $MAINPKG
-for pkg in $(cat $PGAPTDIR/packages.backports); do
-  grep-dctrl --not -S $pkg $MAINPKG > $MAINPKG.tmp
-  mv $MAINPKG.tmp $MAINPKG
-done
 
 # packages not tested in production
 if [ "$stage" = "production" ]; then
@@ -51,18 +49,29 @@ if [ "$stage" = "production" ]; then
   done
 fi
 
-# packages depending on backports
-BPOPKG=$(mktemp bpo_binary-${architecture}_Packages.XXXXXX)
-for pkg in $(cat $PGAPTDIR/packages.backports); do
-  grep-dctrl -S $pkg $DISTSDIR/$DIST/main/binary-${architecture}/Packages >> $BPOPKG
-done
+case $distribution in
+  squeeze|wheezy|jessie)
+    for pkg in $(cat packages.backports); do
+      grep-dctrl --not -S $pkg $MAINPKG > $MAINPKG.tmp
+      mv $MAINPKG.tmp $MAINPKG
+    done
+
+    # packages depending on backports
+    BPOPKG=$(mktemp bpo_binary-${architecture}_Packages.XXXXXX)
+    for pkg in $(cat packages.backports); do
+      grep-dctrl -S $pkg $DISTSDIR/$DIST/main/binary-${architecture}/Packages >> $BPOPKG || :
+    done
+    ;;
+esac
 
 set -x
 
 # run debcheck on main
 $DEBCHECK ${EXTRAFG:-} --fg $MAINPKG || EXIT=$?
-test -s $BPOPKG && \
-$DEBCHECK ${EXTRAFG:-} --bg $DISTSDIR/$DIST/main/binary-${architecture}/Packages --fg $BPOPKG || : # we need to pull the bpo packages file from somewhere ... || EXIT=$?
+test -s "${BPOPKG:-}" && { \
+$DEBCHECK ${EXTRAFG:-} --bg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+  --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
+  --fg $BPOPKG || EXIT=$? ; }
 
 # run debcheck on N.N components
 for P in $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages; do

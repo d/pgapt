@@ -25,6 +25,17 @@ case $(hostname) in
     ;;
 esac
 
+# enable backports
+deb="http://deb/debian"
+case $(hostname) in
+  pgdg*) # use local cache on build host
+    deb="http://debian-approx:9999/debian" ;;
+esac
+case $distribution in
+  squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
+  wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
+esac
+
 PGDG_SH=$(mktemp /var/tmp/pgdg.XXXXXX.sh)
 trap "rm -f $PGDG_SH" 0 2 3 15
 cat < /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh > $PGDG_SH
@@ -54,18 +65,35 @@ umask 002
 		chmod +x $PGDG_SH
 		echo yes | $PGDG_SH
 	fi
-	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
-	rm -f /etc/apt/sources.list.d/backports.list
-	case $distribution in
-	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
-	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
-	esac
+
 	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
 	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
 	test -e /etc/apt/apt.conf.d/50i18n || echo 'Acquire::Languages { none; };' | tee /etc/apt/apt.conf.d/50i18n
 	rm -f /var/lib/apt/lists/*_Translation-*
+
+	# write sources lists
+	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
+	case $distribution in
+	  precise|trusty|wily) # libossp-uuid is in universe on vivid+
+	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
+	esac
+	if [ "$BACKPORTS" ]; then
+	  echo "$BACKPORTS" > /etc/apt/sources.list.d/backports.list
+	  if [ -d /var/lib/apt/backports ]; then
+	    cp -al /var/lib/apt/backports/* /var/lib/apt/lists
+	  fi
+	fi
+
 	apt-get update
+
+	# save backports lists
+	rm -rf /var/lib/apt/backports /etc/apt/sources.list.d/backports.list.disabled
+	if [ "$BACKPORTS" ]; then
+	  mv /etc/apt/sources.list.d/backports.list /etc/apt/sources.list.d/backports.list.disabled
+	  mkdir -p /var/lib/apt/backports
+	  mv /var/lib/apt/lists/*backports* /var/lib/apt/backports
+	fi
 	
 	[ -x /usr/bin/eatmydata ] && eatmydata="eatmydata"
 	#case $distribution in
