@@ -1121,7 +1121,8 @@
 - project:
         name: sfcgal
         git-url: git://anonscm.debian.org/pkg-grass/sfcgal.git
-        dist-filter: '(distribution!="squeeze") && (distribution!="wheezy") && (distribution!="precise") && (distribution!="trusty")'
+        git-branch: jessie-backports
+        dist-filter: 'distribution=="jessie"'
         jobs:
                 - git-packages
 
