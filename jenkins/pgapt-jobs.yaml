@@ -893,7 +893,6 @@
         name: postgis
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
         dist-filter: '(distribution!="squeeze")'
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 
