@@ -4,7 +4,11 @@ set -eu
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 BPODIR="/home/chroot/$distribution-$architecture/var/lib/apt/backports"
-DISTSDIR="/home/jenkins/dists"
+HOMEDIR="/home/jenkins"
+DISTSDIR="$HOMEDIR/dists"
+PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
+
+test -d $PGAPTDIR && cd $PGAPTDIR
 
 # main package list
 PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
