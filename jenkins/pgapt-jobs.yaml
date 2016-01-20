@@ -648,6 +648,7 @@
         git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
         # limit to distributions with python3
         dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
