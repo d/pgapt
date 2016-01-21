@@ -411,6 +411,16 @@
         noadt: ''
 
 - job-group:
+        name: apt-packages-with-next
+        jobs:
+                - '{name}-source-apt'
+                - '{name}-binaries-with-next'
+                - '{name}-binaries-beta'
+                - '{name}-binaries-devel'
+        next-job: dput
+        noadt: ''
+
+- job-group:
         name: git-packages
         jobs:
                 - '{name}-source-git'
@@ -849,7 +859,7 @@
         name: pgsql-asn1oid
         apt-suite: unstable
         jobs:
-                - git-packages-with-next
+                - apt-packages-with-next
 
 - project:
         name: pgstatplans
