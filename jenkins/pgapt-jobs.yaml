@@ -846,6 +846,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pgsql-asn1oid
+        apt-suite: unstable
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgstatplans
         git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
         jobs:
