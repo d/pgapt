@@ -847,7 +847,7 @@
         # needs libcgal-dev (in non-free on squeeze, in multiverse on precise, let's not care)
         dist-filter: '(distribution!="precise") && (distribution!="squeeze")'
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: pgsphere
