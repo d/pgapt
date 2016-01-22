@@ -823,7 +823,7 @@
 
 - project:
         name: pg-rage-terminator
-        git-url: https://github.com/ChristophBerg/pg-rage-terminator-pkg.git
+        git-url: https://github.com/disco-stu/pg-rage-terminator-pkg.git
         jobs:
                 - git-packages-with-next
 
