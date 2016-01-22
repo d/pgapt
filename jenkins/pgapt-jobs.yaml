@@ -820,7 +820,7 @@
         apt-suite: unstable
         # needs qtbase5-dev from wheezy-backports
         backports: 'BACKPORTS=yes '
-        dist-filter: '(distribution!="squeeze") && (distribution!="precise"'
+        dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
         jobs:
                 - apt-packages
 
