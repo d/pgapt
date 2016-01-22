@@ -816,6 +816,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pgmodeler
+        apt-suite: unstable
+        jobs:
+                - apt-packages
+
+- project:
         name: pg-rage-terminator
         git-url: https://github.com/ChristophBerg/pg-rage-terminator-pkg.git
         jobs:
