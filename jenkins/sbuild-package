@@ -76,8 +76,8 @@ if [ "${BACKPORTS:-}" ]; then
       deb="http://debian-approx:9999/debian" ;;
   esac
   case $distribution in
-    squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
-    wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
+    squeeze) BPOREPO="deb $deb-backports/ $distribution-backports main" ;;
+    wheezy|jessie) BPOREPO="deb $deb $distribution-backports main" ;;
   esac
 fi
 
@@ -118,7 +118,7 @@ NEWPID="newpid -iuN newpid$distribution$BITS"
   ${NEWPID:-} \
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
-    ${BACKPORTS:+--extra-repository="$BACKPORTS"} \
+    ${BPOREPO:+--extra-repository="$BPOREPO"} \
     --finished-build-commands="${FINISHED_BUILD_COMMAND:-}" \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
