@@ -818,9 +818,8 @@
 - project:
         name: pgmodeler
         apt-suite: unstable
-        # needs qtbase5-dev from wheezy-backports
-        backports: 'BACKPORTS=yes '
-        dist-filter: '(distribution!="squeeze") && (distribution!="precise")'
+        # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
+        dist-filter: '(distribution!="wheezy") && (distribution!="squeeze") && (distribution!="precise")'
         jobs:
                 - apt-packages
 
