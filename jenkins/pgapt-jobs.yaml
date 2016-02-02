@@ -1080,6 +1080,12 @@
                 - git-packages-with-next
 
 - project:
+        name: postgresql-prioritize
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql-prioritize.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: powa-archivist
         git-url: https://github.com/credativ/powa-archivist.git
         git-branch: debian
