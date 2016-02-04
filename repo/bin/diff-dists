@@ -5,6 +5,7 @@
 
 use strict;
 use warnings;
+use Dpkg::Version;
 
 my $fulldiff = 0;
 if (@ARGV and $ARGV[0] eq '-f') {
@@ -14,7 +15,7 @@ if (@ARGV and $ARGV[0] eq '-f') {
 
 die "Syntax: $0 [-f] <source1> <source2>" unless (@ARGV == 2);
 my ($source1, $source2) = @ARGV;
-my %pkgs;
+my (%pkg1, %pkg2);
 
 $/ = ''; # slurp paragraphs
 
@@ -22,7 +23,8 @@ open S2, $source2 or die "$source2: $!";
 while (<S2>) {
 	my ($pkg) = /^Package: (.+)/m or die "$source2: paragraph without Package: $_";
 	my ($ver) = /^Version: (.+)/m or die "$source2: paragraph without Version: $_";
-	$pkgs{$pkg} = $ver;
+	my $v = Dpkg::Version->new($ver);
+	$pkg2{$pkg} = $v if (not exists $pkg2{$pkg} or $v > $pkg2{$pkg});
 }
 close S2;
 
@@ -30,23 +32,29 @@ open S1, $source1 or die "$source1: $!";
 while (<S1>) {
 	my ($pkg) = /^Package: (.+)/m or die "$source1: paragraph without Package: $_";
 	my ($ver) = /^Version: (.+)/m or die "$source1: paragraph without Version: $_";
-	if (not exists $pkgs{$pkg}) {
-		print "$pkg $ver <missing>\n" if ($fulldiff);
-		next;
-	}
-
-	my $ver2 = $pkgs{$pkg};
-	if ($ver eq $ver2 or $ver2 =~ /^\Q$ver\E[.~]pgdg\+\d$/) {
-		#print "OK: $pkg $ver $ver2\n";
-		delete $pkgs{$pkg};
-		next;
-	}
-
-	print "$pkg $ver $pkgs{$pkg}\n";
-	delete $pkgs{$pkg};
+	my $v = Dpkg::Version->new($ver);
+	$pkg1{$pkg} = $v if (not exists $pkg1{$pkg} or $v > $pkg1{$pkg});
 }
 close S1;
 
-foreach my $pkg (sort keys %pkgs) {
-	print "$pkg <missing> $pkgs{$pkg}\n";
+foreach my $pkg (sort keys %pkg1) {
+	my $ver1 = $pkg1{$pkg};
+	if (not exists $pkg2{$pkg}) {
+		print "$pkg $ver1 <missing>\n" if ($fulldiff);
+		next;
+	}
+
+	my $ver2 = $pkg2{$pkg};
+	if ($ver1 eq $ver2 or $ver2 =~ /^\Q$ver1\E[.~]pgdg\+\d$/) {
+		#print "OK: $pkg $ver1 $ver2\n";
+		delete $pkg2{$pkg};
+		next;
+	}
+
+	print "$pkg $ver1 $ver2\n";
+	delete $pkg2{$pkg};
+}
+
+foreach my $pkg (sort keys %pkg2) {
+	print "$pkg <missing> $pkg2{$pkg}\n";
 }
