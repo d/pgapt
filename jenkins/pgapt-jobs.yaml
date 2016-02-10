@@ -511,8 +511,11 @@
 
         builders:
                 - shell: debcheck-pgapt
-        #publishers:
-        #        - ircbot: *only_configs
+        publishers:
+                - ircbot:
+                        strategy: statechange-only
+                        message-type: summary
+                        matrix-notifier: only-configurations
 
 - job:
         <<: *debcheck
