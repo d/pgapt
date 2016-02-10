@@ -853,7 +853,8 @@
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
         # needs libcgal-dev (in non-free on squeeze, in multiverse on precise, let's not care)
-        dist-filter: '(distribution!="precise") && (distribution!="squeeze")'
+        # dh_sphinxdoc fails on wheezy
+        dist-filter: '(distribution!="precise") && (distribution!="squeeze") && (distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
