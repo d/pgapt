@@ -833,8 +833,8 @@
                 - git-packages-with-next
 
 - project:
-        name: pg-reorg
-        git-url: git://anonscm.debian.org/pkg-postgresql/pg-reorg.git
+        name: pg-repack
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-repack.git
         jobs:
                 - git-packages-with-next
 
