@@ -769,6 +769,12 @@
                 - git-packages
 
 - project:
+        name: pg-backup-ctl
+        git-url: git://github.com/credativ/pg_backup_ctl.git
+        jobs:
+                - git-packages
+
+- project:
         name: pgbouncer
         git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
         jobs:
