@@ -59,6 +59,7 @@
                     - sid
                     - jessie
                     - wheezy
+                    - xenial
                     - wily
                     - trusty
                     - precise

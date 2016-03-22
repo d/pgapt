@@ -280,6 +280,53 @@ DscIndices: Sources Release .gz .bz2
 Tracking: all
 Contents: percomponent nocompatsymlink
 
+Codename: xenial-pgdg
+Suite: xenial-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.1 9.2 9.3 9.4 9.5
+SignWith: ACCC4CF8
+Log: xenial-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
+Codename: xenial-pgdg-testing
+Suite: xenial-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.1 9.2 9.3 9.4 9.5
+SignWith: ACCC4CF8
+Log: xenial-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
+Codename: xenial-pgdg-deprecated
+Suite: xenial-pgdg-deprecated
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386
+Components: main 9.1 9.2 9.3 9.4 9.5
+SignWith: ACCC4CF8
+Log: xenial-pgdg-deprecated.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
 Codename: wily-pgdg
 Suite: wily-pgdg
 Origin: apt.postgresql.org
