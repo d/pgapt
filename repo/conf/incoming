@@ -3,7 +3,6 @@ IncomingDir: /srv/apt/incoming
 TempDir: /srv/apt/repo/tmp
 LogDir: incoming-log
 Allow: sid-pgdg>sid-pgdg-testing
- stretch-pgdg>stretch-pgdg-testing
  jessie-pgdg>jessie-pgdg-testing
  wheezy-pgdg>wheezy-pgdg-testing
  squeeze-pgdg>squeeze-pgdg-testing
