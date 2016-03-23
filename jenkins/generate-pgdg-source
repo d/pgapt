@@ -216,31 +216,6 @@ case $PACKAGE in
 
   geos)
     DOT='~'
-    case ${distribution:-} in
-      squeeze) # squeeze's ruby1.8 package doesn't provide /usr/bin/ruby
-        sed -i -e "s/^Build-Depends: /Build-Depends: ruby, /" debian/control debian/control.in
-      ;;
-    esac
-    ;;
-
-  mimeo)
-    case ${distribution:-} in
-      squeeze) # pg_prove is in "pgtap" on squeeze
-        sed -i -e 's/libtap-parser-sourcehandler-pgtap-perl/pgtap/' debian/tests/control
-        ;;
-    esac
-    ;;
-
-  pgagent) # depend on all PostgreSQL versions, not just "postgresql"
-    for version in $(/usr/share/postgresql-common/supported-versions); do
-      sed -i -e "s/^Depends: /Depends: postgresql-$version, /" debian/tests/control
-    done
-    ;;
-
-  pgextwlist) # depend on all contrib packages
-    for version in $(/usr/share/postgresql-common/supported-versions); do
-      sed -i -e "s/^Depends: /Depends: postgresql-contrib-$version, /" debian/tests/control
-    done
     ;;
 
   pgpool2)
@@ -256,13 +231,6 @@ case $PACKAGE in
         echo "	dh_autoreconf" >> debian/rules
         ;;
     esac
-    ;;
-
-  pgrouting)
-    # 8.4 support is broken, remove it
-    if [ "$(cat debian/pgversions)" = "all" ]; then
-      echo "9.0+" > debian/pgversions
-    fi
     ;;
 
   postgis)
@@ -282,22 +250,6 @@ case $PACKAGE in
     esac
     ;;
 
-  postgresql-multicorn)
-    for version in $(/usr/share/postgresql-common/supported-versions); do
-      case $version in
-        8*|9.0|9.1) ;;
-        *)
-          # Add module (we can't use @) and -contrib dependencies
-          # Depends: postgresql-9.4-python-multicorn
-          sed -i -e "s/python-multicorn, /python-multicorn, postgresql-$version-python-multicorn, postgresql-plpython-$version, postgresql-contrib-$version, /" debian/tests/control
-          # Depends: postgresql-9.4-python3-multicorn
-          sed -i -e "s/python3-multicorn, /python3-multicorn, postgresql-$version-python3-multicorn, postgresql-plpython3-$version, postgresql-contrib-$version, /" debian/tests/control
-          ;;
-      esac
-    done
-    cat debian/tests/control
-    ;;
-
   psqlodbc)
     case ${distribution:-} in
       wheezy|precise|saucy|trusty) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
@@ -308,12 +260,10 @@ case $PACKAGE in
 
   skytools3)
     case ${distribution:-} in
-      squeeze|wheezy|lucid|precise) # remove dh_python2 dependency
+      squeeze|wheezy|lucid|precise)
+        # remove dh_python2 dependency
         sed -i -e 's/ dh-python,//' debian/control debian/control.in
-        ;;
-    esac
-    case ${distribution:-} in
-      squeeze|wheezy|lucid|precise) # rwitch to standard seqnencer
+        # switch to standard sequencer
         sed -i -e 's/ --with python2//' debian/rules
         ;;
     esac
@@ -321,14 +271,6 @@ case $PACKAGE in
 
 esac
 
-# lenny/lucid do not support xz compression
-case ${distribution:-} in
-  lenny|etch|lucid)
-    case $PACKAGE in
-      postgresql-?.?|postgresql-??.?) # dh_builddeb ... -- -Zxz
-        sed -i -e 's/ -Zxz//' debian/rules ;;
-    esac ;;
-esac
 
 # for binnmu-style rebuilds, add a "revision" parameter to the source job
 if [ "${revision:-}" ] ; then
