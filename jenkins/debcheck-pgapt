@@ -77,6 +77,8 @@ $DEBCHECK ${EXTRAFG:-} --bg $DISTSDIR/$DIST/main/binary-${architecture}/Packages
 for P in $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages; do
 	test -s $P && PKG="${PKG:-} $P"
 done
-$DEBCHECK --fg ${PKG:-} || EXIT=$?
+if [ "${PKG:-}" ]; then
+  $DEBCHECK --fg $PKG || EXIT=$?
+fi
 
 exit ${EXIT:-0}
