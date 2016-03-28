@@ -904,6 +904,8 @@
         name: plv8
         git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
         git-branch: debian
+        # uses -std=c++11
+        dist-filter: '(distribution!="precise")'
         jobs:
                 - git-packages-with-next
 
