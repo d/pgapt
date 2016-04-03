@@ -384,7 +384,8 @@
                 - archive: *binaries_archive
                 - junit:
                         results: autopkgtest.xml
-                - ircbot: *only_configs
+                - ircbot:
+                        message-type: summary-params
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
