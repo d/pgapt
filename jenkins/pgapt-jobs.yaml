@@ -55,7 +55,7 @@
     dist_axis: &dist_axis
             type: user-defined
             name: distribution
-            values:
+            values: &dist_list
                     - sid
                     - jessie
                     - wheezy
@@ -83,6 +83,15 @@
                             break;
                     }}
             }}
+    add_version_tag_plain: &add_version_tag_plain |
+            import java.util.regex.Matcher;
+            for (a in manager.build.getArtifacts()) {
+                    m = (a =~ /.*_(.*)\.dsc/);
+                    if (m.matches()) {
+                            manager.addShortText(m[0][1]);
+                            break;
+                    }
+            }
 
 # apt template
 
@@ -185,6 +194,46 @@
                           condition: SUCCESS
                           predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
+
+# build source for a single distribution
+
+- job:
+        <<: *apt_source_template
+        name: 'build-source'
+        description: 'Fetch source from an existing pkg-source/sid build and rebuild it for a different (usually new) distribution'
+        project-type: freestyle
+        concurrent: true
+        parameters:
+                - string: &package_parameter
+                        name: PACKAGE
+                        description: 'Package to rebuild source for (without -source suffix)'
+                - choice: &distribution_parameter
+                        name: distribution
+                        choices: *dist_list
+                        description: 'Distribution to build for'
+                - string: *revision_string
+                - choice: *queue_choice
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '$PACKAGE-source/distribution=sid'
+                        filter: 'result/*'
+                        flatten: true
+                - shell: 'generate-pgdg-source'
+        publishers:
+                - archive:
+                        artifacts: 'result/*'
+                        latest-only: true
+                - ircbot:
+                        matrix-notifier: only-parent
+                - trigger-parameterized-builds:
+                        - project: 'build-binaries'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                            PACKAGE=$PACKAGE
+                            distribution=$distribution
+                            queue=$queue
+                - groovy-postbuild: *add_version_tag_plain
 
 # binaries template
 
@@ -302,6 +351,49 @@
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
                 - shell: 'DEB_PG_SUPPORTED_VERSIONS="9.6" sbuild-package'
+
+# binaries building from "build-source"
+
+- job:
+        <<: *binaries_template
+        name: 'build-binaries'
+        concurrent: true
+        parameters:
+                - string: *package_parameter
+                - choice: *distribution_parameter
+                - bool:
+                        name: BACKPORTS
+                        description: 'Include backports repository in build chroot'
+                - choice: *queue_choice
+                - choice: *upload_choice
+        execution-strategy:
+                touchstone:
+                        expr: 'architecture=="amd64"'
+        axes:
+                - axis: *arch_axis
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: 'build-source'
+                        filter: 'result/*'
+                        flatten: true
+                        which-build: upstream-build
+                        fallback-to-last-successful: true
+                - shell: 'sbuild-package'
+        publishers:
+                - archive: *binaries_archive
+                - junit:
+                        results: autopkgtest.xml
+                - ircbot: *only_configs
+                - trigger-parameterized-builds:
+                        - project: 'dput'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                binaries=$JOB_NAME
+                                queue=$queue
+                                upload=$upload
+                - groovy-postbuild: *add_version_tag_plain
+                - workspace-cleanup
 
 # testsuite template
 

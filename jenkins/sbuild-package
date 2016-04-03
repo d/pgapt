@@ -31,7 +31,9 @@ error () {
 chroot="chroot:$distribution-pgdg-$architecture-sbuild"
 
 # find dsc to build
-PACKAGE="${JOB_NAME%%-binaries*}"
+if [ -z "${PACKAGE:-}" ]; then
+  PACKAGE="${JOB_NAME%%-binaries*}"
+fi
 set -- ${PACKAGE}_*.dsc
 DSC="$1"
 [ "${2:-}" ] && error "There is more than one \${PACKAGE}_*.dsc in $PWD"

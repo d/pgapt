@@ -23,6 +23,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+set -e
+set -u
+
+if [ -z "${PACKAGE:-}" ]; then
+  PACKAGE="${JOB_NAME%-source*}"
+fi
+
+echo "PACKAGE=$PACKAGE"
 echo "BUILD_NUMBER=${BUILD_NUMBER:-}"
 echo "JOB_NAME=${JOB_NAME:-}"
 echo "GIT_COMMIT=${GIT_COMMIT:-}"
@@ -35,8 +43,6 @@ echo "merge=${merge:-}"
 echo "revision=${revision:-}"
 
 set -x
-set -e
-set -u
 
 # which PostgreSQL major version to pull libpq et al. from (should be last stable release)
 PGLIBVER="9.5"
@@ -47,48 +53,43 @@ PGLIBVER_SID="9.5"
 
 export PG_SUPPORTED_VERSIONS="pgdg"
 
-if [ -z "${BUILD_NUMBER:-}" ] ; then
-  echo "No BUILD_NUMBER defined, please run it in jenkins." >&2
-  exit 1
-fi
-
-PACKAGE=${JOB_NAME%-source*}
-if [ "$PACKAGE" = "$JOB_NAME" ] ; then
-  echo "JOB_NAME $JOB_NAME does not end with -source" >2
-  exit 1
-fi
-
 REVERTS="debian/changelog debian/control debian/rules"
 
 if [ "${GIT_COMMIT:-}" ]; then
   VCS=git
-  VCS_REVISION=$GIT_COMMIT
-  VCS_REVERT=checkout
+  VCS_REVISION="git revision $GIT_COMMIT"
+  VCS_REVERT="git checkout"
   # building in 'source'
   cd source
   RESULT=../result
 elif [ "${BZR_REVISION:-}" ] ; then
   VCS=bzr
-  VCS_REVISION=$BZR_REVISION
-  VCS_REVERT=revert
+  VCS_REVISION="bzr revision $BZR_REVISION"
+  VCS_REVERT="bzr revert"
   # building in '.'
   RESULT=result
 elif [ "${SVN_REVISION:-}" ] ; then
   VCS=svn
-  VCS_REVISION=$SVN_REVISION
-  VCS_REVERT=revert
+  VCS_REVISION="svn version $SVN_REVISION"
+  VCS_REVERT="svn revert"
   # building in 'source'
   cd source
   RESULT=../result
-else
-  echo "Using apt-get source"
+elif [ "${apt_suite:-}" ] ; then
   rm -rf $PACKAGE* source
-  apt-get source -d $PACKAGE${apt_suite:+/$apt_suite}
-  dpkg-source -x $PACKAGE*.dsc
-  mv $PACKAGE-*/ source
-  VCS=apt-get
-  VCS_REVISION="sid"
-  VCS_REVERT=moo # apt-get noop :)
+  apt-get source -d $PACKAGE/$apt_suite
+  dpkg-source -x $PACKAGE*.dsc source
+  VCS=debian
+  VCS_REVISION="Debian $apt_suite source rebuild"
+  VCS_REVERT=":"
+  cd source
+  RESULT=../result
+else # use source package in current directory
+  rm -rf source
+  dpkg-source -x $PACKAGE*.dsc source
+  VCS="dsc"
+  VCS_REVISION="source rebuild"
+  VCS_REVERT=":"
   cd source
   RESULT=../result
 fi
@@ -108,7 +109,7 @@ fi
 # clean up behind a possibly broken last job
 cleanup () {
   [ "${NO_ORIGTARGZ:-}" ] && QUILT_PATCHES=debian/patches quilt pop -a
-  $VCS $VCS_REVERT $REVERTS || :
+  $VCS_REVERT $REVERTS || :
 }
 trap "cleanup" 0 2 3 15
 cleanup
@@ -307,7 +308,7 @@ fi
 VERSION_STRING="$BASE_VERSION$SUFFIX${DOT:-.}$PGDG_DISTRIBUTION$PGDG_REVISION"
 dch --force-distribution --distribution="$distribution-pgdg" \
   --release-heuristic log -b --newversion=$VERSION_STRING -- \
-  "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS revision $VCS_REVISION)"
+  "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS_REVISION)"
 
 [ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs -d
 
