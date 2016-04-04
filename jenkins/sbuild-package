@@ -71,7 +71,7 @@ case $distribution in
 esac
 
 # enable backports
-if [ "${BACKPORTS:-}" ]; then
+if [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
   deb="http://deb/debian"
   case $(hostname) in
     pgdg*) # use local cache on build host
