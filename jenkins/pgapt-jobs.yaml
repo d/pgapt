@@ -86,7 +86,7 @@
     add_version_tag_plain: &add_version_tag_plain |
             import java.util.regex.Matcher;
             for (a in manager.build.getArtifacts()) {
-                    m = (a =~ /.*([^\/]*)\.dsc/);
+                    m = (a =~ /.*\/(.*)\.dsc/);
                     if (m.matches()) {
                             manager.addShortText(m[0][1]);
                             break;
