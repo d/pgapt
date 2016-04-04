@@ -86,7 +86,7 @@
     add_version_tag_plain: &add_version_tag_plain |
             import java.util.regex.Matcher;
             for (a in manager.build.getArtifacts()) {
-                    m = (a =~ /(.*)\.dsc/);
+                    m = (a =~ /([^\/]*)\.dsc/);
                     if (m.matches()) {
                             manager.addShortText(m[0][1]);
                             break;
@@ -225,7 +225,7 @@
                         artifacts: 'result/*'
                         latest-only: true
                 - ircbot:
-                        matrix-notifier: only-parent
+                        message-type: summary-params
                 - trigger-parameterized-builds:
                         - project: 'build-binaries'
                           condition: SUCCESS
@@ -385,8 +385,7 @@
                 - archive: *binaries_archive
                 - junit:
                         results: autopkgtest.xml
-                - ircbot:
-                        message-type: summary-params
+                - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
