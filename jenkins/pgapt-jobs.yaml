@@ -390,7 +390,10 @@
                 - archive: *binaries_archive
                 - junit:
                         results: autopkgtest.xml
-                - ircbot: *only_configs
+                - ircbot:
+                    strategy: any-failure
+                    message-type: summary-params
+                    matrix-notifier: only-configurations
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
