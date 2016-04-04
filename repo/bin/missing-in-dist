@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eu
+
+BINDIR=$(dirname $0)
+DISTS=$BINDIR/../dists
+DIST="$1"
+
+$BINDIR/diff-dists -f \
+	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2) \
+	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2)

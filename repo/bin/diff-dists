@@ -38,14 +38,16 @@ while (<S1>) {
 close S1;
 
 foreach my $pkg (sort keys %pkg1) {
-	my $ver1 = $pkg1{$pkg};
+	my $ver1 = my $ver1mangled = $pkg1{$pkg};
+	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	if (not exists $pkg2{$pkg}) {
 		print "$pkg $ver1 <missing>\n" if ($fulldiff);
 		next;
 	}
 
-	my $ver2 = $pkg2{$pkg};
-	if ($ver1 eq $ver2 or $ver2 =~ /^\Q$ver1\E[.~]pgdg\+\d$/) {
+	my $ver2 = my $ver2mangled = $pkg2{$pkg};
+	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
+	if ($ver1 eq $ver2 or $ver1 eq $ver2mangled or $ver1mangled eq $ver2mangled) {
 		#print "OK: $pkg $ver1 $ver2\n";
 		delete $pkg2{$pkg};
 		next;
