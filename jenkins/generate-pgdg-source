@@ -57,20 +57,20 @@ REVERTS="debian/changelog debian/control debian/rules"
 
 if [ "${GIT_COMMIT:-}" ]; then
   VCS=git
-  VCS_REVISION="git revision $GIT_COMMIT"
+  VCS_REVISION="$GIT_COMMIT/git"
   VCS_REVERT="git checkout"
   # building in 'source'
   cd source
   RESULT=../result
 elif [ "${BZR_REVISION:-}" ] ; then
   VCS=bzr
-  VCS_REVISION="bzr revision $BZR_REVISION"
+  VCS_REVISION="$BZR_REVISION/bzr"
   VCS_REVERT="bzr revert"
   # building in '.'
   RESULT=result
 elif [ "${SVN_REVISION:-}" ] ; then
   VCS=svn
-  VCS_REVISION="svn version $SVN_REVISION"
+  VCS_REVISION="$SVN_REVISION/svn"
   VCS_REVERT="svn revert"
   # building in 'source'
   cd source
