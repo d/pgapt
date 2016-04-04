@@ -5,9 +5,9 @@
     description: 'Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
     logrotate:
         daysToKeep: -1
-        numToKeep: 2
+        numToKeep: 5
         artifactDaysToKeep: -1
-        artifactNumToKeep: -1
+        artifactNumToKeep: 1
     wrappers:
         - timestamps
     dist-filter: ''
