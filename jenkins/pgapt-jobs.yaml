@@ -202,6 +202,9 @@
         name: 'build-source'
         description: 'Fetch source from an existing pkg-source/sid build and rebuild it for a different (usually new) distribution'
         project-type: freestyle
+        logrotate: &logrotate_build
+          numToKeep: 5
+          artifactNumToKeep: 5
         concurrent: true
         parameters:
                 - string: &package_parameter
@@ -358,6 +361,7 @@
 - job:
         <<: *binaries_template
         name: 'build-binaries'
+        logrotate: *logrotate_build
         concurrent: true
         parameters:
                 - string: *package_parameter
