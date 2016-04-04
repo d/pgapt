@@ -203,8 +203,8 @@
         description: 'Fetch source from an existing pkg-source/sid build and rebuild it for a different (usually new) distribution'
         project-type: freestyle
         logrotate: &logrotate_build
-          numToKeep: 5
-          artifactNumToKeep: 5
+          numToKeep: 50
+          artifactNumToKeep: 10
         concurrent: true
         parameters:
                 - string: &package_parameter
@@ -228,6 +228,7 @@
                         artifacts: 'result/*'
                         latest-only: true
                 - ircbot:
+                        strategy: any-failure
                         message-type: summary-params
                 - trigger-parameterized-builds:
                         - project: 'build-binaries'
