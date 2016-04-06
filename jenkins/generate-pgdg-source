@@ -310,7 +310,7 @@ dch --force-distribution --distribution="$distribution-pgdg" \
   --release-heuristic log -b --newversion=$VERSION_STRING -- \
   "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS_REVISION)"
 
-[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs -d
+[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs --unpack
 
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
