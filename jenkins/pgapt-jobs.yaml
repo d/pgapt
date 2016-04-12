@@ -767,6 +767,12 @@
                 - git-packages
 
 - project:
+        name: bucardo
+        git-url: git://anonscm.debian.org/pkg-postgresql/bucardo.git
+        jobs:
+                - git-packages
+
+- project:
         name: barman
         git-url: git://git.debian.org/collab-maint/barman.git
         jobs:
