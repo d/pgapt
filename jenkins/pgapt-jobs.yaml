@@ -785,6 +785,13 @@
                 - git-packages
 
 - project:
+        name: citus
+        git-url: https://github.com/citusdata/packaging.git
+        git-branch: debian
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: gdal
         # sid and trusty are current enough
         apt-suite: ??
