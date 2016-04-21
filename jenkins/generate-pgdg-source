@@ -49,7 +49,7 @@ PGLIBVER="9.5"
 # which libpq version to use in sid (latest beta)
 PGLIBVER_SID="9.5"
 
-[ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <myon@debian.org>"
+[ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"
 
 export PG_SUPPORTED_VERSIONS="pgdg"
 
