@@ -74,7 +74,8 @@
             message-type: summary
             matrix-notifier: only-configurations
 
-    add_version_tag: &add_version_tag |
+    add_version_tag: &add_version_tag
+        script: |
             import java.util.regex.Matcher;
             for (a in manager.build.getArtifacts()) {{
                     m = (a =~ /.*_(.*)\.dsc/);
@@ -83,7 +84,8 @@
                             break;
                     }}
             }}
-    add_version_tag_plain: &add_version_tag_plain |
+    add_version_tag_plain: &add_version_tag_plain
+        script: |
             import java.util.regex.Matcher;
             for (a in manager.build.getArtifacts()) {
                     m = (a =~ /(.*)\.dsc/);
@@ -670,7 +672,8 @@
                 - ircbot:
                         matrix-notifier: all
                         message-type: summary-params
-                - groovy-postbuild: &dput_groovy 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue}, ${manager.build.environment.upload})")'
+                - groovy-postbuild: &dput_groovy
+                        script: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue}, ${manager.build.environment.upload})")'
 
 # variant of dput that handles each configuration separately
 # (needed after using matrixreloaded on build jobs)
