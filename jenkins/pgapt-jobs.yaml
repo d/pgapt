@@ -173,7 +173,8 @@
                 - choice: *queue_choice
                 - choice: *buildtype_choice
         triggers:
-                - pollscm: "H */6 * * *"
+                - pollscm:
+                        cron: "H */6 * * *"
         axes:
                 - axis: *sid_only_axis
         scm:
@@ -748,7 +749,8 @@
                                 - master
                         wipe-workspace: false
         triggers:
-                - pollscm: "H */6 * * *"
+                - pollscm:
+                        cron: "H */6 * * *"
 
 # project jobs
 
