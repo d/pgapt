@@ -152,7 +152,8 @@
                                 - '$branch'
                         basedir: source
                         wipe-workspace: false
-                        recursive-submodules: true
+                        submodule:
+                                recursive: true
                         clean:
                                 before: true
 
