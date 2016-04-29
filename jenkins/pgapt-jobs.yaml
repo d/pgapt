@@ -879,9 +879,9 @@
 
 - project:
         name: pgbadger
-        apt-suite: unstable
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgbadger.git
         jobs:
-                - apt-packages
+                - git-packages
 
 - project:
         name: pgbackman
