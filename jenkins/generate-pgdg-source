@@ -176,11 +176,11 @@ esac
 
 # tweaks to get packages in older dists working
 case $PACKAGE in
-  postgresql-9.5)
+  postgresql-9.[56])
     case ${distribution:-} in
       wheezy|squeeze|precise)
-        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-9.5.install
-        REVERTS="$REVERTS debian/postgresql-contrib-9.5.install"
+        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-9.?.install
+        REVERTS="$REVERTS debian/postgresql-contrib-9.?.install"
         ;;
     esac
     ;;
