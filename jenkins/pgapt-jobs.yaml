@@ -1091,6 +1091,14 @@
                 - git-packages-adt
         next-job: 'postgresql-9.5-testsuite'
 
+- project:
+        name: postgresql-9.6
+        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-branch: 9.6
+        jobs:
+                - git-packages-adt
+        next-job: 'postgresql-9.6-testsuite'
+
 # the PostgreSQL devel versions:
 #- project:
 #        name: postgresql-9.4-devel
