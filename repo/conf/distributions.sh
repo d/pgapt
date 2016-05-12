@@ -8,22 +8,34 @@ for DIST in $DISTRIBUTIONS ; do
 	for FLAVOR in $FLAVORS ; do
 		D="$DIST-$FLAVOR"
 		case $DIST in
+			# Debian
 			lenny|etch)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2" ;;
-			lucid)
-				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
-			saucy)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
-			utopic|trusty)
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
-			wheezy|squeeze|precise)
+			squeeze)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
+			wheezy)
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			jessie)
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
-			stretch|xenial|wily)
-				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5" ;;
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+			stretch)
+				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			sid)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+			# Ubuntu
+			lucid)
+				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
+			precise)
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+			saucy)
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
+			trusty)
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+			utopic)
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
+			wily)
+				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+			xenial)
+				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
 				exit 1 ;;

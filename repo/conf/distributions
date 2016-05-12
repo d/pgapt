@@ -50,7 +50,7 @@ Suite: jessie-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: jessie-pgdg.log
 Uploaders: uploaders
@@ -65,7 +65,7 @@ Suite: jessie-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: jessie-pgdg-testing.log
 Uploaders: uploaders
@@ -82,7 +82,7 @@ Suite: jessie-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: jessie-pgdg-deprecated.log
 Uploaders: uploaders
@@ -97,7 +97,7 @@ Suite: wheezy-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wheezy-pgdg.log
 Uploaders: uploaders
@@ -112,7 +112,7 @@ Suite: wheezy-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wheezy-pgdg-testing.log
 Uploaders: uploaders
@@ -129,7 +129,7 @@ Suite: wheezy-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wheezy-pgdg-deprecated.log
 Uploaders: uploaders
@@ -285,7 +285,7 @@ Suite: xenial-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: xenial-pgdg.log
 Uploaders: uploaders
@@ -300,7 +300,7 @@ Suite: xenial-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: xenial-pgdg-testing.log
 Uploaders: uploaders
@@ -317,7 +317,7 @@ Suite: xenial-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: xenial-pgdg-deprecated.log
 Uploaders: uploaders
@@ -332,7 +332,7 @@ Suite: wily-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wily-pgdg.log
 Uploaders: uploaders
@@ -347,7 +347,7 @@ Suite: wily-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wily-pgdg-testing.log
 Uploaders: uploaders
@@ -364,7 +364,7 @@ Suite: wily-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: wily-pgdg-deprecated.log
 Uploaders: uploaders
@@ -426,7 +426,7 @@ Suite: trusty-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: trusty-pgdg.log
 Uploaders: uploaders
@@ -441,7 +441,7 @@ Suite: trusty-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: trusty-pgdg-testing.log
 Uploaders: uploaders
@@ -458,7 +458,7 @@ Suite: trusty-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: trusty-pgdg-deprecated.log
 Uploaders: uploaders
@@ -520,7 +520,7 @@ Suite: precise-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: precise-pgdg.log
 Uploaders: uploaders
@@ -535,7 +535,7 @@ Suite: precise-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: precise-pgdg-testing.log
 Uploaders: uploaders
@@ -552,7 +552,7 @@ Suite: precise-pgdg-deprecated
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: precise-pgdg-deprecated.log
 Uploaders: uploaders
