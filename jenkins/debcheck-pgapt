@@ -78,7 +78,9 @@ for P in $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages; do
 	test -s $P && PKG="${PKG:-} $P"
 done
 if [ "${PKG:-}" ]; then
-  $DEBCHECK --fg $PKG || EXIT=$?
+  $DEBCHECK \
+    --bg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+    --fg $PKG || EXIT=$?
 fi
 
 exit ${EXIT:-0}
