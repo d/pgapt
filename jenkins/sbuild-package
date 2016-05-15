@@ -91,7 +91,12 @@ export DEB_BUILD_OPTIONS="parallel=1"
 export DEB_PG_SUPPORTED_VERSIONS
 
 if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
+  # extra build dependencies
   ADD_DEPENDS="--add-depends=postgresql-server-dev-$DEB_PG_SUPPORTED_VERSIONS --chroot-setup-commands=sbuild-pgdg-components"
+  case $PACKAGE in
+    postgis)
+      ADD_DEPENDS="$ADD_DEPENDS --add-depends=postgresql-$DEB_PG_SUPPORTED_VERSIONS" ;;
+  esac
 fi
 
 # prepare temp file for adt-run results
