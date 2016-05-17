@@ -798,6 +798,14 @@
                 - git-packages-with-next
 
 - project:
+        name: dh-exec
+        # backport 0.14 from jessie to older dists
+        apt-suite: jessie
+        dist-filter: '(distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty")'
+        jobs:
+                - apt-packages
+
+- project:
         name: gdal
         # sid and trusty are current enough
         apt-suite: ??

@@ -199,7 +199,7 @@ case $PACKAGE in
     esac
     ;;
 
-  autopkgtest|libdbd-pg-perl)
+  autopkgtest|dh-exec|libdbd-pg-perl)
     DOT='~' ;;
 
   pgloader|bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader and build-deps
