@@ -85,6 +85,9 @@ umask 002
 	  fi
 	fi
 
+	# tell ucf not to ask any questions
+	export UCF_FORCE_CONFFNEW=y UCF_FORCE_CONFFMISS=y
+
 	apt-get update
 
 	# save backports lists
