@@ -22,7 +22,7 @@ for dist in $DISTS; do
 			source-root-groups=sbuild
 			directory=/home/chroot/$dist-$arch
 			union-type=overlay
-			union-overlay-directory=/dev/shm
+			union-overlay-directory=/var/run
 			EOF
 			[ $arch = i386 ] && echo "personality=linux32"
 			echo
