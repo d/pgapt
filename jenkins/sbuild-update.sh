@@ -107,5 +107,10 @@ umask 002
 	apt-get clean
 	
 	dpkg -l 'libpq*' 'newpid' 'pgdg*' 'postgresql*' || :
+
+	# don't create any cluster on PostgreSQL installation
+	grep -q '^create_main_cluster = false' /etc/postgresql-common/createcluster.conf || sed -i -e 's/.*create_main_cluster.*/create_main_cluster = false/' /etc/postgresql-common/createcluster.conf
+
+	:
 	EOF
 ) 9> $LOCKDIR/$distribution-$architecture.lock
