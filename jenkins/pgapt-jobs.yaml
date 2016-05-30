@@ -1302,6 +1302,13 @@
                 - git-packages-with-next
 
 - project:
+        name: sqlsmith
+        git-url: https://github.com/ChristophBerg/sqlsmith.git
+        git-branch: debian
+        jobs:
+                - git-packages
+
+- project:
         name: wal-e
         git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
         # needs python-swiftclient
