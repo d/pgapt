@@ -1305,6 +1305,8 @@
         name: sqlsmith
         git-url: https://github.com/ChristophBerg/sqlsmith.git
         git-branch: debian
+        # needs libpqxx 4
+        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
         jobs:
                 - git-packages
 
