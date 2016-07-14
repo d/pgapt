@@ -916,6 +916,12 @@
                 - git-packages
 
 - project:
+        name: pgcluu
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgcluu.git
+        jobs:
+                - git-packages
+
+- project:
         name: pgdg-buildenv
         git-url: git://git.postgresql.org/git/pgapt.git
         jobs:
