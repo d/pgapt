@@ -1222,6 +1222,12 @@
                 - git-packages-with-next
 
 - project:
+        name: postgresql-unit
+        git-url: https://github.com/ChristophBerg/postgresql-unit.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: powa-archivist
         git-url: https://github.com/credativ/powa-archivist.git
         git-branch: debian
