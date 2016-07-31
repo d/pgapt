@@ -1,0 +1,47 @@
+#!/bin/sh
+
+set -eu
+
+cd /srv/apt/repo/morgue
+
+move_file ()
+{
+  file="$1"
+  source="$2"
+
+  # sanity checks
+  [ -f "$file" ]
+  [ "$source" ]
+  [ "$file" != "$source" ]
+
+  initial=$(echo $source | egrep -o '^(lib)?.')
+  mkdir -pv "$initial/$source"
+  mv -v $1 $initial/$source
+}
+
+for f in *.dsc *.diff.gz *.tar.*; do
+  [ -f "$f" ] || continue
+  source=${f%%_*}
+  move_file $f $source
+  update=1
+done
+
+for f in *.deb; do
+  [ -f "$f" ] || continue
+  source=$(dpkg-deb -I $f control | awk '/^Source:/ { print $2 }')
+  [ -z "$source" ] && source=${f%%_*}
+  move_file $f $source
+  update=1
+done
+
+if [ "${update:-}" ]; then
+  # build new indices
+  apt-ftparchive -qq --db ../apt-ftparchive/packages.db packages . | xz > .Packages.xz.new
+  apt-ftparchive -qq --db ../apt-ftparchive/sources.db sources . 2>/dev/null | xz > .Sources.xz.new # suppress warnings about missing .orig.tar files etc.
+  mv .Packages.xz.new Packages.xz
+  mv .Sources.xz.new Sources.xz
+  # build new release
+  rm -f Release
+  apt-ftparchive -qq release . > .Release.new
+  mv .Release.new Release
+fi
