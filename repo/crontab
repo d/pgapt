@@ -6,4 +6,4 @@ MAILTO=cb@df7cb.de
 0 0 * * *  /srv/apt/apt.postgresql.org/repo/apt-stats
 
 # move morgue files into pool directories
-16 * * * *  /srv/apt/apt.postgresql.org/repo/morguefiles-to-pool
+16 * * * *  /srv/apt/apt.postgresql.org/repo/bin/morguefiles-to-pool
