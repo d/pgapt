@@ -603,6 +603,8 @@
         name: 'debcheck'
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
+        logrotate:
+                numToKeep: 20
         child-workspace: .
         axes:
                 - axis: *dist_axis
