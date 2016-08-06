@@ -1,29 +1,49 @@
 #!/bin/sh
 
+# expected parameters:
+#   distribution (without -pgdg)
+#   architecture
+#   stage (testing or production)
+# expected directories: chroots in /home/chroot
+# needs dose3 >= 4
+
 set -eu
 
-LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
-HOMEDIR="/home/jenkins"
-DISTSDIR="$HOMEDIR/dists"
-PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
+error () {
+  echo "Error: $@" >&2
+  exit 2
+}
 
+: ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
+
+LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
+[ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
+HOMEDIR="/home/jenkins"
+
+# where to find packages.backports
+PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
 test -d $PGAPTDIR && cd $PGAPTDIR
+
+if [ -d ../repo/dists ]; then
+  DISTSDIR="../repo/dists"
+elif [ -d "$HOMEDIR/dists" ]; then
+  DISTSDIR="$HOMEDIR/dists"
+else
+  error "No dists directory found."
+fi
 
 case $stage in
 	production) DIST="$distribution-pgdg" ;;
 	testing)    DIST="$distribution-pgdg-testing" ;;
-	*) echo "Bad stage $stage" ; exit 1 ;;
+	*) error "Bad stage $stage" ;;
 esac
 
-trap 'rm -f ${TMPPKG:-} ${MAINPKG:-} ${BPOPKG:-}' 0 2 3 15
+trap 'rm -f ${MAINPKG:-} ${BPOPKG:-}' 0 2 3 15
 
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
-	[ -f "$FILE" ] || continue
-	# work around dose-debcheck dying on a Python_ field
-	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
-	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
-	EXTRABG="--bg $TMPPKG"
+  [ -f "$FILE" ] || continue
+  EXTRABG="--bg $FILE"
 done
 
 # include latest N.N components on sid

@@ -1,27 +1,47 @@
 #!/bin/sh
 
+# expected parameters:
+#   distribution (without -pgdg)
+#   architecture
+#   stage (testing or production)
+# expected directories: chroots in /home/chroot
+# needs dose3 >= 4
+
 set -eu
 
+error () {
+  echo "Error: $@" >&2
+  exit 2
+}
+
+: ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
+
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
+[ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
 BPODIR="/home/chroot/$distribution-$architecture/var/lib/apt/backports"
 HOMEDIR="/home/jenkins"
-DISTSDIR="$HOMEDIR/dists"
-PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
 
+# where to find packages.backports
+PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
 test -d $PGAPTDIR && cd $PGAPTDIR
+
+if [ -d ../repo/dists ]; then
+  DISTSDIR="../repo/dists"
+elif [ -d "$HOMEDIR/dists" ]; then
+  DISTSDIR="$HOMEDIR/dists"
+else
+  error "No dists directory found."
+fi
 
 # main package list
 PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
-trap 'rm -f ${TMPPKG:-} ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
+trap 'rm -f ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
 
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
-	[ -f "$FILE" ] || continue
-	# work around dose-debcheck dying on a Python_ field
-	TMPPKG=$(mktemp ${distribution}_universe_binary-${architecture}_Packages.XXXXXX)
-	sed -e 's/^Python_/Python-/' $FILE > $TMPPKG
-	PKG="$PKG $TMPPKG"
+  [ -f "$FILE" ] || continue
+  PKG="$PKG $FILE"
 done
 
 # packages not depending on backports
@@ -30,6 +50,7 @@ zcat $DISTSDIR/$distribution-pgdg-testing/main/source/Sources.gz > $MAINSRC
 
 case $distribution in
   squeeze|wheezy|jessie)
+    [ -f packages.backports ] || error "packages.backports not found"
     for pkg in $(cat packages.backports); do
       grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
       mv $MAINSRC.tmp $MAINSRC
@@ -43,6 +64,7 @@ case $distribution in
     done
 
     # include backports on debian
+    [ -d "$BPODIR" ] || error "$BPODIR not found"
     for FILE in $BPODIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
       [ -f "$FILE" ] || continue
       BPO="$FILE"
@@ -61,7 +83,7 @@ case $stage in
 		DIST="$distribution-pgdg-testing"
 		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
 		;;
-	*) echo "Bad stage $stage" ; exit 1 ;;
+	*) error "Bad stage $stage" ;;
 esac
 
 set -x
