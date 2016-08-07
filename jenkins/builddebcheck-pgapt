@@ -77,6 +77,7 @@ case $stage in
 	production)
 		DIST="$distribution-pgdg"
 		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
+		# -pgdg packages may use -pgdg -testing for building
 		PKG="$PKG $DISTSDIR/$DIST-testing/main/binary-${architecture}/Packages"
 		;;
 	testing)
@@ -86,13 +87,26 @@ case $stage in
 	*) error "Bad stage $stage" ;;
 esac
 
-set -x
-
 # run builddebcheck
-dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
-	$PKG $MAINSRC || EXIT=1
-test -s "${BPO:-}" && { \
-dose-builddebcheck -v -f -e --deb-native-arch=$architecture \
-	$PKG $BPO $BPOSRC || EXIT=1 ; }
+BUILDDEBCHECK="dose-builddebcheck -v -f -e --deb-native-arch=$architecture"
+
+echo "### Running builddebcheck: main, packages not needing backports"
+( set -x; $BUILDDEBCHECK $PKG $MAINSRC ) || EXIT=1
+echo
+
+if test -s "${BPO:-}"; then
+  echo "### Running builddebcheck: main, packages needing backports"
+  grep '^Package:' $BPOSRC
+  ( set -x; $BUILDDEBCHECK $PKG $BPO $BPOSRC ) || EXIT=1
+  echo
+fi
+
+for component in $DISTSDIR/$DIST/?.?/source/Sources.gz; do
+  [ $(zcat $component | wc -c) = 0 ] && continue # skip empty file
+  echo "### Running builddebcheck: $component"
+  zcat $component | grep '^Package:'
+  ( set -x; $BUILDDEBCHECK $PKG $component ) || EXIT=1
+  echo
+done
 
 exit ${EXIT:-0}
