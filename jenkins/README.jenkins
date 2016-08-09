@@ -11,4 +11,5 @@ IRC Plugin
 Parameterized Trigger Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
+Throttle Concurrent Builds Plug-in
 Timestamper Plugin

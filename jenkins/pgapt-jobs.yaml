@@ -69,6 +69,14 @@
             name: distribution
             values: [sid]
 
+    throttle_by_category: &throttle_by_category
+      throttle:
+        option: category
+        categories:
+          - build-jobs
+        matrix-builds: false
+        matrix-configs: true
+
     ircbot_only_configs: &only_configs
             strategy: any-failure
             message-type: summary
@@ -257,6 +265,8 @@
                 combination-filter: '{dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
+        properties:
+                - *throttle_by_category
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
@@ -423,6 +433,8 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        properties:
+                - *throttle_by_category
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -480,6 +492,8 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        properties:
+                - *throttle_by_category
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -616,6 +630,8 @@
                                 - production
                                 - testing
 
+        properties:
+                - *throttle_by_category
         builders:
                 - shell: debcheck-pgapt
         publishers:
@@ -643,6 +659,8 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        properties:
+                - *throttle_by_category
         triggers:
                 - timed: "H */6 * * *"
         builders:
@@ -740,6 +758,8 @@
                         type: user-defined
                         name: distribution
                         values: [wheezy]
+        properties:
+                - *throttle_by_category
         builders:
                 - shell: 'sudo cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
 
