@@ -1,0 +1,14 @@
+Jenkins
+=======
+
+Plugins required
+----------------
+Copy Artifact Plugin
+Git Plugin
+Green Balls Plugin
+Groovy Postbuild Plugin
+IRC Plugin
+Parameterized Trigger Plugin
+Reverse Proxy Auth Plugin
+SCM Sync Plugin
+Timestamper Plugin

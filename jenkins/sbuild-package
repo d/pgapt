@@ -119,7 +119,7 @@ NEWPID="newpid -iuN newpid$distribution$BITS"
 
 # build package and run autopkgtests inside the chroot
 (
-  echo "Bulding $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
+  echo "Building $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9
   ${NEWPID:-} \
