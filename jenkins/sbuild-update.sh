@@ -9,10 +9,11 @@ error () {
 
 # use "default" chroot here ("sbuild" doesn't get /etc/hosts copied)
 chroot="source:$distribution-$architecture"
+chroot_path="/home/chroot/$distribution-$architecture"
 
-# check if chroot exists
+# check if chroot is configured in sbuild
 schroot -l | grep -q $chroot || \
-  error "There is no schroot definition for $chroot"
+  error "There is no schroot definition for $chroot (run schroot-config.sh first)"
 
 apt1="http://apt.postgresql.org/pub/repos/apt"
 apt2="http://atalia.postgresql.org/pub/repos/apt"
@@ -36,6 +37,12 @@ case $distribution in
   wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
 esac
 
+# mirror to use for debootstrap
+case $distribution in
+  precise|trusty|wily|xenial) mirror="$ubuntu" ;;
+  *) mirror="$deb" ;;
+esac
+
 PGDG_SH=$(mktemp /var/tmp/pgdg.XXXXXX.sh)
 trap "rm -f $PGDG_SH" 0 2 3 15
 cat < /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh > $PGDG_SH
@@ -53,7 +60,15 @@ umask 002
 (
   cd /
   set -x
-  flock --exclusive 9
+  flock --exclusive 9 # lock against concurrent access
+
+  # create chroot if it doesn't exist yet
+  if ! test -d $chroot_path; then
+    echo "Creating chroot in $chroot_path"
+    sudo debootstrap --variant=buildd --arch=$architecture $distribution $chroot_path $mirror
+  fi
+
+  # do the update
   schroot -u root -c $chroot -- sh <<-EOF
 	set -ex
 	
