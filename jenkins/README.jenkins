@@ -3,6 +3,7 @@ Jenkins
 
 Plugins required
 ----------------
+Collapsing Console Sections Plugin
 Copy Artifact Plugin
 Git Plugin
 Green Balls Plugin
@@ -12,3 +13,11 @@ Parameterized Trigger Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
 Timestamper Plugin
+
+Collapsing Console Sections Plugin config for sbuild logs
+---------------------------------------------------------
+Section name:        {1}
+Section starts with: ^\| (.+[a-z])  +\|$
+Section ends with:   ^\+------------------------------------------------------------------------------\+$
+(One-per-line ending: doesn't matter)
+
