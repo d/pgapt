@@ -8,6 +8,9 @@
         numToKeep: 5
         artifactDaysToKeep: -1
         artifactNumToKeep: 1
+    properties:
+        - copyartifact:
+            projects: '*'
     wrappers:
         - timestamps
     dist-filter: ''
