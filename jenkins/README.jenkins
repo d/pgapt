@@ -10,6 +10,7 @@ Green Balls Plugin
 Groovy Postbuild Plugin
 IRC Plugin
 Parameterized Trigger Plugin
+Priority Sorter Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
 Timestamper Plugin
@@ -20,4 +21,18 @@ Section name:        {1}
 Section starts with: ^\| (.+[a-z])  +\|$
 Section ends with:   ^\+------------------------------------------------------------------------------\+$
 (One-per-line ending: doesn't matter)
+
+Priority Sorter Plugin config
+-----------------------------
+Global config: 5 priority levels, 3 default
+
+Job Priorities config:
+  For each "view" of "Binaries", "Binaries-Devel", "Binaries-Beta", "Testsuite":
+  JobGroup:
+    Description: $view
+    Jobs to include: Jobs included in a View
+                     Apply to Jobs in View $view
+    Priority: 5 (4 for "Testsuite")
+
+(No special config on the jobs needed)
 
