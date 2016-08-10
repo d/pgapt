@@ -1034,12 +1034,6 @@
                 - git-packages
 
 - project:
-        name: phppgadmin
-        git-url: git://anonscm.debian.org/pkg-postgresql/phppgadmin.git
-        jobs:
-                - git-packages
-
-- project:
         name: plr
         git-url: git://anonscm.debian.org/pkg-postgresql/plr.git
         jobs:
