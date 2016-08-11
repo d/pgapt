@@ -7,10 +7,10 @@ as some client applications.
 To use the repository, do the following:
 
 Create /etc/apt/sources.list.d/pgdg.list. The distributions are called
-codename-pgdg. In the example, replace "wheezy" with the actual distribution
+codename-pgdg. In the example, replace "jessie" with the actual distribution
 you are using:
 
-  deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main
+  deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
 
 (You may determine the codename of your distribution by running lsb_release -c.)
 
@@ -19,6 +19,8 @@ update the package lists, and start installing packages:
 
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   sudo apt-get update
-  sudo apt-get install postgresql pgadmin3
+  sudo apt-get install postgresql-9.5 pgadmin3
 
-More information: http://wiki.postgresql.org/wiki/Apt
+More information:
+* https://wiki.postgresql.org/wiki/Apt
+* https://wiki.postgresql.org/wiki/Apt/FAQ
