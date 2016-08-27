@@ -1,3 +1,9 @@
+pgdg-buildenv (19) sid-pgdg; urgency=medium
+
+  * Add libfile-fcntllock-perl.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 27 Aug 2016 13:11:57 +0200
+
 pgdg-buildenv (18) sid-pgdg; urgency=medium
 
   * Add aptitude.

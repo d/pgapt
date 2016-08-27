@@ -17,6 +17,7 @@ Depends: ${misc:Depends},
  debhelper (>= 9~),
  fakeroot,
  eatmydata,
+ libfile-fcntllock-perl,
 # dependencies of postgresql-server-dev-all:
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # postgresql
