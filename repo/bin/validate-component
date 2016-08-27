@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+# Validate if packages are using the expected component
+# Tested: postgresql-NN and libpq*
+# Input: Packages file or "dpkg-deb -I" output (which has everything
+#        indented by one space, hence the " ?" in the regexps)
+
+use strict;
+use warnings;
+
+my $mainversion = '9.5';
+
+$/ = ''; # slurp paragraphs
+my $exit = 0;
+
+while (<>) {
+  my ($pkg) = (/^ ?Package: (.*)/m) or die "Paragraph without Package: $_";
+  next unless $pkg =~ /^(postgresql-[\d.]+$|libpq5)/;
+  my ($component) = (m!^ ?Section: (.*)/!m);
+  $component ||= 'main';
+  my ($ver, $major) = (/^ ?Version: (([\d.]{1,3})[.~].*)/m)
+    or die "Paragraph without Version: $_"; # major is 9.x or 1x, followed by . or ~
+
+  my $expected_component;
+  if ($major eq $mainversion) { # most recent stable branch -> main
+    $expected_component = 'main';
+  } else {
+    if ($pkg =~ /^lib/) { # all other lib packages go to N.N/NN
+      $expected_component = $major;
+    } else { # postgresql
+      if ($major > $mainversion) { # devel/beta/rc server packages
+	$expected_component = $major;
+      } else { # $major < $mainversion # older stable server packages
+	$expected_component = 'main';
+      }
+    }
+  }
+
+  if ($component ne $expected_component) {
+    warn "$pkg ($ver) is in $component but should be in $expected_component\n";
+    $exit = 1;
+  } else {
+    print "$pkg ($ver) $component: OK\n";
+  }
+}
+
+exit $exit;

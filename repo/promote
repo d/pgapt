@@ -29,6 +29,16 @@ PKG="$1"
 set -- $DISTS
 FIRST_DIST="$1"
 
+# server packages: test .deb files for correct components
+case $PKG in
+  postgresql-?.?|postgresql-??)
+    for DIST in $DISTS; do
+      /srv/apt/apt.postgresql.org/repo/bin/validate-component \
+	/srv/apt/repo/dists/$DIST-pgdg-testing/*/binary-*/Packages
+    done
+    ;;
+esac
+
 NEWVERSION=$($REPREPRO -A source list $FIRST_DIST-pgdg-testing "$PKG" | awk '{ print $3 }')
 if [ -z "$NEWVERSION" ]; then
 	echo "ERROR: $PKG does not seem to be a source package"

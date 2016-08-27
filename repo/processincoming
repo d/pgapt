@@ -1,8 +1,16 @@
 #!/bin/sh
 
+set -eu
+
 QUEUE="${1:-incoming}"
 [ "$QUEUE" = "incoming" ] || exit 0
 REPREPRO_BASE_DIR="/srv/apt/repo"
+
+# test new .deb files for correct components
+for deb in /srv/apt/incoming/*.deb; do
+  test -f "$deb" || continue
+  dpkg-deb -I "$deb" | /srv/apt/apt.postgresql.org/repo/bin/validate-component
+done
 
 flock "$REPREPRO_BASE_DIR/db/.lock" \
 /usr/bin/reprepro -b "$REPREPRO_BASE_DIR" --morguedir "$REPREPRO_BASE_DIR/morgue" --verbose processincoming pgdg
