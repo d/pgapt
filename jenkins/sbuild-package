@@ -126,7 +126,7 @@ NEWPID="newpid -iuN newpid$distribution$BITS"
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
-    --finished-build-commands="${FINISHED_BUILD_COMMAND:-}" \
+    ${FINISHED_BUILD_COMMAND:+--finished-build-commands="$FINISHED_BUILD_COMMAND"} \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
 
