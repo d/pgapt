@@ -790,6 +790,12 @@
                 - git-packages
 
 - project:
+        name: barman-cli
+        git-url: git://git.debian.org/pkg-postgresql/barman-cli.git
+        jobs:
+                - git-packages
+
+- project:
         name: check-postgres
         git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
         jobs:
