@@ -12,8 +12,22 @@ DISTS=$(perl -e 'use YAML::Syck;
 	print "@{$d[0]->{yamltemplates}->{dist_axis}->{values}}";'
 )
 
+# Detect available archs
+ARCH=$(dpkg --print-architecture)
+[ $ARCH = amd64 ] && ARCH="amd64 i386"
+
 for dist in $DISTS; do
-	for arch in amd64 i386; do
+	if [ $ARCH = ppc64el ]
+	then
+		case $dist in
+			sid|wily|jessie|xenial)
+				;;
+			*)
+				continue
+				;;
+		esac
+        fi
+	for arch in $ARCH; do
 		body="$(cat <<-EOF
 			type=directory
 			groups=sbuild
