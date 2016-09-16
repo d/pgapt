@@ -30,21 +30,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: sid-pgdg-deprecated
-Suite: sid-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: sid-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: jessie-pgdg
 Suite: jessie-pgdg
 Origin: apt.postgresql.org
@@ -76,21 +61,6 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: jessie-pgdg-deprecated
-Suite: jessie-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: jessie-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 
 Codename: wheezy-pgdg
 Suite: wheezy-pgdg
@@ -124,21 +94,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: wheezy-pgdg-deprecated
-Suite: wheezy-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: wheezy-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: squeeze-pgdg
 Suite: squeeze-pgdg
 Origin: apt.postgresql.org
@@ -170,21 +125,6 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: squeeze-pgdg-deprecated
-Suite: squeeze-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: squeeze-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 
 Codename: lenny-pgdg
 Suite: lenny-pgdg
@@ -218,21 +158,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: lenny-pgdg-deprecated
-Suite: lenny-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: lenny-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: etch-pgdg
 Suite: etch-pgdg
 Origin: apt.postgresql.org
@@ -264,21 +189,6 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: etch-pgdg-deprecated
-Suite: etch-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: etch-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 
 Codename: xenial-pgdg
 Suite: xenial-pgdg
@@ -312,21 +222,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: xenial-pgdg-deprecated
-Suite: xenial-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: xenial-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: wily-pgdg
 Suite: wily-pgdg
 Origin: apt.postgresql.org
@@ -358,21 +253,6 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: wily-pgdg-deprecated
-Suite: wily-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: wily-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 
 Codename: utopic-pgdg
 Suite: utopic-pgdg
@@ -406,21 +286,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: utopic-pgdg-deprecated
-Suite: utopic-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: utopic-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: trusty-pgdg
 Suite: trusty-pgdg
 Origin: apt.postgresql.org
@@ -452,21 +317,6 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: trusty-pgdg-deprecated
-Suite: trusty-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: trusty-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 
 Codename: saucy-pgdg
 Suite: saucy-pgdg
@@ -500,21 +350,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: saucy-pgdg-deprecated
-Suite: saucy-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: saucy-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: precise-pgdg
 Suite: precise-pgdg
 Origin: apt.postgresql.org
@@ -547,21 +382,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: precise-pgdg-deprecated
-Suite: precise-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: precise-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
-
 Codename: lucid-pgdg
 Suite: lucid-pgdg
 Origin: apt.postgresql.org
@@ -593,19 +413,4 @@ Tracking: all
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
-
-Codename: lucid-pgdg-deprecated
-Suite: lucid-pgdg-deprecated
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: lucid-pgdg-deprecated.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: all
-Contents: percomponent nocompatsymlink
 

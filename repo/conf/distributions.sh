@@ -2,7 +2,7 @@
 
 DISTRIBUTIONS="sid jessie wheezy squeeze lenny etch
 	xenial wily utopic trusty saucy precise lucid"
-FLAVORS="pgdg pgdg-testing pgdg-deprecated"
+FLAVORS="pgdg pgdg-testing"
 
 for DIST in $DISTRIBUTIONS ; do
 	for FLAVOR in $FLAVORS ; do
