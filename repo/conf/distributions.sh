@@ -3,6 +3,7 @@
 DISTRIBUTIONS="sid jessie wheezy squeeze lenny etch
 	xenial wily utopic trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing pgdg-deprecated"
+ARCHS="amd64 i386"
 
 for DIST in $DISTRIBUTIONS ; do
 	for FLAVOR in $FLAVORS ; do
@@ -15,11 +16,11 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			wheezy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
-			jessie)
+			jessie) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
-			stretch)
+			stretch) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
-			sid)
+			sid)    ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			# Ubuntu
 			lucid)
@@ -34,7 +35,7 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			wily)
 				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
-			xenial)
+			xenial) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
@@ -45,7 +46,7 @@ Codename: $D
 Suite: $D
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
+Architectures: source $ARCHS
 Components: $COMPONENTS
 SignWith: ACCC4CF8
 Log: $D.log
