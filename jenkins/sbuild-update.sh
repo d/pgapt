@@ -77,6 +77,7 @@ umask 002
 		exit 1
 	fi
 	if ! test -f /etc/apt/sources.list.d/pgdg.list; then
+		apt-get install -y gnupg
 		chmod +x $PGDG_SH
 		echo yes | $PGDG_SH
 	fi
