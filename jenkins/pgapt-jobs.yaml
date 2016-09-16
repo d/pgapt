@@ -46,7 +46,7 @@
     arch_axis: &arch_axis
             type: user-defined
             name: architecture
-            values:
+            values: &arch_list
                     - amd64
                     - i386
 
@@ -401,6 +401,52 @@
                     strategy: any-failure
                     message-type: summary-params
                     matrix-notifier: only-configurations
+                - trigger-parameterized-builds:
+                        - project: 'dput'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                binaries=$JOB_NAME
+                                queue=$queue
+                                upload=$upload
+                - groovy-postbuild: *add_version_tag_plain
+                - workspace-cleanup
+
+# build binaries for a single (new?) architecture
+
+- job:
+        <<: *binaries_template
+        name: 'build-arch'
+        project-type: freestyle
+        logrotate: *logrotate_build
+        concurrent: true
+        parameters:
+                - string: *package_parameter
+                - choice: *distribution_parameter
+                - choice:
+                        name: architecture
+                        choices: #*arch_list
+                           - ppc64el
+                           - amd64
+                           - i386
+                        description: 'Architecture to build for'
+                - bool:
+                        name: BACKPORTS
+                        description: 'Include backports repository in build chroot'
+                - choice: *queue_choice
+                - choice: *upload_choice
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '$PACKAGE-source/distribution=$distribution'
+                        filter: 'result/*'
+                        flatten: true
+                - shell: 'sbuild-package'
+        publishers:
+                - archive: *binaries_archive
+                - junit:
+                        results: autopkgtest.xml
+                - ircbot:
+                        message-type: summary-params
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
