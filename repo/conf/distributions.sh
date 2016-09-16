@@ -3,11 +3,11 @@
 DISTRIBUTIONS="sid jessie wheezy squeeze lenny etch
 	xenial wily utopic trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing pgdg-deprecated"
-ARCHS="amd64 i386"
 
 for DIST in $DISTRIBUTIONS ; do
 	for FLAVOR in $FLAVORS ; do
 		D="$DIST-$FLAVOR"
+		ARCHS="amd64 i386"
 		case $DIST in
 			# Debian
 			lenny|etch)
