@@ -290,7 +290,7 @@ Codename: trusty-pgdg
 Suite: trusty-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
+Architectures: source amd64 i386 ppc64el
 Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: trusty-pgdg.log
@@ -305,7 +305,7 @@ Codename: trusty-pgdg-testing
 Suite: trusty-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
+Architectures: source amd64 i386 ppc64el
 Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: trusty-pgdg-testing.log

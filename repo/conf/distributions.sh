@@ -29,7 +29,7 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			saucy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
-			trusty)
+			trusty) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			utopic)
 				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
