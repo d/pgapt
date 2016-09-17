@@ -72,6 +72,13 @@ umask 002
   schroot -u root -c $chroot -- sh <<-EOF
 	set -ex
 	
+	# configure dpkg and apt
+	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
+	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
+	test -e /etc/apt/apt.conf.d/50i18n || echo 'Acquire::Languages { none; };' | tee /etc/apt/apt.conf.d/50i18n
+	rm -f /var/lib/apt/lists/*_Translation-*
+
+	# run apt.postgresql.org.sh
 	if ! test -f $PGDG_SH; then
 		echo "$PGDG_SH not found in the chroot, did you configure a /var/tmp bindmount?"
 		exit 1
@@ -81,11 +88,6 @@ umask 002
 		chmod +x $PGDG_SH
 		echo yes | $PGDG_SH
 	fi
-
-	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
-	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
-	test -e /etc/apt/apt.conf.d/50i18n || echo 'Acquire::Languages { none; };' | tee /etc/apt/apt.conf.d/50i18n
-	rm -f /var/lib/apt/lists/*_Translation-*
 
 	# write sources lists
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
