@@ -411,23 +411,24 @@
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
-# build binaries for a single (new?) architecture
+# build binaries for a single architecture
 
 - job:
         <<: *binaries_template
-        name: 'build-arch'
+        name: 'build-ppc64el'
         project-type: freestyle
+        node: ppc64el
         logrotate: *logrotate_build
         concurrent: true
         parameters:
-                - string: *package_parameter
+                - string:
+                        name: PACKAGE
+                        description: 'Package to build binaries for (without -source suffix)'
                 - choice: *distribution_parameter
                 - choice:
                         name: architecture
-                        choices: #*arch_list
+                        choices:
                            - ppc64el
-                           - amd64
-                           - i386
                         description: 'Architecture to build for'
                 - bool:
                         name: BACKPORTS
@@ -446,6 +447,7 @@
                 - junit:
                         results: autopkgtest.xml
                 - ircbot:
+                        strategy: any-failure
                         message-type: summary-params
                 - trigger-parameterized-builds:
                         - project: 'dput'
