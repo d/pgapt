@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eu
 
 DISTS=$(perl -e 'use YAML::Syck;
 	$y = LoadFile("pgapt-jobs.yaml");
@@ -10,9 +10,13 @@ DISTS=$(perl -e 'use YAML::Syck;
 
 prefix="10.1"
 net=1
+case $(dpkg --print-architecture) in
+  amd64) BITS="64 32" ;;
+  ppc64el) BITS="64" ;;
+esac
 
 for dist in $DISTS; do
-	for bits in 64 32; do
+	for bits in $BITS; do
 		ns="newpid$dist$bits"
 		veth="veth$dist$bits"
 		ceth="ceth$dist$bits"
@@ -35,5 +39,5 @@ done
 
 iptables -vnL FORWARD | grep -q 'veth+' || \
 	iptables -A FORWARD -i veth+ -j ACCEPT
-iptables -t nat -vnL POSTROUTING | grep -q 'MASQUERADE' || \
-	iptables -t nat -A POSTROUTING -o wlan2 -j MASQUERADE
+#iptables -t nat -vnL POSTROUTING | grep -q 'MASQUERADE' || \
+#	iptables -t nat -A POSTROUTING -o wlan2 -j MASQUERADE
