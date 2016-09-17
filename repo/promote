@@ -25,7 +25,7 @@ done
 shift $(($OPTIND - 1))
 
 PKG="$1"
-[ "$DISTS" = "all" ] && DISTS="sid jessie wheezy xenial wily trusty precise"
+[ "$DISTS" = "all" ] && DISTS="sid jessie wheezy xenial trusty precise"
 set -- $DISTS
 FIRST_DIST="$1"
 
