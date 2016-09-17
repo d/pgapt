@@ -19,6 +19,3 @@ default/fstab: as above, but bind-mount /home (for postgresql-testsuite)
 
 sbuild-update --keygen
 distribution=$dist architecture=$arch ./sbuild-update.sh
-
-/etc/sbuild/sbuild.conf:
-$build_env_cmnd = 'newnet';
