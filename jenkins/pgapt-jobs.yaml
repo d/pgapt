@@ -473,7 +473,7 @@
                                 binaries=$JOB_NAME
                                 queue=$queue
                                 upload=$upload
-                - groovy-postbuild: *add_version_tag
+                - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
 - job:
@@ -496,22 +496,6 @@
                         description: 'Include backports repository in build chroot'
                 - choice: *queue_choice
                 - choice: *upload_choice
-        publishers:
-                - archive: *binaries_archive
-                - junit:
-                        results: autopkgtest.xml
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary-params
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries=$JOB_NAME
-                                queue=$queue
-                                upload=$upload
-                - groovy-postbuild: *add_version_tag_plain
-                - workspace-cleanup
 
 # testsuite template
 
