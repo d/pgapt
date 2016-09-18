@@ -50,6 +50,11 @@
                     - amd64
                     - i386
 
+    ppc64el_arch_axis: &ppc64el_arch_axis
+            type: slave
+            name: architecture
+            values: [ppc64el]
+
     amd64_only_axis: &amd64_only_axis
             type: user-defined
             name: architecture
@@ -65,6 +70,20 @@
                     - xenial
                     - trusty
                     - precise
+
+    ppc64el_dist_choice: &ppc64el_dist_choice
+            name: distribution
+            choices: &ppc64el_dist_list
+                    - sid
+                    - jessie
+                    - xenial
+                    - trusty
+            description: 'Distribution to build for'
+
+    dist_axis: &ppc64el_dist_axis
+            type: user-defined
+            name: distribution
+            values: *ppc64el_dist_list
 
     sid_only_axis: &sid_only_axis
             type: user-defined
@@ -412,18 +431,61 @@
 
 # build binaries for a single architecture
 
-- job:
+- job: &build_ppc64_all
         <<: *binaries_template
-        name: 'build-ppc64el'
-        project-type: freestyle
-        node: ppc64el
+        name: 'build-ppc64el-all'
         logrotate: *logrotate_build
         concurrent: true
         parameters:
                 - string:
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
-                - choice: *distribution_parameter
+                - bool:
+                        name: BACKPORTS
+                        description: 'Include backports repository in build chroot'
+                - choice: *queue_choice
+                - choice: *upload_choice
+        execution-strategy:
+                touchstone:
+                        #expr: 'distribution=="sid"'
+                        expr: ''
+        axes:
+                - axis: *ppc64el_arch_axis
+                - axis: *ppc64el_dist_axis
+        builders:
+                - shell: 'rm -rf *'
+                - copyartifact:
+                        project: '$PACKAGE-source/distribution=$distribution'
+                        filter: 'result/*'
+                        flatten: true
+                - shell: 'sbuild-package'
+        publishers:
+                - archive: *binaries_archive
+                - junit:
+                        results: autopkgtest.xml
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary-params
+                - trigger-parameterized-builds:
+                        - project: 'dput'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                binaries=$JOB_NAME
+                                queue=$queue
+                                upload=$upload
+                - groovy-postbuild: *add_version_tag
+                - workspace-cleanup
+
+- job:
+        <<: *build_ppc64_all
+        name: 'build-ppc64el'
+        project-type: freestyle
+        node: ppc64el
+        parameters:
+                - string:
+                        name: PACKAGE
+                        description: 'Package to build binaries for (without -source suffix)'
+                - choice: *ppc64el_dist_choice
                 - choice:
                         name: architecture
                         choices:
@@ -434,13 +496,6 @@
                         description: 'Include backports repository in build chroot'
                 - choice: *queue_choice
                 - choice: *upload_choice
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '$PACKAGE-source/distribution=$distribution'
-                        filter: 'result/*'
-                        flatten: true
-                - shell: 'sbuild-package'
         publishers:
                 - archive: *binaries_archive
                 - junit:
