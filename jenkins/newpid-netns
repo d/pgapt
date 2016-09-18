@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# this script looks for an unused network namespace in /var/run/netns/newpid*
+# and invokes "newpid" on it.
+
+set -u
+
+# as long as this file exists, we haven't found a free netns
+STAMP=$(mktemp --tmpdir newnet.sh.XXXXXX)
+trap "rm -f $STAMP" 0 2 3 15
+
+# loop through namespaces
+for ns in /var/run/netns/newpid*; do
+  if [ ! -f $ns ]; then
+    # if we get here, the glob didn't expand
+    echo "No network namespaces matching /var/run/netns/newpid* found" >&2
+    exit 2
+  fi
+
+  # run the command
+  (
+    flock -n 8 || exit
+    # we got the lock
+    rm -f $STAMP
+    echo "newpid-netns: Using namespace $ns"
+    newpid -iuN $(basename $ns) "$@"
+  ) 8< $ns
+  EXIT=$?
+
+  # if we get here and the stamp file exists, loop for the next NS, else exit
+  if [ ! -f $STAMP ]; then exit $EXIT; fi
+done
+
+# if we get here, error out
+echo "No unused network namespace found in /var/run/netns/newpid*" >&2
+exit 2

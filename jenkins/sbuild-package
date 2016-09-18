@@ -19,7 +19,7 @@
 #  /var/tmp bind mount in schroot fstab for retrieving adt-run summary
 #  sbuild needs to pass through DEB_* variables (default)
 #  "deb" resolves to some debian mirror
-#  newpid is installed on host and netns-setup was run
+#  newpid (and newpid-netns) is installed on host and netns-setup was run
 
 set -eu
 
@@ -59,11 +59,6 @@ case $architecture in
       ARCH_ALL="--arch-all"
       FILTER_ARCH_ALL="true"
     fi ;;
-esac
-# which network namespace to use
-case $architecture in
-  i386) BITS=32 ;;
-  *) BITS=64 ;;
 esac
 
 # resolve alternative build-dependencies on dists other than sid
@@ -118,14 +113,12 @@ if ! test -d $LOCKDIR; then
 fi
 umask 002
 
-NEWPID="newpid -iuN newpid$distribution$BITS"
-
 # build package and run autopkgtests inside the chroot
 (
   echo "Building $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
-  flock --shared 9
-  ${NEWPID:-} \
+  flock --shared 9 # lock against concurrent source chroot upgrades
+  newpid-netns \
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
