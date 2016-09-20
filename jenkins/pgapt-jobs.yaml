@@ -44,7 +44,7 @@
             description: 'all: upload all .deb files built, extension-only: upload PostgreSQL-version-specific .deb files only'
 
     arch_axis: &arch_axis
-            type: user-defined
+            type: slave
             name: architecture
             values: &arch_list
                     - amd64
@@ -57,7 +57,7 @@
             values: [ppc64el]
 
     amd64_only_axis: &amd64_only_axis
-            type: user-defined
+            type: slave
             name: architecture
             values: [amd64]
 
