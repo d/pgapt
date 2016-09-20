@@ -13,7 +13,7 @@
             projects: '*'
     wrappers:
         - timestamps
-    dist-filter: ''
+    dist-filter: 'true'
     git-branch: master
     backports: ''
 
@@ -49,6 +49,7 @@
             values: &arch_list
                     - amd64
                     - i386
+                    - ppc64el
 
     ppc64el_arch_axis: &ppc64el_arch_axis
             type: slave
@@ -275,7 +276,7 @@
                 - choice: *queue_choice
                 - choice: *upload_choice
         execution-strategy: &binaries_execution_strategy
-                combination-filter: '{dist-filter}'
+                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
