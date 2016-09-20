@@ -698,7 +698,9 @@
         child-workspace: .
         axes:
                 - axis: *dist_axis
-                - axis: *arch_axis
+                - axis:
+                        type: user-defined
+                        <<: *arch_axis
                 - axis:
                         type: user-defined
                         name: stage
