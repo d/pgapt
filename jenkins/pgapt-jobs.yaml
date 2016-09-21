@@ -14,6 +14,7 @@
     wrappers:
         - timestamps
     dist-filter: 'true'
+    arch-filter: 'true'
     git-branch: master
     backports: ''
 
@@ -276,7 +277,7 @@
                 - choice: *queue_choice
                 - choice: *upload_choice
         execution-strategy: &binaries_execution_strategy
-                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {dist-filter}'
+                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -507,7 +508,7 @@
         parameters:
                 - choice: *queue_choice
         execution-strategy:
-                combination-filter: '{dist-filter}'
+                combination-filter: '{arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -1508,7 +1509,7 @@
         name: pgloader
         #git-url: https://github.com/dimitri/pgloader.git
         apt-suite: unstable
-        dist-filter: '(architecture!="ppc64el")'
+        arch-filter: '(architecture!="ppc64el")'
         jobs:
                 #- git-packages
                 - apt-packages
@@ -1517,14 +1518,14 @@
         name: sbcl
         apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
-        dist-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic"))'
+        arch-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic"))'
         jobs:
                 - apt-packages
 
 - project: &aptpkg
         name: bordeaux-threads
         apt-suite: 'unstable'
-        dist-filter: '(architecture!="ppc64el")'
+        arch-filter: '(architecture!="ppc64el")'
         jobs: [apt-packages]
 - project: { <<: *aptpkg, name: buildapp }
 - project: { <<: *aptpkg, name: cffi }
