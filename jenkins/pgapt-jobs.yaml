@@ -456,10 +456,7 @@
                 - axis: *ppc64el_dist_axis
         builders:
                 - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '$PACKAGE-source/distribution=$distribution'
-                        filter: 'result/*'
-                        flatten: true
+                - shell: 'apt-get source -d $PACKAGE/$distribution-pgdg-testing'
                 - shell: 'sbuild-package'
         publishers:
                 - archive: *binaries_archive
