@@ -732,6 +732,7 @@
                 sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
+                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise")))'
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
