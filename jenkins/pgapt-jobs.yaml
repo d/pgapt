@@ -1508,6 +1508,7 @@
         name: pgloader
         #git-url: https://github.com/dimitri/pgloader.git
         apt-suite: unstable
+        dist-filter: '(architecture!="ppc64el")'
         jobs:
                 #- git-packages
                 - apt-packages
@@ -1516,13 +1517,14 @@
         name: sbcl
         apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
-        dist-filter: '(distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic")'
+        dist-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic"))'
         jobs:
                 - apt-packages
 
 - project: &aptpkg
         name: bordeaux-threads
         apt-suite: 'unstable'
+        dist-filter: '(architecture!="ppc64el")'
         jobs: [apt-packages]
 - project: { <<: *aptpkg, name: buildapp }
 - project: { <<: *aptpkg, name: cffi }
