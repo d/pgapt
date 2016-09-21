@@ -1371,6 +1371,9 @@
 - project:
         name: python-argcomplete
         git-url: git://anonscm.debian.org/collab-maint/python-argcomplete.git
+        # needs dh-python (precise)
+        # python foo (wheezy)
+        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
         jobs:
                 - git-packages
 
