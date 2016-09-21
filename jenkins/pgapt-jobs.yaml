@@ -456,7 +456,15 @@
                 - axis: *ppc64el_dist_axis
         builders:
                 - shell: 'rm -rf *'
-                - shell: 'apt-get source -d $PACKAGE/$distribution-pgdg-testing'
+                - shell: |
+                    case $distribution in
+                      sid)    tag='pgdg+' ;;
+                      jessie) tag='pgdg80+' ;;
+                      xenial) tag='pgdg16.04+' ;;
+                      trusty) tag='pgdg14.04+' ;;
+                    esac
+                    version=$(apt-cache showsrc $PACKAGE | awk '/^Version:/ { print $2 }' | grep $tag)
+                    apt-get source -d $PACKAGE=$version
                 - shell: 'sbuild-package'
         publishers:
                 - archive: *binaries_archive
