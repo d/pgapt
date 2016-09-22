@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+while getopts "c:" opt ; do
+	case $opt in
+	c) cert="$OPTARG" ;;
+	*) exit 5 ;;
+	esac
+done
+# shift away args
+shift $(($OPTIND - 1))
+
+PACKAGE="$1"
+
+set -x
+
+curl --cert "$cert" "https://pgdgbuild.dus.dg-i.net/job/build-ppc64el-all/buildWithParameters" --data "token=buildnow&PACKAGE=$PACKAGE"

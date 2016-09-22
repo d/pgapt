@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+# Diff two Packages files, comparing version numbers for each package found in the second file.
+# Usage example: ./diff-packages <debian-sid-main-Packages> <pgapt-sid-pgdg-testing-main-Packages>
+
+use strict;
+use warnings;
+use Dpkg::Version;
+
+my $fulldiff = 0;
+if (@ARGV and $ARGV[0] eq '-f') {
+	shift;
+	$fulldiff = 1;
+}
+
+die "Syntax: $0 [-f] <packages1> <packages2>" unless (@ARGV == 2);
+my ($packages1, $packages2) = @ARGV;
+my (%pkg1, %pkg2, %src1, %src2);
+
+$/ = ''; # slurp paragraphs
+
+open S2, $packages2 or die "$packages2: $!";
+while (<S2>) {
+	my ($pkg) = /^Package: (.+)/m or die "$packages2: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$packages2: paragraph without Version: $_";
+	my ($src) = /^Source: (.+)/m;
+	$src = $pkg unless $src;
+	my $v = Dpkg::Version->new($ver);
+	if (not exists $pkg2{$pkg} or $v > $pkg2{$pkg}) {
+		$pkg2{$pkg} = $v;
+		$src2{$pkg} = $src;
+	}
+}
+close S2;
+
+open S1, $packages1 or die "$packages1: $!";
+while (<S1>) {
+	my ($pkg) = /^Package: (.+)/m or die "$packages1: paragraph without Package: $_";
+	my ($ver) = /^Version: (.+)/m or die "$packages1: paragraph without Version: $_";
+	my ($src) = /^Source: (.+)/m;
+	$src = $pkg unless $src;
+	my $v = Dpkg::Version->new($ver);
+	if (not exists $pkg1{$pkg} or $v > $pkg1{$pkg}) {
+		$pkg1{$pkg} = $v;
+		$src1{$pkg} = $src;
+	}
+}
+close S1;
+
+foreach my $pkg (sort keys %pkg1) {
+	my $ver1 = my $ver1mangled = $pkg1{$pkg};
+	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
+	if (not exists $pkg2{$pkg}) {
+		print "$src1{$pkg} $pkg $ver1 <missing>\n" if ($fulldiff);
+		next;
+	}
+
+	my $ver2 = my $ver2mangled = $pkg2{$pkg};
+	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
+	if ($ver1 eq $ver2 or $ver1 eq $ver2mangled or $ver1mangled eq $ver2mangled) {
+		#print "OK: $pkg $ver1 $ver2\n";
+		delete $pkg2{$pkg};
+		next;
+	}
+
+	print "$src1{$pkg} $pkg $ver1 $ver2\n";
+	delete $pkg2{$pkg};
+}
+
+foreach my $pkg (sort keys %pkg2) {
+	print "$src2{$pkg} $pkg <missing> $pkg2{$pkg}\n";
+}
