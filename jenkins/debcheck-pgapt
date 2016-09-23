@@ -65,6 +65,11 @@ if [ "$stage" = "production" ]; then
   done
 fi
 
+# packages not tested anywhere (FIXME!)
+for pkg in postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
+  MAINPKG=$(echo "$MAINPKG" | grep -v "$pkg")
+done
+
 # run debcheck
 DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
