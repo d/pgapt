@@ -681,11 +681,23 @@
 - job:
         name: 'debcheck-distsmirror'
         description: 'Sync apt.pg.org dists/ directory and trigger debcheck'
+        project-type: matrix
+        child-workspace: .
+        axes:
+                - axis:
+                        type: slave
+                        name: slave
+                        values:
+                                - master
+                                - pgdgbuild-ppc64el
         triggers:
                 - timed: "H H * * *"
         builders:
                 - shell: |
-                        rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/ /home/jenkins/dists
+                        wget --mirror http://atalia.postgresql.org/dists.tar.gz
+                        rm -rf ~/dists
+                        tar -C ~ -xf atalia.postgresql.org/dists.tar.gz
+                #rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/ /home/jenkins/dists
         publishers:
                 - trigger:
                         project: debcheck
@@ -704,9 +716,7 @@
         child-workspace: .
         axes:
                 - axis: *dist_axis
-                - axis:
-                        type: user-defined
-                        <<: *arch_axis
+                - axis: *arch_axis
                 - axis:
                         type: user-defined
                         name: stage
