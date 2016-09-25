@@ -9,6 +9,7 @@
 #  optionally: DEB_PG_SUPPORTED_VERSIONS (defaults to pgdg)
 #  optionally: ADT=skip
 #  optionally: BACKPORTS=true
+#  optionally: wrap= (disables newpid-netns)
 # Output:
 #  .changes and .deb in current directory
 #  autopkgtest.xml in current directory
@@ -118,7 +119,7 @@ umask 002
   echo "Building $PACKAGE (DEB_PG_SUPPORTED_VERSIONS=$DEB_PG_SUPPORTED_VERSIONS)"
   set -x
   flock --shared 9 # lock against concurrent source chroot upgrades
-  newpid-netns \
+  ${wrap-newpid-netns} \
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
