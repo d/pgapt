@@ -981,6 +981,8 @@
 - project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
+        # needs setns()
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
