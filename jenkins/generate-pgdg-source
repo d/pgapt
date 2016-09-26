@@ -276,6 +276,17 @@ case $PACKAGE in
     esac
     ;;
 
+  barman)
+    case ${distribution:-} in
+      squeeze|wheezy|lucid|precise)
+        # remove dh_python2 dependency
+        sed -i -e 's/ dh-python,//' debian/control debian/control.in
+        # switch to standard sequencer
+        sed -i -e 's/ --with python2//' debian/rules
+        ;;
+    esac
+    ;;
+
 esac
 
 
