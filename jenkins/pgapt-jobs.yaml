@@ -51,6 +51,9 @@
                     - amd64
                     - i386
                     - ppc64el
+    arch_axis_userdefined: &arch_axis_userdefined
+            <<: *arch_axis
+            type: user-defined
 
     ppc64el_arch_axis: &ppc64el_arch_axis
             type: slave
@@ -724,6 +727,8 @@
                                 - production
                                 - testing
 
+        execution-strategy:
+                combination-filter: '(architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))'
         builders:
                 - shell: debcheck-pgapt
         publishers:
@@ -798,7 +803,7 @@
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
-                - axis: *arch_axis
+                - axis: *arch_axis_userdefined
                 - axis: *dist_axis
         builders:
                 - shell: 'rm -rf *'
