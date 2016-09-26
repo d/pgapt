@@ -25,6 +25,10 @@ fold () {
   echo "$r"
 }
 
+skip () {
+  MAINPKG=$(echo "$MAINPKG" | grep -v "$1")
+}
+
 : ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
@@ -60,15 +64,17 @@ MAINPKG=$(awk '/^Package:/ { print $2 }' $DISTSDIR/$DIST/main/binary-${architect
 
 # packages not tested in production
 if [ "$stage" = "production" ]; then
-  for pkg in cl-pgloader; do
-    MAINPKG=$(echo "$MAINPKG" | grep -v "$pkg")
-  done
+  skip cl-pgloader
 fi
 
 # packages not tested anywhere (FIXME!)
-for pkg in postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
-  MAINPKG=$(echo "$MAINPKG" | grep -v "$pkg")
-done
+skip postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
+
+# packages not tested on ppc64el
+if [ $architecture = ppc64el ]; then
+  skip postgresql-8.4-pgtap # PG 8.4 doesn't exist here
+  skip postgresql-9.0-pgtap # PG 9.0 doesn't exist here
+fi
 
 # run debcheck
 DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"

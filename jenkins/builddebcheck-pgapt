@@ -72,6 +72,14 @@ case $distribution in
     ;;
 esac
 
+# packages not tested on ppc64el
+if [ $architecture = ppc64el ]; then
+  for pkg in buildapp cffi cl-unicode pgloader sbcl plv8; do
+    grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
+    mv $MAINSRC.tmp $MAINSRC
+  done
+fi
+
 # include pgdg dists
 case $stage in
 	production)
