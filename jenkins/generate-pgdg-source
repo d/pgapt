@@ -45,9 +45,9 @@ echo "revision=${revision:-}"
 set -x
 
 # which PostgreSQL major version to pull libpq et al. from (should be last stable release)
-PGLIBVER="9.5"
+PGLIBVER="9.6"
 # which libpq version to use in sid (latest beta)
-PGLIBVER_SID="9.5"
+PGLIBVER_SID="9.6"
 
 [ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"
 

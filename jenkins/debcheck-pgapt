@@ -8,7 +8,7 @@
 # needs dose3 >= 4
 
 # when set, will check matching packages in main against this extra component
-BETA="9.6"
+#BETA="9.6"
 
 set -eu
 
@@ -68,7 +68,7 @@ if [ "$stage" = "production" ]; then
 fi
 
 # packages not tested anywhere (FIXME!)
-skip postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
+#skip postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
 
 # packages not tested on ppc64el
 if [ $architecture = ppc64el ]; then
