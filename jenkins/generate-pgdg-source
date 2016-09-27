@@ -278,11 +278,10 @@ case $PACKAGE in
 
   barman)
     case ${distribution:-} in
-      squeeze|wheezy|lucid|precise)
-        # remove dh_python2 dependency
+      wheezy|precise)
+        # remove dh_python2 dependency, the python2 sequencer is
+        # provided by python package
         sed -i -e 's/, dh-python//' debian/control
-        # switch to standard sequencer
-        sed -i -e 's/ --with python2//' debian/rules
         ;;
     esac
     ;;
