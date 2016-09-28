@@ -516,7 +516,7 @@
         parameters:
                 - choice: *queue_choice
         execution-strategy:
-                combination-filter: '{arch-filter} && {dist-filter}'
+                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
