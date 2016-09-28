@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 
-my $mainversion = '9.5';
+my $mainversion = '9.6';
 
 $/ = ''; # slurp paragraphs
 my $exit = 0;
