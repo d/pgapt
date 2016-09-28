@@ -39,6 +39,12 @@ lftp
 bzr
 pristine-tar
 
+Packages on slave hosts
+-----------------------
+
+default-jre-headless
+dose-builddebcheck dose-distcheck dose-extra
+
 
 /etc/approx/approx.conf
 # Here are some examples of remote repository mappings.
@@ -70,23 +76,28 @@ $interval	1
 
 /etc/hosts
 
-127.0.0.1	localhost debian-approx ubuntu-approx security-approx atalia-approx backports-approx
-93.94.133.133	pgdgbuild.dus.dg-i.net	pgdgbuild
+127.0.0.1	localhost
+93.94.133.133	pgdgbuild.dus.dg-i.net	pgdgbuild debian-approx ubuntu-approx security-approx atalia-approx backports-approx
 
 141.76.2.4	ftp.de.debian.org deb
 137.226.34.42	ftp2.de.debian.org
 
 
-/etc/pbuilderrc
+/etc/resolv.conf
 
-# this is your configuration file for pbuilder.
-# the file in /usr/share/pbuilder/pbuilderrc is the default template.
-# /etc/pbuilderrc is the one meant for overwriting defaults in
-# the default template
+options timeout:1 attempts:1
+
+
+#/etc/pbuilderrc
 #
-# read pbuilderrc.5 document for notes on specific options.
-MIRRORSITE=http://debian-approx:9999/debian
-APTCACHE=""
+## this is your configuration file for pbuilder.
+## the file in /usr/share/pbuilder/pbuilderrc is the default template.
+## /etc/pbuilderrc is the one meant for overwriting defaults in
+## the default template
+##
+## read pbuilderrc.5 document for notes on specific options.
+#MIRRORSITE=http://debian-approx:9999/debian
+#APTCACHE=""
 
 
 /etc/sudoers.d/jenkins
@@ -302,3 +313,10 @@ PREFIX=/jenkins
 # --prefix=$PREFIX
 
 JENKINS_ARGS="--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=$PREFIX"
+
+
+/home/jenkins/apt.postgresql.org -> git clone of pgapt.git
+
+
+/usr/local/bin: Symlinks to /home/jenkins/apt.postgresql.org
+  adt-sbuild adtsummary2junit approx-reset.sh builddebcheck-pgapt debcheck-pgapt generate-pgdg-source newpid-netns postgresql-testsuite sbuild-package sbuild-update.sh

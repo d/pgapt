@@ -10,6 +10,7 @@ Configure chroots: ./schroot-config.sh
 Make sure there is enough swap
 Enlarge (/var)/run in /etc/fstab:
 tmpfs           /run            tmpfs   size=12G        0       0
+Make sure /run has enough (>= 500k) inodes (this was a problem on ppc64el)
 
 Bind-Mount /var/tmp in /etc/schroot/sbuild/fstab, and remove /var/lib/sbuild/build there
 Do not bind-mount /dev
