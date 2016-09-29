@@ -799,6 +799,7 @@
         project-type: matrix
         child-workspace: .
         execution-strategy:
+                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise")))'
                 sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
