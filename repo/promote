@@ -14,10 +14,11 @@ if [ "${DEBUG:-}" ]; then
 	SUDO="echo"
 fi
 
-while getopts "c:d:" opt ; do
+while getopts "c:d:f" opt ; do
 	case $opt in
 		c) COMPONENT="$OPTARG" ;;
 		d) DISTS="$OPTARG" ;;
+		f) FORCE="force" ;;
 		*) exit 5 ;;
 	esac
 done
@@ -30,14 +31,16 @@ set -- $DISTS
 FIRST_DIST="$1"
 
 # server packages: test .deb files for correct components
-case $PKG in
-  postgresql-?.?|postgresql-??)
-    for DIST in $DISTS; do
-      /srv/apt/apt.postgresql.org/repo/bin/validate-component \
-	/srv/apt/repo/dists/$DIST-pgdg-testing/*/binary-*/Packages
-    done
-    ;;
-esac
+if [ -z "${FORCE:-}" ]; then
+  case $PKG in
+    postgresql-?.?|postgresql-??)
+      for DIST in $DISTS; do
+	/srv/apt/apt.postgresql.org/repo/bin/validate-component \
+	  /srv/apt/repo/dists/$DIST-pgdg-testing/*/binary-*/Packages
+      done
+      ;;
+  esac
+fi
 
 NEWVERSION=$($REPREPRO -A source list $FIRST_DIST-pgdg-testing "$PKG" | awk '{ print $3 }')
 if [ -z "$NEWVERSION" ]; then
