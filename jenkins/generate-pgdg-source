@@ -279,7 +279,7 @@ case $PACKAGE in
     esac
     ;;
 
-  barman)
+  barman|barman-cli)
     case ${distribution:-} in
       wheezy|precise)
         # remove dh_python2 dependency, the python2 sequencer is
