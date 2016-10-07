@@ -1165,6 +1165,8 @@
         git-branch: debian
         # uses -std=c++11
         dist-filter: '(distribution!="precise")'
+        # libv8-dev/ppc64el exists on Ubuntu, but not on Debian. Wtf.
+        arch-filter: '!(architecture=="ppc64el" && (distribution=="sid" || distribution=="jessie"))'
         jobs:
                 - git-packages-with-next
 
