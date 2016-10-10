@@ -254,7 +254,7 @@ case $PACKAGE in
       # there's a backport to jessie. Pgapt provides libsfcgal for
       # jessie as well, so it remains independent of jessie-backports.
       wheezy|squeeze|wily|trusty|precise)
-        sed -i -e 's/libsfcgal-dev[^,]*,//' debian/control debian/control.in
+        sed -i -e '/libsfcgal-dev/d' debian/control debian/control.in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
         ;;
     esac
