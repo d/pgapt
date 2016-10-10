@@ -999,6 +999,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-activity
+        git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
+        jobs:
+                - git-packages
+
+- project:
         name: pgadmin3
         git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
         jobs:
