@@ -1001,6 +1001,7 @@
 - project:
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
+        git-branch: unstable
         jobs:
                 - git-packages
 
