@@ -297,7 +297,7 @@
                 - shell: '{noadt}{backports}sbuild-package'
         publishers:
                 - archive: &binaries_archive
-                        artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                        artifacts: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes,*.buildinfo'
                         latest-only: true
                 - junit:
                         results: autopkgtest.xml
@@ -779,7 +779,7 @@
                 - shell: 'rm -rf *'
                 - copyartifact:
                         project: '$binaries'
-                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes,*.buildinfo'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
@@ -810,7 +810,7 @@
                 - shell: 'rm -rf *'
                 - copyartifact:
                         project: '$binaries/architecture=$architecture,distribution=$distribution'
-                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes'
+                        filter: '*.gz,*.bz2,*.xz,*.deb,*.dsc,*.changes,*.buildinfo'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
