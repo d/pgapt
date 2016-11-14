@@ -16,3 +16,6 @@ Allow: sid-pgdg>sid-pgdg-testing
  precise-pgdg>precise-pgdg-testing
  lucid-pgdg>lucid-pgdg-testing
 Multiple: yes
+# ignore .buildinfo files
+Permit: unused_files
+Cleanup: unused_files
