@@ -21,7 +21,7 @@ for DIST in $DISTRIBUTIONS ; do
 			stretch) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			sid)    ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			# Ubuntu
 			lucid)
 				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;

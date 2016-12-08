@@ -8,7 +8,7 @@
 # needs dose3 >= 4
 
 # when set, will check matching packages in main against this extra component
-#BETA="9.6"
+BETA="10"
 
 set -eu
 
@@ -97,7 +97,7 @@ case $distribution in
 esac
 
 # beta
-if [ "${BETA:-}" ]; then
+if [ "${BETA:-}" ] && [ -f $DISTSDIR/$DIST/$BETA/binary-${architecture}/Packages ]; then
   echo "### Running debcheck: main, packages matching '$BETA'"
   pkg=$(fold $(echo "$MAINPKG" | fgrep "$BETA"))
   ( set -x; $DEBCHECK \
