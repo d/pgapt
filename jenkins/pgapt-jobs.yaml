@@ -539,7 +539,7 @@
                           predefined-parameters: |
                                 binaries={name}-testsuite
                                 queue=$queue
-                                upload=$upload
+                                upload=all
                 - workspace-cleanup
 
 - job-template:
@@ -566,7 +566,7 @@
                           predefined-parameters: |
                                   binaries={source-name}-testsuite-sid-amd64
                                   queue=$queue
-                                  upload=$upload
+                                  upload=all
                 - workspace-cleanup
 
 # upgrade test template
