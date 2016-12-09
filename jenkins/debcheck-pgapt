@@ -97,13 +97,13 @@ case $distribution in
 esac
 
 # beta
-if [ "${BETA:-}" ] && [ -f $DISTSDIR/$DIST/$BETA/binary-${architecture}/Packages ]; then
+betapkg=$(fold $(echo "$MAINPKG" | fgrep "$BETA"))
+if [ "${BETA:-}" ] && [ "$betapkg" ]; then
   echo "### Running debcheck: main, packages matching '$BETA'"
-  pkg=$(fold $(echo "$MAINPKG" | fgrep "$BETA"))
   ( set -x; $DEBCHECK \
     --bg $DISTSDIR/$DIST/$BETA/binary-${architecture}/Packages \
     --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-    --checkonly $pkg ) || EXIT=$?
+    --checkonly $betapkg ) || EXIT=$?
   echo
 
   # exclude packages from further testing
