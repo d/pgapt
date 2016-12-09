@@ -22,7 +22,7 @@ fold () {
   for i in "$@"; do
     r="${r:+$r,}$i"
   done
-  echo "$r"
+  echo "${r:-}"
 }
 
 skip () {
