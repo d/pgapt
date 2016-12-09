@@ -161,7 +161,7 @@ show_package_sections ()
     debian/control
 }
 case $PACKAGE in
-  postgresql-?.?|postgresql-??.?)
+  postgresql-?.?|postgresql-??)
     PGVERSION=${PACKAGE#postgresql-}
     if dpkg --compare-versions $PGVERSION lt $PGLIBVER; then
       set_package_component "Package: lib" "$PGVERSION\/"
@@ -176,17 +176,17 @@ esac
 
 # tweaks to get packages in older dists working
 case $PACKAGE in
-  postgresql-9.[56])
+  postgresql-9.[56]|postgresql-??)
     case ${distribution:-} in
       wheezy|squeeze|precise)
-        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-9.?.install
-        REVERTS="$REVERTS debian/postgresql-contrib-9.?.install"
+        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-*.install
+        REVERTS="$REVERTS debian/postgresql-contrib-*.install"
         ;;
     esac
     case ${distribution:-} in
       wheezy|squeeze|precise|trusty)
-        sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6 only
-        REVERTS="$REVERTS debian/postgresql-contrib-9.?.install"
+        sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6+ only
+        REVERTS="$REVERTS debian/postgresql-contrib-*.install"
         ;;
     esac
     ;;
