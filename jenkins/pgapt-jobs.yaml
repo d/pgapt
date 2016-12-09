@@ -531,12 +531,13 @@
                         fallback-to-last-successful: true
                 - shell: 'postgresql-testsuite'
         publishers:
+                - archive: *binaries_archive
                 - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
                           predefined-parameters: |
-                                binaries={name}-binaries
+                                binaries={name}-testsuite
                                 queue=$queue
                                 upload=$upload
                 - workspace-cleanup
@@ -557,12 +558,13 @@
                         fallback-to-last-successful: true
                 - shell: 'postgresql-testsuite'
         publishers:
+                - archive: *binaries_archive
                 - ircbot: *only_configs
                 - trigger-parameterized-builds:
                         - project: 'dput'
                           condition: SUCCESS
                           predefined-parameters: |
-                                  binaries={source-name}-binaries-sid-amd64
+                                  binaries={source-name}-testsuite-sid-amd64
                                   queue=$queue
                                   upload=$upload
                 - workspace-cleanup
