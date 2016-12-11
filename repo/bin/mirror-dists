@@ -3,3 +3,7 @@
 TARGET=$(dirname $0)/..
 
 rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists $TARGET
+
+#wget --mirror http://atalia.postgresql.org/dists.tar.gz
+#rm -rf dists
+#tar xf atalia.postgresql.org/dists.tar.gz
