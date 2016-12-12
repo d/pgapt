@@ -40,6 +40,10 @@ set -eux
 # /var/lib/jenkins will probably not exist
 test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 
+# pick up new packages, most notably postgresql-common might have been updated
+apt-get update
+apt-get -y dist-upgrade
+
 # libkrb5-dev needed for postgresql-9.0 and postgresql-9.1
 apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid libkrb5-dev
 if ! dpkg -i *.deb; then
