@@ -1165,6 +1165,7 @@
 - project:
         name: pldebugger
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pldebugger.git
+        git-branch: debian
         jobs:
                 - git-packages-with-next
 
