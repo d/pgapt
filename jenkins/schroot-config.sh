@@ -4,24 +4,18 @@
 
 # ./schroot-config.sh | sudo tee /etc/schroot/chroot.d/sbuild.conf
 
-set -e
+set -eu
 
-DISTS=$(perl -e 'use YAML::Syck;
-	$y = LoadFile("pgapt-jobs.yaml");
-	@d = grep { exists $_->{yamltemplates} } @$y;
-	print "@{$d[0]->{yamltemplates}->{dist_axis}->{values}}";'
-)
-
-# Detect available archs
 ARCH=$(dpkg --print-architecture)
-[ $ARCH = amd64 ] && ARCH="amd64 i386"
+
+case $ARCH in
+	amd64) ARCH="amd64 i386"
+		DISTS="sid stretch jessie wheezy zesty xenial trusty precise" ;;
+	ppc64el)
+		DISTS="sid stretch jessie        zesty xenial trusty" ;;
+esac
 
 for dist in $DISTS; do
-	if [ "$ARCH" = ppc64el ]; then
-		case $dist in # these don't have ppc64el yet
-			wheezy|precise) continue ;;
-		esac
-        fi
 	for arch in $ARCH; do
 		body="$(cat <<-EOF
 			type=directory
