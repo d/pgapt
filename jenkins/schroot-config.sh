@@ -17,7 +17,7 @@ ARCH=$(dpkg --print-architecture)
 [ $ARCH = amd64 ] && ARCH="amd64 i386"
 
 for dist in $DISTS; do
-	if [ $ARCH = ppc64el ]; then
+	if [ "$ARCH" = ppc64el ]; then
 		case $dist in # these don't have ppc64el yet
 			wheezy|precise) continue ;;
 		esac
