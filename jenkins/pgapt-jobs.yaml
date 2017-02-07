@@ -70,8 +70,10 @@
             name: distribution
             values: &dist_list
                     - sid
+                    - stretch
                     - jessie
                     - wheezy
+                    - zesty
                     - xenial
                     - trusty
                     - precise
@@ -80,7 +82,9 @@
             name: distribution
             choices: &ppc64el_dist_list
                     - sid
+                    - stretch
                     - jessie
+                    - zesty
                     - xenial
                     - trusty
             description: 'Distribution to build for'
@@ -462,7 +466,9 @@
                 - shell: |
                     case $distribution in
                       sid)    tag='pgdg+' ;;
+                      stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      zesty)  tag='pgdg17.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       trusty) tag='pgdg14.04+' ;;
                     esac
