@@ -39,7 +39,7 @@ esac
 
 # mirror to use for debootstrap
 case $distribution in
-  precise|trusty|wily|xenial) mirror="$ubuntu" ;;
+  precise|trusty|wily|xenial|zesty) mirror="$ubuntu" ;;
   *) mirror="$deb" ;;
 esac
 
@@ -93,7 +93,7 @@ umask 002
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $distribution in
-	  precise|trusty|wily|xenial) # libossp-uuid is in universe on vivid+
+	  precise|trusty|wily|xenial|zesty) # libossp-uuid is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
 	esac
 	if [ "${BACKPORTS:-}" ]; then
