@@ -19,7 +19,7 @@ apt1="http://apt.postgresql.org/pub/repos/apt"
 apt2="http://atalia.postgresql.org/pub/repos/apt"
 ubuntu="http://de.archive.ubuntu.com/ubuntu"
 case $(hostname) in
-  pgdg*) # use local cache on build host
+  pgdg*|benz*) # use local cache on build host
     apt1="http://atalia-approx:9999/atalia"
     apt2="$apt1"
     ubuntu="http://ubuntu-approx:9999/ubuntu"
@@ -29,7 +29,7 @@ esac
 # enable backports
 deb="http://deb/debian"
 case $(hostname) in
-  pgdg*) # use local cache on build host
+  pgdg*|benz*) # use local cache on build host
     deb="http://debian-approx:9999/debian" ;;
 esac
 case $distribution in
@@ -90,6 +90,7 @@ umask 002
 	fi
 
 	# write sources lists
+	echo "deb $mirror $distribution main" > /etc/apt/sources.list
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $distribution in
