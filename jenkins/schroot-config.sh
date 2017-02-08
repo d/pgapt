@@ -17,6 +17,16 @@ esac
 
 for dist in $DISTS; do
 	for arch in $ARCH; do
+
+		# if arguments are given, execute as command in enviroment
+		# ./schroot-config.sh ./sbuild-update.sh
+		if [ "$*" ]; then
+			echo "### distribution=$dist architecture=$arch ###"
+			export distribution=$dist architecture=$arch
+			"$@"
+			continue
+		fi
+
 		body="$(cat <<-EOF
 			type=directory
 			groups=sbuild
