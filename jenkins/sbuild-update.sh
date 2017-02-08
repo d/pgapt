@@ -125,7 +125,12 @@ umask 002
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
 	apt-get clean
 	
-	dpkg -l 'libpq*' 'newpid' 'pgdg*' 'postgresql*' || :
+	# remove libreadline-dev if present
+	if dpkg -l 'libreadline*-dev' | grep -q '^ii'; then
+	  apt-get remove -y 'libreadline*-dev'
+	fi
+
+	dpkg -l 'libpq*' 'newpid' 'pgdg*' 'postgresql*' 'libreadline*' 'libedit*' || :
 
 	# don't create any cluster on PostgreSQL installation
 	grep -q '^create_main_cluster = false' /etc/postgresql-common/createcluster.conf || sed -i -e 's/.*create_main_cluster.*/create_main_cluster = false/' /etc/postgresql-common/createcluster.conf
