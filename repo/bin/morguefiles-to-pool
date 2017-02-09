@@ -15,7 +15,7 @@ move_file ()
   [ "$file" != "$source" ]
 
   initial=$(echo $source | egrep -o '^(lib)?.')
-  mkdir -pv "$initial/$source"
+  mkdir -p "$initial/$source"
   mv $1 $initial/$source
 }
 
