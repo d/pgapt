@@ -36,7 +36,7 @@ for DIST in $DISTRIBUTIONS ; do
 			wily)
 				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			xenial) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			zesty) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 9.2 9.3 9.4 9.5 9.6" ;;
 			*)
