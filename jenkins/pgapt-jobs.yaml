@@ -60,7 +60,7 @@
             name: architecture
             values: [ppc64el]
 
-    amd64_only_axis: &amd64_only_axis
+    git_head_arch_axis: &git_head_arch_axis
             type: slave
             name: architecture
             values: [amd64]
@@ -94,10 +94,12 @@
             name: distribution
             values: *ppc64el_dist_list
 
-    sid_only_axis: &sid_only_axis
+    git_head_dist_axis: &git_head_dist_axis
             type: user-defined
             name: distribution
-            values: [sid]
+            values:
+                    - sid
+                    - xenial
 
     ircbot_only_configs: &only_configs
             strategy: any-failure
@@ -208,7 +210,7 @@
                 - pollscm:
                         cron: "H */6 * * *"
         axes:
-                - axis: *sid_only_axis
+                - axis: *git_head_dist_axis
         scm:
                 - git:
                         url: '{git-url}'
@@ -224,7 +226,7 @@
                 - ircbot:
                         matrix-notifier: only-parent
                 - trigger-parameterized-builds:
-                        - project: '{source-name}-binaries-sid-amd64'
+                        - project: '{source-name}-binaries-git-head'
                           condition: SUCCESS
                           predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
@@ -355,7 +357,7 @@
 # binaries triggered from -source-git-head
 - job-template:
         <<: *binaries_template
-        name: '{source-name}-binaries-sid-amd64'
+        name: '{source-name}-binaries-git-head'
         #job-name: '{name}-binaries'
         builders:
                 - shell: 'rm -rf *'
@@ -367,8 +369,8 @@
                         fallback-to-last-successful: true
                 - shell: '{noadt}{backports}sbuild-package'
         axes:
-                - axis: *amd64_only_axis
-                - axis: *dist_axis
+                - axis: *git_head_arch_axis
+                - axis: *git_head_dist_axis
 
 # binaries for building modules for PostgreSQL beta
 - job-template:
@@ -384,8 +386,8 @@
         <<: *binaries_template
         name: '{name}-binaries-devel'
         axes:
-                - axis: *amd64_only_axis
-                - axis: *sid_only_axis
+                - axis: *git_head_arch_axis
+                - axis: *git_head_dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
@@ -550,15 +552,15 @@
 
 - job-template:
         <<: *testsuite_template
-        name: '{source-name}-testsuite-sid-amd64'
+        name: '{source-name}-testsuite-git-head'
         #job-name: '{name}-testsuite'
         axes:
-                - axis: *amd64_only_axis
-                - axis: *dist_axis
+                - axis: *git_head_arch_axis
+                - axis: *git_head_dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: '{source-name}-binaries-sid-amd64/architecture=$architecture,distribution=$distribution'
+                        project: '{source-name}-binaries-git-head/architecture=$architecture,distribution=$distribution'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
@@ -570,7 +572,7 @@
                         - project: 'dput'
                           condition: SUCCESS
                           predefined-parameters: |
-                                  binaries={source-name}-testsuite-sid-amd64
+                                  binaries={source-name}-testsuite-git-head
                                   queue=$queue
                                   upload=all
                 - workspace-cleanup
@@ -606,11 +608,11 @@
 
 - job-template:
         <<: *upgrade_template
-        name: 'upgrade-{oldversion}-{newversion}-sid-amd64'
+        name: 'upgrade-{oldversion}-{newversion}-git-head'
         job-name: 'upgrade-{oldversion}-{newversion}'
         axes:
-                - axis: *amd64_only_axis
-                - axis: *sid_only_axis
+                - axis: *git_head_arch_axis
+                - axis: *git_head_dist_axis
 
 # job groups
 
@@ -1292,9 +1294,9 @@
         dist-filter: 'distribution=="sid"'
         jobs:
                 - '{source-name}-source-git-head'
-                - '{source-name}-binaries-sid-amd64'
-                - '{source-name}-testsuite-sid-amd64'
-        next-job: postgresql-10-testsuite-sid-amd64
+                - '{source-name}-binaries-git-head'
+                - '{source-name}-testsuite-git-head'
+        next-job: postgresql-10-testsuite-git-head
         noadt: 'ADT=skip '
 
 - project:
@@ -1528,14 +1530,14 @@
         oldversion: 9.4
         newversion: 9.5
         jobs:
-                - upgrade-{oldversion}-{newversion}-sid-amd64
+                - upgrade-job
 
 - project:
         name: upgrade-9.4-9.6
         oldversion: 9.4
         newversion: 9.6
         jobs:
-                - upgrade-{oldversion}-{newversion}-sid-amd64
+                - upgrade-job
 
 ## pgloader and dependencies
 - project:
