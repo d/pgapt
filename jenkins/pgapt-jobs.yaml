@@ -99,6 +99,7 @@
             name: distribution
             values:
                     - sid
+                    - jessie
                     - xenial
 
     ircbot_only_configs: &only_configs

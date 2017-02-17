@@ -17,7 +17,7 @@ for DIST in $DISTRIBUTIONS ; do
 			wheezy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			jessie) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			stretch) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 9.2 9.3 9.4 9.5 9.6" ;;
 			sid)    ARCHS="amd64 i386 ppc64el"
