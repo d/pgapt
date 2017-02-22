@@ -101,6 +101,7 @@
                     - sid
                     - jessie
                     - xenial
+                    - trusty # for travis
 
     ircbot_only_configs: &only_configs
             strategy: any-failure
