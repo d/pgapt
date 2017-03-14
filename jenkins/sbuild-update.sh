@@ -26,11 +26,14 @@ case $(hostname) in
     ;;
 esac
 
-# enable backports
+# enable backports and security
 deb="http://deb/debian"
+security="http://security.debian.org/debian-security"
 case $(hostname) in
   pgdg*|benz*) # use local cache on build host
-    deb="http://debian-approx:9999/debian" ;;
+    deb="http://debian-approx:9999/debian"
+    security="http://security-approx:9999/security"
+    ;;
 esac
 case $distribution in
   squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
@@ -95,7 +98,14 @@ umask 002
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $distribution in
 	  precise|trusty|wily|xenial|zesty) # libossp-uuid is in universe on vivid+
-	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list ;;
+	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list
+	    echo "deb $ubuntu $distribution-security main" > /etc/apt/sources.list.d/security.list
+	    ;;
+	  sid) # no security
+	    ;;
+	  *)
+	    echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
+	    ;;
 	esac
 	if [ "${BACKPORTS:-}" ]; then
 	  echo "${BACKPORTS:-}" > /etc/apt/sources.list.d/backports.list
@@ -105,7 +115,8 @@ umask 002
 	  fi
 	fi
 
-	# tell ucf not to ask any questions
+	# tell debconf and ucf not to ask any questions
+	export DEBIAN_FRONTEND=noninteractive
 	export UCF_FORCE_CONFFNEW=y UCF_FORCE_CONFFMISS=y
 
 	apt-get update
