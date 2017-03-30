@@ -53,12 +53,6 @@ case $stage in
 	*) error "Bad stage $stage" ;;
 esac
 
-# include universe on ubuntu
-for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
-  [ -f "$FILE" ] || continue
-  EXTRABG="--bg $FILE"
-done
-
 # list of all packages
 MAINPKG=$(awk '/^Package:/ { print $2 }' $DISTSDIR/$DIST/main/binary-${architecture}/Packages)
 
@@ -77,7 +71,19 @@ if [ $architecture = ppc64el ]; then
 fi
 
 # run debcheck
-DEBCHECK="dose-debcheck -v -f -e ${EXTRABG:-} --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
+DEBCHECK="dose-debcheck -v -f -e --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
+
+# security (Debian + Ubuntu)
+for FILE in $LISTSDIR/*_dists_${distribution}_updates_main_binary-${architecture}_Packages $LISTSDIR/*_dists_${distribution}-security_main_binary-${architecture}_Packages; do
+  [ -f "$FILE" ] || continue
+  DEBCHECK="$DEBCHECK --bg $FILE"
+done
+
+# include universe on Ubuntu
+for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
+  [ -f "$FILE" ] || continue
+  DEBCHECK="$DEBCHECK --bg $FILE"
+done
 
 # bpo
 case $distribution in
