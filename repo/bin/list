@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Dpkg::Version;
+
+die "Syntax: $0 <pkg>" unless (@ARGV == 1);
+my $want_pkg = $ARGV[0];
+
+print "$want_pkg:\n";
+
+$/ = ''; # slurp paragraphs
+
+my @packages_files = glob "dists/*/*/*/Packages";
+
+foreach my $packages (@packages_files) {
+  my ($dists, $dist, $component, $arch) = split m!/!, $packages;
+  $arch =~ s/^binary-//;
+
+  open P, $packages or die "$packages: $!";
+  while (<P>) {
+    my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
+    my ($ver) = /^Version: (.+)/m or die "$packages: paragraph without Version: $_";
+
+    next unless ($pkg eq $want_pkg);
+    printf "%-20s %-4s %-7s %s\n",
+      $dist, $component, $arch, $ver;
+  }
+  close P;
+}
