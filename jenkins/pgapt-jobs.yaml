@@ -920,6 +920,12 @@
                 - git-packages
 
 - project:
+        name: bgw-replstatus
+        git-url: https://github.com/mhagander/bgw_replstatus.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: check-postgres
         git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
         jobs:
