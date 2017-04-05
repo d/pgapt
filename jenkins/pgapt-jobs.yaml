@@ -1036,6 +1036,12 @@
                 - git-packages
 
 - project:
+        name: pgaudit
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgaudit.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgbadger
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgbadger.git
         jobs:
