@@ -1349,6 +1349,8 @@
 - project:
         name: postgresql-numeral
         git-url: https://github.com/ChristophBerg/postgresql-numeral.git
+        # needs bison 3
+        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
         jobs:
                 - git-packages-with-next
 
