@@ -1347,6 +1347,12 @@
                 - git-packages-with-next
 
 - project:
+        name: postgresql-numeral
+        git-url: https://github.com/ChristophBerg/postgresql-numeral.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: postgresql-pgmp
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
         jobs:
