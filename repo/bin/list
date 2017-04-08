@@ -11,13 +11,17 @@ print "$want_pkg:\n";
 
 $/ = ''; # slurp paragraphs
 
-my @packages_files = glob "dists/*/*/*/Packages";
+my @packages_files = sort (glob ("dists/*/*/*/Packages"), glob ("dists/*/*/*/Sources.gz"));
 
 foreach my $packages (@packages_files) {
   my ($dists, $dist, $component, $arch) = split m!/!, $packages;
   $arch =~ s/^binary-//;
 
-  open P, $packages or die "$packages: $!";
+  if ($packages =~ /\.gz$/) {
+    open P, '-|', 'gunzip', '-c', $packages or die "$packages: $!";
+  } else {
+    open P, $packages or die "$packages: $!";
+  }
   while (<P>) {
     my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
     my ($ver) = /^Version: (.+)/m or die "$packages: paragraph without Version: $_";
