@@ -38,6 +38,12 @@ PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
 trap 'rm -f ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
 
+# security (Debian + Ubuntu)
+for FILE in $LISTSDIR/*_dists_${distribution}_updates_main_binary-${architecture}_Packages $LISTSDIR/*_dists_${distribution}-security_main_binary-${architecture}_Packages; do
+  [ -f "$FILE" ] || continue
+  PKG="$PKG $FILE"
+done
+
 # include universe on ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
   [ -f "$FILE" ] || continue
