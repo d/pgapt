@@ -1084,6 +1084,12 @@
                 - git-packages
 
 - project:
+        name: pg-dirtyread
+        git-url: https://github.com/ChristophBerg/pg_dirtyread.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgespresso
         git-url: git://git.debian.org/collab-maint/pgespresso.git
         jobs:
