@@ -172,6 +172,11 @@ case $PACKAGE in
       set_package_component "" ""
     fi
     show_package_sections
+
+    # enable cassert on sid
+    if [ "$distribution" = "sid" ]; then
+      sed -i -e 's/^#CASSERT_FLAGS/CASSERT_FLAGS/' debian/rules
+    fi
     ;;
 esac
 
