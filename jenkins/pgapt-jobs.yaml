@@ -76,7 +76,6 @@
                     - zesty
                     - xenial
                     - trusty
-                    - precise
 
     ppc64el_dist_choice: &ppc64el_dist_choice
             name: distribution
@@ -288,7 +287,7 @@
                 - choice: *queue_choice
                 - choice: *upload_choice
         execution-strategy: &binaries_execution_strategy
-                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {arch-filter} && {dist-filter}'
+                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -526,7 +525,7 @@
         parameters:
                 - choice: *queue_choice
         execution-strategy:
-                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))) && {arch-filter} && {dist-filter}'
+                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -740,7 +739,7 @@
                                 - testing
 
         execution-strategy:
-                combination-filter: '(architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise"))'
+                combination-filter: '(architecture!="ppc64el") || (distribution!="wheezy")'
         builders:
                 - shell: debcheck-pgapt
         publishers:
@@ -765,7 +764,7 @@
                 sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
-                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise")))'
+                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
@@ -811,7 +810,7 @@
         project-type: matrix
         child-workspace: .
         execution-strategy:
-                combination-filter: '((architecture!="ppc64el") || ((distribution!="wheezy") && (distribution!="precise")))'
+                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
                 sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
@@ -895,8 +894,6 @@
 - project:
         name: autopkgtest
         git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
-        # limit to distributions with python3
-        dist-filter: '(distribution!="precise")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -942,7 +939,7 @@
         name: dh-exec
         # backport 0.14 from jessie to older dists
         apt-suite: jessie
-        dist-filter: '(distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty")'
+        dist-filter: '(distribution=="wheezy") || (distribution=="trusty")'
         jobs:
                 - apt-packages
 
@@ -950,7 +947,7 @@
         name: gdal
         # sid and trusty are current enough
         apt-suite: ??
-        dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
+        dist-filter: '(distribution=="wheezy")'
         jobs:
                 - apt-packages
 
@@ -958,7 +955,7 @@
         name: geos
         # sid and trusty are current enough
         apt-suite: ??
-        dist-filter: '(distribution=="wheezy") || (distribution=="precise")'
+        dist-filter: '(distribution=="wheezy")'
         jobs:
                 - apt-packages
 
@@ -1117,7 +1114,7 @@
         name: pgmodeler
         apt-suite: unstable
         # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - apt-packages
 
@@ -1148,9 +1145,8 @@
 - project:
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
-        # needs libcgal-dev (in multiverse on precise, let's not care)
         # dh_sphinxdoc fails on wheezy
-        dist-filter: '(distribution!="precise") && (distribution!="wheezy")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1207,8 +1203,6 @@
         name: plv8
         git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
         git-branch: debian
-        # uses -std=c++11
-        dist-filter: '(distribution!="precise")'
         # libv8-dev/ppc64el is missing in Debian Jessie
         arch-filter: '!(architecture=="ppc64el" && distribution=="jessie")'
         jobs:
@@ -1340,9 +1334,8 @@
 - project:
         name: postgresql-multicorn
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
-        # needs dh-python (precise)
         # python foo (wheezy)
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1356,7 +1349,7 @@
         name: postgresql-numeral
         git-url: https://github.com/ChristophBerg/postgresql-numeral.git
         # needs bison 3
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1377,7 +1370,7 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
         # wheezy/precise amd64: ERROR:  cache lookup failed for type 2192165
         # (squeeze and wheezy/precise i386 work)
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1434,9 +1427,8 @@
 - project:
         name: python-argcomplete
         git-url: git://anonscm.debian.org/collab-maint/python-argcomplete.git
-        # needs dh-python (precise)
         # python foo (wheezy)
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1449,8 +1441,6 @@
 - project: # needed by wal-e
         name: python-azure
         git-url: bzr::lp:~stub/ubuntu/trusty/python-azure/trunk
-        # needs dh-python
-        dist-filter: '(distribution!="precise")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1505,7 +1495,7 @@
         git-url: https://github.com/anse1/sqlsmith.git
         git-branch: debian
         # needs libpqxx 4
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1513,7 +1503,7 @@
         name: wal-e
         git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
         # needs python-swiftclient
-        dist-filter: '(distribution!="wheezy") && (distribution!="precise")'
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1580,7 +1570,7 @@
         name: sbcl
         apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
-        arch-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="precise") || (distribution=="trusty") || (distribution=="utopic"))'
+        arch-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="trusty") || (distribution=="utopic"))'
         jobs:
                 - apt-packages
 
