@@ -1105,6 +1105,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pglogical
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pglogical.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgmemcache
         git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
         jobs:
