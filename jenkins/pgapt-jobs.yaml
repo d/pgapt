@@ -1222,7 +1222,7 @@
 
 - project:
         name: postgresql-8.2
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: '8.2-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1231,7 +1231,7 @@
 
 - project:
         name: postgresql-8.3
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: '8.3-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1240,7 +1240,7 @@
 
 - project:
         name: postgresql-8.4
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: '8.4-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1249,7 +1249,7 @@
 
 - project:
         name: postgresql-9.0
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: '9.0-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1258,7 +1258,7 @@
 
 - project:
         name: postgresql-9.1
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.1
         jobs:
                 - git-packages-adt
@@ -1266,7 +1266,7 @@
 
 - project:
         name: postgresql-9.2
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.2
         jobs:
                 - git-packages-adt
@@ -1274,7 +1274,7 @@
 
 - project:
         name: postgresql-9.3
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.3
         jobs:
                 - git-packages-adt
@@ -1282,7 +1282,7 @@
 
 - project:
         name: postgresql-9.4
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.4
         jobs:
                 - git-packages-adt
@@ -1290,7 +1290,7 @@
 
 - project:
         name: postgresql-9.5
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.5
         jobs:
                 - git-packages-adt
@@ -1298,11 +1298,19 @@
 
 - project:
         name: postgresql-9.6
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql.git
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.6
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.6-testsuite'
+
+- project:
+        name: postgresql-10
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-branch: 10
+        jobs:
+                - git-packages-adt
+        next-job: 'postgresql-10-testsuite'
 
 # the PostgreSQL devel version:
 - project:

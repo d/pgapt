@@ -35,7 +35,7 @@ Suite: stretch-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6
+Components: main 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: stretch-pgdg.log
 Uploaders: uploaders
@@ -50,7 +50,7 @@ Suite: stretch-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6
+Components: main 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: stretch-pgdg-testing.log
 Uploaders: uploaders
@@ -99,7 +99,7 @@ Suite: wheezy-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: wheezy-pgdg.log
 Uploaders: uploaders
@@ -114,7 +114,7 @@ Suite: wheezy-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: wheezy-pgdg-testing.log
 Uploaders: uploaders
@@ -227,7 +227,7 @@ Suite: zesty-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6
+Components: main 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: zesty-pgdg.log
 Uploaders: uploaders
@@ -242,7 +242,7 @@ Suite: zesty-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6
+Components: main 9.2 9.3 9.4 9.5 9.6 10
 SignWith: ACCC4CF8
 Log: zesty-pgdg-testing.log
 Uploaders: uploaders
