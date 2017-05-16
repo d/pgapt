@@ -25,9 +25,18 @@
             name: queue
             choices:
                     - incoming
+                    - snapshot
                     - private
                     - discard
-            description: 'Incoming queue to use: incoming uploads to reprepro, private stages the upload in a directory, discard throws the upload away.'
+            description: 'Incoming queue to use: incoming uploads to reprepro, snapshot uploads to *-snapshot distributions, private stages the upload in a directory, discard throws the upload away.'
+
+    queue_choice_snapshot: &queue_choice_snapshot
+            <<: *queue_choice
+            choices:
+                    - snapshot
+                    - incoming
+                    - private
+                    - discard
 
     buildtype_choice: &buildtype_choice
             name: buildtype
@@ -205,7 +214,7 @@
                                 - '{merge-branch}'
                         description: 'Packaging branch to merge with before build'
                 - string: *revision_string
-                - choice: *queue_choice
+                - choice: *queue_choice_snapshot
                 - choice: *buildtype_choice
         triggers:
                 - pollscm:
