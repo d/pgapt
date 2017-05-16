@@ -219,7 +219,7 @@ case $PACKAGE in
     esac
     ;;
 
-  geos)
+  geos|docbook-xsl)
     DOT='~'
     ;;
 

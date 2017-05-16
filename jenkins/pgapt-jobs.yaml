@@ -953,6 +953,14 @@
                 - apt-packages
 
 - project:
+        name: docbook-xsl
+        # postgresql-10 needs docbook-xsl >= 1.77
+        apt-suite: jessie
+        dist-filter: '(distribution=="wheezy")'
+        jobs:
+                - apt-packages
+
+- project:
         name: gdal
         # sid and trusty are current enough
         apt-suite: ??
