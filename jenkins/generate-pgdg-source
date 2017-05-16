@@ -185,14 +185,12 @@ case $PACKAGE in
   postgresql-9.[56]|postgresql-??)
     case ${distribution:-} in
       wheezy|squeeze|precise)
-        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-contrib-*.install
-        REVERTS="$REVERTS debian/postgresql-contrib-*.install"
+        sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-*.install
         ;;
     esac
     case ${distribution:-} in
       wheezy|squeeze|precise|trusty)
         sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6+ only
-        REVERTS="$REVERTS debian/postgresql-contrib-*.install"
         ;;
     esac
     ;;
