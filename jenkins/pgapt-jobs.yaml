@@ -214,7 +214,7 @@
                                 - '{merge-branch}'
                         description: 'Packaging branch to merge with before build'
                 - string: *revision_string
-                - choice: *queue_choice_snapshot
+                - choice: *queue_choice
                 - choice: *buildtype_choice
         triggers:
                 - pollscm:
