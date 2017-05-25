@@ -992,9 +992,9 @@
 
 - project:
         name: libdbd-pg-perl
-        apt-suite: unstable
+        git-url: https://anonscm.debian.org/git/pkg-perl/packages/libdbd-pg-perl.git
         jobs:
-                - apt-packages
+                - git-packages
 
 - project:
         name: libtap-parser-sourcehandler-pgtap-perl
