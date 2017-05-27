@@ -140,7 +140,8 @@
 # apt template
 
 - job-template: &apt_source_template
-        name: '{name}-source-apt'
+        name: '{name}-source'
+        id: 'source-apt'
         job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
@@ -180,7 +181,8 @@
 
 - job-template: &git_source_template
         <<: *apt_source_template
-        name: '{name}-source-git'
+        name: '{name}-source'
+        id: 'source-git'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
                 - string: &git_branch
@@ -205,7 +207,7 @@
 - job-template:
         <<: *git_source_template
         name: '{source-name}-source-git-head'
-        job-name: '{source-name}-source-git-head'
+        id: 'source-git-head'
         parameters:
                 - string: *git_branch
                 - choice:
@@ -246,6 +248,7 @@
 - job:
         <<: *apt_source_template
         name: 'build-source'
+        id: 'build-source'
         description: 'Fetch source from an existing pkg-source/sid build and rebuild it for a different (usually new) distribution'
         project-type: freestyle
         logrotate: &logrotate_build
@@ -290,6 +293,7 @@
 
 - job-template: &binaries_template
         name: '{name}-binaries'
+        id: 'binaries'
         description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         parameters:
@@ -330,9 +334,9 @@
 
 # same as {name}-binaries, but running sequentially
 - job-template:
-        name: '{name}-binaries-sequential'
-        job-name: '{name}-binaries'
         <<: *binaries_template
+        name: '{name}-binaries'
+        id: 'binaries-sequential'
         description: 'Build Debian binary package of {name}, running configurations sequentially.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         execution-strategy:
                 <<: *binaries_execution_strategy
@@ -341,8 +345,8 @@
 # same as {name}-binaries, but triggers -beta and -devel builds on success
 - job-template:
         <<: *binaries_template
-        job-name: '{name}-binaries'
-        name: '{name}-binaries-with-next'
+        name: '{name}-binaries'
+        id: 'binaries-with-next'
         publishers:
                 - archive: *binaries_archive
                 - junit:
@@ -368,7 +372,7 @@
 - job-template:
         <<: *binaries_template
         name: '{source-name}-binaries-git-head'
-        #job-name: '{name}-binaries'
+        id: 'binaries-git-head'
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -386,6 +390,7 @@
 - job-template:
         <<: *binaries_template
         name: '{name}-binaries-beta'
+        id: 'binaries-beta'
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
@@ -395,6 +400,7 @@
 - job-template:
         <<: *binaries_template
         name: '{name}-binaries-devel'
+        id: 'binaries-devel'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
@@ -408,6 +414,7 @@
 - job:
         <<: *binaries_template
         name: 'build-binaries'
+        id: 'build-binaries'
         logrotate: *logrotate_build
         concurrent: true
         parameters:
@@ -455,6 +462,7 @@
 - job: &build_ppc64_all
         <<: *binaries_template
         name: 'build-ppc64el-all'
+        id: 'build-ppc64el-all'
         logrotate: *logrotate_build
         concurrent: true
         parameters:
@@ -507,6 +515,7 @@
 - job:
         <<: *build_ppc64_all
         name: 'build-ppc64el'
+        id: 'build-ppc64el'
         project-type: freestyle
         node: ppc64el
         parameters:
@@ -629,52 +638,52 @@
 - job-group:
         name: apt-packages
         jobs:
-                - '{name}-source-apt'
-                - '{name}-binaries'
+                - 'source-apt'
+                - 'binaries'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: apt-packages-with-next
         jobs:
-                - '{name}-source-apt'
-                - '{name}-binaries-with-next'
-                - '{name}-binaries-beta'
-                - '{name}-binaries-devel'
+                - 'source-apt'
+                - 'binaries-with-next'
+                - 'binaries-beta'
+                - 'binaries-devel'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages
         jobs:
-                - '{name}-source-git'
-                - '{name}-binaries'
+                - 'source-git'
+                - 'binaries'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-sequential
         jobs:
-                - '{name}-source-git'
-                - '{name}-binaries-sequential'
+                - 'source-git'
+                - 'binaries-sequential'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-with-next
         jobs:
-                - '{name}-source-git'
-                - '{name}-binaries-with-next'
-                - '{name}-binaries-beta'
-                - '{name}-binaries-devel'
+                - 'source-git'
+                - 'binaries-with-next'
+                - 'binaries-beta'
+                - 'binaries-devel'
         next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-adt
         jobs:
-                - '{name}-source-git'
-                - '{name}-binaries'
+                - 'source-git'
+                - 'binaries'
                 - '{name}-testsuite'
         #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
         noadt: 'ADT=skip '
@@ -981,14 +990,6 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
         jobs:
                 - git-packages-with-next
-
-- project:
-        name: jenkins-job-builder
-        git-url: https://github.com/ChristophBerg/jenkins-job-builder-deb.git
-        dist-filter: '(distribution=="sid") || (distribution=="jessie")'
-        backports: 'BACKPORTS=yes '
-        jobs:
-                - git-packages
 
 - project:
         name: libdbd-pg-perl
@@ -1337,8 +1338,8 @@
         git-branch: origin/master
         merge-branch: 10
         jobs:
-                - '{source-name}-source-git-head'
-                - '{source-name}-binaries-git-head'
+                - 'source-git-head'
+                - 'binaries-git-head'
                 - '{source-name}-testsuite-git-head'
         next-job: postgresql-10-testsuite-git-head
         noadt: 'ADT=skip '

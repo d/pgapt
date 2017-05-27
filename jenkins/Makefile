@@ -1,5 +1,5 @@
 JOBS = pgapt-jobs.yaml
-JJB = jenkins-job-builder
+JJB = jenkins-jobs
 
 all: test lists
 
