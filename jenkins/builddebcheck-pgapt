@@ -33,7 +33,7 @@ else
   error "No dists directory found."
 fi
 
-# main package list
+# Debian/Ubuntu main package list
 PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
 trap 'rm -f ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
@@ -44,15 +44,28 @@ for FILE in $LISTSDIR/*_dists_${distribution}_updates_main_binary-${architecture
   PKG="$PKG $FILE"
 done
 
-# include universe on ubuntu
+# include universe on Ubuntu
 for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
   [ -f "$FILE" ] || continue
   PKG="$PKG $FILE"
 done
 
+# include pgdg dists
+case $stage in
+  production)
+    DIST="$distribution-pgdg"
+    PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
+    ;;
+  testing)
+    DIST="$distribution-pgdg-testing"
+    PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
+    ;;
+  *) error "Bad stage $stage" ;;
+esac
+
 # packages not depending on backports
-MAINSRC=$(mktemp main_source_Sources.XXXXXX)
-zcat $DISTSDIR/$distribution-pgdg-testing/main/source/Sources.gz > $MAINSRC
+MAINSRC=$(mktemp ${DIST}_main_source_Sources.XXXXXX)
+zcat $DISTSDIR/$DIST/main/source/Sources.gz > $MAINSRC
 
 case $distribution in
   squeeze|wheezy|jessie)
@@ -63,20 +76,30 @@ case $distribution in
     done
 
     # packages depending on backports
-    BPOSRC=$(mktemp bpo_source_Sources.XXXXXX)
+    BPOSRC=$(mktemp ${DIST}_bpo_source_Sources.XXXXXX)
     for pkg in $(cat packages.backports); do
-      zcat $DISTSDIR/$distribution-pgdg-testing/main/source/Sources.gz | \
-        grep-dctrl -S $pkg >> $BPOSRC || :
+      grep-dctrl -S $pkg < $MAINSRC >> $BPOSRC || :
     done
 
     # include backports on debian
     [ -d "$BPODIR" ] || error "$BPODIR not found"
     for FILE in $BPODIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
-      [ -f "$FILE" ] || continue
+      [ -f "$FILE" ] || error "$FILE not found"
       BPO="$FILE"
     done
     ;;
 esac
+
+# exclude pgloader on the older dists in production
+if [ "$stage" = "production" ]; then
+  case $distribution in
+    jessie|wheezy|trusty)
+      echo "Excluding pgloader, its build-deps are in -testing only"
+      grep-dctrl --not -S pgloader $MAINSRC > $MAINSRC.tmp
+      mv $MAINSRC.tmp $MAINSRC
+      ;;
+  esac
+fi
 
 # packages not tested on ppc64el
 if [ $architecture = ppc64el ]; then
@@ -85,21 +108,6 @@ if [ $architecture = ppc64el ]; then
     mv $MAINSRC.tmp $MAINSRC
   done
 fi
-
-# include pgdg dists
-case $stage in
-	production)
-		DIST="$distribution-pgdg"
-		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
-		# -pgdg packages may use -pgdg -testing for building
-		PKG="$PKG $DISTSDIR/$DIST-testing/main/binary-${architecture}/Packages"
-		;;
-	testing)
-		DIST="$distribution-pgdg-testing"
-		PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
-		;;
-	*) error "Bad stage $stage" ;;
-esac
 
 # run builddebcheck
 BUILDDEBCHECK="dose-builddebcheck -v -f -e --deb-native-arch=$architecture"
@@ -110,7 +118,7 @@ echo
 
 if test -s "${BPO:-}"; then
   echo "### Running builddebcheck: main, packages needing backports"
-  grep '^Package:' $BPOSRC
+  grep '^Package:' $BPOSRC || :
   ( set -x; $BUILDDEBCHECK $PKG $BPO $BPOSRC ) || EXIT=1
   echo
 fi
