@@ -22,7 +22,7 @@ if [ "${upload:-all}" = "extension-only" ]; then
 		case $c in
 			*_source.changes) continue ;;
 		esac
-		NONEXTDEBS=$(dcmd --deb echo $c | xargs -n1 | egrep -v -- '[^_]-[1-9][0-9]?\.[0-9][-_]' | sed -e 's!.*/!!')
+		NONEXTDEBS=$(dcmd --deb echo $c | xargs -n1 | egrep -v -- '[^_]-[1-9]([0-9]|\.[0-9])[-_]' | sed -e 's!.*/!!')
 		[ -z "$NONEXTDEBS" ] && continue # only version-specific .debs in there
 		changestool $c dumbremove $NONEXTDEBS
 	done
