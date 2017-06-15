@@ -1029,6 +1029,8 @@
         name: ora2pg
         git-url: https://anonscm.debian.org/git/collab-maint/ora2pg.git
         git-branch: debian/unstable
+        # needs dh 10
+        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
