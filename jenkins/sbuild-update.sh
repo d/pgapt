@@ -38,6 +38,7 @@ esac
 case $distribution in
   squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
   wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
+  trusty|xenial) BACKPORTS="deb $ubuntu $distribution-backports main" ;;
 esac
 
 # mirror to use for debootstrap

@@ -1031,6 +1031,7 @@
         git-branch: debian/unstable
         # needs dh 10
         dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

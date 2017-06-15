@@ -72,13 +72,17 @@ esac
 # enable backports
 if [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
   deb="http://deb/debian"
+  ubuntu="http://de.archive.ubuntu.com/ubuntu"
   case $(hostname) in
     pgdg*) # use local cache on build host
-      deb="http://debian-approx:9999/debian" ;;
+      deb="http://debian-approx:9999/debian"
+      ubuntu="http://ubuntu-approx:9999/ubuntu"
+      ;;
   esac
   case $distribution in
     squeeze) BPOREPO="deb $deb-backports/ $distribution-backports main" ;;
     wheezy|jessie) BPOREPO="deb $deb $distribution-backports main" ;;
+    trusty|xenial) BPOREPO="deb $ubuntu $distribution-backports main" ;;
   esac
 fi
 
