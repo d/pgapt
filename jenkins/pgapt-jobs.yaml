@@ -1026,6 +1026,12 @@
                 - git-packages
 
 - project:
+        name: ora2pg
+        git-url: https://anonscm.debian.org/git/collab-maint/ora2pg.git
+        jobs:
+                - git-packages
+
+- project:
         name: orafce
         git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
         jobs:
