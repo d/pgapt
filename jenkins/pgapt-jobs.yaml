@@ -1042,6 +1042,12 @@
                 - git-packages-with-next
 
 - project:
+        name: paf
+        git-url: https://github.com/dalibo/PAF.git
+        jobs:
+                - git-packages
+
+- project:
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
         git-branch: unstable
