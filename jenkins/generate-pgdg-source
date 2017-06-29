@@ -197,8 +197,10 @@ case $PACKAGE in
 
   postgresql-common)
     case ${distribution:-} in
-      lucid|precise|saucy|trusty|squeeze|wheezy) # remove systemd dependency
+      trusty|wheezy)
+        TWEAK="Remove systemd dependency"
         sed -i -e '/dh-systemd/d' debian/control
+        sed -i -e '/^WITH_SYSTEMD/d' debian/rules
         ;;
     esac
     ;;
