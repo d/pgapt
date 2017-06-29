@@ -1100,6 +1100,7 @@
 - project:
         name: pgbouncer
         git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

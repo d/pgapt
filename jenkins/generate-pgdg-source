@@ -223,6 +223,15 @@ case $PACKAGE in
     DOT='~'
     ;;
 
+  pgbouncer)
+    case ${distribution:-} in
+      wheezy|trusty|xenial) # c-ares is too old
+        sed -i -e '/libc-ares-dev/d' debian/control
+        sed -i -e '/1.7.2-3/,/28 Jun 2017/d' debian/NEWS # remove news item about c-ares switch
+        ;;
+    esac
+    ;;
+
   pgpool2)
     case ${distribution:-} in
       squeeze|wheezy|lucid|precise|saucy|trusty) # remove systemd dependency

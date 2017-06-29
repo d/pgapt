@@ -1,2 +1,4 @@
 autopkgtest
+ora2pg
+pgbouncer
 python-azure
