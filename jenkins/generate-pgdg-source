@@ -228,7 +228,7 @@ case $PACKAGE in
       wheezy|trusty|xenial)
         TWEAK="Revert switch to c-ares because it is too old on $distribution"
         sed -i -e '/libc-ares-dev/d' debian/control
-        sed -i -e 's/--with-cares=auto/--with-cares=no/d' debian/rules
+        sed -i -e 's/--with-cares=yes/--with-cares=no/' debian/rules
         sed -i -e '/1.7.2-3/,/28 Jun 2017/d' debian/NEWS # remove news item about c-ares switch
         ;;
     esac
