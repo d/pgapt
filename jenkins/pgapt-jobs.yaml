@@ -713,8 +713,24 @@
         builders:
                 - shell: 'cd jenkins && make && make update'
         publishers:
+                - trigger:
+                        project: apt.postgresql.org-ppc64el
                 - ircbot:
                         matrix-notifier: all
+
+- job:
+        name: apt.postgresql.org-ppc64el
+        node: ppc64el
+        scm:
+                - git:
+                        url: git://git.postgresql.org/git/pgapt.git
+                        branches:
+                                - master
+                        wipe-workspace: false
+        publishers:
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
 
 - job:
         name: 'debcheck-distsmirror'
