@@ -68,7 +68,7 @@ MAINSRC=$(mktemp ${DIST}_main_source_Sources.XXXXXX)
 zcat $DISTSDIR/$DIST/main/source/Sources.gz > $MAINSRC
 
 case $distribution in
-  squeeze|wheezy|jessie)
+  squeeze|wheezy|jessie|trusty|xenial)
     [ -f packages.backports ] || error "packages.backports not found"
     for pkg in $(cat packages.backports); do
       grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
@@ -81,7 +81,7 @@ case $distribution in
       grep-dctrl -S $pkg < $MAINSRC >> $BPOSRC || :
     done
 
-    # include backports on debian
+    # include backports packages file
     [ -d "$BPODIR" ] || error "$BPODIR not found"
     for FILE in $BPODIR/*_dists_${distribution}-backports_main_binary-${architecture}_Packages ; do
       [ -f "$FILE" ] || error "$FILE not found"

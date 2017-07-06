@@ -87,7 +87,7 @@ done
 
 # bpo
 case $distribution in
-  squeeze|wheezy|jessie)
+  squeeze|wheezy|jessie|trusty|xenial)
     echo "### Running debcheck: main, packages needing backports"
     [ -f packages.backports ] || error "packages.backports not found"
     pkg=$(fold $(cat packages.backports))
