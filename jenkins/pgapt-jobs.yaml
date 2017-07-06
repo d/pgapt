@@ -1061,6 +1061,8 @@
         name: resource-agents-paf
         git-url: https://github.com/dalibo/PAF.git
         dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        # needs pacemaker backport on jessie
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
