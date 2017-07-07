@@ -359,12 +359,12 @@
                         results: autopkgtest.xml
                 - ircbot: *only_configs
                 - trigger-parameterized-builds: *next_job_trigger
-                #- trigger-parameterized-builds:
-                #        - project: '{name}-binaries-beta'
-                #          condition: SUCCESS
-                #          predefined-parameters: |
-                #                queue=$queue
-                #                upload=extension-only
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries-beta'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                queue=$queue
+                                upload=extension-only
                 #- trigger-parameterized-builds:
                 #        - project: '{name}-binaries-devel'
                 #          condition: SUCCESS
@@ -400,7 +400,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="9.6" sbuild-package'
+                - shell: 'DEB_PG_SUPPORTED_VERSIONS="10" sbuild-package'
 
 # binaries for building modules for PostgreSQL devel
 - job-template:
