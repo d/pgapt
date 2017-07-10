@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # expected parameters:
 #   distribution (without -pgdg)
@@ -123,7 +123,7 @@ if test -s "${BPO:-}"; then
   echo
 fi
 
-for component in $DISTSDIR/$DIST/?.?/source/Sources.gz; do
+for component in $DISTSDIR/$DIST/{?.?,??}/source/Sources.gz; do
   [ $(zcat $component | wc -c) = 0 ] && continue # skip empty file
   echo "### Running builddebcheck: $component"
   zcat $component | grep '^Package:'

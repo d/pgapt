@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # expected parameters:
 #   distribution (without -pgdg)
@@ -125,7 +125,7 @@ pkg=$(fold $MAINPKG)
 echo
 
 # other components
-for P in $DISTSDIR/$DIST/?.?/binary-${architecture}/Packages; do
+for P in $DISTSDIR/$DIST/{?.?,??}/binary-${architecture}/Packages; do
   test -s $P || continue
   PKG="${PKG:-} $P"
 done
