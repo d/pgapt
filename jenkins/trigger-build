@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# trigger builds of $pkg-source
+# package is comma or space-separated lists
+
+# ./trigger-build -c debsso.crt:asdf prefix
+
+set -eu
+
+while getopts "c:" opt ; do
+	case $opt in
+	c) cert="$OPTARG" ;;
+	*) exit 5 ;;
+	esac
+done
+# shift away args
+shift $(($OPTIND - 1))
+
+IFS=", "
+
+set -x
+
+for pkg in "$@"; do
+  curl --cert "$cert" \
+    "https://pgdgbuild.dus.dg-i.net/job/$pkg-source/buildWithParameters" \
+    --data "token=buildnow"
+done
