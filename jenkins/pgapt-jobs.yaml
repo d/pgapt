@@ -800,8 +800,6 @@
         child-workspace: .
         execution-strategy:
                 sequential: true
-                touchstone:
-                        expr: '(distribution=="sid") && (architecture=="amd64")'
                 combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
         axes:
                 - axis: *arch_axis
