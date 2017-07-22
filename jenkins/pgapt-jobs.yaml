@@ -782,7 +782,7 @@
                 - shell: debcheck-pgapt
         publishers:
                 - ircbot:
-                        strategy: statechange-only
+                        strategy: failure-and-fixed
                         message-type: summary
                         matrix-notifier: only-configurations
 
