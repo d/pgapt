@@ -258,6 +258,9 @@ case $PACKAGE in
     case ${distribution:-} in
       wheezy) # we do not want libjson-c-dev from bpo, just wheezy's libjson0-dev
         sed -i -e 's/libjson-c-dev | //' debian/control debian/control.in
+        # disable PIE for wheezy (amd64 needs it, do it for the other archs as well)
+        sed -i -e 's/DEB_BUILD_MAINT_OPTIONS.*/DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie/' debian/rules
+        TWEAK="Disable PIE."
         ;;
     esac
     case ${distribution:-} in
@@ -267,6 +270,7 @@ case $PACKAGE in
       wheezy|squeeze|wily|trusty|precise)
         sed -i -e '/libsfcgal-dev/d' debian/control debian/control.in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
+        TWEAK="${TWEAK:-} Disable sfcgal."
         ;;
     esac
     ;;
