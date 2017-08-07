@@ -1210,7 +1210,7 @@
 
 - project:
         name: pgsphere
-        git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/pgsphere.git
+        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/pgsphere.git/
         jobs:
                 - git-packages-with-next
 
@@ -1512,8 +1512,8 @@
                 - git-packages
 
 - project:
-        name: q3c
-        git-url: https://alioth.debian.org/anonscm/git/debian-science/packages/q3c.git
+        name: postgresql-q3c
+        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/postgresql-q3c.git/
         jobs:
                 - git-packages-with-next
 
