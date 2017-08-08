@@ -186,11 +186,19 @@ case $PACKAGE in
     case ${distribution:-} in
       wheezy|squeeze|precise)
         sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-*.install
+        TWEAK="${TWEAK:-} Disable sepgsql support."
         ;;
     esac
     case ${distribution:-} in
       wheezy|squeeze|precise|trusty)
         sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6+ only
+        TWEAK="${TWEAK:-} Disable systemd support."
+        ;;
+    esac
+    case ${distribution:-} in
+      jessie|wheezy|squeeze|xenial|precise|trusty)
+        sed -i -e 's/^#PIE# //' debian/rules
+        TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
         ;;
     esac
     ;;
