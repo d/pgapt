@@ -196,7 +196,7 @@ case $PACKAGE in
         ;;
     esac
     case ${distribution:-} in
-      jessie|wheezy|squeeze|xenial|precise|trusty)
+      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         sed -i -e 's/^#PIE# //' debian/rules
         TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
         ;;
