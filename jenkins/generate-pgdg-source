@@ -177,6 +177,14 @@ case $PACKAGE in
     if [ "$distribution" = "sid" ]; then
       sed -i -e 's/^#CASSERT_FLAGS/CASSERT_FLAGS/' debian/rules
     fi
+
+    # Revert to old-style PIE config
+    case ${distribution:-} in
+      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
+        sed -i -e 's/^#PIE# //' debian/rules
+        TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
+        ;;
+    esac
     ;;
 esac
 
@@ -193,12 +201,6 @@ case $PACKAGE in
       wheezy|squeeze|precise|trusty)
         sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6+ only
         TWEAK="${TWEAK:-} Disable systemd support."
-        ;;
-    esac
-    case ${distribution:-} in
-      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
-        sed -i -e 's/^#PIE# //' debian/rules
-        TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
         ;;
     esac
     ;;
