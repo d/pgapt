@@ -1369,7 +1369,7 @@
         name: postgresql-10-devel
         source-name: postgresql-10
         git-url: git://git.postgresql.org/git/postgresql.git
-        git-branch: origin/master
+        git-branch: origin/REL_10_STABLE
         merge-branch: 10
         jobs:
                 - 'source-git-head'
