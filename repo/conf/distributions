@@ -3,7 +3,7 @@ Suite: sid-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: sid-pgdg.log
 Uploaders: uploaders
@@ -18,9 +18,41 @@ Suite: sid-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: sid-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
+Codename: buster-pgdg
+Suite: buster-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386 ppc64el
+Components: main 9.3 9.4 9.5 9.6 10 11
+SignWith: ACCC4CF8
+Log: buster-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
+Codename: buster-pgdg-testing
+Suite: buster-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386 ppc64el
+Components: main 9.3 9.4 9.5 9.6 10 11
+SignWith: ACCC4CF8
+Log: buster-pgdg-testing.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
@@ -35,7 +67,7 @@ Suite: stretch-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6 10
+Components: main 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: stretch-pgdg.log
 Uploaders: uploaders
@@ -50,7 +82,7 @@ Suite: stretch-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6 10
+Components: main 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: stretch-pgdg-testing.log
 Uploaders: uploaders
@@ -67,7 +99,7 @@ Suite: jessie-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: jessie-pgdg.log
 Uploaders: uploaders
@@ -82,7 +114,7 @@ Suite: jessie-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: jessie-pgdg-testing.log
 Uploaders: uploaders
@@ -222,6 +254,38 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
+Codename: artful-pgdg
+Suite: artful-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386 ppc64el
+Components: main 9.3 9.4 9.5 9.6 10
+SignWith: ACCC4CF8
+Log: artful-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+
+Codename: artful-pgdg-testing
+Suite: artful-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 i386 ppc64el
+Components: main 9.3 9.4 9.5 9.6 10
+SignWith: ACCC4CF8
+Log: artful-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: all
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
 Codename: zesty-pgdg
 Suite: zesty-pgdg
 Origin: apt.postgresql.org
@@ -259,7 +323,7 @@ Suite: xenial-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: xenial-pgdg.log
 Uploaders: uploaders
@@ -274,7 +338,7 @@ Suite: xenial-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: xenial-pgdg-testing.log
 Uploaders: uploaders
@@ -355,7 +419,7 @@ Suite: trusty-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: trusty-pgdg.log
 Uploaders: uploaders
@@ -370,7 +434,7 @@ Suite: trusty-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10
+Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
 Log: trusty-pgdg-testing.log
 Uploaders: uploaders

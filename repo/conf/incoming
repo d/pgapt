@@ -3,12 +3,14 @@ IncomingDir: /srv/apt/incoming
 TempDir: /srv/apt/repo/tmp
 LogDir: incoming-log
 Allow: sid-pgdg>sid-pgdg-testing
+ buster-pgdg>buster-pgdg-testing
  stretch-pgdg>stretch-pgdg-testing
  jessie-pgdg>jessie-pgdg-testing
  wheezy-pgdg>wheezy-pgdg-testing
  squeeze-pgdg>squeeze-pgdg-testing
  lenny-pgdg>lenny-pgdg-testing
  etch-pgdg>etch-pgdg-testing
+ artful-pgdg>artful-pgdg-testing
  zesty-pgdg>zesty-pgdg-testing
  xenial-pgdg>xenial-pgdg-testing
  wily-pgdg>wily-pgdg-testing

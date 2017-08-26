@@ -1,7 +1,7 @@
 #!/bin/sh
 
-DISTRIBUTIONS="sid stretch jessie wheezy squeeze lenny etch
-	zesty xenial wily utopic trusty saucy precise lucid"
+DISTRIBUTIONS="sid buster stretch jessie wheezy squeeze lenny etch
+	artful zesty xenial wily utopic trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing"
 
 for DIST in $DISTRIBUTIONS ; do
@@ -17,32 +17,37 @@ for DIST in $DISTRIBUTIONS ; do
 			wheezy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			jessie) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
 			stretch) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main                     9.2 9.3 9.4 9.5 9.6 10 11" ;;
+			buster) ARCHS="amd64 i386 ppc64el"
+				COMPONENTS="main                         9.3 9.4 9.5 9.6 10 11" ;;
 			sid)    ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
 			# Ubuntu
 			lucid)
-				COMPONENTS="main 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
+				COMPONENTS="main     8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			precise)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			saucy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			trusty) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
 			utopic)
-				COMPONENTS="main 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
+				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			wily)
-				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6" ;;
+				COMPONENTS="main                 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			xenial) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main                 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
 			zesty) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main 9.2 9.3 9.4 9.5 9.6 10" ;;
+				COMPONENTS="main                     9.2 9.3 9.4 9.5 9.6 10" ;;
+			artful) ARCHS="amd64 i386 ppc64el"
+				COMPONENTS="main                         9.3 9.4 9.5 9.6 10" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
 				exit 1 ;;
 		esac
+		COMPONENTS=$(echo $COMPONENTS) # strip duplicate spaces
 		cat <<EOF
 Codename: $D
 Suite: $D
