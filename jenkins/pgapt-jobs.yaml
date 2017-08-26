@@ -115,6 +115,7 @@
             name: distribution
             values:
                     - sid
+                    - stretch
                     - jessie
                     - xenial
                     - trusty # for travis
@@ -365,12 +366,12 @@
                           predefined-parameters: |
                                 queue=$queue
                                 upload=extension-only
-                #- trigger-parameterized-builds:
-                #        - project: '{name}-binaries-devel'
-                #          condition: SUCCESS
-                #          predefined-parameters: |
-                #                queue=$queue
-                #                upload=extension-only
+                - trigger-parameterized-builds:
+                        - project: '{name}-binaries-devel'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                queue=$queue
+                                upload=extension-only
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
@@ -413,7 +414,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="10" sbuild-package'
+                - shell: 'DEB_PG_SUPPORTED_VERSIONS="11" sbuild-package'
 
 # binaries building from "build-source"
 
@@ -1364,6 +1365,14 @@
                 - git-packages-adt
         next-job: 'postgresql-10-testsuite'
 
+- project:
+        name: postgresql-11
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-branch: 11
+        jobs:
+                - git-packages-adt
+        next-job: 'postgresql-11-testsuite'
+
 # the PostgreSQL devel version:
 - project:
         name: postgresql-10-devel
@@ -1376,6 +1385,19 @@
                 - 'binaries-git-head'
                 - '{source-name}-testsuite-git-head'
         next-job: postgresql-10-testsuite-git-head
+        noadt: 'ADT=skip '
+
+- project:
+        name: postgresql-11-devel
+        source-name: postgresql-11
+        git-url: git://git.postgresql.org/git/postgresql.git
+        git-branch: origin/master
+        merge-branch: 11
+        jobs:
+                - 'source-git-head'
+                - 'binaries-git-head'
+                - '{source-name}-testsuite-git-head'
+        next-job: postgresql-11-testsuite-git-head
         noadt: 'ADT=skip '
 
 - project:
