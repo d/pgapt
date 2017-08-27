@@ -130,6 +130,7 @@ case ${distribution:-} in
   lenny)   PGDG_DISTRIBUTION="pgdg50"    DISTRO="debian" RELEASE="5.0" ;;
   etch)    PGDG_DISTRIBUTION="pgdg40"    DISTRO="debian" RELEASE="4.1" ;;
   # Ubuntu
+  artful)  PGDG_DISTRIBUTION="pgdg17.10" DISTRO="ubuntu" RELEASE="17.10" ;;
   zesty)   PGDG_DISTRIBUTION="pgdg17.04" DISTRO="ubuntu" RELEASE="17.04" ;;
   xenial)  PGDG_DISTRIBUTION="pgdg16.04" DISTRO="ubuntu" RELEASE="16.04" ;;
   wily)    PGDG_DISTRIBUTION="pgdg15.10" DISTRO="ubuntu" RELEASE="15.10" ;;
