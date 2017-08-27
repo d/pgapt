@@ -7,8 +7,9 @@
 # expected directories: chroots in /home/chroot
 # needs dose3 >= 4
 
-# when set, will check matching packages in main against this extra component
+# when set, will check matching packages in main against these extra components
 BETA="10"
+DEVEL="11"
 
 set -eu
 
@@ -103,7 +104,7 @@ case $distribution in
 esac
 
 # beta
-betapkg=$(fold $(echo "$MAINPKG" | fgrep "$BETA"))
+betapkg=$(fold $(echo "$MAINPKG" | fgrep "${BETA:-}"))
 if [ "${BETA:-}" ] && [ "$betapkg" ]; then
   echo "### Running debcheck: main, packages matching '$BETA'"
   ( set -x; $DEBCHECK \
@@ -114,6 +115,20 @@ if [ "${BETA:-}" ] && [ "$betapkg" ]; then
 
   # exclude packages from further testing
   MAINPKG=$(echo "$MAINPKG" | fgrep -v "$BETA")
+fi
+
+# devel
+develpkg=$(fold $(echo "$MAINPKG" | fgrep "${DEVEL:-}"))
+if [ "${DEVEL:-}" ] && [ "$develpkg" ]; then
+  echo "### Running debcheck: main, packages matching '$DEVEL'"
+  ( set -x; $DEBCHECK \
+    --bg $DISTSDIR/$DIST/$DEVEL/binary-${architecture}/Packages \
+    --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+    --checkonly $develpkg ) || EXIT=$?
+  echo
+
+  # exclude packages from further testing
+  MAINPKG=$(echo "$MAINPKG" | fgrep -v "$DEVEL")
 fi
 
 # main
