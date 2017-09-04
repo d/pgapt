@@ -874,7 +874,7 @@
                 - timed: "H H * * *"
         builders:
                 - shell: |
-                    cd $HOME && hardlink -vfot -i '\.tar\.' -i '\.dsc$' -i '\.deb$' jobs* workspace*
+                    cd $JENKINS_HOME && hardlink -vfot -i '\.tar\.' -i '\.dsc$' -i '\.deb$' jobs* workspace*
         publishers:
                 - ircbot:
                         strategy: any-failure
