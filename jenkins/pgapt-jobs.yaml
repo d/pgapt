@@ -867,6 +867,19 @@
                         message-type: summary-params
                 - groovy-postbuild: *dput_groovy
 
+- job:
+        name: hardlink-jenkins-files
+        description: 'Save some space in ~jenkins by hardlinking files'
+        triggers:
+                - timed: "H H * * *"
+        builders:
+                - shell: |
+                    cd $HOME && hardlink -vfot -i '\.tar\.' -i '\.dsc$' -i '\.deb$' jobs* workspace*
+        publishers:
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+
 #- job:
 #        name: promote
 #        description: 'Promotes packages from the *-pgdg-testing distributions to *-pgdg.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
