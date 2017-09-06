@@ -1,3 +1,9 @@
+pgdg-buildenv (20) sid-pgdg; urgency=medium
+
+  * Update sbuild-pgdg-components to use sudo only when necessary.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 06 Sep 2017 18:14:57 +0200
+
 pgdg-buildenv (19) sid-pgdg; urgency=medium
 
   * Add libfile-fcntllock-perl.
