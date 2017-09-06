@@ -712,6 +712,7 @@
                                 - master
                         wipe-workspace: false
         builders:
+                - shell: 'chmod go+rX -R .' # make directory readable for other workers
                 - shell: 'cd jenkins && make && make update'
         publishers:
                 - trigger:
