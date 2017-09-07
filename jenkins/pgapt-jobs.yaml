@@ -61,6 +61,14 @@
                     - extension-only
             description: 'all: upload all .deb files built, extension-only: upload PostgreSQL-version-specific .deb files only'
 
+    slaves_axis: &slaves_axis
+            type: slave
+            name: slave
+            values:
+              - master
+              - moe-x86
+              - pgdgbuild-ppc64el
+
     arch_axis: &arch_axis
             type: slave
             name: architecture
@@ -704,7 +712,11 @@
 
 - job:
         name: apt.postgresql.org
-        description: 'Update configuration on build and repository hosts.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        description: 'Update configuration on build hosts'
+        project-type: matrix
+        child-workspace: .
+        axes:
+                - axis: *slaves_axis
         scm:
                 - git:
                         url: git://git.postgresql.org/git/pgapt.git
@@ -713,22 +725,17 @@
                         wipe-workspace: false
         builders:
                 - shell: 'chmod go+rX -R .' # make directory readable for other workers
-                - shell: 'cd jenkins && make && make update'
+                - shell: 'cd jenkins && make install'
         publishers:
                 - trigger:
-                        project: apt.postgresql.org-ppc64el
+                        project: apt.postgresql.org-jobs
                 - ircbot:
                         matrix-notifier: all
 
 - job:
-        name: apt.postgresql.org-ppc64el
-        node: ppc64el
-        scm:
-                - git:
-                        url: git://git.postgresql.org/git/pgapt.git
-                        branches:
-                                - master
-                        wipe-workspace: false
+        name: apt.postgresql.org-jobs
+        builders:
+                - shell: 'cd jenkins && make && make update'
         publishers:
                 - ircbot:
                         strategy: any-failure
@@ -740,12 +747,7 @@
         project-type: matrix
         child-workspace: .
         axes:
-                - axis:
-                        type: slave
-                        name: slave
-                        values:
-                                - master
-                                - pgdgbuild-ppc64el
+                - axis: *slaves_axis
         triggers:
                 - timed: "H H * * *"
         builders:
