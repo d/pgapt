@@ -1,0 +1,90 @@
+#!/usr/bin/ansible-playbook
+
+- name: setup-buildd
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: packages
+    apt:
+      name: '{{item}}'
+    with_items:
+      - debootstrap
+      - default-jre-headless
+      - dose-builddebcheck
+      - dose-distcheck
+      - dose-extra
+      - git
+      - make
+      - ncdu
+      - newpid
+      - postgresql-common # for apt.postgresql.org.sh
+      - sbuild
+      - schroot
+
+  - name: Deploy scripts
+    copy:
+      src: ../{{item}}
+      dest: /usr/local/bin/{{item}}
+      mode: 0755
+    with_items:
+      - sbuild-update.sh
+      - schroot-config.sh
+      - netns-setup
+
+  - name: buildd user
+    user:
+      name: buildd
+      groups: sbuild,staff,sudo
+
+  - name: buildd authorized_keys
+    authorized_key:
+      user: buildd
+      key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEbRuNmXd2MhrSN7RTINoj1kYZQ8iRKvhvGCE8jqgMj1UpKL8XGIiD3ouGqIYt1eDaDvMoSGEwYVYZHbkRz7U9Kpb2n7fenOhRTT9jkE4p4eYnYbhV81ZB487IiKBAkIyGk9+J6XbQO4dnLY+XDufGIKXkPwdYkw2otvxfSI+TjJQ7tRw4BHn9+UsPPKRYSO/i7d/jgZcthVWsRPdDk54dRI2uDClXob7rJjazCWPVBH8VDXbbM2q5xIgVAG812GXAXXksAljdQU05lwOgVo5foPVeV0SKnrVIugf4xmJXkNNtU1l62g5Whkqu9KMk1uzPpopSwyaGk7I0WftPU57J jenkins@pgdgbuild.dus.dg-i.net'
+
+  - name: create {{chroot_dir}}
+    file:
+      name: '{{chroot_dir}}'
+      state: directory
+
+  - name: symlink {{chroot_dir}}
+    file:
+      name: /home/chroot
+      src: '{{chroot_dir}}'
+    when: 'chroot_dir != "/home/chroot"'
+
+  - name: update schroot config
+    shell: /usr/local/bin/schroot-config.sh > /etc/schroot/chroot.d/sbuild.conf
+
+  - name: schroot sbuild fstab
+    copy:
+      src: fstab.sbuild
+      dest: /etc/schroot/sbuild/fstab
+      mode: 0644
+
+  - name: schroot default fstab
+    copy:
+      src: fstab.default
+      dest: /etc/schroot/default/fstab
+      mode: 0644
+
+  - name: add /run to /etc/fstab
+    lineinfile:
+      dest: /etc/fstab
+      line: 'tmpfs /run tmpfs size={{run_size}} 0 0'
+      regexp: '.*/run.*'
+    when: run_size is defined
+    register: fstab
+
+  - name: resize /run
+    command: mount -oremount /run
+    args:
+      warn: off # no we don't want to use the mount module
+    when: fstab|changed
+
+  - name: /etc/rc.local
+    copy:
+      src: rc.local
+      dest: /etc/rc.local
+      mode: 0755

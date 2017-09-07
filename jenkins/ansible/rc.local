@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+# setup network namespaces
+/usr/local/bin/netns-setup
+
+# resize /run
+mount -oremount /run
+
+exit 0
+
