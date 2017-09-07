@@ -735,7 +735,7 @@
 - job:
         name: apt.postgresql.org-jobs
         builders:
-                - shell: 'cd jenkins && make && make update'
+                - shell: 'cd $JENKINS_HOME/workspace/apt.postgresql.org/jenkins && make && make update'
         publishers:
                 - ircbot:
                         strategy: any-failure
