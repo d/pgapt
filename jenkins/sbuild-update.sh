@@ -27,7 +27,7 @@ case $(hostname) in
 esac
 
 # enable backports and security
-deb="http://deb/debian"
+deb="http://deb.debian.org/debian"
 security="http://security.debian.org/debian-security"
 case $(hostname) in
   pgdg*|benz*) # use local cache on build host

@@ -71,7 +71,7 @@ esac
 
 # enable backports
 if [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
-  deb="http://deb/debian"
+  deb="http://deb.debian.org/debian"
   ubuntu="http://de.archive.ubuntu.com/ubuntu"
   case $(hostname) in
     pgdg*) # use local cache on build host
