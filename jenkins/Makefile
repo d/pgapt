@@ -29,3 +29,12 @@ packages.backports: pgapt-jobs.yaml
 
 clean:
 	rm -rf output output.old packages.backports
+
+# install scripts
+SCRIPTS = adt-sbuild adtsummary2junit approx-reset.sh builddebcheck-pgapt debcheck-pgapt generate-pgdg-source newpid-netns postgresql-testsuite sbuild-package sbuild-update.sh
+INST_SCRIPTS = $(patsubst %, /usr/local/bin/%, $(SCRIPTS))
+
+install: $(INST_SCRIPTS)
+
+/usr/local/bin/%: %
+	install $< $@
