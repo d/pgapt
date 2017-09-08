@@ -68,6 +68,17 @@
               - pgdgbuild-x86
               - moe-x86
               - pgdgbuild-ppc64el
+    x86_slaves_axis: &x86_slaves_axis
+            type: slave
+            name: slave
+            values:
+              - pgdgbuild-x86
+              - moe-x86
+    ppc64el_slaves_axis: &ppc64el_slaves_axis
+            type: slave
+            name: slave
+            values:
+              - pgdgbuild-ppc64el
 
     arch_axis: &arch_axis
             type: slave
@@ -798,8 +809,8 @@
         builders:
                 - shell: 'builddebcheck-pgapt'
 
-- job:
-        name: 'sbuild-update'
+- job: &sbuild_update_x86
+        name: 'sbuild-update-x86'
         description: 'Update sbuild chroots'
         project-type: matrix
         child-workspace: .
@@ -807,6 +818,7 @@
                 sequential: true
                 combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
         axes:
+                - axis: *x86_slaves_axis
                 - axis: *arch_axis
                 - axis: *dist_axis
         triggers:
@@ -815,6 +827,14 @@
                 - shell: 'sbuild-update.sh'
         publishers:
                 - ircbot: *only_configs
+
+- job:
+        <<: *sbuild_update_x86
+        name: 'sbuild-update-ppc64el'
+        axes:
+                - axis: *ppc64el_slaves_axis
+                - axis: *arch_axis
+                - axis: *dist_axis
 
 - job: &dput
         name: dput
