@@ -37,7 +37,7 @@ LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 HOMEDIR="/home/buildd"
 
 # where to find packages.backports
-PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"
+PGAPTDIR="$HOMEDIR/workspace/apt.postgresql.org/jenkins"
 test -d $PGAPTDIR && cd $PGAPTDIR
 
 if [ -d ../repo/dists ]; then
