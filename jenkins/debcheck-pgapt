@@ -120,9 +120,16 @@ fi
 # devel
 develpkg=$(fold $(echo "$MAINPKG" | fgrep "${DEVEL:-}"))
 if [ "${DEVEL:-}" ] && [ "$develpkg" ]; then
+  # production doesn't have PG-devel, test modules against -testing
+  if [ "$stage" = "production" ]; then
+    BGDIST="$DIST-testing"
+  else
+    BGDIST="$DIST"
+  fi
+
   echo "### Running debcheck: main, packages matching '$DEVEL'"
   ( set -x; $DEBCHECK \
-    --bg $DISTSDIR/$DIST/$DEVEL/binary-${architecture}/Packages \
+    --bg $DISTSDIR/$BGDIST/$DEVEL/binary-${architecture}/Packages \
     --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
     --checkonly $develpkg ) || EXIT=$?
   echo
