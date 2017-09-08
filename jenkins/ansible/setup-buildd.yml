@@ -10,6 +10,7 @@
     apt:
       name: '{{item}}'
     with_items:
+      - acl # allow unprivileged users to read ansible's files
       - debootstrap
       - default-jre-headless
       - dose-builddebcheck
@@ -72,9 +73,9 @@
   - name: add /run to /etc/fstab
     lineinfile:
       dest: /etc/fstab
-      line: 'tmpfs /run tmpfs size={{run_size}} 0 0'
+      line: 'tmpfs /run tmpfs {{run_opts}} 0 0'
       regexp: '.*/run.*'
-    when: run_size is defined
+    when: run_opts is defined
     register: fstab
 
   - name: resize /run
@@ -88,3 +89,19 @@
       src: rc.local
       dest: /etc/rc.local
       mode: 0755
+
+  - name: git user name
+    git_config:
+      name: user.name
+      value: apt.postgresql.org buildd
+      scope: global
+    become: true
+    become_user: buildd
+
+  - name: git user email
+    git_config:
+      name: user.email
+      value: pgsql-pkg-debian@postgresql.org
+      scope: global
+    become: true
+    become_user: buildd

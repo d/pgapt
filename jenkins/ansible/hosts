@@ -1,2 +1,3 @@
-pgdgbuild.dus.dg-i.net chroot_dir=/home/chroot.buexcl run_size=20G
-moe chroot_dir=/var/lib/chroot run_size=6G
+pgdgbuild.dus.dg-i.net chroot_dir=/home/chroot.buexcl run_opts="size=20G"
+pgdgbuild-ppc64el chroot_dir=/home/chroot run_opts="size=24G,nr_inodes=800k"
+moe chroot_dir=/var/lib/chroot run_opts="size=6G"
