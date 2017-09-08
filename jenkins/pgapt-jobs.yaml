@@ -730,7 +730,7 @@
                 - trigger:
                         project: apt.postgresql.org-jobs
                 - ircbot:
-                        matrix-notifier: all
+                        matrix-notifier: only-parent
 
 - job:
         name: apt.postgresql.org-jobs
