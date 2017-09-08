@@ -16,6 +16,7 @@
       - dose-builddebcheck
       - dose-distcheck
       - dose-extra
+      - ferm
       - git
       - make
       - ncdu
@@ -89,6 +90,19 @@
       src: rc.local
       dest: /etc/rc.local
       mode: 0755
+
+  - name: ferm.conf
+    copy:
+      src: ferm.conf
+      dest: /etc/ferm/ferm.conf
+      mode: 0644
+    register: fermconf
+
+  - name: reload ferm
+    service:
+      name: ferm
+      state: reloaded
+    when: fermconf|changed
 
   - name: git user name
     git_config:
