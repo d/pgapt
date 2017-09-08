@@ -71,6 +71,12 @@
       dest: /etc/schroot/default/fstab
       mode: 0644
 
+  - name: sbuild.conf
+    copy:
+      src: sbuild.conf
+      dest: /etc/sbuild/sbuild.conf
+      mode: 0644
+
   - name: add /run to /etc/fstab
     lineinfile:
       dest: /etc/fstab
