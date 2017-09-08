@@ -819,7 +819,12 @@
                 combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
         axes:
                 - axis: *x86_slaves_axis
-                - axis: *arch_axis
+                - axis:
+                    type: user-defined
+                    name: architecture
+                    values:
+                      - amd64
+                      - i386
                 - axis: *dist_axis
         triggers:
                 - timed: "H */6 * * *"
@@ -833,7 +838,11 @@
         name: 'sbuild-update-ppc64el'
         axes:
                 - axis: *ppc64el_slaves_axis
-                - axis: *arch_axis
+                - axis:
+                    type: user-defined
+                    name: architecture
+                    values:
+                      - ppc64el
                 - axis: *dist_axis
 
 - job: &dput
