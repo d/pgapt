@@ -34,7 +34,7 @@ skip () {
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 [ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
-HOMEDIR="/home/jenkins"
+HOMEDIR="/home/buildd"
 
 # where to find packages.backports
 PGAPTDIR="$HOMEDIR/apt.postgresql.org/jenkins"

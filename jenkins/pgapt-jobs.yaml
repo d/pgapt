@@ -65,7 +65,7 @@
             type: slave
             name: slave
             values:
-              - master
+              - pgdgbuild-x86
               - moe-x86
               - pgdgbuild-ppc64el
 
@@ -712,12 +712,12 @@
 
 - job:
         name: apt.postgresql.org
-        description: 'Update configuration on build hosts'
+        description: 'Update apt.postgresql.org (pgapt.git) checkout on build hosts'
         project-type: matrix
         child-workspace: .
         axes:
                 - axis: *slaves_axis
-        scm:
+        scm: &scm_pgapt
                 - git:
                         url: git://git.postgresql.org/git/pgapt.git
                         branches:
@@ -734,8 +734,9 @@
 
 - job:
         name: apt.postgresql.org-jobs
+        scm: *scm_pgapt
         builders:
-                - shell: 'cd $JENKINS_HOME/workspace/apt.postgresql.org/jenkins && make && make update'
+                - shell: 'cd jenkins && make && make update'
         publishers:
                 - ircbot:
                         strategy: any-failure
