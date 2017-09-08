@@ -6,9 +6,9 @@ use warnings;
 my $packages = shift || 'sid-pgdg-testing';
 $packages = "dists/$packages/main/binary-amd64/Packages" unless ($packages =~ m!/!);
 
-my %pkgs;
-my %templates;
-my %pgversions;
+my %pkgs; # known binary packages
+my %templates; # binary package templates, e.g. postgresql-*-debversion
+my %pgversions; # all existing PostgreSQL versions
 
 $/ = ''; # slurp paragraphs
 
@@ -19,7 +19,7 @@ while (<P>) {
 		my $version = $1;
 		next if ($version < 9.1);
 		$pkgs{$pkg} = 1;
-		$pkg =~ s/-(\d{1,2}\.\d|1\d)\b/-N.N/;
+		$pkg =~ s/-([89]\.\d|1\d)\b/-*/;
 		$templates{$pkg} = 1;
 		$pgversions{$version} = 1;
 	}
@@ -30,7 +30,7 @@ foreach my $template (sort keys %templates) {
 	my @missing;
 	foreach my $version (sort { $a <=> $b } keys %pgversions) {
 		my $pkg = $template;
-		$pkg =~ s/-N\.N/-$version/;
+		$pkg =~ s/-\*/-$version/;
 		next if ($pkgs{$pkg});
 		push @missing, $version;
 	}
