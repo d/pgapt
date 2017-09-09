@@ -485,20 +485,20 @@
                         description: 'Include backports repository in build chroot'
                 - choice: *queue_choice
                 - choice: *upload_choice
-        execution-strategy:
-                touchstone:
-                        #expr: 'distribution=="sid"'
-                        expr: ''
         builders:
                 - shell: 'rm -rf *'
                 - shell: |
                     case $distribution in
                       sid)    tag='pgdg+' ;;
+                      buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      wheezy) tag='pgdg70+' ;;
+                      artful) tag='pgdg17.10+' ;;
                       zesty)  tag='pgdg17.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       trusty) tag='pgdg14.04+' ;;
+                      *) echo "bad distribution"; exit 1 ;;
                     esac
                     version=$(apt-cache showsrc $PACKAGE | awk '/^Version:/ { print $2 }' | grep $tag)
                     apt-get source -d $PACKAGE=$version
