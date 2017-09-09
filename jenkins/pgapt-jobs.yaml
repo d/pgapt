@@ -91,11 +91,6 @@
             <<: *arch_axis
             type: user-defined
 
-    ppc64el_arch_axis: &ppc64el_arch_axis
-            type: slave
-            name: architecture
-            values: [ppc64el]
-
     git_head_arch_axis: &git_head_arch_axis
             type: slave
             name: architecture
@@ -112,22 +107,6 @@
                     - zesty
                     - xenial
                     - trusty
-
-    ppc64el_dist_choice: &ppc64el_dist_choice
-            name: distribution
-            choices: &ppc64el_dist_list
-                    - sid
-                    - stretch
-                    - jessie
-                    - zesty
-                    - xenial
-                    - trusty
-            description: 'Distribution to build for'
-
-    dist_axis: &ppc64el_dist_axis
-            type: user-defined
-            name: distribution
-            values: *ppc64el_dist_list
 
     git_head_dist_axis: &git_head_dist_axis
             type: user-defined
@@ -483,18 +462,24 @@
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
-# build binaries for a single architecture
+# building modules for PostgreSQL beta, get source from apt.
+# useful when the current -source job doesn't have all dists yet because
+# it was not rerun since a new dist was added
 
-- job: &build_ppc64_all
+- job: &build_binaries_from_apt
         <<: *binaries_template
-        name: 'build-ppc64el-all'
-        id: 'build-ppc64el-all'
+        name: 'build-binaries-from-apt'
+        id: 'build-binaries-from-apt'
         properties: *properties_more_artifacts
         concurrent: true
         parameters:
                 - string:
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
+                - string:
+                        name: DEB_PG_SUPPORTED_VERSIONS
+                        default: 'pgdg'
+                        description: 'PostgreSQL versions to target'
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
@@ -504,9 +489,6 @@
                 touchstone:
                         #expr: 'distribution=="sid"'
                         expr: ''
-        axes:
-                - axis: *ppc64el_arch_axis
-                - axis: *ppc64el_dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - shell: |
@@ -539,19 +521,24 @@
                 - workspace-cleanup
 
 - job:
-        <<: *build_ppc64_all
-        name: 'build-ppc64el'
-        id: 'build-ppc64el'
+        <<: *build_binaries_from_apt
+        name: 'build-binary-from-apt'
+        id: 'build-binary-from-apt'
         project-type: freestyle
-        node: ppc64el
         parameters:
                 - string:
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
-                - choice: *ppc64el_dist_choice
-                - choice:
+                - string:
+                        name: DEB_PG_SUPPORTED_VERSIONS
+                        default: 'pgdg'
+                        description: 'PostgreSQL versions to target'
+                - choice: *distribution_parameter
+                - node:
                         name: architecture
-                        choices:
+                        allowed-slaves:
+                           - amd64
+                           - i386
                            - ppc64el
                         description: 'Architecture to build for'
                 - bool:
