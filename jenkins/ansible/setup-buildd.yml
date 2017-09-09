@@ -25,6 +25,23 @@
       - sbuild
       - schroot
 
+  - name: apt.postgresql.org repository
+    shell: echo yes | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+    args:
+      creates: /etc/apt/sources.list.d/pgdg.list
+
+  - name: pgdg-src.list
+    copy:
+      src: pgdg-src.list
+      dest: /etc/apt/sources.list.d/pgdg-src.list
+      mode: 0644
+    register: pgdg_src
+
+  - name: apt-get update
+    apt:
+      update_cache: yes
+    when: pgdg_src|changed
+
   - name: Deploy scripts
     copy:
       src: ../{{item}}
