@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 my $oldest_pg_version = 9.2;
+my $newest_pg_version = 10; # ignore 11 while it is devel
 
 my $packages = shift || 'sid-pgdg-testing';
 $packages = "dists/$packages/main/binary-amd64/Packages" unless ($packages =~ m!/!);
@@ -20,6 +21,7 @@ while (<P>) {
 	if ($pkg =~ /-([89]\.\d|1\d)\b/) {
 		my $version = $1;
 		next if ($version < $oldest_pg_version);
+		next if ($version > $newest_pg_version);
 		$pkgs{$pkg} = 1;
 		$pkg =~ s/-([89]\.\d|1\d)\b/-*/;
 		$templates{$pkg} = 1;
