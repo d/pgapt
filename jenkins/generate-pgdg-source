@@ -284,6 +284,13 @@ case $PACKAGE in
         TWEAK="${TWEAK:-} Disable sfcgal."
         ;;
     esac
+    case ${distribution:-} in
+      # disable protobuf support
+      wheezy|trusty)
+        sed -i -e '/protobuf/d' debian/control debian/control.in
+        TWEAK="${TWEAK:-} Disable protobuf support."
+        ;;
+    esac
     ;;
 
   psqlodbc)
