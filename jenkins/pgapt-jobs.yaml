@@ -1303,6 +1303,8 @@
 - project:
         name: postgis
         git-url: git://git.debian.org/git/pkg-grass/postgis.git
+        # needs libgeos-dev >= 3.4
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
