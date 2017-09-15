@@ -10,3 +10,6 @@ MAILTO=cb@df7cb.de
 
 # move morgue files into pool directories
 16 * * * *  /srv/apt/apt.postgresql.org/repo/bin/morguefiles-to-pool
+
+# remove snapshot builds from morgue to save some space
+19 0 * * *  find /srv/apt/repo/morgue/p/postgresql-1[01]/ -name '*~*~*' -mtime +14 | xargs -r rm
