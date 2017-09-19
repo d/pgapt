@@ -1524,7 +1524,7 @@
 - project:
         name: powa-archivist
         git-url: https://github.com/credativ/powa-archivist.git
-        git-branch: debian
+        git-branch: master
         jobs:
                 - git-packages-with-next
 
