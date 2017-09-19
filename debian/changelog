@@ -1,3 +1,9 @@
+pgdg-buildenv (21) sid-pgdg; urgency=medium
+
+  * Update adt-sbuild to support /usr/bin/autopkgtest.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Tue, 19 Sep 2017 11:22:40 +0200
+
 pgdg-buildenv (20) sid-pgdg; urgency=medium
 
   * Update sbuild-pgdg-components to use sudo only when necessary.
