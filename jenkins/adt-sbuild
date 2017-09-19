@@ -47,12 +47,23 @@ ADT_SUMMARY=$(mktemp /tmp/adt.XXXXXX.summary)
 trap "rm -f $ADT_SUMMARY" 0 2 3 15
 
 (
+if [ -x /usr/bin/autopkgtest ]; then
+  # new autopkgtest interface
+  set -x
+  sudo DEB_PG_SUPPORTED_VERSIONS="$DEB_PG_SUPPORTED_VERSIONS" \
+    autopkgtest --summary $ADT_SUMMARY \
+	$SBUILD_PKGBUILD_DIR/ \
+	$SBUILD_BUILD_DIR/*.deb \
+	-- null
+else
+  # old adt interface
 set -x
 sudo DEB_PG_SUPPORTED_VERSIONS="$DEB_PG_SUPPORTED_VERSIONS" \
   adt-run --summary $ADT_SUMMARY \
 	$SBUILD_BUILD_DIR/*.deb \
 	--built-tree $SBUILD_PKGBUILD_DIR \
 	--- adt-virt-null
+fi
 ) || EXIT=$?
 
 case ${EXIT:-0} in
