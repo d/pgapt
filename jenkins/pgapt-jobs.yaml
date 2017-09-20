@@ -1098,7 +1098,7 @@
         jobs:
                 - git-packages
 
- - project:
+- project:
         name: patroni
         git-url: https://anonscm.debian.org/git/pkg-postgresql/patroni.git
         jobs:
