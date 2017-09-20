@@ -1098,6 +1098,12 @@
         jobs:
                 - git-packages
 
+ - project:
+        name: patroni
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/patroni.git
+        jobs:
+                - git-packages
+
 - project:
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
