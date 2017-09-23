@@ -1356,6 +1356,7 @@
         name: postgresql-9.1
         git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.1
+        dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.1-testsuite'
