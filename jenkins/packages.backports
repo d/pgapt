@@ -2,4 +2,5 @@ autopkgtest
 ora2pg
 resource-agents-paf
 pgbouncer
+pgrouting
 python-azure

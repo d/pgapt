@@ -1260,7 +1260,7 @@
         name: pgsql-asn1oid
         git-url: https://github.com/ChristophBerg/pgsql-asn1oid.git
         jobs:
-                - apt-packages-with-next
+                - git-packages-with-next
 
 - project:
         name: pgstatplans
