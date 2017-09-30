@@ -399,7 +399,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="10" sbuild-package'
+                - shell: 'DEB_PG_SUPPORTED_VERSIONS="10" {backports}sbuild-package'
 
 # binaries for building modules for PostgreSQL devel
 - job-template:
@@ -412,7 +412,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="11" sbuild-package'
+                - shell: 'DEB_PG_SUPPORTED_VERSIONS="11" {backports}sbuild-package'
 
 # binaries building from "build-source"
 
@@ -1265,6 +1265,9 @@
 - project:
         name: pgsql-ogr-fdw
         git-url: https://anonscm.debian.org/git/pkg-grass/pgsql-ogr-fdw.git
+        # needs DH 10
+        dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 
@@ -1325,6 +1328,8 @@
 - project:
         name: postgis-java
         git-url: https://anonscm.debian.org/git/pkg-grass/postgis-java.git
+        # needs default-jdk-headless (not available on jessie and trusty)
+        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty")'
         jobs:
                 - git-packages
 
