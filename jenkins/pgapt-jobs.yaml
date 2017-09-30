@@ -1052,6 +1052,12 @@
                 - git-packages
 
 - project:
+        name: libpgjava
+        git-url: https://anonscm.debian.org/git/pkg-java/libpostgresql-jdbc-java.git
+        jobs:
+                - git-packages
+
+- project:
         name: libpqtypes
         git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
         # run sequentially so the tests have 5432 available
