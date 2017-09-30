@@ -276,6 +276,7 @@
                         project: '$PACKAGE-source/distribution=sid'
                         filter: 'result/*'
                         flatten: true
+                        do-not-fingerprint: true
                 - shell: 'generate-pgdg-source'
         publishers:
                 - archive:
@@ -319,6 +320,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: '{noadt}{backports}sbuild-package'
         publishers:
                 - archive: &binaries_archive
@@ -386,6 +388,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: '{noadt}{backports}sbuild-package'
         axes:
                 - axis: *git_head_arch_axis
@@ -443,6 +446,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'sbuild-package'
         publishers:
                 - archive: *binaries_archive
@@ -569,6 +573,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'postgresql-testsuite'
         publishers:
                 - archive: *binaries_archive
@@ -596,6 +601,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'postgresql-testsuite'
         publishers:
                 - archive: *binaries_archive
@@ -628,11 +634,13 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - copyartifact:
                         project: 'postgresql-{newversion}-binaries/architecture=$architecture,distribution=$distribution'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'postgresql-testsuite'
         publishers:
                 - ircbot: *only_configs
@@ -849,6 +857,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'dput-pgdg $queue'
         publishers:
                 - ircbot:
@@ -880,6 +889,7 @@
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
+                        do-not-fingerprint: true
                 - shell: 'dput-pgdg $queue'
         publishers:
                 - ircbot:
