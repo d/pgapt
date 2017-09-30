@@ -1263,6 +1263,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pgsql-ogr-fdw
+        git-url: https://anonscm.debian.org/git/pkg-grass/pgsql-ogr-fdw.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgstatplans
         git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
         jobs:
@@ -1315,6 +1321,12 @@
         dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
+
+- project:
+        name: postgis-java
+        git-url: https://anonscm.debian.org/git/pkg-grass/postgis-java.git
+        jobs:
+                - git-packages
 
 - project:
         name: postgresql-8.2
