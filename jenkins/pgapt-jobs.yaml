@@ -1055,7 +1055,9 @@
         name: libpgjava
         git-url: https://anonscm.debian.org/git/pkg-java/libpostgresql-jdbc-java.git
         # needs dh 10
-        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        # jessie: Error configuring: com.igormaznitsa:jcp. Reason: ERROR: Cannot override read-only parameter: destination in goal: jcp:preprocess
+        # xenial: [ERROR] Failed to execute goal com.igormaznitsa:jcp:5.3.3:preprocess (preprocessTestSources) on project postgresql: Exception during preprocessor context creation: Can't find source directory [/<<PKGBUILDDIR>>/pgjdbc/target/generated-sources/annotations]
+        dist-filter: '(distribution!="wheezy" && distribution!="trusty" && distribution!="jessie" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1338,7 +1340,8 @@
         name: postgis-java
         git-url: https://anonscm.debian.org/git/pkg-grass/postgis-java.git
         # needs default-jdk-headless (not available on jessie and trusty)
-        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty")'
+        # needs newer libpgjava (xenial: [ERROR] Failed to execute goal on project postgis-jdbc: Could not resolve dependencies for project net.postgis:postgis-jdbc:jar:2.2.1: Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.postgresql:postgresql:jar:debian has not been downloaded from it before.)
+        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
         jobs:
                 - git-packages
 
