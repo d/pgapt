@@ -1054,6 +1054,9 @@
 - project:
         name: libpgjava
         git-url: https://anonscm.debian.org/git/pkg-java/libpostgresql-jdbc-java.git
+        # needs dh 10
+        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
