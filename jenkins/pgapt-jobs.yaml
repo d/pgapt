@@ -962,6 +962,12 @@
 # project jobs
 
 - project:
+        name: amcheck
+        git-url: https://github.com/petergeoghegan/amcheck.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: apgdiff
         git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/apgdiff.git
         jobs:
