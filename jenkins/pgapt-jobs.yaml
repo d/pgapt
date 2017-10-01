@@ -1028,22 +1028,6 @@
                 - apt-packages
 
 - project:
-        name: gdal
-        # sid and trusty are current enough
-        apt-suite: ??
-        dist-filter: '(distribution=="wheezy")'
-        jobs:
-                - apt-packages
-
-- project:
-        name: geos
-        # sid and trusty are current enough
-        apt-suite: ??
-        dist-filter: '(distribution=="wheezy")'
-        jobs:
-                - apt-packages
-
-- project:
         name: ip4r
         git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
         jobs:
