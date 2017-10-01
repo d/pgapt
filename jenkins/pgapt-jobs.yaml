@@ -1619,14 +1619,6 @@
                 - git-packages
 
 - project:
-        name: sfcgal
-        git-url: git://anonscm.debian.org/pkg-grass/sfcgal.git
-        git-branch: jessie-backports
-        dist-filter: 'distribution=="jessie"'
-        jobs:
-                - git-packages
-
-- project:
         name: skytools3
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
         git-branch: debian
