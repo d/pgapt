@@ -1627,12 +1627,6 @@
                 - git-packages
 
 - project:
-        name: skytools
-        git-url: git://anonscm.debian.org/pkg-postgresql/skytools.git
-        jobs:
-                - git-packages
-
-- project:
         name: skytools3
         git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
         git-branch: debian
