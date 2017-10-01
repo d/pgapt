@@ -1203,7 +1203,7 @@
         name: pgespresso
         git-url: git://git.debian.org/collab-maint/pgespresso.git
         jobs:
-                - git-packages-with-next
+                - git-packages # supports 9.2 .. 9.5 only
 
 - project:
         name: pgextwlist
