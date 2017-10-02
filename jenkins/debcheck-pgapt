@@ -62,15 +62,6 @@ if [ "$stage" = "production" ]; then
   skip cl-pgloader
 fi
 
-# packages not tested anywhere (FIXME!)
-#skip postgresql-9.6-pgrouting; do # depends on postgresql-9.6-postgis-2.2 which doesn't exist yet
-
-# packages not tested on ppc64el
-if [ $architecture = ppc64el ]; then
-  skip postgresql-8.4-pgtap # PG 8.4 doesn't exist here
-  skip postgresql-9.0-pgtap # PG 9.0 doesn't exist here
-fi
-
 # run debcheck
 DEBCHECK="dose-debcheck -v -f -e --bg $LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
 
