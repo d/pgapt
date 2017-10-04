@@ -4,6 +4,13 @@ set -eu
 
 #DEBUG=1
 
+# read pgapt config
+for dir in . .. /srv/apt/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+
 [ "$USER" = "aptuser" ] || SUDO="sudo -u aptuser"
 export REPREPRO_BASE_DIR="/srv/apt/repo"
 REPREPRO="flock $REPREPRO_BASE_DIR/db/.lock /usr/bin/reprepro -b $REPREPRO_BASE_DIR --morguedir $REPREPRO_BASE_DIR/morgue --verbose"
@@ -26,7 +33,7 @@ done
 shift $(($OPTIND - 1))
 
 PKG="$1"
-[ "$DISTS" = "all" ] && DISTS="sid stretch jessie wheezy zesty xenial trusty"
+[ "$DISTS" = "all" ] && DISTS="$PG_SUPPORTED_DISTS"
 set -- $DISTS
 FIRST_DIST="$1"
 

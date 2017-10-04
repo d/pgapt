@@ -8,7 +8,19 @@
 use strict;
 use warnings;
 
-my $mainversion = '9.6';
+my $mainversion;
+
+# read pgapt config
+foreach my $dir (qw(. .. /srv/apt/apt.postgresql.org/)) {
+  next unless (-f "$dir/pgapt.conf");
+  open F, "$dir/pgapt.conf";
+  while (<F>) {
+    $mainversion = $1 if /^PG_MAIN_VERSION=(.+)/;
+  }
+  close F;
+  last;
+}
+die "Could not determine PG_MAIN_VERSION" unless ($mainversion);
 
 $/ = ''; # slurp paragraphs
 my $exit = 0;

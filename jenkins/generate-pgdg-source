@@ -42,12 +42,13 @@ echo "branch=${branch:-}"
 echo "merge=${merge:-}"
 echo "revision=${revision:-}"
 
-set -x
-
-# which PostgreSQL major version to pull libpq et al. from (should be last stable release)
-PGLIBVER="9.6"
-# which libpq version to use in sid (latest beta)
-PGLIBVER_SID="9.6"
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  set -x
+  . $dir/pgapt.conf
+  break
+done
 
 [ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"
 
@@ -120,8 +121,7 @@ BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
 case ${distribution:-} in
   # Debian
-  sid)     PGLIBVER="$PGLIBVER_SID" # use latest beta on sid
-           PGDG_DISTRIBUTION="pgdg"      DISTRO="debian" RELEASE="unstable" ;;
+  sid)     PGDG_DISTRIBUTION="pgdg"      DISTRO="debian" RELEASE="unstable" ;;
   buster)  PGDG_DISTRIBUTION="pgdg100"   DISTRO="debian" RELEASE="10" ;;
   stretch) PGDG_DISTRIBUTION="pgdg90"    DISTRO="debian" RELEASE="9" ;;
   jessie)  PGDG_DISTRIBUTION="pgdg80"    DISTRO="debian" RELEASE="8" ;;
@@ -146,9 +146,9 @@ esac
 export DISTRO RELEASE
 
 # for postgresql server packages, move packages to a separate components
-# = $PGLIBVER: main
-# < $PGLIBVER: lib packages to N.N, rest to main
-# > $PGLIBVER: all packages to N.N
+# = $PG_MAIN_VERSION: main
+# < $PG_MAIN_VERSION: lib packages to N.N, rest to main
+# > $PG_MAIN_VERSION: all packages to N.N
 set_package_component ()
 {
   PKGPREFIX="$1" # empty ok
@@ -165,9 +165,9 @@ show_package_sections ()
 case $PACKAGE in
   postgresql-?.?|postgresql-??)
     PGVERSION=${PACKAGE#postgresql-}
-    if dpkg --compare-versions $PGVERSION lt $PGLIBVER; then
+    if dpkg --compare-versions $PGVERSION lt $PG_MAIN_VERSION; then
       set_package_component "Package: lib" "$PGVERSION\/"
-    elif dpkg --compare-versions $PGVERSION gt $PGLIBVER; then
+    elif dpkg --compare-versions $PGVERSION gt $PG_MAIN_VERSION; then
       set_package_component "" "$PGVERSION\/"
     else
       set_package_component "" ""

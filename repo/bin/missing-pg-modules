@@ -3,8 +3,20 @@
 use strict;
 use warnings;
 
-my $oldest_pg_version = 9.2;
-my $newest_pg_version = 10; # ignore 11 while it is devel
+my $PG_OLDEST_VERSION; # oldest version to check
+my $PG_DEVEL_VERSION;  # ignore devel
+
+# read pgapt config
+foreach my $dir (qw(. .. /srv/apt/apt.postgresql.org/)) {
+  next unless (-f "$dir/pgapt.conf");
+  open F, "$dir/pgapt.conf";
+  while (<F>) {
+    $PG_OLDEST_VERSION = $1 if /^PG_OLDEST_VERSION=(.+)/;
+    $PG_DEVEL_VERSION = $1 if /^PG_DEVEL_VERSION=(.+)/;
+  }
+  close F;
+  last;
+}
 
 my $packages = shift || 'sid-pgdg-testing';
 $packages = "dists/$packages/main/binary-amd64/Packages" unless ($packages =~ m!/!);
@@ -20,8 +32,8 @@ while (<P>) {
 	my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
 	if ($pkg =~ /-([89]\.\d|1\d)\b/) {
 		my $version = $1;
-		next if ($version < $oldest_pg_version);
-		next if ($version > $newest_pg_version);
+		next if ($version < $PG_OLDEST_VERSION);
+		next if ($PG_DEVEL_VERSION and $version eq $PG_DEVEL_VERSION);
 		$pkgs{$pkg} = 1;
 		$pkg =~ s/-([89]\.\d|1\d)\b/-*/;
 		$templates{$pkg} = 1;

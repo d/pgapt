@@ -7,10 +7,6 @@
 # expected directories: chroots in /home/chroot
 # needs dose3 >= 4
 
-# when set, will check matching packages in main against these extra components
-BETA="10"
-DEVEL="11"
-
 set -eu
 
 error () {
@@ -29,6 +25,13 @@ fold () {
 skip () {
   MAINPKG=$(echo "$MAINPKG" | grep -v "$1")
 }
+
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
 
 : ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
 
@@ -95,22 +98,22 @@ case $distribution in
 esac
 
 # beta
-betapkg=$(fold $(echo "$MAINPKG" | fgrep "${BETA:-}"))
-if [ "${BETA:-}" ] && [ "$betapkg" ]; then
-  echo "### Running debcheck: main, packages matching '$BETA'"
+betapkg=$(fold $(echo "$MAINPKG" | fgrep "${PG_BETA_VERSION:-}"))
+if [ "${PG_BETA_VERSION:-}" ] && [ "$betapkg" ]; then
+  echo "### Running debcheck: main, packages matching '$PG_BETA_VERSION'"
   ( set -x; $DEBCHECK \
-    --bg $DISTSDIR/$DIST/$BETA/binary-${architecture}/Packages \
+    --bg $DISTSDIR/$DIST/$PG_BETA_VERSION/binary-${architecture}/Packages \
     --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
     --checkonly $betapkg ) || EXIT=$?
   echo
 
   # exclude packages from further testing
-  MAINPKG=$(echo "$MAINPKG" | fgrep -v "$BETA")
+  MAINPKG=$(echo "$MAINPKG" | fgrep -v "$PG_BETA_VERSION")
 fi
 
 # devel
-develpkg=$(fold $(echo "$MAINPKG" | fgrep "${DEVEL:-}"))
-if [ "${DEVEL:-}" ] && [ "$develpkg" ]; then
+develpkg=$(fold $(echo "$MAINPKG" | fgrep "${PG_DEVEL_VERSION:-}"))
+if [ "${PG_DEVEL_VERSION:-}" ] && [ "$develpkg" ]; then
   # production doesn't have PG-devel, test modules against -testing
   if [ "$stage" = "production" ]; then
     BGDIST="$DIST-testing"
@@ -118,15 +121,15 @@ if [ "${DEVEL:-}" ] && [ "$develpkg" ]; then
     BGDIST="$DIST"
   fi
 
-  echo "### Running debcheck: main, packages matching '$DEVEL'"
+  echo "### Running debcheck: main, packages matching '$PG_DEVEL_VERSION'"
   ( set -x; $DEBCHECK \
-    --bg $DISTSDIR/$BGDIST/$DEVEL/binary-${architecture}/Packages \
+    --bg $DISTSDIR/$BGDIST/$PG_DEVEL_VERSION/binary-${architecture}/Packages \
     --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
     --checkonly $develpkg ) || EXIT=$?
   echo
 
   # exclude packages from further testing
-  MAINPKG=$(echo "$MAINPKG" | fgrep -v "$DEVEL")
+  MAINPKG=$(echo "$MAINPKG" | fgrep -v "$PG_DEVEL_VERSION")
 fi
 
 # main
