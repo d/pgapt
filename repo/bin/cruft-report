@@ -38,7 +38,7 @@ while (<P>) {
 		next;
 	}
 	if ($srcs{$src} ne $srcver) {
-		print "Package $pkg ($ver) source $src ($srcver) has version $srcs{$src}\n";
+		print "Package $pkg ($ver) source $src ($srcver) has version $srcs{$src}: sudo -u aptuser reprepro remove $dist $pkg\n";
 	}
 }
 close P;
