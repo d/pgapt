@@ -641,6 +641,7 @@
                         which-build: upstream-build
                         fallback-to-last-successful: true
                         do-not-fingerprint: true
+                - shell: 'rm lib*_{oldversion}*'
                 - shell: 'postgresql-testsuite'
         publishers:
                 - ircbot: *only_configs
