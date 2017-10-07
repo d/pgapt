@@ -622,6 +622,7 @@
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
+                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
