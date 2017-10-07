@@ -1662,37 +1662,9 @@
                 - upgrade-job
 
 - project:
-        name: upgrade-9.1-9.2
+        name: upgrade-9.1-9.4
         oldversion: 9.1
-        newversion: 9.2
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.1-9.3
-        oldversion: 9.1
-        newversion: 9.3
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.2-9.3
-        oldversion: 9.2
-        newversion: 9.3
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.3-9.4
-        oldversion: 9.3
         newversion: 9.4
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.4-9.5
-        oldversion: 9.4
-        newversion: 9.5
         jobs:
                 - upgrade-job
 
@@ -1700,6 +1672,13 @@
         name: upgrade-9.4-9.6
         oldversion: 9.4
         newversion: 9.6
+        jobs:
+                - upgrade-job
+
+- project:
+        name: upgrade-9.6-10
+        oldversion: 9.6
+        newversion: 10
         jobs:
                 - upgrade-job
 
