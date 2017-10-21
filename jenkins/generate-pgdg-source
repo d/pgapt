@@ -293,6 +293,15 @@ case $PACKAGE in
     esac
     ;;
 
+  postgresql-multicorn)
+    case ${distribution:-} in
+      jessie|stretch|trusty|xenial|zesty) # have older sqlalchemy
+        sed -i -e 's/^655e4fb2b854cc004bf93db7a73a825dd49e35b5/#655e4fb2b854cc004bf93db7a73a825dd49e35b5/' debian/patches/series
+        TWEAK="${TWEAK:-} Using old sqlalchemy array api."
+        ;;
+    esac
+    ;;
+
   psqlodbc)
     case ${distribution:-} in
       wheezy|precise|saucy|trusty) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
