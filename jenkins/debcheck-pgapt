@@ -121,11 +121,15 @@ if [ "${PG_DEVEL_VERSION:-}" ] && [ "$develpkg" ]; then
     BGDIST="$DIST"
   fi
 
-  echo "### Running debcheck: main, packages matching '$PG_DEVEL_VERSION'"
-  ( set -x; $DEBCHECK \
-    --bg $DISTSDIR/$BGDIST/$PG_DEVEL_VERSION/binary-${architecture}/Packages \
-    --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-    --checkonly $develpkg ) || EXIT=$?
+  if [ "$architecture" = "amd64" ]; then
+    echo "### Running debcheck: main, packages matching '$PG_DEVEL_VERSION'"
+    ( set -x; $DEBCHECK \
+      --bg $DISTSDIR/$BGDIST/$PG_DEVEL_VERSION/binary-${architecture}/Packages \
+      --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+      --checkonly $develpkg ) || EXIT=$?
+  else
+    echo "### Skipping '$PG_DEVEL_VERSION' packages on $architecture"
+  fi
   echo
 
   # exclude packages from further testing
