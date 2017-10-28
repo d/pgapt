@@ -1042,6 +1042,12 @@
                 - git-packages-with-next
 
 - project:
+        name: jsquery
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/jsquery.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: libdbd-pg-perl
         git-url: https://anonscm.debian.org/git/pkg-perl/packages/libdbd-pg-perl.git
         jobs:
