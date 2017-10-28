@@ -1256,12 +1256,14 @@
 - project:
         name: pgq
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgq.git
+        git-branch: debian
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgqd
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgqd.git
+        git-branch: debian
         jobs:
                 - git-packages
 
