@@ -1044,6 +1044,7 @@
 - project:
         name: jsquery
         git-url: https://anonscm.debian.org/git/pkg-postgresql/jsquery.git
+        git-branch: debian
         jobs:
                 - git-packages-with-next
 
