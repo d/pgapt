@@ -1254,6 +1254,18 @@
                 - git-packages-with-next
 
 - project:
+        name: pgq
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgq.git
+        jobs:
+                - git-packages-with-next
+
+- project:
+        name: pgqd
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgqd.git
+        jobs:
+                - git-packages
+
+- project:
         name: pgrouting
         git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
         # dh_sphinxdoc fails on wheezy
@@ -1625,13 +1637,6 @@
         git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
         jobs:
                 - git-packages
-
-- project:
-        name: skytools3
-        git-url: git://anonscm.debian.org/pkg-postgresql/skytools3.git
-        git-branch: debian
-        jobs:
-                - git-packages-with-next
 
 - project:
         name: slony1-2
