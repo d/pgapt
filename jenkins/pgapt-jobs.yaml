@@ -1577,6 +1577,19 @@
                 - git-packages-with-next
 
 - project:
+        name: postgresql-q3c
+        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/postgresql-q3c.git/
+        jobs:
+                - git-packages-with-next
+
+- project:
+        name: postgresql-rum
+        git-url: https://anonscm.debian.org/cgit/pkg-postgresql/postgresql-rum.git/
+        git-branch: debian
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: postgresql-unit
         git-url: https://github.com/ChristophBerg/postgresql-unit.git
         jobs:
@@ -1628,12 +1641,6 @@
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
-
-- project:
-        name: postgresql-q3c
-        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/postgresql-q3c.git/
-        jobs:
-                - git-packages-with-next
 
 - project:
         name: repmgr
