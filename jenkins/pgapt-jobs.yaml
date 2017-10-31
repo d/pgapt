@@ -1108,6 +1108,8 @@
         git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
         jobs:
                 - git-packages-with-next
+        # needs bison 3
+        dist-filter: '(distribution!="wheezy")'
 
 - project:
         name: resource-agents-paf
