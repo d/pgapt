@@ -1253,6 +1253,7 @@
 - project:
         name: pg-similarity
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-similarity.git
+        git-branch: debian
         jobs:
                 - git-packages-with-next
 
