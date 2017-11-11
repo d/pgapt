@@ -1,0 +1,10 @@
+The apt.postgresql.org morgue
+=============================
+
+The *-pgdg distributions in the apt.postgresql.org repository only contain the
+most recent version of each package. Older versions are available in the morgue
+at http://atalia.postgresql.org/morgue/.
+
+There is no dists/ structure, and the provided Packages.xz and Sources.xz files
+contain all packages for all distributions, users will need to choose the
+correct files manually.
