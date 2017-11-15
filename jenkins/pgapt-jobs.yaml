@@ -1514,7 +1514,6 @@
 - project:
         name: postgresql-debversion
         git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
-        git-branch: debian
         jobs:
                 - git-packages-with-next
 
