@@ -88,12 +88,10 @@ TO="PostgreSQL in Debian <pgsql-pkg-debian@postgresql.org>"
 
 if [ "$OLDVERSION" ]; then
 	SOMEDEB=$(ls /srv/apt/repo/pool/$COMPONENT/$INITIAL/$PKG/*$NEWSHORTVERSION*deb | head -1)
-	CHANGES=$(apt-listchanges -f text --which=changelogs --since=$OLDVERSION $SOMEDEB)
+	CHANGES=$(apt-listchanges -f text --which=both --since=$OLDVERSION $SOMEDEB | fgrep -v 'Lese Changelogs...')
 	CHANGESTEXT="Old version $OLDVERSION:
 
 $OLDLSPROD
-
-Changelog:
 
 $CHANGES"
 else
