@@ -1624,6 +1624,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pspg
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pspg.git
+        jobs:
+                - git-packages
+
+- project:
         name: psqlodbc
         git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
         jobs:
