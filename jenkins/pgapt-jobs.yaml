@@ -1513,7 +1513,7 @@
 
 - project:
         name: postgresql-debversion
-        git-url: git://git.debian.org/git/buildd-tools/postgresql-debversion
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql-debversion.git
         jobs:
                 - git-packages-with-next
 
