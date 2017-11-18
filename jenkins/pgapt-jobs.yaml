@@ -1684,6 +1684,12 @@
                 - git-packages
 
 - project:
+        name: toastinfo
+        git-url: https://github.com/credativ/toastinfo.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: wal-e
         git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
         # needs python-swiftclient
