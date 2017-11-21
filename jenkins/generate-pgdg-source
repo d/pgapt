@@ -342,6 +342,7 @@ case $PACKAGE in
         TWEAK="${TWEAK:-} Using old-style dbg packages in debian/control."
         ;;
     esac
+    ;;
 
 esac
 
