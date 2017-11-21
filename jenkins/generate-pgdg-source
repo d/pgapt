@@ -334,6 +334,15 @@ case $PACKAGE in
     esac
     ;;
 
+  repmgr)
+    case ${distribution:-} in
+      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
+        # Revert to old-style dbg packages config
+        sed -i -e 's/^#dbg#//' debian/control*
+        TWEAK="${TWEAK:-} Using old-style dbg packages in debian/control."
+        ;;
+    esac
+
 esac
 
 
