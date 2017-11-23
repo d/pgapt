@@ -185,7 +185,7 @@ case $PACKAGE in
         sed -i -e 's/^#PIE# //' debian/rules
         TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
         # Revert to old-style dbg packages config
-        sed -i -e 's/^#dbg#//' debian/control*
+        sed -i -e 's/^#dbg#//' debian/rules debian/control*
         TWEAK="${TWEAK:-} Using old-style dbg packages in debian/control."
         ;;
     esac
@@ -338,7 +338,7 @@ case $PACKAGE in
     case ${distribution:-} in
       jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         # Revert to old-style dbg packages config
-        sed -i -e 's/^#dbg#//' debian/control*
+        sed -i -e 's/^#dbg#//' debian/rules debian/control*
         TWEAK="${TWEAK:-} Using old-style dbg packages in debian/control."
         ;;
     esac
