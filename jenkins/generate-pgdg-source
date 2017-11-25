@@ -104,7 +104,7 @@ if [ "${merge:-}" ]; then
   git fetch debian
   git reset --hard $branch
   git clean -xdf
-  git merge -m "Merge with https://anonscm.debian.org/git/pkg-postgresql/postgresql.git ($merge)" debian/$merge
+  git merge --allow-unrelated-histories -m "Merge with https://anonscm.debian.org/git/pkg-postgresql/postgresql.git ($merge)" debian/$merge
 fi
 
 # clean up behind a possibly broken last job
