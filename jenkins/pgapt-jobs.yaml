@@ -1183,6 +1183,13 @@
                 - git-packages
 
 - project:
+        name: pg-cron
+        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-cron.git
+        git-branch: debian
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgcluu
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgcluu.git
         jobs:
