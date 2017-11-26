@@ -747,8 +747,7 @@
         builders:
                 - shell: 'cd jenkins && make && make update'
         publishers:
-                - ircbot:
-                        message-type: summary
+                - ircbot
 
 - job:
         name: 'debcheck-distsmirror'
