@@ -738,6 +738,7 @@
                 - trigger:
                         project: apt.postgresql.org-jobs
                 - ircbot:
+                        strategy: any-failure
                         matrix-notifier: only-parent
 
 - job:
@@ -747,7 +748,6 @@
                 - shell: 'cd jenkins && make && make update'
         publishers:
                 - ircbot:
-                        strategy: any-failure
                         message-type: summary
 
 - job:
