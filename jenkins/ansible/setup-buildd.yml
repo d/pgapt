@@ -88,6 +88,24 @@
       dest: /etc/schroot/default/fstab
       mode: 0644
 
+  # make sure /etc/hosts is handled in copyfiles instead of nssdatabases
+  - name: schroot copyfiles
+    copy:
+      src: schroot.copyfiles
+      dest: /etc/schroot/{{item}}/copyfiles
+      mode: 0644
+    with_items:
+      - default
+      - sbuild
+  - name: schroot nssdatabases
+    copy:
+      src: schroot.nssdatabases
+      dest: /etc/schroot/{{item}}/nssdatabases
+      mode: 0644
+    with_items:
+      - default
+      - sbuild
+
   - name: sbuild.conf
     copy:
       src: sbuild.conf
