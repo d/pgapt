@@ -331,6 +331,14 @@ case $PACKAGE in
     esac
     ;;
 
+  pgdg-buildenv)
+    case ${distribution:-} in
+      wheezy|trusty) sed -i -e '/autodep8/d' debian/control
+        TWEAK="${TWEAK:-} Dropping autodep8 dependency."
+        ;;
+    esac
+    ;;
+
 esac
 
 # tweaks shared by several packages
