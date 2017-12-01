@@ -1737,7 +1737,7 @@
         name: flask-mail
         git-url: https://anonscm.debian.org/git/python-modules/packages/flask-mail.git
         git-branch: debian/master
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="zesty")'
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
