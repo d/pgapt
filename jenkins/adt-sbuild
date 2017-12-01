@@ -29,12 +29,6 @@ SBUILD_BUILD_DIR="$1"
 SBUILD_PKGBUILD_DIR="$2"
 cd "$SBUILD_PKGBUILD_DIR"
 
-if [ ! -f debian/tests/control ]; then
-	echo "Package does not have autopkgtest support (there is no debian/tests/control file)"
-	adtsummary2junit /dev/null > $DEB_ADT_SUMMARY
-	exit 0
-fi
-
 if [ ! -f debian/files ]; then
 	echo "Error: Package source is not built, debian/files is missing"
 	exit 1
