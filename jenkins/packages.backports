@@ -6,3 +6,4 @@ pgbouncer
 pgrouting
 pgsql-ogr-fdw
 python-azure
+flask-mail

@@ -1738,6 +1738,7 @@
         git-url: https://anonscm.debian.org/git/python-modules/packages/flask-mail.git
         git-branch: debian/master
         dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="zesty")'
+        backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
 - project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-paranoid.git' }
