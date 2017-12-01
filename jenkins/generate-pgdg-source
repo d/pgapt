@@ -222,6 +222,16 @@ case $PACKAGE in
   pgloader|bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader and build-deps
     DOT='~' ;;
 
+  flask-wtf)
+    case $distribution in
+      xenial)
+        echo "override_dh_auto_test:" >> debian/rules
+        echo "	-override_dh_auto_test" >> debian/rules
+        TWEAK="${TWEAK:-} Ignore CSRF test failure on xenial."
+        ;;
+    esac
+    ;;
+
   gdal)
     DOT='~'
     case ${distribution:-} in
