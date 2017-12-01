@@ -61,10 +61,14 @@ fi
 ) || EXIT=$?
 
 case ${EXIT:-0} in
-	0|2|4|6|8) # all ok or some test failed, exit 0 here and let adtsummary2junit report the failure to jenkins
-		adtsummary2junit $ADT_SUMMARY > $DEB_ADT_SUMMARY
-		exit 0
-		;;
+  0|2|4|6) # all ok or some test failed, exit 0 here and let adtsummary2junit report the failure to jenkins
+    adtsummary2junit $ADT_SUMMARY > $DEB_ADT_SUMMARY
+    exit 0
+    ;;
+  8) # "SKIP no tests in this package"
+    adtsummary2junit /dev/null > $DEB_ADT_SUMMARY
+    exit 0
+    ;;
 esac
 
 # in reality, sbuild ignores failures here, but jenkins will complain if the junit xml result file is empty
