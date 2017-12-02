@@ -254,14 +254,14 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: artful-pgdg
-Suite: artful-pgdg
+Codename: bionic-pgdg
+Suite: bionic-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.3 9.4 9.5 9.6 10
+Components: main 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
-Log: artful-pgdg.log
+Log: bionic-pgdg.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
@@ -269,14 +269,14 @@ DscIndices: Sources Release .gz .bz2
 Tracking: all
 Contents: percomponent nocompatsymlink
 
-Codename: artful-pgdg-testing
-Suite: artful-pgdg-testing
+Codename: bionic-pgdg-testing
+Suite: bionic-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
 Architectures: source amd64 i386 ppc64el
-Components: main 9.3 9.4 9.5 9.6 10
+Components: main 9.3 9.4 9.5 9.6 10 11
 SignWith: ACCC4CF8
-Log: artful-pgdg-testing.log
+Log: bionic-pgdg-testing.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
