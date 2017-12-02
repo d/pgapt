@@ -78,6 +78,12 @@ umask 002
   # create chroot if it doesn't exist yet
   if ! test -d $chroot_path; then
     echo "Creating chroot in $chroot_path"
+    if ! test -e /usr/share/debootstrap/scripts/$distribution; then
+      case $DISTRO in
+        debian) sudo ln -sv sid /usr/share/debootstrap/scripts/$distribution ;;
+        ubuntu) sudo ln -sv gutsy /usr/share/debootstrap/scripts/$distribution ;;
+      esac
+    fi
     sudo debootstrap --variant=buildd --arch=$architecture $distribution $chroot_path $mirror
   fi
 
