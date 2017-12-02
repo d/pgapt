@@ -143,6 +143,14 @@ if [ "${FILTER_ARCH_ALL:-}" ]; then
   sed -i -e '/_all\.deb$/d' *.changes
 fi
 
+# rename Ubuntu bionic's .ddebs to .deb
+if grep -q '\.ddeb$' *.changes; then
+  for ddeb in $(grep -ho '[^ ]*\.ddeb$' *.changes | sort -u); do
+    mv -v $ddeb ${ddeb%.ddeb}.deb
+  done
+  sed -i -e 's/\.ddeb$/.deb/' *.changes
+fi
+
 # copy autopkgtest results back (already in junit format)
 if [ "${DEB_ADT_SUMMARY:-}" ]; then
   cp $DEB_ADT_SUMMARY autopkgtest.xml
