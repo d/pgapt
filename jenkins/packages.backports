@@ -7,3 +7,10 @@ pgrouting
 pgsql-ogr-fdw
 python-azure
 flask-mail
+flask-mongoengine
+flask-paranoid
+flask-peewee
+flask-security
+flask-wtf
+peewee
+wtf-peewee
