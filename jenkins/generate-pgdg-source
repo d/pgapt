@@ -330,7 +330,7 @@ esac
 
 # tweaks shared by several packages
 case $PACKAGE in
-  pgadmin3|repmgr)
+  postgresql-??|pgadmin3|repmgr)
     case ${distribution:-} in
       jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         # Revert to old-style -dbg packages
