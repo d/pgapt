@@ -101,9 +101,11 @@
             name: distribution
             values: &dist_list
                     - sid
+                    - buster
                     - stretch
                     - jessie
                     - wheezy
+                    - bionic
                     - zesty
                     - xenial
                     - trusty
@@ -494,11 +496,12 @@
                 - shell: |
                     case $distribution in
                       sid)    tag='pgdg+' ;;
+                      bullseye) tag='pgdg110+' ;;
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
                       wheezy) tag='pgdg70+' ;;
-                      artful) tag='pgdg17.10+' ;;
+                      bionic) tag='pgdg18.04+' ;;
                       zesty)  tag='pgdg17.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       trusty) tag='pgdg14.04+' ;;
@@ -1432,6 +1435,7 @@
         name: postgresql-9.2
         git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
         git-branch: 9.2
+        dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
         next-job: 'postgresql-9.2-testsuite'
