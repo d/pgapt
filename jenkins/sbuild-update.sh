@@ -8,7 +8,7 @@ error () {
 }
 
 # read pgapt config
-for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
   . $dir/pgapt.conf
   break
