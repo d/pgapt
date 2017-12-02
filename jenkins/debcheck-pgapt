@@ -82,7 +82,7 @@ for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Pa
 done
 
 # bpo
-if [ "$HAS_BACKPORTS" ];
+if [ "$HAS_BACKPORTS" ]; then
     echo "### Running debcheck: main, packages needing backports"
     [ -f packages.backports ] || error "packages.backports not found"
     pkg=$(fold $(cat packages.backports))
