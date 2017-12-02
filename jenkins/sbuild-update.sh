@@ -7,6 +7,14 @@ error () {
   exit 1
 }
 
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+set_dist_vars $distribution
+
 # use "default" chroot here ("sbuild" doesn't get /etc/hosts copied)
 chroot="source:$distribution-$architecture"
 chroot_path="/home/chroot/$distribution-$architecture"
@@ -35,15 +43,16 @@ case $(hostname) in
     security="http://security-approx:9999/security"
     ;;
 esac
-case $distribution in
-  squeeze) BACKPORTS="deb $deb-backports/ $distribution-backports main" ;;
-  wheezy|jessie) BACKPORTS="deb $deb $distribution-backports main" ;;
-  trusty|xenial) BACKPORTS="deb $ubuntu $distribution-backports main" ;;
-esac
+if [ "$HAS_BACKPORTS" ]; then
+  case $DISTRO in
+    debian) BACKPORTS="deb $deb $distribution-backports main" ;;
+    ubuntu) BACKPORTS="deb $ubuntu $distribution-backports main" ;;
+  esac
+fi
 
 # mirror to use for debootstrap
-case $distribution in
-  precise|trusty|wily|xenial|zesty) mirror="$ubuntu" ;;
+case $DISTRO in
+  ubuntu) mirror="$ubuntu" ;;
   *) mirror="$deb" ;;
 esac
 
@@ -97,15 +106,13 @@ umask 002
 	echo "deb $mirror $distribution main" > /etc/apt/sources.list
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
-	case $distribution in
-	  precise|trusty|wily|xenial|zesty) # libossp-uuid is in universe on vivid+
+	case $DISTRO in
+	  ubuntu) # libossp-uuid-dev is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list
 	    echo "deb $ubuntu $distribution-security main" > /etc/apt/sources.list.d/security.list
 	    ;;
-	  sid) # no security
-	    ;;
 	  *)
-	    echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
+	    [ "$distribution" != "sid" ] && echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
 	    ;;
 	esac
 	if [ "${BACKPORTS:-}" ]; then

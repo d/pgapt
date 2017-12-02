@@ -34,6 +34,7 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/
 done
 
 : ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
+set_dist_vars $distribution
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 [ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
@@ -81,8 +82,7 @@ for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Pa
 done
 
 # bpo
-case $distribution in
-  squeeze|wheezy|jessie|trusty|xenial)
+if [ "$HAS_BACKPORTS" ];
     echo "### Running debcheck: main, packages needing backports"
     [ -f packages.backports ] || error "packages.backports not found"
     pkg=$(fold $(cat packages.backports))
@@ -94,8 +94,7 @@ case $distribution in
 
     # exclude packages from further testing
     MAINPKG=$(echo "$MAINPKG" | fgrep -v -f packages.backports)
-  ;;
-esac
+fi
 
 # beta
 betapkg=$(fold $(echo "$MAINPKG" | fgrep "${PG_BETA_VERSION:-}"))

@@ -29,6 +29,14 @@ error () {
   exit 1
 }
 
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+set_dist_vars $distribution
+
 chroot="chroot:$distribution-pgdg-$architecture-sbuild"
 
 # find dsc to build
@@ -70,7 +78,7 @@ case $distribution in
 esac
 
 # enable backports
-if [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
+if [ "$HAS_BACKPORTS" ] && [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
   deb="http://deb.debian.org/debian"
   ubuntu="http://de.archive.ubuntu.com/ubuntu"
   case $(hostname) in
@@ -79,10 +87,9 @@ if [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
       ubuntu="http://ubuntu-approx:9999/ubuntu"
       ;;
   esac
-  case $distribution in
-    squeeze) BPOREPO="deb $deb-backports/ $distribution-backports main" ;;
-    wheezy|jessie) BPOREPO="deb $deb $distribution-backports main" ;;
-    trusty|xenial) BPOREPO="deb $ubuntu $distribution-backports main" ;;
+  case $DISTRO in
+    debian) BPOREPO="deb $deb $distribution-backports main" ;;
+    ubuntu) BPOREPO="deb $ubuntu $distribution-backports main" ;;
   esac
 fi
 

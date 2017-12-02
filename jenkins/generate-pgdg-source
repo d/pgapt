@@ -49,10 +49,13 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
   . $dir/pgapt.conf
   break
 done
+set_dist_vars $distribution
 
 [ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"
 
 export PG_SUPPORTED_VERSIONS="pgdg"
+# tell /usr/share/postgresql-common/supported-versions which distro/release we are targeting
+export DISTRO RELEASE
 
 REVERTS="debian/changelog debian/control debian/rules"
 
@@ -118,32 +121,6 @@ cleanup
 # get newest version number from changelog
 PREVIOUS_VERSION=$(dpkg-parsechangelog --count 1 | awk '/^Version: / {print $2}')
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
-
-case ${distribution:-} in
-  # Debian
-  sid)     PGDG_DISTRIBUTION="pgdg"      DISTRO="debian" RELEASE="unstable" ;;
-  buster)  PGDG_DISTRIBUTION="pgdg100"   DISTRO="debian" RELEASE="10" ;;
-  stretch) PGDG_DISTRIBUTION="pgdg90"    DISTRO="debian" RELEASE="9" ;;
-  jessie)  PGDG_DISTRIBUTION="pgdg80"    DISTRO="debian" RELEASE="8" ;;
-  wheezy)  PGDG_DISTRIBUTION="pgdg70"    DISTRO="debian" RELEASE="7" ;;
-  squeeze) PGDG_DISTRIBUTION="pgdg60"    DISTRO="debian" RELEASE="6.0" ;;
-  lenny)   PGDG_DISTRIBUTION="pgdg50"    DISTRO="debian" RELEASE="5.0" ;;
-  etch)    PGDG_DISTRIBUTION="pgdg40"    DISTRO="debian" RELEASE="4.1" ;;
-  # Ubuntu
-  artful)  PGDG_DISTRIBUTION="pgdg17.10" DISTRO="ubuntu" RELEASE="17.10" ;;
-  zesty)   PGDG_DISTRIBUTION="pgdg17.04" DISTRO="ubuntu" RELEASE="17.04" ;;
-  xenial)  PGDG_DISTRIBUTION="pgdg16.04" DISTRO="ubuntu" RELEASE="16.04" ;;
-  wily)    PGDG_DISTRIBUTION="pgdg15.10" DISTRO="ubuntu" RELEASE="15.10" ;;
-  utopic)  PGDG_DISTRIBUTION="pgdg14.10" DISTRO="ubuntu" RELEASE="14.10" ;;
-  trusty)  PGDG_DISTRIBUTION="pgdg14.04" DISTRO="ubuntu" RELEASE="14.04" ;;
-  saucy)   PGDG_DISTRIBUTION="pgdg13.10" DISTRO="ubuntu" RELEASE="13.10" ;;
-  precise) PGDG_DISTRIBUTION="pgdg12.4"  DISTRO="ubuntu" RELEASE="12.04" ;;
-  lucid)   PGDG_DISTRIBUTION="pgdg10.4"  DISTRO="ubuntu" RELEASE="10.04" ;;
-  *) echo "Unknown distribution ${distribution:-}" >&2 ; exit 1 ;;
-esac
-
-# tell /usr/share/postgresql-common/supported-versions which distro/release we are targetting
-export DISTRO RELEASE
 
 # for postgresql server packages, move packages to a separate components
 # = $PG_MAIN_VERSION: main

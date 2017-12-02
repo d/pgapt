@@ -6,17 +6,20 @@
 
 set -eu
 
-ARCH=$(dpkg --print-architecture)
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
 
-case $ARCH in
-	amd64) ARCH="amd64 i386"
-		DISTS="sid stretch jessie wheezy zesty xenial trusty precise" ;;
-	ppc64el)
-		DISTS="sid stretch jessie        zesty xenial trusty" ;;
+case $(dpkg --print-architecture) in
+	amd64) ARCHS="amd64 i386" ;;
+	ppc64el) ARCHS="ppc64el" ;;
 esac
 
-for dist in $DISTS; do
-	for arch in $ARCH; do
+for dist in $PG_SUPPORTED_DISTS; do
+	for arch in $ARCHS; do
 
 		# if arguments are given, execute as command in enviroment
 		# ./schroot-config.sh ./sbuild-update.sh

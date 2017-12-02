@@ -14,7 +14,15 @@ error () {
   exit 2
 }
 
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+
 : ${distribution:=sid} ${architecture:=amd64} ${stage:=testing}
+set_dist_vars $distribution
 
 LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 [ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
@@ -67,8 +75,7 @@ esac
 MAINSRC=$(mktemp ${DIST}_main_source_Sources.XXXXXX)
 zcat $DISTSDIR/$DIST/main/source/Sources.gz > $MAINSRC
 
-case $distribution in
-  squeeze|wheezy|jessie|trusty|xenial)
+if [ "$HAS_BACKPORTS" ]; then
     [ -f packages.backports ] || error "packages.backports not found"
     for pkg in $(cat packages.backports); do
       grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
@@ -87,8 +94,7 @@ case $distribution in
       [ -f "$FILE" ] || error "$FILE not found"
       BPO="$FILE"
     done
-    ;;
-esac
+fi
 
 # exclude pgloader on the older dists in production
 if [ "$stage" = "production" ]; then
