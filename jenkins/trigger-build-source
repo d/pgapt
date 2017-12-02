@@ -10,6 +10,7 @@ set -eu
 while getopts "d:c:" opt ; do
 	case $opt in
 	d) distribution="$OPTARG" ;;
+	f) from_distribution="$OPTARG" ;;
 	c) cert="$OPTARG" ;;
 	*) exit 5 ;;
 	esac
@@ -25,6 +26,6 @@ for pkg in "$@"; do
   for dist in $distribution; do
     curl --cert "$cert" \
       "https://pgdgbuild.dus.dg-i.net/job/build-source/buildWithParameters" \
-      --data "token=buildnow&PACKAGE=$pkg&distribution=$dist"
+      --data "token=buildnow&PACKAGE=$pkg&from_distribution=${from_distribution:=sid}&distribution=$dist"
   done
 done

@@ -266,6 +266,10 @@
                 - string: &package_parameter
                         name: PACKAGE
                         description: 'Package to rebuild source for (without -source suffix)'
+                - choice:
+                        name: from_distribution
+                        choices: *dist_list
+                        description: 'Distribution to build from'
                 - choice: &distribution_parameter
                         name: distribution
                         choices: *dist_list
@@ -275,7 +279,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: '$PACKAGE-source/distribution=sid'
+                        project: '$PACKAGE-source/distribution=$from_distribution'
                         filter: 'result/*'
                         flatten: true
                         do-not-fingerprint: true
