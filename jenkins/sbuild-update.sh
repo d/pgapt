@@ -113,13 +113,19 @@ umask 002
 	echo "deb-src $mirror $distribution main" >> /etc/apt/sources.list
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
+	echo "deb-src $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $DISTRO in
 	  ubuntu) # libossp-uuid-dev is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list
+	    echo "deb-src $ubuntu $distribution universe" >> /etc/apt/sources.list.d/universe.list
 	    echo "deb $ubuntu $distribution-security main" > /etc/apt/sources.list.d/security.list
+	    echo "deb-src $ubuntu $distribution-security main" >> /etc/apt/sources.list.d/security.list
 	    ;;
 	  *)
-	    [ "$distribution" != "sid" ] && echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
+	    if [ "$distribution" != "sid" ]; then
+	      echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
+	      echo "deb-src $security $distribution/updates main" >> /etc/apt/sources.list.d/security.list
+	    fi
 	    ;;
 	esac
 	if [ "${BACKPORTS:-}" ]; then
