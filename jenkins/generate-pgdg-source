@@ -199,6 +199,7 @@ case $PACKAGE in
   pgloader|bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader and build-deps
     DOT='~' ;;
 
+  # pgadmin4 build-deps
   flask-wtf)
     case $distribution in
       xenial)
@@ -207,7 +208,11 @@ case $PACKAGE in
         TWEAK="${TWEAK:-} Ignore CSRF test failure on xenial."
         ;;
     esac
+    DOT='~'
     ;;
+
+  flask*|*peewee*)
+    DOT='~' ;;
 
   gdal)
     DOT='~'

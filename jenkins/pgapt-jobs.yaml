@@ -1758,6 +1758,12 @@
 - project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://anonscm.debian.org/git/python-modules/packages/wtf-peewee.git' }
 
 - project:
+        name: flask-login
+        apt-suite: 'bionic'
+        dist-filter: '(distribution=="xenial")'
+        jobs: [apt-packages]
+
+- project:
         name: pgadmin4
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgadmin4.git
         dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="zesty")'
