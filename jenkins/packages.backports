@@ -14,3 +14,4 @@ flask-security
 flask-wtf
 peewee
 wtf-peewee
+flask-login
