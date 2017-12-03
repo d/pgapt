@@ -81,7 +81,7 @@ elif [ "${SVN_REVISION:-}" ] ; then
   RESULT=../result
 elif [ "${apt_suite:-}" ] ; then
   rm -rf $PACKAGE* source
-  apt-get source -d $PACKAGE/$apt_suite
+  schroot -c $apt_suite -- apt-get source -d $PACKAGE/$apt_suite
   dpkg-source -x $PACKAGE*.dsc source
   VCS=debian
   VCS_REVISION="Debian $apt_suite source rebuild"

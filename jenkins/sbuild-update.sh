@@ -110,6 +110,7 @@ umask 002
 
 	# write sources lists
 	echo "deb $mirror $distribution main" > /etc/apt/sources.list
+	echo "deb-src $mirror $distribution main" >> /etc/apt/sources.list
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $DISTRO in

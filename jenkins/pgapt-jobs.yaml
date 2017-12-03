@@ -1245,7 +1245,7 @@
 
 - project:
         name: pgmodeler
-        apt-suite: unstable
+        apt-suite: sid
         # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
         dist-filter: '(distribution!="wheezy")'
         jobs:
@@ -1775,7 +1775,7 @@
 - project:
         name: pgloader
         #git-url: https://github.com/dimitri/pgloader.git
-        apt-suite: unstable
+        apt-suite: sid
         arch-filter: '(architecture!="ppc64el")'
         jobs:
                 #- git-packages
@@ -1791,7 +1791,7 @@
 
 - project: &aptpkg
         name: bordeaux-threads
-        apt-suite: 'unstable'
+        apt-suite: sid
         arch-filter: '(architecture!="ppc64el")'
         jobs: [apt-packages]
 - project: { <<: *aptpkg, name: buildapp }
