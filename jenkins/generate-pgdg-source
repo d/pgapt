@@ -200,6 +200,16 @@ case $PACKAGE in
     DOT='~' ;;
 
   # pgadmin4 build-deps
+  flask-gravatar)
+    case $distribution in stretch|zesty|xenial)
+      sed -i -e '/pytest-pep8/d' debian/control
+      sed -i -e 's/#0003-no-pep8/0003-no-pep8/' debian/patches/series
+      TWEAK="${TWEAK:-} Removing python(3)-pytest-pep8 dependency."
+      ;;
+    esac
+    DOT='~'
+    ;;
+
   flask-security)
     case $distribution in stretch|zesty|xenial)
       sed -i -e '/python3-pytest-pep8/d' debian/control
