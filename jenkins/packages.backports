@@ -7,6 +7,7 @@ pgrouting
 pgsql-ogr-fdw
 python-azure
 flask-mail
+flask-gravatar
 flask-mongoengine
 flask-paranoid
 flask-peewee

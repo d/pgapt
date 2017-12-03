@@ -1749,6 +1749,7 @@
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
+- project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-gravatar.git' }
 - project: { <<: *pythonpkg, name: flask-mongoengine, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-mongoengine.git' }
 - project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-paranoid.git' }
 - project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-peewee.git' }
