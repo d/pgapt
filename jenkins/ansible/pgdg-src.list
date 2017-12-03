@@ -1,7 +1,0 @@
-deb-src http://atalia.postgresql.org/pub/repos/apt sid-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt stretch-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt jessie-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt wheezy-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt zesty-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt xenial-pgdg-testing main
-deb-src http://atalia.postgresql.org/pub/repos/apt trusty-pgdg-testing main

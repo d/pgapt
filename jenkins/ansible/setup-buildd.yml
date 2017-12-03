@@ -31,11 +31,16 @@
       creates: /etc/apt/sources.list.d/pgdg.list
 
   - name: pgdg-src.list
-    copy:
-      src: pgdg-src.list
+    lineinfile:
+      line: 'deb-src http://atalia.postgresql.org/pub/repos/apt {{item}}-pgdg-testing main'
       dest: /etc/apt/sources.list.d/pgdg-src.list
+      create: true
       mode: 0644
+    with_lines:
+      "sh -c '. ../../pgapt.conf; echo $PG_SUPPORTED_DISTS | xargs -n1'"
     register: pgdg_src
+    tags:
+      - list
 
   - name: apt-get update
     apt:
@@ -73,6 +78,7 @@
       src: '{{chroot_dir}}'
     when: 'chroot_dir != "/home/chroot"'
 
+  # FIXME: needs pgapt.conf
   - name: update schroot config
     shell: /usr/local/bin/schroot-config.sh > /etc/schroot/chroot.d/sbuild.conf
 

@@ -6,6 +6,9 @@
 
 set -eu
 
+# seed PG_SUPPORTED_DISTS if pgapt.conf is not yet installed
+PG_SUPPORTED_DISTS="sid"
+
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
