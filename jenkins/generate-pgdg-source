@@ -200,6 +200,20 @@ case $PACKAGE in
     DOT='~' ;;
 
   # pgadmin4 build-deps
+  flask-security)
+    case $distribution in stretch|zesty|xenial)
+      sed -i -e '/python3-pytest-pep8/d' debian/control
+      TWEAK="${TWEAK:-} Removing python3-pytest-pep8 dependency."
+      ;;
+    esac
+    case $distribution in xenial)
+      sed -i -e '/python3-pytest-runner/d' debian/control
+      TWEAK="${TWEAK:-} Removing python3-pytest-runner dependency."
+      ;;
+    esac
+    DOT='~'
+    ;;
+
   flask-wtf)
     case $distribution in
       xenial)
