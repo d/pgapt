@@ -1770,7 +1770,7 @@
 - project:
         name: pgadmin4
         git-url: https://anonscm.debian.org/git/pkg-postgresql/pgadmin4.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="zesty")'
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
