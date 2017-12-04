@@ -1750,11 +1750,13 @@
         jobs:
                 - git-packages
 - project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-gravatar.git' }
+- project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-htmlmin.git' }
 - project: { <<: *pythonpkg, name: flask-mongoengine, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-mongoengine.git' }
 - project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-paranoid.git' }
 - project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-peewee.git' }
 - project: { <<: *pythonpkg, name: flask-security, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-security.git' }
 - project: { <<: *pythonpkg, name: flask-wtf,      git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-wtf.git' }
+- project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://anonscm.debian.org/git/python-modules/packages/htmlmin.git' }
 - project: { <<: *pythonpkg, name: peewee,         git-url: 'https://anonscm.debian.org/git/python-modules/packages/peewee.git' }
 - project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://anonscm.debian.org/git/python-modules/packages/wtf-peewee.git' }
 

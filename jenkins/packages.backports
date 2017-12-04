@@ -8,11 +8,13 @@ pgsql-ogr-fdw
 python-azure
 flask-mail
 flask-gravatar
+flask-htmlmin
 flask-mongoengine
 flask-paranoid
 flask-peewee
 flask-security
 flask-wtf
+htmlmin
 peewee
 wtf-peewee
 flask-login
