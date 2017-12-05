@@ -238,6 +238,12 @@ case $PACKAGE in
   flask*|*peewee*)
     DOT='~' ;;
 
+  pgadmin4)
+    case $distribution in xenial)
+      sed -i -e 's/.*libqt5webkit5-dev.*/ libqt5webkit5-dev,/' debian/control
+      TWEAK="${TWEAK:-} Forcing usage of Qtwebkit on xenial."
+      ;;
+
   gdal)
     DOT='~'
     case ${distribution:-} in
