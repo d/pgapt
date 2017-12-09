@@ -122,6 +122,19 @@ cleanup
 PREVIOUS_VERSION=$(dpkg-parsechangelog --count 1 | awk '/^Version: / {print $2}')
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
+# tweaks shared by several packages
+case $PACKAGE in
+  postgresql-??|pgadmin3|repmgr)
+    case ${distribution:-} in
+      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
+        # Revert to old-style -dbg packages
+        sed -i -e 's/^#dbg#//' debian/rules debian/control*
+        TWEAK="${TWEAK:-} Using old-style -dbg packages in debian/control."
+        ;;
+    esac
+    ;;
+esac
+
 # for postgresql server packages, move packages to a separate components
 # = $PG_MAIN_VERSION: main
 # < $PG_MAIN_VERSION: lib packages to N.N, rest to main
@@ -364,21 +377,6 @@ case $PACKAGE in
     ;;
 
 esac
-
-# tweaks shared by several packages
-case $PACKAGE in
-  postgresql-??|pgadmin3|repmgr)
-    case ${distribution:-} in
-      jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
-        # Revert to old-style -dbg packages
-        sed -i -e 's/^#dbg#//' debian/rules debian/control*
-        TWEAK="${TWEAK:-} Using old-style -dbg packages in debian/control."
-        ;;
-    esac
-    ;;
-
-esac
-
 
 # for binnmu-style rebuilds, add a "revision" parameter to the source job
 if [ "${revision:-}" ] ; then
