@@ -300,9 +300,6 @@ case $PACKAGE in
     ;;
 
   postgis)
-    for version in $(/usr/share/postgresql-common/supported-versions); do
-      sed -i -e "s/^Build-Depends: /Build-Depends: postgresql-$version, /" debian/control
-    done
     case ${distribution:-} in
       wheezy) # we do not want libjson-c-dev from bpo, just wheezy's libjson0-dev
         sed -i -e 's/libjson-c-dev | //' debian/control debian/control.in
