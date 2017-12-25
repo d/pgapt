@@ -14,8 +14,8 @@
 #  sudo DEB_PG_SUPPORTED_VERSIONS=value adt-run
 
 if [ -z "$DEB_ADT_SUMMARY" ]; then
-	echo "DEB_ADT_SUMMARY is not set, skipping tests"
-	exit
+	echo "Error: DEB_ADT_SUMMARY is not set. Did you configure sbuild.conf to pass through DEB_*?"
+	exit 1
 fi
 
 set -eu
