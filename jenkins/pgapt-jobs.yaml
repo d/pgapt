@@ -29,6 +29,16 @@
 - yamltemplates:
     name: yamltemplates
 
+    revision_string: &revision_string
+        name: revision
+        default: '1'
+        description: Revision number to use on generated source package (number in .pgdg+N suffix)
+
+    git_branch: &git_branch
+        name: branch
+        default: '{git-branch}'
+        description: Git branch, tag, or commit to build
+
     queue_choice: &queue_choice
             name: queue
             choices:
@@ -146,6 +156,127 @@
                     }
             }
 
+# pipeline template
+
+- job-template: &build_pipeline
+        name: '{name}'
+        id: 'build-pipeline'
+        description: 'Build source and binaries for {name}, and upload them'
+        project-type: pipeline
+        parameters:
+                - string: *revision_string
+                - string: *git_branch
+                - choice: *queue_choice
+        dsl: |
+                pipeline {{
+                    agent {{ label 'master' }}
+                    stages {{
+                        stage('source') {{
+                            steps {{
+                                build(job: '{name}-source',
+                                    parameters: [
+                                        string(name: 'revision', value: revision),
+                                        string(name: 'branch', value: branch),
+                                    ]
+                                )
+                            }}
+                        }}
+                        stage('binaries') {{
+                            steps {{
+                                build(job: '{name}-binaries')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'all'),
+                                    ]
+                                )
+                            }}
+                        }}
+                    }}
+                }}
+
+- job-template:
+        <<: *build_pipeline
+        name: '{name}'
+        id: 'build-pipeline-with-devel'
+        description: 'Build source and binaries for {name}, and upload them, including PostgreSQL devel'
+        dsl: |
+                pipeline {{
+                    agent {{ label 'master' }}
+                    stages {{
+                        stage('source') {{
+                            steps {{
+                                build(job: '{name}-source',
+                                    parameters: [
+                                        string(name: 'revision', value: revision),
+                                        string(name: 'branch', value: branch),
+                                    ]
+                                )
+                            }}
+                        }}
+                        stage('binaries') {{
+                            steps {{
+                                build(job: '{name}-binaries')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'all'),
+                                    ]
+                                )
+                            }}
+                        }}
+                        stage('binaries-devel') {{
+                            steps {{
+                                build(job: '{name}-binaries-devel')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries-devel'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'extension-only'),
+                                    ]
+                                )
+                            }}
+                        }}
+                    }}
+                }}
+
+- job-template:
+        <<: *build_pipeline
+        name: '{name}'
+        id: 'build-pipeline-split-adt'
+        description: 'Build source and binaries for {name}, test, and upload them'
+        dsl: |
+                pipeline {{
+                    agent {{ label 'master' }}
+                    stages {{
+                        stage('source') {{
+                            steps {{
+                                build(job: '{name}-source',
+                                    parameters: [
+                                        string(name: 'revision', value: revision),
+                                        string(name: 'branch', value: branch),
+                                    ]
+                                )
+                            }}
+                        }}
+                        stage('binaries') {{
+                            steps {{
+                                build(job: '{name}-binaries')
+                                build(job: '{name}-testsuite')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'all'),
+                                    ]
+                                )
+                            }}
+                        }}
+                    }}
+                }}
+
 # apt template
 
 - job-template: &apt_source_template
@@ -156,11 +287,7 @@
         project-type: matrix
         child-workspace: .
         parameters:
-                - string: &revision_string
-                        name: revision
-                        default: '1'
-                        description: Revision number to use on generated source package (number in .pgdg+N suffix)
-                - choice: *queue_choice
+                - string: *revision_string
                 - string:
                         name: apt_suite
                         default: '{apt-suite}'
@@ -180,10 +307,6 @@
                         latest-only: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
 
 # git template
@@ -194,12 +317,8 @@
         id: 'source-git'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
-                - string: &git_branch
-                        name: branch
-                        default: '{git-branch}'
-                        description: Git branch, tag, or commit to build
+                - string: *git_branch
                 - string: *revision_string
-                - choice: *queue_choice
         scm:
                 - git:
                         url: '{git-url}'
@@ -225,7 +344,6 @@
                                 - '{merge-branch}'
                         description: 'Packaging branch to merge with before build'
                 - string: *revision_string
-                - choice: *queue_choice
                 - choice: *buildtype_choice
         triggers:
                 - pollscm:
@@ -246,15 +364,11 @@
                         latest-only: true
                 - ircbot:
                         matrix-notifier: only-parent
-                - trigger-parameterized-builds:
-                        - project: '{source-name}-binaries-git-head'
-                          condition: SUCCESS
-                          predefined-parameters: 'queue=$queue'
                 - groovy-postbuild: *add_version_tag
 
 # build source for a single distribution
 
-- job:
+- job-template:
         <<: *apt_source_template
         name: 'build-source'
         id: 'build-source'
@@ -275,7 +389,6 @@
                         choices: *dist_list
                         description: 'Distribution to build for'
                 - string: *revision_string
-                - choice: *queue_choice
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
@@ -291,13 +404,6 @@
                 - ircbot:
                         strategy: any-failure
                         message-type: summary-params
-                - trigger-parameterized-builds:
-                        - project: 'build-binaries'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                            PACKAGE=$PACKAGE
-                            distribution=$distribution
-                            queue=$queue
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
@@ -306,11 +412,8 @@
 - job-template: &binaries_template
         name: '{name}-binaries'
         id: 'binaries'
-        description: 'Build Debian binary package of {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+        description: 'Build Debian binary packages of {name}'
         project-type: matrix
-        parameters:
-                - choice: *queue_choice
-                - choice: *upload_choice
         execution-strategy: &binaries_execution_strategy
                 combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
                 touchstone:
@@ -335,13 +438,6 @@
                 - junit:
                         results: autopkgtest.xml
                 - ircbot: *only_configs
-                - trigger-parameterized-builds: &next_job_trigger
-                        - project: '{next-job}'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries=$JOB_NAME
-                                queue=$queue
-                                upload=$upload
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
@@ -354,32 +450,6 @@
         execution-strategy:
                 <<: *binaries_execution_strategy
                 sequential: true
-
-# same as {name}-binaries, but triggers -beta and -devel builds on success
-- job-template:
-        <<: *binaries_template
-        name: '{name}-binaries'
-        id: 'binaries-with-next'
-        publishers:
-                - archive: *binaries_archive
-                - junit:
-                        results: autopkgtest.xml
-                - ircbot: *only_configs
-                - trigger-parameterized-builds: *next_job_trigger
-                #- trigger-parameterized-builds:
-                #        - project: '{name}-binaries-beta'
-                #          condition: SUCCESS
-                #          predefined-parameters: |
-                #                queue=$queue
-                #                upload=extension-only
-                - trigger-parameterized-builds:
-                        - project: '{name}-binaries-devel'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                queue=$queue
-                                upload=extension-only
-                - groovy-postbuild: *add_version_tag
-                - workspace-cleanup
 
 # binaries triggered from -source-git-head
 - job-template:
@@ -437,8 +507,6 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
-                - choice: *queue_choice
-                - choice: *upload_choice
         execution-strategy:
                 touchstone:
                         expr: 'architecture=="amd64"'
@@ -462,13 +530,6 @@
                     strategy: any-failure
                     message-type: summary-params
                     matrix-notifier: only-configurations
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries=$JOB_NAME
-                                queue=$queue
-                                upload=$upload
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
@@ -493,8 +554,6 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
-                - choice: *queue_choice
-                - choice: *upload_choice
         builders:
                 - shell: 'rm -rf *'
                 - shell: |
@@ -521,13 +580,6 @@
                 - ircbot:
                         strategy: any-failure
                         message-type: summary-params
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries=$JOB_NAME
-                                queue=$queue
-                                upload=$upload
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
 
@@ -555,8 +607,6 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
-                - choice: *queue_choice
-                - choice: *upload_choice
 
 # testsuite template
 
@@ -564,8 +614,6 @@
         name: '{name}-testsuite'
         description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
-        parameters:
-                - choice: *queue_choice
         execution-strategy:
                 combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
                 touchstone:
@@ -585,13 +633,6 @@
         publishers:
                 - archive: *binaries_archive
                 - ircbot: *only_configs
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries={name}-testsuite
-                                queue=$queue
-                                upload=all
                 - workspace-cleanup
 
 - job-template:
@@ -613,13 +654,6 @@
         publishers:
                 - archive: *binaries_archive
                 - ircbot: *only_configs
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                  binaries={source-name}-testsuite-git-head
-                                  queue=$queue
-                                  upload=all
                 - workspace-cleanup
 
 # upgrade test template
@@ -668,54 +702,54 @@
 - job-group:
         name: apt-packages
         jobs:
+                - 'build-pipeline'
                 - 'source-apt'
                 - 'binaries'
-        next-job: dput
         noadt: ''
 
 - job-group:
         name: apt-packages-with-next
         jobs:
+                - 'build-pipeline-with-devel'
                 - 'source-apt'
-                - 'binaries-with-next'
+                - 'binaries'
                 - 'binaries-beta'
                 - 'binaries-devel'
-        next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages
         jobs:
+                - 'build-pipeline'
                 - 'source-git'
                 - 'binaries'
-        next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-sequential
         jobs:
+                - 'build-pipeline'
                 - 'source-git'
                 - 'binaries-sequential'
-        next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-with-next
         jobs:
+                - 'build-pipeline-with-devel'
                 - 'source-git'
-                - 'binaries-with-next'
+                - 'binaries'
                 - 'binaries-beta'
                 - 'binaries-devel'
-        next-job: dput
         noadt: ''
 
 - job-group:
         name: git-packages-adt
         jobs:
+                - 'build-pipeline-split-adt'
                 - 'source-git'
                 - 'binaries'
                 - '{name}-testsuite'
-        #next-job: '{name}-testsuite' -- doesn't resolve {name} (needs to be set manually in the job)
         noadt: 'ADT=skip '
 
 - job-group:
@@ -1397,7 +1431,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-8.2-testsuite'
 
 - project:
         name: postgresql-8.3
@@ -1406,7 +1439,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-8.3-testsuite'
 
 - project:
         name: postgresql-8.4
@@ -1415,7 +1447,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-8.4-testsuite'
 
 - project:
         name: postgresql-9.0
@@ -1424,7 +1455,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.0-testsuite'
 
 - project:
         name: postgresql-9.1
@@ -1433,7 +1463,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.1-testsuite'
 
 - project:
         name: postgresql-9.2
@@ -1442,7 +1471,6 @@
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.2-testsuite'
 
 - project:
         name: postgresql-9.3
@@ -1450,7 +1478,6 @@
         git-branch: 9.3
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.3-testsuite'
 
 - project:
         name: postgresql-9.4
@@ -1458,7 +1485,6 @@
         git-branch: 9.4
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.4-testsuite'
 
 - project:
         name: postgresql-9.5
@@ -1466,7 +1492,6 @@
         git-branch: 9.5
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.5-testsuite'
 
 - project:
         name: postgresql-9.6
@@ -1474,7 +1499,6 @@
         git-branch: 9.6
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-9.6-testsuite'
 
 - project:
         name: postgresql-10
@@ -1482,7 +1506,6 @@
         git-branch: 10
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-10-testsuite'
 
 - project:
         name: postgresql-11
@@ -1490,7 +1513,6 @@
         git-branch: 11
         jobs:
                 - git-packages-adt
-        next-job: 'postgresql-11-testsuite'
 
 # the PostgreSQL devel version:
 - project:
@@ -1503,7 +1525,6 @@
                 - 'source-git-head'
                 - 'binaries-git-head'
                 - '{source-name}-testsuite-git-head'
-        next-job: postgresql-10-testsuite-git-head
         noadt: 'ADT=skip '
 
 - project:
@@ -1516,7 +1537,6 @@
                 - 'source-git-head'
                 - 'binaries-git-head'
                 - '{source-name}-testsuite-git-head'
-        next-job: postgresql-11-testsuite-git-head
         noadt: 'ADT=skip '
 
 - project:
