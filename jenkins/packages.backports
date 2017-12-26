@@ -2,6 +2,7 @@ autopkgtest
 libpgjava
 ora2pg
 resource-agents-paf
+pg-activity
 pgbouncer
 pgrouting
 pgsql-ogr-fdw

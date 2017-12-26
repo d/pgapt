@@ -1030,7 +1030,7 @@
 
 - project:
         name: barman
-        git-url: git://git.debian.org/collab-maint/barman.git
+        git-url: https://salsa.debian.org/postgresql/barman.git
         jobs:
                 - git-packages
 
@@ -1170,6 +1170,8 @@
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
         git-branch: unstable
+        # needs dh-python backport on wheezy
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
@@ -1249,7 +1251,7 @@
 
 - project:
         name: pgespresso
-        git-url: git://git.debian.org/collab-maint/pgespresso.git
+        git-url: https://salsa.debian.org/postgresql/pgespresso.git
         jobs:
                 - git-packages # supports 9.2 .. 9.5 only
 
@@ -1695,12 +1697,6 @@
         git-url: https://salsa.debian.org/postgresql/repmgr.git
         jobs:
                 - git-packages-with-next
-
-- project:
-        name: repmgr2
-        git-url: https://salsa.debian.org/postgresql/repmgr2.git
-        jobs:
-                - git-packages
 
 - project:
         name: slony1-2
