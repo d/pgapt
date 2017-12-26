@@ -1011,7 +1011,7 @@
 
 - project:
         name: apgdiff
-        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/apgdiff.git
+        git-url: https://salsa.debian.org/postgresql/apgdiff.git
         jobs:
                 - git-packages
 
@@ -1024,7 +1024,7 @@
 
 - project:
         name: bucardo
-        git-url: git://anonscm.debian.org/pkg-postgresql/bucardo.git
+        git-url: https://salsa.debian.org/postgresql/bucardo.git
         jobs:
                 - git-packages
 
@@ -1036,7 +1036,7 @@
 
 - project:
         name: barman-cli
-        git-url: git://git.debian.org/pkg-postgresql/barman-cli.git
+        git-url: https://salsa.debian.org/postgresql/barman-cli.git
         jobs:
                 - git-packages
 
@@ -1048,7 +1048,7 @@
 
 - project:
         name: check-postgres
-        git-url: git://anonscm.debian.org/pkg-postgresql/check-postgres.git
+        git-url: https://salsa.debian.org/postgresql/check-postgres.git
         jobs:
                 - git-packages
 
@@ -1077,13 +1077,13 @@
 
 - project:
         name: ip4r
-        git-url: git://anonscm.debian.org/pkg-postgresql/ip4r.git
+        git-url: https://salsa.debian.org/postgresql/ip4r.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: jsquery
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/jsquery.git
+        git-url: https://salsa.debian.org/postgresql/jsquery.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
@@ -1113,14 +1113,14 @@
 
 - project:
         name: libpqtypes
-        git-url: git://anonscm.debian.org/pkg-postgresql/libpqtypes.git
+        git-url: https://salsa.debian.org/postgresql/libpqtypes.git
         # run sequentially so the tests have 5432 available
         jobs:
                 - git-packages-sequential
 
 - project:
         name: mimeo
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/mimeo.git
+        git-url: https://salsa.debian.org/postgresql/mimeo.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
@@ -1135,7 +1135,7 @@
 
 - project:
         name: ora2pg
-        git-url: https://anonscm.debian.org/git/collab-maint/ora2pg.git
+        git-url: https://salsa.debian.org/postgresql/ora2pg.git
         git-branch: debian/unstable
         # needs dh 10
         dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
@@ -1145,7 +1145,7 @@
 
 - project:
         name: orafce
-        git-url: git://anonscm.debian.org/pkg-postgresql/orafce.git
+        git-url: https://salsa.debian.org/postgresql/orafce.git
         jobs:
                 - git-packages-with-next
         # needs bison 3
@@ -1162,7 +1162,7 @@
 
 - project:
         name: patroni
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/patroni.git
+        git-url: https://salsa.debian.org/postgresql/patroni.git
         jobs:
                 - git-packages
 
@@ -1175,25 +1175,25 @@
 
 - project:
         name: pgadmin3
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgadmin3.git
+        git-url: https://salsa.debian.org/postgresql/pgadmin3.git
         jobs:
                 - git-packages
 
 - project:
         name: pgagent
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgagent.git
+        git-url: https://salsa.debian.org/postgresql/pgagent.git
         jobs:
                 - git-packages
 
 - project:
         name: pgaudit
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgaudit.git
+        git-url: https://salsa.debian.org/postgresql/pgaudit.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgbadger
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgbadger.git
+        git-url: https://salsa.debian.org/postgresql/pgbadger.git
         jobs:
                 - git-packages
 
@@ -1205,7 +1205,7 @@
 
 - project:
         name: pgbackrest
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgbackrest.git
+        git-url: https://salsa.debian.org/postgresql/pgbackrest.git
         jobs:
                 - git-packages
 
@@ -1217,21 +1217,21 @@
 
 - project:
         name: pgbouncer
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgbouncer.git
+        git-url: https://salsa.debian.org/postgresql/pgbouncer.git
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
 - project:
         name: pg-cron
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-cron.git
+        git-url: https://salsa.debian.org/postgresql/pg-cron.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgcluu
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgcluu.git
+        git-url: https://salsa.debian.org/postgresql/pgcluu.git
         jobs:
                 - git-packages
 
@@ -1267,13 +1267,13 @@
 
 - project:
         name: pglogical
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pglogical.git
+        git-url: https://salsa.debian.org/postgresql/pglogical.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgmemcache
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgmemcache.git
+        git-url: https://salsa.debian.org/postgresql/pgmemcache.git
         jobs:
                 - git-packages-with-next
 
@@ -1293,39 +1293,39 @@
 
 - project:
         name: pg-repack
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-repack.git
+        git-url: https://salsa.debian.org/postgresql/pg-repack.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pg-similarity
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-similarity.git
+        git-url: https://salsa.debian.org/postgresql/pg-similarity.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pg-partman
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pg-partman.git
+        git-url: https://salsa.debian.org/postgresql/pg-partman.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgpool2
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgpool2.git
+        git-url: https://salsa.debian.org/postgresql/pgpool2.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgq
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgq.git
+        git-url: https://salsa.debian.org/postgresql/pgq.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
 
 - project:
         name: pgqd
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgqd.git
+        git-url: https://salsa.debian.org/postgresql/pgqd.git
         git-branch: debian
         jobs:
                 - git-packages
@@ -1342,7 +1342,7 @@
 
 - project:
         name: pgsphere
-        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/pgsphere.git/
+        git-url: https://salsa.debian.org/postgresql/pgsphere.git/
         jobs:
                 - git-packages-with-next
 
@@ -1369,7 +1369,7 @@
 
 - project:
         name: pgtap
-        git-url: git://anonscm.debian.org/pkg-postgresql/pgtap.git
+        git-url: https://salsa.debian.org/postgresql/pgtap.git
         jobs:
                 - git-packages-with-next
 
@@ -1381,26 +1381,26 @@
 
 - project:
         name: pgxnclient
-        git-url: git://git.debian.org/pkg-postgresql/pgxnclient.git
+        git-url: https://salsa.debian.org/postgresql/pgxnclient.git
         jobs:
                 - git-packages
 
 - project:
         name: pldebugger
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pldebugger.git
+        git-url: https://salsa.debian.org/postgresql/pldebugger.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
 
 - project:
         name: plr
-        git-url: git://anonscm.debian.org/pkg-postgresql/plr.git
+        git-url: https://salsa.debian.org/postgresql/plr.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: plv8
-        git-url: git://anonscm.debian.org/pkg-postgresql/plv8.git
+        git-url: https://salsa.debian.org/postgresql/plv8.git
         git-branch: debian
         # libv8-dev/ppc64el is missing in Debian Jessie
         arch-filter: '!(architecture=="ppc64el" && distribution=="jessie")'
@@ -1426,7 +1426,7 @@
 
 - project:
         name: postgresql-8.2
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: '8.2-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1434,7 +1434,7 @@
 
 - project:
         name: postgresql-8.3
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: '8.3-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1442,7 +1442,7 @@
 
 - project:
         name: postgresql-8.4
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: '8.4-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1450,7 +1450,7 @@
 
 - project:
         name: postgresql-9.0
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: '9.0-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1458,7 +1458,7 @@
 
 - project:
         name: postgresql-9.1
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.1
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1466,7 +1466,7 @@
 
 - project:
         name: postgresql-9.2
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.2
         dist-filter: '(distribution=="sid")'
         jobs:
@@ -1474,42 +1474,42 @@
 
 - project:
         name: postgresql-9.3
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.3
         jobs:
                 - git-packages-adt
 
 - project:
         name: postgresql-9.4
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.4
         jobs:
                 - git-packages-adt
 
 - project:
         name: postgresql-9.5
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.5
         jobs:
                 - git-packages-adt
 
 - project:
         name: postgresql-9.6
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.6
         jobs:
                 - git-packages-adt
 
 - project:
         name: postgresql-10
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 10
         jobs:
                 - git-packages-adt
 
 - project:
         name: postgresql-11
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql.git
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 11
         jobs:
                 - git-packages-adt
@@ -1541,25 +1541,25 @@
 
 - project:
         name: postgresql-common
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-common.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-common.git
         jobs:
                 - git-packages
 
 - project:
         name: postgresql-debversion
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql-debversion.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-debversion.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-filedump
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-filedump.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-filedump.git
         jobs:
                 - git-packages
 
 - project:
         name: postgresql-multicorn
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-multicorn.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-multicorn.git
         # python foo (wheezy)
         dist-filter: '(distribution!="wheezy")'
         jobs:
@@ -1567,7 +1567,7 @@
 
 - project:
         name: postgresql-mysql-fdw
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-mysql-fdw.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-mysql-fdw.git
         jobs:
                 - git-packages-with-next
 
@@ -1581,19 +1581,19 @@
 
 - project:
         name: postgresql-pgmp
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pgmp.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-pgmp.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-pljava
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pljava.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-pljava.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-pllua
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-pllua.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-pllua.git
         # wheezy/precise amd64: ERROR:  cache lookup failed for type 2192165
         # (squeeze and wheezy/precise i386 work)
         dist-filter: '(distribution!="wheezy")'
@@ -1602,31 +1602,31 @@
 
 - project:
         name: postgresql-plproxy
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plproxy.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-plproxy.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-plsh
-        git-url: git://anonscm.debian.org/pkg-postgresql/postgresql-plsh.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-plsh.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-prioritize
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/postgresql-prioritize.git
+        git-url: https://salsa.debian.org/postgresql/postgresql-prioritize.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-q3c
-        git-url: https://alioth.debian.org/anonscm/git/pkg-postgresql/postgresql-q3c.git/
+        git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git/
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-rum
-        git-url: https://anonscm.debian.org/cgit/pkg-postgresql/postgresql-rum.git/
+        git-url: https://salsa.debian.org/postgresql/postgresql-rum.git/
         git-branch: debian
         jobs:
                 - git-packages-with-next
@@ -1659,13 +1659,13 @@
 
 - project:
         name: pspg
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pspg.git
+        git-url: https://salsa.debian.org/postgresql/pspg.git
         jobs:
                 - git-packages
 
 - project:
         name: psqlodbc
-        git-url: git://anonscm.debian.org/pkg-postgresql/psqlodbc.git
+        git-url: https://salsa.debian.org/postgresql/psqlodbc.git
         jobs:
                 - git-packages
 
@@ -1692,19 +1692,19 @@
 
 - project:
         name: repmgr
-        git-url: git://git.debian.org/pkg-postgresql/repmgr.git
+        git-url: https://salsa.debian.org/postgresql/repmgr.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: repmgr2
-        git-url: git://git.debian.org/pkg-postgresql/repmgr2.git
+        git-url: https://salsa.debian.org/postgresql/repmgr2.git
         jobs:
                 - git-packages
 
 - project:
         name: slony1-2
-        git-url: git://anonscm.debian.org/pkg-postgresql/slony1-2.git
+        git-url: https://salsa.debian.org/postgresql/slony1-2.git
         jobs:
                 - git-packages-with-next
 
@@ -1789,7 +1789,7 @@
 
 - project:
         name: pgadmin4
-        git-url: https://anonscm.debian.org/git/pkg-postgresql/pgadmin4.git
+        git-url: https://salsa.debian.org/postgresql/pgadmin4.git
         dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
