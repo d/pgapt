@@ -1281,11 +1281,11 @@
 
 - project:
         name: pgmodeler
-        apt-suite: sid
+        git-url: https://salsa.debian.org/postgresql/pgmodeler.git
         # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
         dist-filter: '(distribution!="wheezy")'
         jobs:
-                - apt-packages
+                - git-packages
 
 - project:
         name: pg-rage-terminator
