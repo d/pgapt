@@ -1283,7 +1283,8 @@
         name: pgmodeler
         git-url: https://salsa.debian.org/postgresql/pgmodeler.git
         # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
-        dist-filter: '(distribution!="wheezy")'
+        # 1.9 excludes jessie/trusty: src/basetableview.cpp:174:88: error: no matching function for call to 'QTimer::singleShot(int, BaseTableView::mousePressEvent(QGraphicsSceneMouseEvent*)::__lambda0)'
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
