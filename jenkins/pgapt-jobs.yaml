@@ -48,14 +48,6 @@
                     - discard
             description: 'Incoming queue to use: incoming uploads to reprepro, snapshot uploads to *-snapshot distributions, private stages the upload in a directory, discard throws the upload away.'
 
-    queue_choice_snapshot: &queue_choice_snapshot
-            <<: *queue_choice
-            choices:
-                    - snapshot
-                    - incoming
-                    - private
-                    - discard
-
     buildtype_choice: &buildtype_choice
             name: buildtype
             choices:
@@ -242,7 +234,7 @@
                     }}
                 }}
 
-- job-template:
+- job-template: &build_pipeline_split_adt
         <<: *build_pipeline
         name: '{name}'
         id: 'build-pipeline-split-adt'
@@ -251,6 +243,58 @@
                 pipeline {{
                     agent {{ label 'master' }}
                     stages {{
+                        stage('source') {{
+                            steps {{
+                                build(job: '{name}-source',
+                                    parameters: [
+                                        string(name: 'revision', value: revision),
+                                        string(name: 'branch', value: branch),
+                                    ]
+                                )
+                            }}
+                        }}
+                        stage('binaries') {{
+                            steps {{
+                                build(job: '{name}-binaries')
+                                build(job: '{name}-testsuite')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'all'),
+                                    ]
+                                )
+                            }}
+                        }}
+                    }}
+                }}
+
+- job-template:
+        <<: *build_pipeline_split_adt
+        name: '{name}'
+        id: 'build-pipeline-split-adt-with-git'
+        triggers:
+                - pollscm:
+                        cron: "H */6 * * *"
+        dsl: |
+                pipeline {{
+                    agent {{ label 'master' }}
+                    stages {{
+                        stage('git') {{
+                            steps {{
+                                checkout([$class: 'GitSCM',
+                                    branches: [[name: '*/master']],
+                                    doGenerateSubmoduleConfigurations: false,
+                                    extensions: [[$class: 'CloneOption',
+                                        depth: 0,
+                                        noTags: false,
+                                        reference: '/var/lib/jenkins/gitcache.buexcl/postgresql',
+                                        shallow: false]],
+                                    submoduleCfg: [],
+                                    userRemoteConfigs: [[url: 'git://git.postgresql.org/git/postgresql.git']]
+                                ])
+                            }}
+                        }}
                         stage('source') {{
                             steps {{
                                 build(job: '{name}-source',
@@ -334,7 +378,7 @@
 # special git-in-git job for postgresql-devel
 - job-template:
         <<: *git_source_template
-        name: '{source-name}-source-git-head'
+        name: '{name}-source'
         id: 'source-git-head'
         parameters:
                 - string: *git_branch
@@ -345,9 +389,6 @@
                         description: 'Packaging branch to merge with before build'
                 - string: *revision_string
                 - choice: *buildtype_choice
-        triggers:
-                - pollscm:
-                        cron: "H */6 * * *"
         axes:
                 - axis: *git_head_dist_axis
         scm:
@@ -454,12 +495,12 @@
 # binaries triggered from -source-git-head
 - job-template:
         <<: *binaries_template
-        name: '{source-name}-binaries-git-head'
+        name: '{name}-binaries'
         id: 'binaries-git-head'
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: '{source-name}-source-git-head/distribution=$distribution'
+                        project: '{name}-source/distribution=$distribution'
                         filter: 'result/*'
                         flatten: true
                         which-build: upstream-build
@@ -637,15 +678,15 @@
 
 - job-template:
         <<: *testsuite_template
-        name: '{source-name}-testsuite-git-head'
-        #job-name: '{name}-testsuite'
+        name: '{name}-testsuite'
+        id: 'testsuite-git-head'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: '{source-name}-binaries-git-head/architecture=$architecture,distribution=$distribution'
+                        project: '{name}-binaries/architecture=$architecture,distribution=$distribution'
                         flatten: true
                         which-build: upstream-build
                         fallback-to-last-successful: true
@@ -750,6 +791,15 @@
                 - 'source-git'
                 - 'binaries'
                 - '{name}-testsuite'
+        noadt: 'ADT=skip '
+
+- job-group:
+        name: git-packages-adt-with-git
+        jobs:
+                - 'build-pipeline-split-adt-with-git'
+                - 'source-git-head'
+                - 'binaries-git-head'
+                - 'testsuite-git-head'
         noadt: 'ADT=skip '
 
 - job-group:
@@ -1510,37 +1560,14 @@
         jobs:
                 - git-packages-adt
 
-- project:
-        name: postgresql-11
-        git-url: https://salsa.debian.org/postgresql/postgresql.git
-        git-branch: 11
-        jobs:
-                - git-packages-adt
-
 # the PostgreSQL devel version:
 - project:
-        name: postgresql-10-devel
-        source-name: postgresql-10
-        git-url: git://git.postgresql.org/git/postgresql.git
-        git-branch: origin/REL_10_STABLE
-        merge-branch: 10
-        jobs:
-                - 'source-git-head'
-                - 'binaries-git-head'
-                - '{source-name}-testsuite-git-head'
-        noadt: 'ADT=skip '
-
-- project:
-        name: postgresql-11-devel
-        source-name: postgresql-11
+        name: postgresql-11
         git-url: git://git.postgresql.org/git/postgresql.git
         git-branch: origin/master
         merge-branch: 11
         jobs:
-                - 'source-git-head'
-                - 'binaries-git-head'
-                - '{source-name}-testsuite-git-head'
-        noadt: 'ADT=skip '
+                - git-packages-adt-with-git
 
 - project:
         name: postgresql-common
