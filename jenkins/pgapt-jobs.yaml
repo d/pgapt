@@ -326,7 +326,6 @@
 - job-template: &apt_source_template
         name: '{name}-source'
         id: 'source-apt'
-        job-name: '{name}-source'
         description: 'Build Debian source package of {name} from "apt-get source".<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         child-workspace: .
@@ -733,7 +732,6 @@
 - job-template:
         <<: *upgrade_template
         name: 'upgrade-{oldversion}-{newversion}-git-head'
-        job-name: 'upgrade-{oldversion}-{newversion}'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
