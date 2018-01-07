@@ -285,11 +285,17 @@
                                 checkout([$class: 'GitSCM',
                                     branches: [[name: '*/master']],
                                     doGenerateSubmoduleConfigurations: false,
-                                    extensions: [[$class: 'CloneOption',
-                                        depth: 0,
-                                        noTags: false,
-                                        reference: '/var/lib/jenkins/gitcache.buexcl/postgresql',
-                                        shallow: false]],
+                                    extensions: [
+                                        [$class: 'CloneOption',
+                                            depth: 0,
+                                            noTags: true,
+                                            reference: '/var/lib/jenkins/gitcache.buexcl/postgresql',
+                                            shallow: true
+                                        ],
+                                        [$class: 'SparseCheckoutPaths',
+                                            sparseCheckoutPaths: [[path: 'HISTORY']]
+                                        ]
+                                    ],
                                     submoduleCfg: [],
                                     userRemoteConfigs: [[url: 'git://git.postgresql.org/git/postgresql.git']]
                                 ])
@@ -1044,6 +1050,9 @@
                         url: git://git.postgresql.org/git/postgresql.git
                         branches:
                                 - master
+                        sparse-checkout:
+                                paths:
+                                        - HISTORY
                         wipe-workspace: false
         triggers:
                 - pollscm:
