@@ -1284,6 +1284,8 @@
 - project:
         name: pg-cloudconfig
         git-url: https://github.com/credativ/pg_cloudconfig.git
+        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")' # needs python3-pint
+        backports: 'BACKPORTS=yes ' # make DH 10 available on jessie/xenial
         jobs:
                 - git-packages
 

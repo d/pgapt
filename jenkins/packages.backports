@@ -4,6 +4,7 @@ ora2pg
 resource-agents-paf
 pg-activity
 pgbouncer
+pg-cloudconfig
 pgrouting
 pgsql-ogr-fdw
 python-azure
