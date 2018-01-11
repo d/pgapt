@@ -1282,6 +1282,12 @@
                 - git-packages
 
 - project:
+        name: pg-cloudconfig
+        git-url: https://github.com/credativ/pg_cloudconfig.git
+        jobs:
+                - git-packages
+
+- project:
         name: pg-cron
         git-url: https://salsa.debian.org/postgresql/pg-cron.git
         git-branch: debian
