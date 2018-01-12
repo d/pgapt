@@ -3,7 +3,7 @@
 # The MIT License
 #
 # Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
-# Copyright (c) 2012-2017 by Christoph Berg <myon@debian.org>
+# Copyright (c) 2012-2018 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -197,12 +197,16 @@ case $PACKAGE in
     ;;
 
   postgresql-common)
-    case ${distribution:-} in
-      trusty|wheezy)
-        TWEAK="Remove systemd dependency"
-        sed -i -e '/dh-systemd/d' debian/control
-        sed -i -e '/^WITH_SYSTEMD/d' debian/rules
-        ;;
+    case ${distribution:-} in trusty|wheezy)
+      TWEAK="${TWEAK:-} Remove systemd dependency"
+      sed -i -e '/dh-systemd/d' debian/control
+      sed -i -e '/^WITH_SYSTEMD/d' debian/rules
+      ;;
+    esac
+    case ${distribution:-} in jessie|wheezy|trusty)
+      TWEAK="${TWEAK:-} Change systemd TimeoutStartSec to 0 (doesn't support infinity yet)"
+      sed -i -e 's/^TimeoutStartSec=.*/TimeoutStartSec=0/' systemd/postgresql@.service
+      ;;
     esac
     ;;
 
