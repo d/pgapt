@@ -814,8 +814,6 @@
         child-workspace: .
         axes:
                 - axis: *slaves_axis
-        triggers:
-                - timed: "H H * * *"
         builders:
                 - shell: |
                         wget --mirror http://atalia.postgresql.org/dists.tar.gz
@@ -823,10 +821,6 @@
                         tar -C ~ -xf atalia.postgresql.org/dists.tar.gz
                 #rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists/ /home/jenkins/dists
         publishers:
-                - trigger:
-                        project: debcheck
-                - trigger:
-                        project: builddebcheck
                 - ircbot:
                         strategy: any-failure
                         message-type: summary
@@ -862,6 +856,32 @@
         description: 'Run dose-builddebcheck on all distributions'
         builders:
                 - shell: 'builddebcheck-pgapt'
+
+- job:
+        name: 'debcheck-pipeline'
+        description: 'Run dose-builddebcheck on all distributions'
+        project-type: pipeline
+        triggers:
+                - timed: "H H * * *"
+        dsl: |
+                pipeline {
+                    agent { label 'master' }
+                    stages {
+                        stage('distsmirror') {
+                            steps {
+                                build(job: 'debcheck-distsmirror')
+                            }
+                        }
+                        stage('debcheck') {
+                            steps {
+                                parallel(
+                                    "debcheck": { build(job: 'debcheck') },
+                                    "builddebcheck": { build(job: 'builddebcheck') }
+                                )
+                            }
+                        }
+                    }
+                }
 
 - job: &sbuild_update_x86
         name: 'sbuild-update-x86'
