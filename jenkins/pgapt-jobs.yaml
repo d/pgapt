@@ -525,7 +525,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: '$PACKAGE-source/$distribution'
+                        project: '$PACKAGE-source/distribution=$distribution'
                         filter: 'result/*'
                         flatten: true
                         fallback-to-last-successful: true
