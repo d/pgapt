@@ -412,47 +412,6 @@
                         matrix-notifier: only-parent
                 - groovy-postbuild: *add_version_tag
 
-# build source for a single distribution
-
-- job-template:
-        <<: *apt_source_template
-        name: 'build-source'
-        id: 'build-source'
-        description: 'Fetch source from an existing pkg-source/sid build and rebuild it for a different (usually new) distribution'
-        project-type: freestyle
-        properties: *properties_more_artifacts
-        concurrent: true
-        parameters:
-                - string: &package_parameter
-                        name: PACKAGE
-                        description: 'Package to rebuild source for (without -source suffix)'
-                - choice:
-                        name: from_distribution
-                        choices: *dist_list
-                        description: 'Distribution to build from'
-                - choice: &distribution_parameter
-                        name: distribution
-                        choices: *dist_list
-                        description: 'Distribution to build for'
-                - string: *revision_string
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '$PACKAGE-source/distribution=$from_distribution'
-                        filter: 'result/*'
-                        flatten: true
-                        do-not-fingerprint: true
-                - shell: 'generate-pgdg-source'
-        publishers:
-                - archive:
-                        artifacts: 'result/*'
-                        latest-only: true
-                - ircbot:
-                        strategy: any-failure
-                        message-type: summary-params
-                - groovy-postbuild: *add_version_tag_plain
-                - workspace-cleanup
-
 # binaries template
 
 - job-template: &binaries_template
@@ -539,7 +498,7 @@
                 - copyartifact: *copysource
                 - shell: 'DEB_PG_SUPPORTED_VERSIONS="11" {backports}sbuild-package'
 
-# binaries building from "build-source"
+# build binaries for a single distribution
 
 - job:
         <<: *binaries_template
@@ -548,8 +507,13 @@
         concurrent: true
         properties: *properties_more_artifacts
         parameters:
-                - string: *package_parameter
-                - choice: *distribution_parameter
+                - string: &package_parameter
+                        name: PACKAGE
+                        description: 'Package to build (without -source suffix)'
+                - choice: &distribution_parameter
+                        name: distribution
+                        choices: *dist_list
+                        description: 'Distribution to build for'
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
@@ -561,10 +525,9 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
-                        project: 'build-source'
+                        project: '$PACKAGE-source/$distribution'
                         filter: 'result/*'
                         flatten: true
-                        which-build: upstream-build
                         fallback-to-last-successful: true
                         do-not-fingerprint: true
                 - shell: 'sbuild-package'
