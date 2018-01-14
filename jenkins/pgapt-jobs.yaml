@@ -504,6 +504,7 @@
         <<: *binaries_template
         name: 'build-binaries'
         id: 'build-binaries'
+        description: 'Build Debian binary packages for a single distribution, and upload them'
         concurrent: true
         properties: *properties_more_artifacts
         parameters:
@@ -517,6 +518,8 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
+                - choice: *queue_choice
+                - choice: *upload_choice
         execution-strategy:
                 touchstone:
                         expr: 'architecture=="amd64"'
@@ -541,6 +544,14 @@
                     matrix-notifier: only-configurations
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
+                - trigger-parameterized-builds:
+                        - project: 'dput'
+                          condition: SUCCESS
+                          predefined-parameters: |
+                                binaries=$JOB_NAME
+                                queue=$queue
+                                upload=$upload
+
 
 # building modules for PostgreSQL beta, get source from apt.
 # useful when the current -source job doesn't have all dists yet because
