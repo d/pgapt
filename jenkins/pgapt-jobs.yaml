@@ -1210,13 +1210,6 @@
                 - git-packages
 
 - project:
-        name: patroni
-        git-url: https://salsa.debian.org/postgresql/patroni.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
-        jobs:
-                - git-packages
-
-- project:
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
         git-branch: unstable
@@ -1797,6 +1790,23 @@
         newversion: 10
         jobs:
                 - upgrade-job
+
+## patroni and dependencies
+
+- project:
+        name: patroni
+        git-url: https://salsa.debian.org/postgresql/patroni.git
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        jobs:
+                - git-packages
+
+- project: &python_stretch_backport
+        name: python-parse-type
+        apt-suite: 'buster'
+        dist-filter: '(distribution=="stretch")'
+        jobs: [apt-packages]
+- project: { <<: *python_stretch_backport, name: behave }
+- project: { <<: *python_stretch_backport, name: cdiff }
 
 ## pgadmin4 and dependencies
 
