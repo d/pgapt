@@ -1212,6 +1212,7 @@
 - project:
         name: patroni
         git-url: https://salsa.debian.org/postgresql/patroni.git
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
         jobs:
                 - git-packages
 

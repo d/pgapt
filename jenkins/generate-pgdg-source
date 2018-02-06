@@ -256,6 +256,16 @@ case $PACKAGE in
   flask*|*peewee*)
     DOT='~' ;;
 
+  patroni)
+    case $distribution in stretch|xenial)
+      rm -fv patroni/dcs/consul.py patroni/dcs/kubernetes.py
+      rm -fv tests/test_consul.py tests/test_kubernetes.py
+      sed -i -e '/python3-\(consul\|kubernetes\)/d' debian/control debian/tests/control
+      TWEAK="${TWEAK:-} Removing consul and kubernetes support."
+      ;;
+    esac
+    ;;
+
   pgadmin4)
     case $distribution in zesty) # using webengine dies with Project ERROR: Unknown module(s) in QT: positioning
       sed -i -e 's/.*libqt5webkit5-dev.*/ libqt5webkit5-dev,/' debian/control
