@@ -204,11 +204,6 @@ case $PACKAGE in
       sed -i -e '/^WITH_SYSTEMD/d' debian/rules
       ;;
     esac
-    case ${distribution:-} in jessie|wheezy|trusty)
-      TWEAK="${TWEAK:-} Change systemd TimeoutStartSec to 0 (doesn't support infinity yet)"
-      sed -i -e 's/^TimeoutStartSec=.*/TimeoutStartSec=0/' systemd/postgresql@.service
-      ;;
-    esac
     ;;
 
   autopkgtest|dh-exec|libdbd-pg-perl)
