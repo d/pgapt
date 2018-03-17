@@ -15,8 +15,8 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/
 done
 set_dist_vars $distribution
 
-# use "default" chroot here ("sbuild" doesn't get /etc/hosts copied)
-chroot="source:$distribution-$architecture"
+# use "sbuild" chroot here (default bind-mounts /root)
+chroot="source:$distribution-pgdg-$architecture-sbuild"
 chroot_path="/home/chroot/$distribution-$architecture"
 
 # check if chroot is configured in sbuild
