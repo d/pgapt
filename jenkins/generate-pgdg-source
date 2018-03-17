@@ -124,8 +124,7 @@ PREVIOUS_VERSION=$(dpkg-parsechangelog --count 1 | awk '/^Version: / {print $2}'
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
 # tweaks shared by several packages
-case $PACKAGE in
-  postgresql-??|pgadmin3|repmgr)
+if grep -q '^#dbg#' debian/rules debian/control*; then
     case ${distribution:-} in
       jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         # Revert to old-style -dbg packages
@@ -133,8 +132,7 @@ case $PACKAGE in
         TWEAK="${TWEAK:-} Using old-style -dbg packages in debian/control."
         ;;
     esac
-    ;;
-esac
+fi
 
 # for postgresql server packages, move packages to a separate components
 # = $PG_MAIN_VERSION: main
