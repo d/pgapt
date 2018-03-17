@@ -445,16 +445,6 @@
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
-# same as {name}-binaries, but running sequentially
-- job-template:
-        <<: *binaries_template
-        name: '{name}-binaries'
-        id: 'binaries-sequential'
-        description: 'Build Debian binary package of {name}, running configurations sequentially.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        execution-strategy:
-                <<: *binaries_execution_strategy
-                sequential: true
-
 # binaries triggered from -source-git-head
 - job-template:
         <<: *binaries_template
@@ -740,14 +730,6 @@
                 - 'build-pipeline'
                 - 'source-git'
                 - 'binaries'
-        noadt: ''
-
-- job-group:
-        name: git-packages-sequential
-        jobs:
-                - 'build-pipeline'
-                - 'source-git'
-                - 'binaries-sequential'
         noadt: ''
 
 - job-group:
@@ -1163,9 +1145,8 @@
 - project:
         name: libpqtypes
         git-url: https://salsa.debian.org/postgresql/libpqtypes.git
-        # run sequentially so the tests have 5432 available
         jobs:
-                - git-packages-sequential
+                - git-packages
 
 - project:
         name: mimeo
