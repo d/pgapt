@@ -156,6 +156,7 @@ umask 002
 	#esac
 	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
+	eatmydata apt-get -y autoremove --purge
 	apt-get clean
 	
 	# remove libreadline-dev if present
