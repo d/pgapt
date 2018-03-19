@@ -1123,7 +1123,7 @@
         name: libdbd-pg-perl
         git-url: https://anonscm.debian.org/git/pkg-perl/packages/libdbd-pg-perl.git
         # Problem with pkg-perl-autopkgtest
-        dist-filter: '(distribution=="wheezy") || (distribution=="trusty")'
+        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
