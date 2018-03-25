@@ -180,6 +180,17 @@ esac
 
 # tweaks to get packages in older dists working
 case $PACKAGE in
+  postgresql-11)
+    case $distribution in
+      stretch|jessie|xenial|trusty) # needs llvm 3.9
+        sed -i -e '/llvm\|clang/d' debian/control debian/rules debian/postgresql-*.install
+        TWEAK="${TWEAK:-} Disable llvm jit support."
+        ;;
+    esac
+    ;;
+esac
+
+case $PACKAGE in
   postgresql-9.[56]|postgresql-??)
     case ${distribution:-} in
       wheezy|squeeze|precise)
