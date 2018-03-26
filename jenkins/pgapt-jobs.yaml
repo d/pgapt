@@ -1097,6 +1097,12 @@
                 - apt-packages
 
 - project:
+        name: hypopg
+        git-url: https://github.com/HypoPG/hypopg.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: ip4r
         git-url: https://salsa.debian.org/postgresql/ip4r.git
         jobs:
