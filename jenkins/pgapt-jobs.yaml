@@ -5,18 +5,10 @@
     description: 'Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
     properties: &properties
         - build-discarder:
-            days-to-keep: -1
-            num-to-keep: 50
-            artifact-days-to-keep: -1
-            artifact-num-to-keep: 1
-        - copyartifact:
-            projects: '*'
-    properties_more_artifacts: &properties_more_artifacts
-        - build-discarder:
-            days-to-keep: -1
-            num-to-keep: 50
-            artifact-days-to-keep: -1
-            artifact-num-to-keep: 10
+            days-to-keep: 7
+            num-to-keep: -1
+            artifact-days-to-keep: 7
+            artifact-num-to-keep: -1
         - copyartifact:
             projects: '*'
     wrappers:
@@ -495,7 +487,6 @@
         id: 'build-binaries'
         description: 'Build Debian binary packages for a single distribution, and upload them'
         concurrent: true
-        properties: *properties_more_artifacts
         parameters:
                 - string: &package_parameter
                         name: PACKAGE
@@ -550,7 +541,6 @@
         <<: *binaries_template
         name: 'build-binaries-from-apt'
         id: 'build-binaries-from-apt'
-        properties: *properties_more_artifacts
         concurrent: true
         parameters:
                 - string:
