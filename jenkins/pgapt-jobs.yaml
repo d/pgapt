@@ -43,6 +43,14 @@
     buildtype_choice: &buildtype_choice
             name: buildtype
             choices:
+                    - normal
+                    - snapshot
+                    - snapshot-dot
+            description: 'snapshot: if changelog is UNRELEASED, build a snapshot tarball with a ~date version. With snapshot-dot, use a .date version.'
+
+    buildtype_choice_snapshot: &buildtype_choice_snapshot
+            name: buildtype
+            choices:
                     - snapshot
                     - snapshot-dot
                     - normal
@@ -359,6 +367,7 @@
         parameters:
                 - string: *git_branch
                 - string: *revision_string
+                - choice: *buildtype_choice
         scm:
                 - git:
                         url: '{git-url}'
@@ -384,7 +393,7 @@
                                 - '{merge-branch}'
                         description: 'Packaging branch to merge with before build'
                 - string: *revision_string
-                - choice: *buildtype_choice
+                - choice: *buildtype_choice_snapshot
         axes:
                 - axis: *git_head_dist_axis
         scm:
