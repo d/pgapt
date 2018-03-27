@@ -113,7 +113,7 @@ fi
 
 # clean up behind a possibly broken last job
 cleanup () {
-  [ "${NO_ORIGTARGZ:-}" ] && QUILT_PATCHES=debian/patches quilt pop -a
+  [ "${NO_ORIGTARGZ:-}" ] && test -d debian/patches && QUILT_PATCHES=debian/patches quilt pop -a
   $VCS_REVERT $REVERTS || :
 }
 trap "cleanup" 0 2 3 15
@@ -426,7 +426,7 @@ if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; the
     echo "1.0" > debian/source/format
     REVERTS="$REVERTS debian/source/format"
     NO_ORIGTARGZ="1.0"
-    QUILT_PATCHES=debian/patches quilt push -a
+    test -d debian/patches && QUILT_PATCHES=debian/patches quilt push -a
     ;;
   esac
   SHORT_REVISION=$(echo $VCS_REVISION | cut -c 1-7)
