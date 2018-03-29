@@ -1108,7 +1108,7 @@
 - project:
         name: hypopg
         git-url: https://github.com/HypoPG/hypopg.git
-        git-branch: debian
+        git-branch: master
         jobs:
                 - git-packages-with-next
 
