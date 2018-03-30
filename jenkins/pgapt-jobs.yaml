@@ -1548,6 +1548,7 @@
 - project:
         name: postgresql-common
         git-url: https://salsa.debian.org/postgresql/postgresql-common.git
+        arch-filter: '(architecture=="amd64")'
         jobs:
                 - git-packages
 
