@@ -13,6 +13,9 @@ if (@ARGV and $ARGV[0] eq '-f') {
 	$fulldiff = 1;
 }
 
+# enable ansi codes if outputting to a terminal
+my ($b, $n) = (-t 1) ? ("\e[1m", "\e[0m") : ("", "");
+
 die "Syntax: $0 [-f] <packages1> <packages2>" unless (@ARGV == 2);
 my ($packages1, $packages2) = @ARGV;
 my (%pkg1, %pkg2, %src1, %src2);
@@ -51,7 +54,7 @@ foreach my $pkg (sort keys %pkg1) {
 	my $ver1 = my $ver1mangled = $pkg1{$pkg};
 	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	if (not exists $pkg2{$pkg}) {
-		print "$src1{$pkg} $pkg $ver1 <missing>\n" if ($fulldiff);
+		print "$src1{$pkg} $pkg $b$ver1$n <missing>\n" if ($fulldiff);
 		next;
 	}
 
@@ -63,10 +66,14 @@ foreach my $pkg (sort keys %pkg1) {
 		next;
 	}
 
-	print "$src1{$pkg} $pkg $ver1 $ver2\n";
+	if ($ver1 > $ver2) {
+		print "$src1{$pkg} $pkg $b$ver1$n $ver2\n";
+	} else {
+		print "$src1{$pkg} $pkg $ver1 $b$ver2$n\n";
+	}
 	delete $pkg2{$pkg};
 }
 
 foreach my $pkg (sort keys %pkg2) {
-	print "$src2{$pkg} $pkg <missing> $pkg2{$pkg}\n";
+	print "$src2{$pkg} $pkg <missing> $b$pkg2{$pkg}$n\n";
 }
