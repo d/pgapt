@@ -118,8 +118,10 @@ umask 002
 	  ubuntu) # libossp-uuid-dev is in universe on vivid+
 	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list
 	    echo "deb-src $ubuntu $distribution universe" >> /etc/apt/sources.list.d/universe.list
-	    echo "deb $ubuntu $distribution-security main" > /etc/apt/sources.list.d/security.list
-	    echo "deb-src $ubuntu $distribution-security main" >> /etc/apt/sources.list.d/security.list
+	    echo "deb $ubuntu $distribution-updates main universe" > /etc/apt/sources.list.d/updates.list
+	    echo "deb-src $ubuntu $distribution-updates main universe" >> /etc/apt/sources.list.d/updates.list
+	    echo "deb $ubuntu $distribution-security main universe" > /etc/apt/sources.list.d/security.list
+	    echo "deb-src $ubuntu $distribution-security main universe" >> /etc/apt/sources.list.d/security.list
 	    ;;
 	  *)
 	    if [ "$distribution" != "sid" ]; then
