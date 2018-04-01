@@ -182,7 +182,11 @@ esac
 case $PACKAGE in
   postgresql-11)
     case $distribution in
-      stretch|jessie|xenial|trusty) # needs llvm 3.9
+      stretch|xenial|trusty) # replace default clang/llvm with (newer) 3.9
+        sed -i -e 's/\(llvm\|clang\)/\1-3.9/g' debian/control
+        TWEAK="${TWEAK:-} Use clang/llvm 3.9 for jit support."
+        ;;
+      jessie) # newest llvm/clang is 3.5
         sed -i -e '/llvm\|clang\|bitcode/d' debian/control debian/rules debian/postgresql-*.install
         TWEAK="${TWEAK:-} Disable llvm jit support."
         ;;
