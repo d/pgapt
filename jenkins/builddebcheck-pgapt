@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # expected parameters:
-#   distribution (without -pgdg)
-#   architecture
-#   stage (testing or production)
+#   distribution (without -pgdg, default "sid")
+#   architecture (default "amd64")
+#   stage (testing or production, default "testing")
 # expected directories: chroots in /home/chroot
 # needs dose3 >= 4
 
@@ -41,21 +41,12 @@ else
   error "No dists directory found."
 fi
 
-# Debian/Ubuntu main package list
-PKG="$LISTSDIR/*_dists_${distribution}_main_binary-${architecture}_Packages"
-
 trap 'rm -f ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
 
-# security (Debian + Ubuntu)
-for FILE in $LISTSDIR/*_dists_${distribution}_updates_main_binary-${architecture}_Packages $LISTSDIR/*_dists_${distribution}-security_main_binary-${architecture}_Packages; do
+# include all Packages files for "distribution" (main, universe, security) and "distribution-updates" (main, universe)
+for FILE in $LISTSDIR/*_dists_${distribution}{,-updates}_*_binary-${architecture}_Packages; do
   [ -f "$FILE" ] || continue
-  PKG="$PKG $FILE"
-done
-
-# include universe on Ubuntu
-for FILE in $LISTSDIR/*_dists_${distribution}_universe_binary-${architecture}_Packages ; do
-  [ -f "$FILE" ] || continue
-  PKG="$PKG $FILE"
+  PKG="${PKG:-} $FILE"
 done
 
 # include pgdg dists
