@@ -1565,6 +1565,12 @@
                 - git-packages
 
 - project:
+        name: postgresql-hll
+        git-url: https://salsa.debian.org/postgresql/postgresql-hll.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: postgresql-multicorn
         git-url: https://salsa.debian.org/postgresql/postgresql-multicorn.git
         # python foo (wheezy)
