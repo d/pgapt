@@ -1047,7 +1047,7 @@
 
 - project:
         name: autopkgtest
-        git-url: git://anonscm.debian.org/autopkgtest/autopkgtest.git
+        git-url: https://salsa.debian.org/ci-team/autopkgtest.git
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1127,7 +1127,7 @@
 
 - project:
         name: libdbd-pg-perl
-        git-url: https://anonscm.debian.org/git/pkg-perl/packages/libdbd-pg-perl.git
+        git-url: https://salsa.debian.org/perl-team/modules/packages/libdbd-pg-perl.git
         # Problem with pkg-perl-autopkgtest
         dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
         jobs:
@@ -1135,7 +1135,7 @@
 
 - project:
         name: libtap-parser-sourcehandler-pgtap-perl
-        git-url: git://anonscm.debian.org/pkg-perl/packages/libtap-parser-sourcehandler-pgtap-perl.git
+        git-url: https://salsa.debian.org/perl-team/modules/packages/libtap-parser-sourcehandler-pgtap-perl.git
         jobs:
                 - git-packages
 
@@ -1361,7 +1361,7 @@
 
 - project:
         name: pgrouting
-        git-url: git://anonscm.debian.org/pkg-grass/pgrouting.git
+        git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
         # dh_sphinxdoc fails on wheezy
         # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
         dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
@@ -1383,7 +1383,7 @@
 
 - project:
         name: pgsql-ogr-fdw
-        git-url: https://anonscm.debian.org/git/pkg-grass/pgsql-ogr-fdw.git
+        git-url: https://salsa.debian.org/debian-gis-team/pgsql-ogr-fdw.git
         # needs DH 10
         dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
         backports: 'BACKPORTS=yes '
@@ -1438,7 +1438,7 @@
 
 - project:
         name: postgis
-        git-url: git://git.debian.org/git/pkg-grass/postgis.git
+        git-url: https://salsa.debian.org/debian-gis-team/postgis.git
         # needs libgeos-dev >= 3.4
         dist-filter: '(distribution!="wheezy")'
         jobs:
@@ -1446,7 +1446,7 @@
 
 - project:
         name: postgis-java
-        git-url: https://anonscm.debian.org/git/pkg-grass/postgis-java.git
+        git-url: https://salsa.debian.org/debian-gis-team/postgis-java.git
         # needs default-jdk-headless (not available on jessie and trusty)
         # needs newer libpgjava (xenial: [ERROR] Failed to execute goal on project postgis-jdbc: Could not resolve dependencies for project net.postgis:postgis-jdbc:jar:2.2.1: Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.postgresql:postgresql:jar:debian has not been downloaded from it before.)
         dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
@@ -1834,21 +1834,21 @@
 
 - project: &pythonpkg
         name: flask-mail
-        git-url: https://anonscm.debian.org/git/python-modules/packages/flask-mail.git
+        git-url: https://salsa.debian.org/python-team/modules/flask-mail.git
         git-branch: debian/master
         dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
-- project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-gravatar.git' }
-- project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-htmlmin.git' }
-- project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-paranoid.git' }
-- project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-peewee.git' }
-- project: { <<: *pythonpkg, name: flask-security, git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-security.git' }
-- project: { <<: *pythonpkg, name: flask-wtf,      git-url: 'https://anonscm.debian.org/git/python-modules/packages/flask-wtf.git' }
-- project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://anonscm.debian.org/git/python-modules/packages/htmlmin.git' }
-- project: { <<: *pythonpkg, name: peewee,         git-url: 'https://anonscm.debian.org/git/python-modules/packages/peewee.git' }
-- project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://anonscm.debian.org/git/python-modules/packages/wtf-peewee.git' }
+- project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://salsa.debian.org/python-team/modules/flask-gravatar.git' }
+- project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://salsa.debian.org/python-team/modules/flask-htmlmin.git' }
+- project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://salsa.debian.org/python-team/modules/flask-paranoid.git' }
+- project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://salsa.debian.org/python-team/modules/flask-peewee.git' }
+- project: { <<: *pythonpkg, name: flask-security, git-url: 'https://salsa.debian.org/python-team/modules/flask-security.git' }
+- project: { <<: *pythonpkg, name: flask-wtf,      git-url: 'https://salsa.debian.org/python-team/modules/flask-wtf.git' }
+- project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://salsa.debian.org/python-team/modules/htmlmin.git' }
+- project: { <<: *pythonpkg, name: peewee,         git-url: 'https://salsa.debian.org/python-team/modules/peewee.git' }
+- project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://salsa.debian.org/python-team/modules/wtf-peewee.git' }
 
 - project:
         name: flask-login
