@@ -1682,13 +1682,6 @@
         jobs:
                 - git-packages
 
-- project: # needed by wal-e
-        name: python-azure
-        git-url: bzr::lp:~stub/ubuntu/trusty/python-azure/trunk
-        backports: 'BACKPORTS=yes '
-        jobs:
-                - git-packages
-
 - project:
         name: repmgr
         git-url: https://salsa.debian.org/postgresql/repmgr.git
@@ -1715,14 +1708,6 @@
         git-url: https://github.com/credativ/toastinfo.git
         jobs:
                 - git-packages-with-next
-
-- project:
-        name: wal-e
-        git-url: bzr::lp:~stub/ubuntu/trusty/wal-e/trunk
-        # needs python-swiftclient
-        dist-filter: '(distribution!="wheezy")'
-        jobs:
-                - git-packages
 
 - project:
         name: upgrade-8.4-9.4
