@@ -1710,6 +1710,14 @@
                 - git-packages-with-next
 
 - project:
+        name: wal2json
+        git-url: https://salsa.debian.org/postgresql/wal2json.git
+        jobs:
+                - git-packages-with-next
+
+# upgrade tests
+
+- project:
         name: upgrade-8.4-9.4
         oldversion: 8.4
         newversion: 9.4
