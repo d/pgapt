@@ -7,7 +7,6 @@ pgbouncer
 pg-cloudconfig
 pgrouting
 pgsql-ogr-fdw
-python-azure
 flask-mail
 flask-gravatar
 flask-htmlmin
