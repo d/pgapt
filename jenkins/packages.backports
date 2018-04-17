@@ -8,6 +8,7 @@ pg-cloudconfig
 pgrouting
 pgsql-ogr-fdw
 flask-mail
+flask-babelex
 flask-gravatar
 flask-htmlmin
 flask-paranoid

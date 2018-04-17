@@ -1829,6 +1829,7 @@
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
+- project: { <<: *pythonpkg, name: flask-babelex,  git-url: 'https://salsa.debian.org/python-team/modules/flask-babelex.git' }
 - project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://salsa.debian.org/python-team/modules/flask-gravatar.git' }
 - project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://salsa.debian.org/python-team/modules/flask-htmlmin.git' }
 - project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://salsa.debian.org/python-team/modules/flask-paranoid.git' }
