@@ -1324,6 +1324,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pgl-ddl-deploy
+        git-url: https://github.com/enova/pgl_ddl_deploy.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgmemcache
         git-url: https://salsa.debian.org/postgresql/pgmemcache.git
         jobs:
