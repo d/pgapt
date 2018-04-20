@@ -17,5 +17,6 @@ flask-security
 flask-wtf
 htmlmin
 peewee
+psycopg2
 wtf-peewee
 flask-login
