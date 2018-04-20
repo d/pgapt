@@ -1687,6 +1687,14 @@
                 - git-packages-with-next
 
 - project:
+        name: prometheus-sql-exporter
+        git-url: https://github.com/credativ/sql_exporter
+        git-branch: debian
+        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        jobs:
+                - git-packages
+
+- project:
         name: pspg
         git-url: https://salsa.debian.org/postgresql/pspg.git
         jobs:
