@@ -1691,6 +1691,7 @@
         git-url: https://github.com/credativ/sql_exporter
         git-branch: debian
         dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        backports: 'BACKPORTS=yes ' # golang-* backports
         jobs:
                 - git-packages
 
