@@ -1,16 +1,17 @@
 #!/usr/bin/perl
 
 # Diff two Packages files, comparing version numbers for each package found in the second file.
-# Usage example: ./diff-packages <debian-sid-main-Packages> <pgapt-sid-pgdg-testing-main-Packages>
+# Usage example: ./diff-packages [-m] <debian-sid-main-Packages> <pgapt-sid-pgdg-testing-main-Packages>
+#   -m don't show packages missing in 2nd file
 
 use strict;
 use warnings;
 use Dpkg::Version;
 
-my $fulldiff = 0;
-if (@ARGV and $ARGV[0] eq '-f') {
+my $show_missing = 1;
+if (@ARGV and $ARGV[0] eq '-m') {
 	shift;
-	$fulldiff = 1;
+	$show_missing = 0;
 }
 
 # enable ansi codes if outputting to a terminal
@@ -54,7 +55,7 @@ foreach my $pkg (sort keys %pkg1) {
 	my $ver1 = my $ver1mangled = $pkg1{$pkg};
 	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	if (not exists $pkg2{$pkg}) {
-		print "$src1{$pkg} $pkg $b$ver1$n <missing>\n" if ($fulldiff);
+		print "$src1{$pkg} $pkg $b$ver1$n <missing>\n" if ($show_missing);
 		next;
 	}
 

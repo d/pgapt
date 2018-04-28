@@ -3,6 +3,6 @@
 BINDIR=$(dirname $0)
 DISTS=$BINDIR/../dists
 
-$BINDIR/diff-dists \
+$BINDIR/diff-dists -m \
 	<(cat /var/lib/apt/lists/*_debian_dists_{sid,experimental}_main_source_Sources) \
 	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2)
