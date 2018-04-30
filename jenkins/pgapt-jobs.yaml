@@ -1698,6 +1698,8 @@
 - project:
         name: pspg
         git-url: https://salsa.debian.org/postgresql/pspg.git
+        # readline too old on wheezy
+        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
