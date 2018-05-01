@@ -1429,7 +1429,7 @@
 
 - project:
         name: pgtop
-        git-url: git://anonscm.debian.org/collab-maint/pgtop.git
+        git-url: https://salsa.debian.org/postgresql/pgtop.git
         jobs:
                 - git-packages
 
