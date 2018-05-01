@@ -1,5 +1,6 @@
 autopkgtest
 libpgjava
+libscram-java
 ora2pg
 resource-agents-paf
 pg-activity

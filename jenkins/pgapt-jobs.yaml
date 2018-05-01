@@ -1151,7 +1151,7 @@
 
 - project:
         name: libpgjava
-        git-url: https://anonscm.debian.org/git/pkg-java/libpostgresql-jdbc-java.git
+        git-url: https://salsa.debian.org/java-team/libpostgresql-jdbc-java.git
         # needs dh 10
         # jessie: Error configuring: com.igormaznitsa:jcp. Reason: ERROR: Cannot override read-only parameter: destination in goal: jcp:preprocess
         # xenial: [ERROR] Failed to execute goal com.igormaznitsa:jcp:5.3.3:preprocess (preprocessTestSources) on project postgresql: Exception during preprocessor context creation: Can't find source directory [/<<PKGBUILDDIR>>/pgjdbc/target/generated-sources/annotations]
@@ -1163,6 +1163,15 @@
 - project:
         name: libpqtypes
         git-url: https://salsa.debian.org/postgresql/libpqtypes.git
+        jobs:
+                - git-packages
+
+- project:
+        name: libscram-java
+        git-url: https://salsa.debian.org/myon/libscram-java.git
+        # needs dh 11
+        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
