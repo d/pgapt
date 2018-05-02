@@ -1168,7 +1168,7 @@
 
 - project:
         name: libscram-java
-        git-url: https://salsa.debian.org/myon/libscram-java.git
+        git-url: https://salsa.debian.org/java-team/libscram-java.git
         # needs dh 11
         dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
