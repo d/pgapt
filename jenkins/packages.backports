@@ -8,6 +8,7 @@ pgbouncer
 pg-cloudconfig
 pgrouting
 pgsql-ogr-fdw
+pgtop
 prometheus-sql-exporter
 flask-mail
 flask-babelex

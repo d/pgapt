@@ -1430,6 +1430,9 @@
 - project:
         name: pgtop
         git-url: https://salsa.debian.org/postgresql/pgtop.git
+        # needs DH 10
+        dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
