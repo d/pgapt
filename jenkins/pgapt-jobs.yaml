@@ -1284,6 +1284,12 @@
                 - git-packages
 
 - project:
+        name: pg-checksums
+        git-url: https://salsa.debian.org/postgresql/pg-checksums.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pg-cron
         git-url: https://salsa.debian.org/postgresql/pg-cron.git
         git-branch: debian
