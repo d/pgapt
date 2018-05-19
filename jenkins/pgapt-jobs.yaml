@@ -1686,7 +1686,7 @@
 
 - project:
         name: powa-archivist
-        git-url: https://github.com/dalibo/powa-archivist.git
+        git-url: https://github.com/powa-team/powa-archivist.git
         git-branch: master
         jobs:
                 - git-packages-with-next
