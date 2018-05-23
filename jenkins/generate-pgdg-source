@@ -388,7 +388,20 @@ case $PACKAGE in
     esac
     ;;
 
-  barman|barman-cli)
+  barman)
+    case ${distribution:-} in
+      wheezy|precise)
+        # remove dh_python2 dependency, the python2 sequencer is
+        # provided by python package
+        sed -i -e 's/, dh-python//' debian/control
+	# Remove bash-completion helper that is not available here
+	sed -i -e 's/, \?bash-completion//' debian/control deb/debian/rules
+	TWEAK="${TWEAK:-} Remove bash-completion support."
+        ;;
+    esac
+    ;;
+
+  barman-cli)
     case ${distribution:-} in
       wheezy|precise)
         # remove dh_python2 dependency, the python2 sequencer is
