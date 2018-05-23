@@ -395,7 +395,7 @@ case $PACKAGE in
         # provided by python package
         sed -i -e 's/, dh-python//' debian/control
 	# Remove bash-completion helper that is not available here
-	sed -i -e 's/, \?bash-completion//' debian/control deb/debian/rules
+	sed -i -e 's/, \?bash-completion//' debian/control debian/rules
 	TWEAK="${TWEAK:-} Remove bash-completion support."
         ;;
     esac
