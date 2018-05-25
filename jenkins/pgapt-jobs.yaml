@@ -106,7 +106,6 @@
                     - buster
                     - stretch
                     - jessie
-                    - wheezy
                     - bionic
                     - xenial
                     - trusty
@@ -429,7 +428,7 @@
         description: 'Build Debian binary packages of {name}'
         project-type: matrix
         execution-strategy: &binaries_execution_strategy
-                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
+                combination-filter: '{arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -581,7 +580,6 @@
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
-                      wheezy) tag='pgdg70+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       trusty) tag='pgdg14.04+' ;;
@@ -632,7 +630,7 @@
         description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
-                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
+                combination-filter: '{arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -680,7 +678,7 @@
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
-                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy")) && {arch-filter} && {dist-filter}'
+                combination-filter: '{arch-filter} && {dist-filter}'
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -839,9 +837,6 @@
                         values:
                                 - production
                                 - testing
-
-        execution-strategy:
-                combination-filter: '(architecture!="ppc64el") || (distribution!="wheezy")'
         builders:
                 - shell: debcheck-pgapt
         publishers:
@@ -890,7 +885,6 @@
         child-workspace: .
         execution-strategy:
                 sequential: true
-                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
         axes:
                 - axis: *x86_slaves_axis
                 - axis:
@@ -953,7 +947,6 @@
         project-type: matrix
         child-workspace: .
         execution-strategy:
-                combination-filter: '((architecture!="ppc64el") || (distribution!="wheezy"))'
                 sequential: true
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
@@ -1103,15 +1096,7 @@
         name: dh-exec
         # backport 0.14 from jessie to older dists
         apt-suite: jessie
-        dist-filter: '(distribution=="wheezy") || (distribution=="trusty")'
-        jobs:
-                - apt-packages
-
-- project:
-        name: docbook-xsl
-        # postgresql-10 needs docbook-xsl >= 1.77
-        apt-suite: jessie
-        dist-filter: '(distribution=="wheezy")'
+        dist-filter: '(distribution=="trusty")'
         jobs:
                 - apt-packages
 
@@ -1139,7 +1124,7 @@
         name: libdbd-pg-perl
         git-url: https://salsa.debian.org/perl-team/modules/packages/libdbd-pg-perl.git
         # Problem with pkg-perl-autopkgtest
-        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         jobs:
                 - git-packages
 
@@ -1155,7 +1140,7 @@
         # needs dh 10
         # jessie: Error configuring: com.igormaznitsa:jcp. Reason: ERROR: Cannot override read-only parameter: destination in goal: jcp:preprocess
         # xenial: [ERROR] Failed to execute goal com.igormaznitsa:jcp:5.3.3:preprocess (preprocessTestSources) on project postgresql: Exception during preprocessor context creation: Can't find source directory [/<<PKGBUILDDIR>>/pgjdbc/target/generated-sources/annotations]
-        dist-filter: '(distribution!="wheezy" && distribution!="trusty" && distribution!="jessie" && distribution!="xenial")'
+        dist-filter: '(distribution!="trusty" && distribution!="jessie" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1170,7 +1155,7 @@
         name: libscram-java
         git-url: https://salsa.debian.org/java-team/libscram-java.git
         # needs dh 11
-        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
+        dist-filter: '(distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1185,8 +1170,6 @@
 - project:
         name: newpid
         git-url: https://github.com/ChristophBerg/newpid.git
-        # needs setns()
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1195,7 +1178,7 @@
         git-url: https://salsa.debian.org/postgresql/ora2pg.git
         git-branch: debian/unstable
         # needs dh 10
-        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1205,13 +1188,11 @@
         git-url: https://salsa.debian.org/postgresql/orafce.git
         jobs:
                 - git-packages-with-next
-        # needs bison 3
-        dist-filter: '(distribution!="wheezy")'
 
 - project:
         name: resource-agents-paf
         git-url: https://github.com/dalibo/PAF.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         # needs pacemaker backport on jessie
         backports: 'BACKPORTS=yes '
         jobs:
@@ -1221,8 +1202,6 @@
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
         git-branch: unstable
-        # needs dh-python backport on wheezy
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
@@ -1278,7 +1257,7 @@
 - project:
         name: pg-cloudconfig
         git-url: https://github.com/credativ/pg_cloudconfig.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="trusty")' # needs python3-pint
+        dist-filter: '(distribution!="trusty")' # needs python3-pint
         backports: 'BACKPORTS=yes ' # make DH 10 available on jessie/xenial
         jobs:
                 - git-packages
@@ -1353,9 +1332,8 @@
 - project:
         name: pgmodeler
         git-url: https://salsa.debian.org/postgresql/pgmodeler.git
-        # qtbase5-dev from wheezy-backports doesn't work: undefined reference to `MainWindow::PENDING_SAVE_OPER'
         # 1.9 excludes jessie/trusty: src/basetableview.cpp:174:88: error: no matching function for call to 'QTimer::singleShot(int, BaseTableView::mousePressEvent(QGraphicsSceneMouseEvent*)::__lambda0)'
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
@@ -1393,9 +1371,8 @@
 - project:
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
-        # dh_sphinxdoc fails on wheezy
         # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
-        dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
@@ -1416,7 +1393,7 @@
         name: pgsql-ogr-fdw
         git-url: https://salsa.debian.org/debian-gis-team/pgsql-ogr-fdw.git
         # needs DH 10
-        dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
@@ -1437,7 +1414,7 @@
         name: pgtop
         git-url: https://salsa.debian.org/postgresql/pgtop.git
         # needs DH 10
-        dist-filter: '(distribution!="wheezy" && distribution!="trusty")'
+        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1473,8 +1450,6 @@
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
-        # needs libgeos-dev >= 3.4
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1483,7 +1458,7 @@
         git-url: https://salsa.debian.org/debian-gis-team/postgis-java.git
         # needs default-jdk-headless (not available on jessie and trusty)
         # needs newer libpgjava (xenial: [ERROR] Failed to execute goal on project postgis-jdbc: Could not resolve dependencies for project net.postgis:postgis-jdbc:jar:2.2.1: Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.postgresql:postgresql:jar:debian has not been downloaded from it before.)
-        dist-filter: '(distribution!="wheezy" && distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
+        dist-filter: '(distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
         jobs:
                 - git-packages
 
@@ -1615,8 +1590,6 @@
 - project:
         name: postgresql-multicorn
         git-url: https://salsa.debian.org/postgresql/postgresql-multicorn.git
-        # python foo (wheezy)
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1629,8 +1602,6 @@
 - project:
         name: postgresql-numeral
         git-url: https://github.com/ChristophBerg/postgresql-numeral.git
-        # needs bison 3
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1649,9 +1620,6 @@
 - project:
         name: postgresql-pllua
         git-url: https://salsa.debian.org/postgresql/postgresql-pllua.git
-        # wheezy/precise amd64: ERROR:  cache lookup failed for type 2192165
-        # (squeeze and wheezy/precise i386 work)
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-with-next
 
@@ -1716,7 +1684,7 @@
         name: prometheus-sql-exporter
         git-url: https://github.com/credativ/sql_exporter
         git-branch: debian
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
         backports: 'BACKPORTS=yes ' # golang-* backports
         jobs:
                 - git-packages
@@ -1724,8 +1692,6 @@
 - project:
         name: pspg
         git-url: https://salsa.debian.org/postgresql/pspg.git
-        # readline too old on wheezy
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1751,8 +1717,6 @@
         name: sqlsmith
         git-url: https://github.com/anse1/sqlsmith.git
         git-branch: debian
-        # needs libpqxx 4
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages
 
@@ -1804,7 +1768,7 @@
         name: londiste
         git-url: https://salsa.debian.org/postgresql/londiste.git
         git-branch: debian
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
         jobs:
                 - git-packages
 
@@ -1833,7 +1797,7 @@
         name: python-pgq
         git-url: https://salsa.debian.org/postgresql/python-pgq.git
         git-branch: debian
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
         jobs:
                 - git-packages
 
@@ -1841,7 +1805,7 @@
         name: python-skytools
         git-url: https://salsa.debian.org/postgresql/python-skytools.git
         git-branch: debian
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
         jobs:
                 - git-packages
 
@@ -1850,7 +1814,7 @@
 - project:
         name: patroni
         git-url: https://salsa.debian.org/postgresql/patroni.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
         jobs:
                 - git-packages
 
@@ -1868,7 +1832,7 @@
         name: flask-mail
         git-url: https://salsa.debian.org/python-team/modules/flask-mail.git
         git-branch: debian/master
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs:
                 - git-packages
@@ -1894,7 +1858,7 @@
 - project:
         name: pgadmin4
         git-url: https://salsa.debian.org/postgresql/pgadmin4.git
-        dist-filter: '(distribution!="wheezy") && (distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
@@ -1913,7 +1877,7 @@
         name: sbcl
         apt-suite: jessie
         # upgrade sbcl to 1.2 on the older dists
-        arch-filter: '(architecture!="ppc64el") && ((distribution=="wheezy") || (distribution=="trusty") || (distribution=="utopic"))'
+        arch-filter: '(architecture!="ppc64el") && ((distribution=="trusty") || (distribution=="utopic"))'
         jobs:
                 - apt-packages
 
