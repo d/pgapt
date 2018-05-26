@@ -1044,18 +1044,11 @@
         name: amcheck
         git-url: https://github.com/petergeoghegan/amcheck.git
         jobs:
-                - git-packages-with-next
+                - git-packages
 
 - project:
         name: apgdiff
         git-url: https://salsa.debian.org/postgresql/apgdiff.git
-        jobs:
-                - git-packages
-
-- project:
-        name: autopkgtest
-        git-url: https://salsa.debian.org/ci-team/autopkgtest.git
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
