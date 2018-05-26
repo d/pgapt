@@ -34,7 +34,6 @@ echo "PACKAGE=$PACKAGE"
 echo "BUILD_NUMBER=${BUILD_NUMBER:-}"
 echo "JOB_NAME=${JOB_NAME:-}"
 echo "GIT_COMMIT=${GIT_COMMIT:-}"
-echo "BZR_REVISION=${BZR_REVISION:-}"
 echo "SVN_REVISION=${SVN_REVISION:-}"
 echo "buildtype=${buildtype:-}"
 echo "distribution=${distribution:=sid}"
@@ -63,22 +62,10 @@ if [ "${GIT_COMMIT:-}" ]; then
   VCS=git
   VCS_REVISION="$GIT_COMMIT"
   VCS_REVERT="git checkout"
-  # building in 'source'
-  cd source
-  RESULT=../result
-elif [ "${BZR_REVISION:-}" ] ; then
-  VCS=bzr
-  VCS_REVISION="$BZR_REVISION"
-  VCS_REVERT="bzr revert"
-  # building in '.'
-  RESULT=result
 elif [ "${SVN_REVISION:-}" ] ; then
   VCS=svn
   VCS_REVISION="$SVN_REVISION"
   VCS_REVERT="svn revert"
-  # building in 'source'
-  cd source
-  RESULT=../result
 elif [ "${apt_suite:-}" ] ; then
   rm -rf $PACKAGE* source
   schroot -c $apt_suite -- apt-get source -d $PACKAGE/$apt_suite
@@ -86,20 +73,17 @@ elif [ "${apt_suite:-}" ] ; then
   VCS=debian
   VCS_REVISION=""
   VCS_REVERT=":"
-  cd source
-  RESULT=../result
 else # use source package in current directory
   rm -rf source
   dpkg-source -x $PACKAGE*.dsc source
   VCS="dsc"
   VCS_REVISION=""
   VCS_REVERT=":"
-  cd source
-  RESULT=../result
 fi
 
 # remove artifacts from last build
-rm -rf $RESULT ../*.dsc ../*.debian.tar.* ../*.diff.gz ../*.changes
+rm -rf result *.dsc *.debian.tar.* *.diff.gz *.buildinfo *.changes
+cd source
 
 # merge with another branch
 if [ "${merge:-}" ]; then
@@ -475,6 +459,7 @@ EOT
 mv debian/changelog.tmp debian/changelog
 sed -ne '1,/^ --/p' debian/changelog
 
+# unpack orig tarball in case it's a debian/ only checkout
 [ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs --unpack
 
 if ! [ -f debian/control ] ; then
@@ -483,7 +468,7 @@ fi
 
 dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
 
-mkdir $RESULT
-dcmd cp -alv ../${PACKAGE}_*.changes $RESULT
+mkdir ../result
+dcmd cp -alv ../${PACKAGE}_*.changes ../result
 
 # vim:foldmethod=marker ts=2 ft=sh ai expandtab sw=2
