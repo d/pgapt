@@ -34,7 +34,6 @@ echo "PACKAGE=$PACKAGE"
 echo "BUILD_NUMBER=${BUILD_NUMBER:-}"
 echo "JOB_NAME=${JOB_NAME:-}"
 echo "GIT_COMMIT=${GIT_COMMIT:-}"
-echo "SVN_REVISION=${SVN_REVISION:-}"
 echo "buildtype=${buildtype:-}"
 echo "distribution=${distribution:=sid}"
 echo "branch=${branch:-}"
@@ -56,33 +55,17 @@ export PG_SUPPORTED_VERSIONS="pgdg"
 # tell /usr/share/postgresql-common/supported-versions which distro/release we are targeting
 export DISTRO RELEASE
 
-REVERTS="debian/changelog debian/control debian/rules"
-
-if [ "${GIT_COMMIT:-}" ]; then
-  VCS=git
-  VCS_REVISION="$GIT_COMMIT"
-  VCS_REVERT="git checkout"
-elif [ "${SVN_REVISION:-}" ] ; then
-  VCS=svn
-  VCS_REVISION="$SVN_REVISION"
-  VCS_REVERT="svn revert"
-elif [ "${apt_suite:-}" ] ; then
+# prepare 'source' directory
+if [ "${GIT_COMMIT:-}" ]; then # git expects the checkout in 'source' subdir
+  :
+elif [ "${apt_suite:-}" ] ; then # apt-get source specified
   rm -rf $PACKAGE* source
   schroot -c $apt_suite -- apt-get source -d $PACKAGE/$apt_suite
   dpkg-source -x $PACKAGE*.dsc source
-  VCS=debian
-  VCS_REVISION=""
-  VCS_REVERT=":"
 else # use source package in current directory
   rm -rf source
   dpkg-source -x $PACKAGE*.dsc source
-  VCS="dsc"
-  VCS_REVISION=""
-  VCS_REVERT=":"
 fi
-
-# remove artifacts from last build
-rm -rf result *.dsc *.debian.tar.* *.diff.gz *.buildinfo *.changes
 cd source
 
 # merge with another branch
@@ -94,14 +77,6 @@ if [ "${merge:-}" ]; then
   git clean -xdf
   git merge --allow-unrelated-histories -m "Merge with $REMOTE ($merge)" debian/$merge
 fi
-
-# clean up behind a possibly broken last job
-cleanup () {
-  [ "${NO_ORIGTARGZ:-}" ] && test -d debian/patches && QUILT_PATCHES=debian/patches quilt pop -a
-  $VCS_REVERT $REVERTS || :
-}
-trap "cleanup" 0 2 3 15
-cleanup
 
 # get newest version number from changelog
 PREVIOUS_VERSION=$(dpkg-parsechangelog -SVersion)
@@ -425,13 +400,12 @@ if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; the
     DATE="$(date -u +%Y%m%d.%H%M)"
     BASE_VERSION=$(echo "$BASE_VERSION" | sed -e "s/-/$TILDE$DATE-/")
     echo "1.0" > debian/source/format
-    REVERTS="$REVERTS debian/source/format"
     NO_ORIGTARGZ="1.0"
     test -d debian/patches && QUILT_PATCHES=debian/patches quilt push -a
     ;;
   esac
-  SHORT_REVISION=$(echo $VCS_REVISION | cut -c 1-7)
-  SUFFIX="~${BUILD_NUMBER}.${VCS}${SHORT_REVISION}"
+  SHORT_REVISION=$(echo $GIT_COMMIT | cut -c 1-7)
+  SUFFIX="~${BUILD_NUMBER}.git${SHORT_REVISION}"
 else
   SUFFIX=""
 fi
@@ -459,16 +433,24 @@ EOT
 mv debian/changelog.tmp debian/changelog
 sed -ne '1,/^ --/p' debian/changelog
 
-# unpack orig tarball in case it's a debian/ only checkout
-[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs --unpack
+# remove artifacts from last build
+rm -f ../*.*
+
+# get orig tarball and unpack it in case it's a debian/ only checkout
+[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path ../result --path=$HOME/tarballs --unpack
 
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
 
+# build source package and move it to 'result' for archiving
 dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
+cd ..
+rm -rf result
+mkdir result
+dcmd mv -v ${PACKAGE}_*.changes result
 
-mkdir ../result
-dcmd cp -alv ../${PACKAGE}_*.changes ../result
+# clean up generated 'source' directory
+if [ -z "${GIT_COMMIT:-}" ]; then rm -rf source; fi
 
 # vim:foldmethod=marker ts=2 ft=sh ai expandtab sw=2
