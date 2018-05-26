@@ -560,6 +560,10 @@
         name: 'build-binaries-from-apt'
         id: 'build-binaries-from-apt'
         concurrent: true
+        execution-strategy:
+                combination-filter: ''
+                touchstone:
+                        expr: '(distribution=="sid") && (architecture=="amd64")'
         parameters:
                 - string:
                         name: PACKAGE
