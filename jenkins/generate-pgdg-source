@@ -61,20 +61,20 @@ REVERTS="debian/changelog debian/control debian/rules"
 
 if [ "${GIT_COMMIT:-}" ]; then
   VCS=git
-  VCS_REVISION="$GIT_COMMIT/git"
+  VCS_REVISION="$GIT_COMMIT"
   VCS_REVERT="git checkout"
   # building in 'source'
   cd source
   RESULT=../result
 elif [ "${BZR_REVISION:-}" ] ; then
   VCS=bzr
-  VCS_REVISION="$BZR_REVISION/bzr"
+  VCS_REVISION="$BZR_REVISION"
   VCS_REVERT="bzr revert"
   # building in '.'
   RESULT=result
 elif [ "${SVN_REVISION:-}" ] ; then
   VCS=svn
-  VCS_REVISION="$SVN_REVISION/svn"
+  VCS_REVISION="$SVN_REVISION"
   VCS_REVERT="svn revert"
   # building in 'source'
   cd source
@@ -84,7 +84,7 @@ elif [ "${apt_suite:-}" ] ; then
   schroot -c $apt_suite -- apt-get source -d $PACKAGE/$apt_suite
   dpkg-source -x $PACKAGE*.dsc source
   VCS=debian
-  VCS_REVISION="Debian $apt_suite source rebuild"
+  VCS_REVISION=""
   VCS_REVERT=":"
   cd source
   RESULT=../result
@@ -92,7 +92,7 @@ else # use source package in current directory
   rm -rf source
   dpkg-source -x $PACKAGE*.dsc source
   VCS="dsc"
-  VCS_REVISION="source rebuild"
+  VCS_REVISION=""
   VCS_REVERT=":"
   cd source
   RESULT=../result
@@ -120,7 +120,7 @@ trap "cleanup" 0 2 3 15
 cleanup
 
 # get newest version number from changelog
-PREVIOUS_VERSION=$(dpkg-parsechangelog --count 1 | awk '/^Version: / {print $2}')
+PREVIOUS_VERSION=$(dpkg-parsechangelog -SVersion)
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
 # tweaks shared by several packages
@@ -432,7 +432,7 @@ else
 fi
 
 # set $UNRELEASED to force using a ~version
-CL_DISTRIBUTION=$(dpkg-parsechangelog --count 1 | awk '/^Distribution/ {print $2}')
+CL_DISTRIBUTION=$(dpkg-parsechangelog -SDistribution)
 if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; then
   case ${buildtype:-} in
   snapshot*) # create a ~ orig tarball
@@ -452,11 +452,28 @@ else
   SUFFIX=""
 fi
 
+# update changelog
 # $DOT defaults to '.', but can be set to '~'
 VERSION_STRING="$BASE_VERSION$SUFFIX${DOT:-.}$PGDG_DISTRIBUTION$PGDG_REVISION"
-dch --force-distribution --distribution="$distribution-pgdg" \
-  --release-heuristic log -b --newversion=$VERSION_STRING -- \
-  "Rebuild for $distribution-pgdg (${BUILD_TAG:-}, $VCS_REVISION)" ${TWEAK:-}
+DATE=$(dpkg-parsechangelog -SDate)
+cat > debian/changelog.tmp <<EOT
+$PACKAGE ($VERSION_STRING) $distribution-pgdg; urgency=medium
+
+  * Rebuild for $distribution-pgdg.
+EOT
+if [ "${TWEAK:-}" ]; then
+  echo "  * Changes applied by generate-pgdg-source:" >> debian/changelog.tmp
+  echo "    $TWEAK" >> debian/changelog.tmp
+else
+  echo "  * No source changes." >> debian/changelog.tmp
+fi
+cat - debian/changelog >> debian/changelog.tmp <<EOT
+
+ -- apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>  $DATE
+
+EOT
+mv debian/changelog.tmp debian/changelog
+sed -ne '1,/^ --/p' debian/changelog
 
 [ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path=$HOME/tarballs --unpack
 
