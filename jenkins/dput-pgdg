@@ -13,9 +13,6 @@ set -eux
 
 CHANGES="$(find . -name '*.changes')"
 
-# work around reprepro #808558
-perl -i -pe 's/ (\S+)/ $1 $1-dbgsym/g if /^Binary:/' $CHANGES
-
 # upload only version-specific .deb files when requested
 if [ "${upload:-all}" = "extension-only" ]; then
 	for c in $CHANGES; do
