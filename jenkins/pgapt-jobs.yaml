@@ -343,18 +343,19 @@
                 - string: &package_parameter
                         name: PACKAGE
                         description: 'Package to build (without -source suffix)'
+                - choice: *queue_choice
         dsl: |
                 pipeline {
                     agent { label 'master' }
                     stages {
                         stage('binaries-beta') {
                             steps {
-                                addShortText("${params.PACKAGE}-binaries-beta")
+                                addShortText("${params.PACKAGE}-binaries-beta (${params.queue})")
                                 build(job: "${params.PACKAGE}-binaries-beta")
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: "${params.PACKAGE}-binaries-beta"),
-                                        string(name: 'queue', value: queue),
+                                        string(name: 'queue', value: "${params.queue}"),
                                         string(name: 'upload', value: 'extension-only'),
                                     ]
                                 )
