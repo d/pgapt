@@ -30,9 +30,14 @@ if [ "${upload:-all}" = "extension-only" ]; then
 fi
 
 dcmd chmod a+r $CHANGES
-dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 
+# upload packages
+dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
+rm -rf *
+
+[ "$QUEUE" = "incoming" ] || exit 0
+
+# if processincoming fails, move files to "failed" directory
+trap "ssh $HOST mv /srv/apt/incoming/* /srv/apt/failed" 0 2 3 15
 # call processincoming once for all packages uploaded
 ssh $HOST sudo -u aptuser /srv/apt/apt.postgresql.org/repo/processincoming $QUEUE
-
-# trap will clean up here
