@@ -334,6 +334,34 @@
                     }}
                 }}
 
+- job:
+        <<: *build_pipeline
+        name: 'build-binaries-beta'
+        id: 'build-binaries-beta'
+        description: 'Build binaries for some package, and upload them, for PostgreSQL devel'
+        parameters:
+                - string: &package_parameter
+                        name: PACKAGE
+                        description: 'Package to build (without -source suffix)'
+        dsl: |
+                pipeline {
+                    agent { label 'master' }
+                    stages {
+                        stage('binaries-beta') {
+                            steps {
+                                build(job: "${params.PACKAGE}-binaries-beta")
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: "${params.PACKAGE}-binaries-beta"),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'extension-only'),
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                }
+
 # apt template
 
 - job-template: &apt_source_template
@@ -506,9 +534,7 @@
         concurrent: true
         properties: *properties_more_artifacts
         parameters:
-                - string: &package_parameter
-                        name: PACKAGE
-                        description: 'Package to build (without -source suffix)'
+                - string: *package_parameter
                 - choice: &distribution_parameter
                         name: distribution
                         choices: *dist_list
