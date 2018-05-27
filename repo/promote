@@ -21,11 +21,12 @@ if [ "${DEBUG:-}" ]; then
 	SUDO="echo"
 fi
 
-while getopts "c:d:f" opt ; do
+while getopts "c:d:fq" opt ; do
 	case $opt in
-		c) COMPONENT="$OPTARG" ;;
-		d) DISTS="$OPTARG" ;;
-		f) FORCE="force" ;;
+		c) COMPONENT="$OPTARG" ;; # check this component to determine if packages exists
+		d) DISTS="$OPTARG" ;; # promote these dists only
+		f) FORCE="force" ;; # ignore server packages component mismatch
+		q) QUIET="quiet" ;; # don't send announcement mail
 		*) exit 5 ;;
 	esac
 done
@@ -76,6 +77,8 @@ NEWLS=$($REPREPRO ls $PKG; for p in $OTHERBINARIES; do $REPREPRO ls $p; done)
 echo "$NEWLS"
 NEWLSPROD=$(echo "$NEWLS" | grep -v pgdg-testing | column -t)
 echo
+
+[ "${QUIET:-}" ] && exit
 
 if [ -z "${DEBUG:-}" ] && [ "$OLDLSPROD" = "$NEWLSPROD" ]; then
 	echo "No change in the repository, not sending mail"
