@@ -344,6 +344,7 @@
                         name: PACKAGE
                         description: 'Package to build (without -source suffix)'
                 - choice: *queue_choice
+        concurrent: true
         dsl: |
                 pipeline {
                     agent { label 'master' }
