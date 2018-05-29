@@ -1407,7 +1407,7 @@
         name: pgsphere
         git-url: https://salsa.debian.org/postgresql/pgsphere.git/
         jobs:
-                - git-packages-with-next
+                - git-packages
 
 - project:
         name: pgsql-asn1oid
@@ -1421,12 +1421,6 @@
         # needs DH 10
         dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
-        jobs:
-                - git-packages-with-next
-
-- project:
-        name: pgstatplans
-        git-url: https://github.com/2ndQuadrant/pg_stat_plans.git
         jobs:
                 - git-packages-with-next
 
@@ -1671,7 +1665,7 @@
         name: postgresql-q3c
         git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git/
         jobs:
-                - git-packages-with-next
+                - git-packages
 
 - project:
         name: postgresql-rum
