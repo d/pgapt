@@ -1119,14 +1119,6 @@
                 - git-packages-with-next
 
 - project:
-        name: dh-exec
-        # backport 0.14 from jessie to older dists
-        apt-suite: jessie
-        dist-filter: '(distribution=="trusty")'
-        jobs:
-                - apt-packages
-
-- project:
         name: hypopg
         git-url: https://github.com/HypoPG/hypopg.git
         git-branch: master
@@ -1891,14 +1883,6 @@
         arch-filter: '(architecture!="ppc64el")'
         jobs:
                 #- git-packages
-                - apt-packages
-
-- project:
-        name: sbcl
-        apt-suite: jessie
-        # upgrade sbcl to 1.2 on the older dists
-        arch-filter: '(architecture!="ppc64el") && ((distribution=="trusty") || (distribution=="utopic"))'
-        jobs:
                 - apt-packages
 
 - project: &aptpkg
