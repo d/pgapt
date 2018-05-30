@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Debian PostgreSQL Maintainers <pkg-postgresql-public@lists.alioth.debian.org>
 Uploaders: Christoph Berg <myon@debian.org>
-Standards-Version: 4.1.2
+Standards-Version: 4.1.4
 Build-Depends: debhelper (>= 9~)
 Vcs-Browser: http://git.postgresql.org/gitweb/?p=pgapt.git
 Vcs-Git: git://git.postgresql.org/git/pgapt.git
@@ -25,7 +25,7 @@ Depends: ${misc:Depends},
 # testsuite:
  hunspell-en-us, locales, logrotate, net-tools, netcat-openbsd,
 # autopkgtest
- autodep8,
+ autodep8, pkg-perl-autopkgtest,
  autopkgtest, newpid, sudo
 Description: metapackage to install in pgdg build chroots
  metapackage to install in pgdg build chroots for apt.postgresql.org

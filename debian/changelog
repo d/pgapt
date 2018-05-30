@@ -1,3 +1,9 @@
+pgdg-buildenv (23) sid-pgdg; urgency=medium
+
+  * Install pkg-perl-autopkgtest.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 30 May 2018 15:18:03 +0200
+
 pgdg-buildenv (22) sid-pgdg; urgency=medium
 
   * Install autodep8, and run autopkgtest unconditionally.
