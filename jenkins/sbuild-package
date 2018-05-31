@@ -108,8 +108,13 @@ if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
       ADD_DEPENDS="$ADD_DEPENDS --add-depends=postgresql-$DEB_PG_SUPPORTED_VERSIONS" ;;
   esac
   # change buildinfo filename so we don't overwrite the one from the main "pgdg" build
-  BUILDINFO="${DSC%.dsc}_$architecture-$DEB_PG_SUPPORTED_VERSIONS.buildinfo"
-  BUILDINFOOPT="--buildinfo-option=-O../$BUILDINFO"
+  case $distribution in
+    jessie|wheezy|xenial|trusty) ;; # no buildinfo support
+    *)
+      BUILDINFO="${DSC%.dsc}_$architecture-$DEB_PG_SUPPORTED_VERSIONS.buildinfo"
+      BUILDINFOOPT="--buildinfo-option=-O../$BUILDINFO"
+      ;;
+  esac
 fi
 
 # prepare temp file for adt-run results
