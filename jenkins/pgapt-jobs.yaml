@@ -1002,6 +1002,7 @@
                         matrix-notifier: only-parent
                         message-type: summary-params
                 - groovy-postbuild: *dput_groovy
+                - workspace-cleanup
 
 - job:
         name: hardlink-jenkins-files
