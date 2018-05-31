@@ -971,6 +971,7 @@
                         message-type: summary-params
                 - groovy-postbuild: &dput_groovy
                         script: 'manager.addShortText("${manager.build.environment.binaries} (${manager.build.environment.queue}, ${manager.build.environment.upload})")'
+                - workspace-cleanup
 
 # variant of dput that handles each configuration separately
 # (needed after using matrixreloaded on build jobs)

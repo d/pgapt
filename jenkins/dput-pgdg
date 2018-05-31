@@ -3,8 +3,6 @@
 HOST="atalia.postgresql.org"
 QUEUE="${1:-incoming}"
 
-trap "rm -rf *" 0 2 3 15
-
 ls -AlR
 
 [ "$QUEUE" = "discard" ] && exit 0
