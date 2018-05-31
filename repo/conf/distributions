@@ -10,7 +10,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: sid-pgdg-testing
@@ -25,7 +25,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -42,7 +42,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: buster-pgdg-testing
@@ -57,7 +57,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -74,7 +74,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: stretch-pgdg-testing
@@ -89,7 +89,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -106,7 +106,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: jessie-pgdg-testing
@@ -121,7 +121,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -138,7 +138,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: wheezy-pgdg-testing
@@ -153,7 +153,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -170,7 +170,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: squeeze-pgdg-testing
@@ -185,7 +185,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -202,7 +202,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: lenny-pgdg-testing
@@ -217,7 +217,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -234,7 +234,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: etch-pgdg-testing
@@ -249,7 +249,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -266,7 +266,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: bionic-pgdg-testing
@@ -281,7 +281,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -298,7 +298,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: zesty-pgdg-testing
@@ -313,7 +313,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -330,7 +330,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: xenial-pgdg-testing
@@ -345,7 +345,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -362,7 +362,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: wily-pgdg-testing
@@ -377,7 +377,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -394,7 +394,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: utopic-pgdg-testing
@@ -409,7 +409,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -426,7 +426,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: trusty-pgdg-testing
@@ -441,7 +441,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -458,7 +458,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: saucy-pgdg-testing
@@ -473,7 +473,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -490,7 +490,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: precise-pgdg-testing
@@ -505,7 +505,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
@@ -522,7 +522,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 
 Codename: lucid-pgdg-testing
@@ -537,7 +537,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes

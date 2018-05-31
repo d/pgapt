@@ -61,7 +61,7 @@ Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
 DscIndices: Sources Release .gz .bz2
-Tracking: all
+Tracking: minimal includebuildinfos keepsources
 Contents: percomponent nocompatsymlink
 EOF
 		case $FLAVOR in *testing)
