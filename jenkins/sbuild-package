@@ -29,6 +29,8 @@ error () {
   exit 1
 }
 
+chroot="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
+
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
@@ -36,8 +38,6 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/
   break
 done
 set_dist_vars $distribution
-
-chroot="chroot:$distribution-pgdg-$architecture-sbuild"
 
 # find dsc to build
 if [ -z "${PACKAGE:-}" ]; then
@@ -107,6 +107,9 @@ if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
     postgis)
       ADD_DEPENDS="$ADD_DEPENDS --add-depends=postgresql-$DEB_PG_SUPPORTED_VERSIONS" ;;
   esac
+  # change buildinfo filename so we don't overwrite the one from the main "pgdg" build
+  BUILDINFO="${DSC%.dsc}_$architecture-$DEB_PG_SUPPORTED_VERSIONS.buildinfo"
+  BUILDINFOOPT="--buildinfo-option=-O../$BUILDINFO"
 fi
 
 # prepare temp file for adt-run results
@@ -134,6 +137,7 @@ umask 002
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
+    ${BUILDINFOOPT:+--debbuildopt=$BUILDINFOOPT} \
     ${FINISHED_BUILD_COMMAND:+--finished-build-commands="$FINISHED_BUILD_COMMAND"} \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
