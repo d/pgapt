@@ -709,6 +709,8 @@
         name: '{name}-adt'
         id: 'adt'
         description: 'Run autopkgtest on {name}'
+        workspace: /tmp
+        child-workspace: .
         triggers:
                 - timed: "H H H * *"
         builders:
