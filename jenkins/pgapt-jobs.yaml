@@ -704,6 +704,25 @@
                 - ircbot: *only_configs
                 - workspace-cleanup
 
+- job-template: &adt_template
+        <<: *testsuite_template
+        name: '{name}-adt'
+        id: 'adt'
+        description: 'Run autopkgtest on {name}'
+        triggers:
+                - timed: "H H H * *"
+        builders:
+                - shell: 'pgdg-autopkgtest {name}'
+        publishers:
+                - ircbot: *only_configs
+
+- job-template:
+        <<: *adt_template
+        name: '{name}-adt-devel'
+        id: 'adt-devel'
+        builders:
+                - shell: 'PG_SUPPORTED_VERSIONS=11 pgdg-autopkgtest {name}'
+
 # upgrade test template
 
 - job-template: &upgrade_template
@@ -752,6 +771,7 @@
                 - 'build-pipeline'
                 - 'source-apt'
                 - 'binaries'
+                - 'adt'
         noadt: ''
 
 - job-group:
@@ -762,6 +782,8 @@
                 - 'binaries'
                 - 'binaries-beta'
                 - 'binaries-devel'
+                - 'adt'
+                - 'adt-devel'
         noadt: ''
 
 - job-group:
@@ -770,6 +792,7 @@
                 - 'build-pipeline'
                 - 'source-git'
                 - 'binaries'
+                - 'adt-devel'
         noadt: ''
 
 - job-group:
@@ -780,6 +803,8 @@
                 - 'binaries'
                 - 'binaries-beta'
                 - 'binaries-devel'
+                - 'adt'
+                - 'adt-devel'
         noadt: ''
 
 - job-group:
@@ -789,6 +814,7 @@
                 - 'source-git'
                 - 'binaries'
                 - '{name}-testsuite'
+                - 'adt'
         noadt: 'ADT=skip '
 
 - job-group:

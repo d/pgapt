@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# run autopkgtest in schroot
+
+set -eu
+
+PACKAGE="$1"
+CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
+
+set -x
+
+newpid-netns schroot -c $CHROOT -u root <<-EOF
+	set -eu
+	export PG_SUPPORTED_VERSIONS="${PG_SUPPORTED_VERSIONS:=pgdg}" # import from outer environment
+
+	# make PG devel available if requested
+	( set -x
+	  if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
+	    sed -i -e "s/main/main \$PG_SUPPORTED_VERSIONS/" /etc/apt/sources.list.d/pgdg.list
+	  fi
+	  apt-get -y update
+	  if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
+	    apt install -y postgresql-\$PG_SUPPORTED_VERSIONS postgresql-server-dev-\$PG_SUPPORTED_VERSIONS
+	  fi
+	)
+	
+	# convert list of supported versions to grep filter
+	for ver in \$(/usr/share/postgresql-common/supported-versions); do
+	  FILTER="\${FILTER:-} -e \$ver"
+	done
+	
+	# install all binaries built from this source matching supported versions
+	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
+	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
+	  fgrep \$FILTER | sort -u)
+
+	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ] && [ -z "\$BINARIES" ]; then
+	  echo "No version \$PG_SUPPORTED_VERSIONS packages for $PACKAGE found, exiting"
+	  exit 0
+	fi
+	
+	if [ "\$BINARIES" ]; then
+	  ( set -x; apt-get install -y \$BINARIES )
+	fi
+	set -x
+	autopkgtest "$PACKAGE" -- null ||
+	  case \$? in
+	    2|8) exit 0 ;; # tests skipped / no tests in this package
+	    *) exit \$? ;;
+	  esac
+EOF
+

@@ -31,7 +31,7 @@ clean:
 	rm -rf output output.old packages.backports
 
 # install scripts
-SCRIPTS = adt-sbuild adtsummary2junit approx-reset.sh builddebcheck-pgapt debcheck-pgapt dput-pgdg generate-pgdg-source newpid-netns postgresql-testsuite sbuild-package sbuild-update.sh
+SCRIPTS = adt-sbuild adtsummary2junit approx-reset.sh builddebcheck-pgapt debcheck-pgapt dput-pgdg generate-pgdg-source newpid-netns pgdg-autopkgtest postgresql-testsuite sbuild-package sbuild-update.sh
 INST_SCRIPTS = $(patsubst %, /usr/local/bin/%, $(SCRIPTS))
 
 install: $(INST_SCRIPTS)
