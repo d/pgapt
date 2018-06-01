@@ -792,7 +792,7 @@
                 - 'build-pipeline'
                 - 'source-git'
                 - 'binaries'
-                - 'adt-devel'
+                - 'adt'
         noadt: ''
 
 - job-group:
