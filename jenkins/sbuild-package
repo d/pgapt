@@ -107,14 +107,6 @@ if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
     postgis)
       ADD_DEPENDS="$ADD_DEPENDS --add-depends=postgresql-$DEB_PG_SUPPORTED_VERSIONS" ;;
   esac
-  # change buildinfo filename so we don't overwrite the one from the main "pgdg" build
-  case $distribution in
-    jessie|wheezy|xenial|trusty) ;; # no buildinfo support
-    *)
-      BUILDINFO="${DSC%.dsc}_$architecture-$DEB_PG_SUPPORTED_VERSIONS.buildinfo"
-      BUILDINFOOPT="--buildinfo-option=-O../$BUILDINFO"
-      ;;
-  esac
 fi
 
 # prepare temp file for adt-run results
@@ -142,7 +134,6 @@ umask 002
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
-    ${BUILDINFOOPT:+--debbuildopt=$BUILDINFOOPT} \
     ${FINISHED_BUILD_COMMAND:+--finished-build-commands="$FINISHED_BUILD_COMMAND"} \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
@@ -150,6 +141,12 @@ umask 002
 # remove arch:all packages that were only built for autopkgtests
 if [ "${FILTER_ARCH_ALL:-}" ]; then
   sed -i -e '/_all\.deb$/d' *.changes
+fi
+
+# when building for PG devel, remove buildinfo so we don't overwrite the one
+# from the main "pgdg" build
+if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
+  sed -i -e '/\.buildinfo$/d' *.changes
 fi
 
 # rename Ubuntu bionic's .ddebs to .deb
