@@ -443,7 +443,7 @@ if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
 if [ -f debian/control.in ]; then
-  pg_buildext updatecontrol
+  pg_buildext checkcontrol
 fi
 
 # build source package and move it to 'result' for archiving
