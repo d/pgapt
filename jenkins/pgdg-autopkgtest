@@ -6,6 +6,7 @@ set -eu
 
 PACKAGE="$1"
 CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
+cd /
 
 set -x
 
