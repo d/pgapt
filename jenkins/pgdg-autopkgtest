@@ -9,7 +9,7 @@ CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
 
 set -x
 
-newpid-netns schroot -c $CHROOT -u root <<-EOF
+newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	set -eu
 	export PG_SUPPORTED_VERSIONS="${PG_SUPPORTED_VERSIONS:=pgdg}" # import from outer environment
 
@@ -33,20 +33,24 @@ newpid-netns schroot -c $CHROOT -u root <<-EOF
 	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
 	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
 	  fgrep \$FILTER | sort -u)
-
+	# skip PG devel tests if packages have not been built yet
 	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ] && [ -z "\$BINARIES" ]; then
 	  echo "No version \$PG_SUPPORTED_VERSIONS packages for $PACKAGE found, exiting"
 	  exit 0
 	fi
-	
 	if [ "\$BINARIES" ]; then
 	  ( set -x; apt-get install -y \$BINARIES )
 	fi
-	set -x
-	autopkgtest "$PACKAGE" -- null ||
-	  case \$? in
-	    2|8) exit 0 ;; # tests skipped / no tests in this package
-	    *) exit \$? ;;
-	  esac
+	
+	# run autopkgtest
+	if [ -x /usr/bin/autopkgtest ]; then
+	  ( set -x; autopkgtest "$PACKAGE" -- null || EXIT=\$? )
+	else
+	  ( set -x; adt-run --apt-source "$PACKAGE" --- null || EXIT=\$? )
+	fi
+	case \${EXIT:-0} in
+	  2|8) exit 0 ;; # tests skipped / no tests in this package
+	  *) exit \$? ;;
+	esac
 EOF
 

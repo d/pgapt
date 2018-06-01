@@ -7,6 +7,10 @@ error () {
   exit 1
 }
 
+# use "sbuild" chroot here (default bind-mounts /root)
+chroot="source:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
+chroot_path="/home/chroot/$distribution-$architecture"
+
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
@@ -14,10 +18,6 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/
   break
 done
 set_dist_vars $distribution
-
-# use "sbuild" chroot here (default bind-mounts /root)
-chroot="source:$distribution-pgdg-$architecture-sbuild"
-chroot_path="/home/chroot/$distribution-$architecture"
 
 # check if chroot is configured in sbuild
 schroot -l | grep -q $chroot || \
