@@ -444,9 +444,9 @@ if ! [ -f debian/control ] ; then
 fi
 
 # build source package and move it to 'result' for archiving
-dpkg-buildpackage -uc -us -nc -d -sa -S -i -I
+dpkg-buildpackage -uc -us -nc -d -sa -S -i -I --buildinfo-option=-O../buildinfo.tmp
 cd ..
-rm -rf result
+rm -rf result buildinfo.tmp
 mkdir result
 dcmd mv -v ${PACKAGE}_*.changes result
 
