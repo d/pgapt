@@ -1908,12 +1908,12 @@
 
 - project:
         name: pgloader
-        #git-url: https://github.com/dimitri/pgloader.git
-        apt-suite: sid
+        git-url: https://github.com/dimitri/pgloader.git
+        #apt-suite: sid
         arch-filter: '(architecture!="ppc64el")'
         jobs:
-                #- git-packages
-                - apt-packages
+                - git-packages
+                #- apt-packages
 
 - project: &aptpkg
         name: bordeaux-threads
