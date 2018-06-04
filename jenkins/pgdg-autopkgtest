@@ -4,6 +4,13 @@
 
 set -eu
 
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+
 PACKAGE="$1"
 CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
 cd /
@@ -18,6 +25,12 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
 	  sed -i -e "s/main/main \$PG_SUPPORTED_VERSIONS/" /etc/apt/sources.list.d/pgdg.list
 	fi
+	case $PACKAGE in
+	  postgresql-${PG_BETA_VERSION})
+	    sed -i -e "s/main/main $PG_BETA_VERSION/" /etc/apt/sources.list.d/pgdg.list ;;
+	  postgresql-${PG_DEVEL_VERSION})
+	    sed -i -e "s/main/main $PG_DEVEL_VERSION/" /etc/apt/sources.list.d/pgdg.list ;;
+	esac
 	
 	( set -x; apt-get -y update)
 	
