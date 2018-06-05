@@ -32,7 +32,7 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	    sed -i -e "s/main/main ${PG_DEVEL_VERSION:-}/" /etc/apt/sources.list.d/pgdg.list ;;
 	esac
 	
-	( set -x; apt-get -y update)
+	( set -x; apt-get -y update; apt-get -y dist-upgrade )
 	
 	# convert list of supported versions to grep filter
 	for ver in \$(/usr/share/postgresql-common/supported-versions); do
