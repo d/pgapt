@@ -19,7 +19,7 @@ move_file ()
   mv $1 $initial/$source
 }
 
-for f in *.dsc *.diff.gz *.tar.*; do
+for f in *.dsc *.diff.gz *.tar.* *.buildinfo; do
   [ -f "$f" ] || continue
   source=${f%%_*}
   move_file $f $source
