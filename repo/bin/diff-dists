@@ -7,17 +7,21 @@
 use strict;
 use warnings;
 use Dpkg::Version;
+use Getopt::Long;
+Getopt::Long::config('bundling');
 
 my $show_missing = 1;
-if (@ARGV and $ARGV[0] eq '-m') {
-	shift;
-	$show_missing = 0;
-}
+my $to_term = (-t 1);
+
+GetOptions (
+  '-m' => sub { $show_missing = 0 },
+  '-t' => \$to_term,
+) or die;
 
 # enable ansi codes if outputting to a terminal
-my ($b, $n) = (-t 1) ? ("\e[1m", "\e[0m") : ("", "");
+my ($b, $n) = $to_term ? ("\e[1m", "\e[0m") : ("", "");
 
-die "Syntax: $0 [-f] <source1> <source2>" unless (@ARGV == 2);
+die "Syntax: $0 [-m] <source1> <source2>" unless (@ARGV == 2);
 my ($source1, $source2) = @ARGV;
 my (%pkg1, %pkg2);
 

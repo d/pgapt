@@ -2,7 +2,9 @@
 
 BINDIR=$(dirname $0)
 DISTS=$BINDIR/../dists
+[ -t 1 ] && TO_TERM="-t"
 
-$BINDIR/diff-dists -m \
+$BINDIR/diff-dists $TO_TERM -m \
 	<(cat /var/lib/apt/lists/*_debian_dists_{sid,experimental}_main_source_Sources) \
-	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2)
+	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2) |
+grep -v -e '^pgdg-buildenv'
