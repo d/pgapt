@@ -305,7 +305,7 @@ case $PACKAGE in
       # March 2018: sfcgal is disabled in unstable, reenable it on dists where
       # it still works (#876521)
       jessie|stretch|xenial)
-        sed -i -e '/sfcgal/Is/^#//' debian/liblwgeom-2.4-0.symbols debian/control
+        sed -i -e '/sfcgal/Is/^#//' debian/liblwgeom-2.4-0.symbols debian/control debian/control.in
         sed -i -e 's/postgis_tiger_geocoder/postgis_sfcgal postgis_tiger_geocoder/' debian/tests/test-extension-creation
         TWEAK="${TWEAK:-} Enable sfcgal."
         ;;
@@ -318,7 +318,7 @@ case $PACKAGE in
         ;;
     esac
     case ${distribution:-} in stretch|jessie)
-      # Revert fix for #901158 on older dists
+      # June 2018: Revert fix for #901158 on older dists
       sed -i -e '/rt_gdalwarp.patch/d' debian/patches/series
       TWEAK="${TWEAK:-} Revert 'Add patch to fix expected test output with GDAL 2.3.0 & PROJ 5.1.0'."
       ;;
