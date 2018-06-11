@@ -290,7 +290,7 @@ case $PACKAGE in
         sed -i -e 's/libjson-c-dev | //' debian/control debian/control.in
         # disable PIE for wheezy (amd64 needs it, do it for the other archs as well)
         sed -i -e 's/DEB_BUILD_MAINT_OPTIONS.*/DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie/' debian/rules
-        TWEAK="Disable PIE."
+        TWEAK="${TWEAK:-} Disable PIE."
         ;;
     esac
     case ${distribution:-} in
@@ -316,6 +316,12 @@ case $PACKAGE in
         sed -i -e '/protobuf/d' debian/control debian/control.in
         TWEAK="${TWEAK:-} Disable protobuf support."
         ;;
+    esac
+    case ${distribution:-} in stretch|jessie)
+      # Revert fix for #901158 on older dists
+      sed -i -e '/rt_gdalwarp.patch/d' debian/patches/series
+      TWEAK="${TWEAK:-} Revert 'Add patch to fix expected test output with GDAL 2.3.0 & PROJ 5.1.0'."
+      ;;
     esac
     ;;
 
