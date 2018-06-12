@@ -57,7 +57,8 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	fi
 	
 	if [ "\$BINARIES" ]; then
-	  ( set -x; apt-get install -y \$BINARIES )
+	  # prefer our packages over the base distro ones
+	  ( set -x; apt-get install -t $distribution-pgdg -y \$BINARIES )
 	fi
 	
 	# run autopkgtest
