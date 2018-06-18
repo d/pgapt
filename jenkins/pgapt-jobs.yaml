@@ -177,7 +177,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
-                                        string(name: 'branch', value: buildtype),
+                                        string(name: 'buildtype', value: buildtype),
                                     ]
                                 )
                             }}
@@ -212,7 +212,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
-                                        string(name: 'branch', value: buildtype),
+                                        string(name: 'buildtype', value: buildtype),
                                     ]
                                 )
                             }}
@@ -259,6 +259,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
+                                        string(name: 'buildtype', value: buildtype),
                                     ]
                                 )
                             }}
@@ -317,6 +318,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
+                                        string(name: 'buildtype', value: buildtype),
                                     ]
                                 )
                             }}
