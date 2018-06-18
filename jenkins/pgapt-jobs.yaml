@@ -165,6 +165,7 @@
         parameters:
                 - string: *revision_string
                 - string: *git_branch
+                - choice: *buildtype_choice
                 - choice: *queue_choice
         dsl: |
                 pipeline {{
@@ -176,6 +177,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
+                                        string(name: 'branch', value: buildtype),
                                     ]
                                 )
                             }}
@@ -210,6 +212,7 @@
                                     parameters: [
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
+                                        string(name: 'branch', value: buildtype),
                                     ]
                                 )
                             }}
