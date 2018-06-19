@@ -42,9 +42,10 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	# (we need this because the source package will likely only list one)
 	# libpgsql-9.3-asn1oid: original package name on trusty, filter out
 	# postgis: old binaries still kept around
+	# postgresql-9.6-repmgr-dbg: original package on stretch
 	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
 	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
-	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[123]' |
+	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[123]|postgresql-9.6-repmgr-dbg' |
 	  fgrep \$FILTER | sort -u)
 	
 	# skip PG devel tests if packages have not been built yet
