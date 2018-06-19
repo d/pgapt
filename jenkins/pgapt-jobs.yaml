@@ -1486,15 +1486,6 @@
                 - git-packages-with-next
 
 - project:
-        name: plv8
-        git-url: https://salsa.debian.org/postgresql/plv8.git
-        git-branch: debian
-        # libv8-dev/ppc64el is missing in Debian Jessie
-        arch-filter: '!(architecture=="ppc64el" && distribution=="jessie")'
-        jobs:
-                - git-packages-with-next
-
-- project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
         jobs:
