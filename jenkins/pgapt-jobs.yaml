@@ -1659,12 +1659,6 @@
                 - git-packages-with-next
 
 - project:
-        name: postgresql-pljava
-        git-url: https://salsa.debian.org/postgresql/postgresql-pljava.git
-        jobs:
-                - git-packages-with-next
-
-- project:
         name: postgresql-pllua
         git-url: https://salsa.debian.org/postgresql/postgresql-pllua.git
         jobs:
