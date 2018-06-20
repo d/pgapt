@@ -23,39 +23,6 @@ set_dist_vars $distribution
 schroot -l | grep -q $chroot || \
   error "There is no schroot definition for $chroot (run schroot-config.sh first)"
 
-apt1="http://apt.postgresql.org/pub/repos/apt"
-apt2="http://atalia.postgresql.org/pub/repos/apt"
-ubuntu="http://de.archive.ubuntu.com/ubuntu"
-case $(hostname) in
-  pgdg*|benz*) # use local cache on build host
-    apt1="http://atalia-approx:9999/atalia"
-    apt2="$apt1"
-    ubuntu="http://ubuntu-approx:9999/ubuntu"
-    ;;
-esac
-
-# enable backports and security
-deb="http://deb.debian.org/debian"
-security="http://security.debian.org/debian-security"
-case $(hostname) in
-  pgdg*|benz*) # use local cache on build host
-    deb="http://debian-approx:9999/debian"
-    security="http://security-approx:9999/security"
-    ;;
-esac
-if [ "$HAS_BACKPORTS" ]; then
-  case $DISTRO in
-    debian) BACKPORTS="deb $deb $distribution-backports main" ;;
-    ubuntu) BACKPORTS="deb $ubuntu $distribution-backports main" ;;
-  esac
-fi
-
-# mirror to use for debootstrap
-case $DISTRO in
-  ubuntu) mirror="$ubuntu" ;;
-  *) mirror="$deb" ;;
-esac
-
 PGDG_SH=$(mktemp /var/tmp/pgdg.XXXXXX.sh)
 trap "rm -f $PGDG_SH" 0 2 3 15
 cat < /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh > $PGDG_SH
@@ -116,22 +83,22 @@ umask 002
 	echo "deb-src $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $DISTRO in
 	  ubuntu) # libossp-uuid-dev is in universe on vivid+
-	    echo "deb $ubuntu $distribution universe" > /etc/apt/sources.list.d/universe.list
-	    echo "deb-src $ubuntu $distribution universe" >> /etc/apt/sources.list.d/universe.list
-	    echo "deb $ubuntu $distribution-updates main universe" > /etc/apt/sources.list.d/updates.list
-	    echo "deb-src $ubuntu $distribution-updates main universe" >> /etc/apt/sources.list.d/updates.list
-	    echo "deb $ubuntu $distribution-security main universe" > /etc/apt/sources.list.d/security.list
-	    echo "deb-src $ubuntu $distribution-security main universe" >> /etc/apt/sources.list.d/security.list
+	    echo "deb $mirror $distribution universe" > /etc/apt/sources.list.d/universe.list
+	    echo "deb-src $mirror $distribution universe" >> /etc/apt/sources.list.d/universe.list
+	    echo "deb $mirror $distribution-updates main universe" > /etc/apt/sources.list.d/updates.list
+	    echo "deb-src $mirror $distribution-updates main universe" >> /etc/apt/sources.list.d/updates.list
+	    echo "deb $mirror $distribution-security main universe" > /etc/apt/sources.list.d/security.list
+	    echo "deb-src $mirror $distribution-security main universe" >> /etc/apt/sources.list.d/security.list
 	    ;;
 	  *)
 	    if [ "$distribution" != "sid" ]; then
-	      echo "deb $security $distribution/updates main" > /etc/apt/sources.list.d/security.list
-	      echo "deb-src $security $distribution/updates main" >> /etc/apt/sources.list.d/security.list
+	      echo "deb ${security:-} $distribution/updates main" > /etc/apt/sources.list.d/security.list
+	      echo "deb-src ${security:-} $distribution/updates main" >> /etc/apt/sources.list.d/security.list
 	    fi
 	    ;;
 	esac
-	if [ "${BACKPORTS:-}" ]; then
-	  echo "${BACKPORTS:-}" > /etc/apt/sources.list.d/backports.list
+	if [ "$HAS_BACKPORTS" ]; then
+	  echo "$mirror_backports" > /etc/apt/sources.list.d/backports.list
 	  if [ -d /var/lib/apt/backports ]; then
 	    rm -f /var/lib/apt/lists/*backports* # clean up if last run failed
 	    cp -al /var/lib/apt/backports/* /var/lib/apt/lists
@@ -146,7 +113,7 @@ umask 002
 
 	# save backports lists
 	rm -rf /var/lib/apt/backports /etc/apt/sources.list.d/backports.list.disabled
-	if [ "${BACKPORTS:-}" ]; then
+	if [ "$HAS_BACKPORTS" ]; then
 	  mv /etc/apt/sources.list.d/backports.list /etc/apt/sources.list.d/backports.list.disabled
 	  mkdir -p /var/lib/apt/backports
 	  mv /var/lib/apt/lists/*backports* /var/lib/apt/backports

@@ -4,17 +4,18 @@
 
 set -eu
 
+PACKAGE="$1"
+CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
+
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
   . $dir/pgapt.conf
   break
 done
+set_dist_vars $distribution
 
-PACKAGE="$1"
-CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
 cd /
-
 set -x
 
 newpid-netns schroot -c $CHROOT -u root sh <<-EOF
@@ -31,6 +32,13 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	  postgresql-${PG_DEVEL_VERSION:-})
 	    sed -i -e "s/main/main ${PG_DEVEL_VERSION:-}/" /etc/apt/sources.list.d/pgdg.list ;;
 	esac
+
+	if [ "${BACKPORTS:-false}" != "false" ]; then
+	  echo "${mirror_backports:-}" > /etc/apt/sources.list.d/backports.list
+	  echo "Package: *" > /etc/apt/preferences.d/backports.pref
+	  echo "Pin: release a=$distribution-backports" >> /etc/apt/preferences.d/backports.pref
+	  echo "Pin-Priority: 500" >> /etc/apt/preferences.d/backports.pref
+	fi
 	
 	( set -x; apt-get -y update; apt-get -y dist-upgrade )
 	

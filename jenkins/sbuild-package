@@ -79,18 +79,7 @@ esac
 
 # enable backports
 if [ "$HAS_BACKPORTS" ] && [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; then
-  deb="http://deb.debian.org/debian"
-  ubuntu="http://de.archive.ubuntu.com/ubuntu"
-  case $(hostname) in
-    pgdg*) # use local cache on build host
-      deb="http://debian-approx:9999/debian"
-      ubuntu="http://ubuntu-approx:9999/ubuntu"
-      ;;
-  esac
-  case $DISTRO in
-    debian) BPOREPO="deb $deb $distribution-backports main" ;;
-    ubuntu) BPOREPO="deb $ubuntu $distribution-backports main" ;;
-  esac
+  BPOREPO="$mirror_backports"
 fi
 
 # disable parallel builds
