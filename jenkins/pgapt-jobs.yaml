@@ -18,6 +18,7 @@
     git-branch: master
     backports: ''
     backports_runtime: ''
+    disable_submodules: false
 
 - yamltemplates:
     name: yamltemplates
@@ -421,6 +422,7 @@
                         basedir: source
                         wipe-workspace: false
                         submodule:
+                                disable: '{disable_submodules}'
                                 recursive: true
                         clean:
                                 before: true
@@ -1630,6 +1632,7 @@
 - project:
         name: postgresql-multicorn
         git-url: https://salsa.debian.org/postgresql/postgresql-multicorn.git
+        disable_submodules: true
         jobs:
                 - git-packages-with-next
 
