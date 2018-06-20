@@ -21,6 +21,7 @@ set -x
 newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	set -eu
 	export PG_SUPPORTED_VERSIONS="${PG_SUPPORTED_VERSIONS:=pgdg}" # import from outer environment
+	[ "$PACKAGE" = "postgresql-8.2" ] && PG_SUPPORTED_VERSIONS="8.2" # needs libecpg5 and friends
 	
 	# make PG devel available if requested
 	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
