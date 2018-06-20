@@ -23,12 +23,12 @@ update-pgdgbuild:
 	$(JJB) --conf jenkins_jobs.ini update $(JOBS)
 
 # package lists
-lists: packages.backports
-packages.backports: pgapt-jobs.yaml
-	perl -le 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{backports} or $$p->{project}->{"<<"}->{backports} }' > $@
+lists: packages.backports packages.backports_runtime
+packages.%: pgapt-jobs.yaml
+	perl -le 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{$*} or $$p->{project}->{"<<"}->{$*} }' > $@
 
 clean:
-	rm -rf output output.old packages.backports
+	rm -rf output output.old packages.backports*
 
 # install scripts
 SCRIPTS = adt-sbuild adtsummary2junit approx-reset.sh builddebcheck-pgapt debcheck-pgapt dput-pgdg generate-pgdg-source newpid-netns pgdg-autopkgtest postgresql-testsuite sbuild-package sbuild-update.sh

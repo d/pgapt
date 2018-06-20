@@ -17,6 +17,7 @@
     arch-filter: 'true'
     git-branch: master
     backports: ''
+    backports_runtime: ''
 
 - yamltemplates:
     name: yamltemplates
@@ -719,7 +720,7 @@
         triggers:
                 - timed: "H H H * *"
         builders:
-                - shell: 'pgdg-autopkgtest {name}'
+                - shell: '{backports_runtime}pgdg-autopkgtest {name}'
         publishers:
                 - ircbot: *only_configs
 
@@ -728,7 +729,7 @@
         name: '{name}-adt-devel'
         id: 'adt-devel'
         builders:
-                - shell: 'PG_SUPPORTED_VERSIONS=11 pgdg-autopkgtest {name}'
+                - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=11 pgdg-autopkgtest {name}'
 
 # upgrade test template
 
@@ -1248,6 +1249,7 @@
         dist-filter: '(distribution!="trusty")'
         # needs pacemaker backport on jessie
         backports: 'BACKPORTS=yes '
+        backports_runtime: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

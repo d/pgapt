@@ -40,7 +40,7 @@ LISTSDIR="/home/chroot/$distribution-$architecture/var/lib/apt/lists"
 [ -d "$LISTSDIR" ] || error "$LISTSDIR not found"
 HOMEDIR="/home/buildd"
 
-# where to find packages.backports
+# where to find packages.backports_runtime
 PGAPTDIR="$HOMEDIR/workspace/apt.postgresql.org/jenkins"
 test -d $PGAPTDIR && cd $PGAPTDIR
 
@@ -78,8 +78,8 @@ done
 # bpo
 if [ "$HAS_BACKPORTS" ]; then
     echo "### Running debcheck: main, packages needing backports"
-    [ -f packages.backports ] || error "packages.backports not found"
-    pkg=$(fold $(cat packages.backports))
+    [ -f packages.backports_runtime ] || error "packages.backports_runtime not found"
+    pkg=$(fold $(cat packages.backports_runtime))
     ( set -x; $DEBCHECK \
       --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
       --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
@@ -87,7 +87,7 @@ if [ "$HAS_BACKPORTS" ]; then
     echo
 
     # exclude packages from further testing
-    MAINPKG=$(echo "$MAINPKG" | fgrep -v -f packages.backports)
+    MAINPKG=$(echo "$MAINPKG" | fgrep -v -f packages.backports_runtime)
 fi
 
 # beta
