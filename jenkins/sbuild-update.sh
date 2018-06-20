@@ -98,7 +98,7 @@ umask 002
 	    ;;
 	esac
 	if [ "$HAS_BACKPORTS" ]; then
-	  echo "$mirror_backports" > /etc/apt/sources.list.d/backports.list
+	  echo "${mirror_backports:-}" > /etc/apt/sources.list.d/backports.list
 	  if [ -d /var/lib/apt/backports ]; then
 	    rm -f /var/lib/apt/lists/*backports* # clean up if last run failed
 	    cp -al /var/lib/apt/backports/* /var/lib/apt/lists
