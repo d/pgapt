@@ -79,11 +79,18 @@ done
 if [ "$HAS_BACKPORTS" ]; then
     echo "### Running debcheck: main, packages needing backports"
     [ -f packages.backports_runtime ] || error "packages.backports_runtime not found"
-    pkg=$(fold $(cat packages.backports_runtime))
-    ( set -x; $DEBCHECK \
-      --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
-      --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-      --checkonly $pkg ) || EXIT=$?
+    pkg=""
+    for p in $(cat packages.backports_runtime); do # --checkonly wants only packages that exist
+      if grep -q "^Package: $p\$" $DISTSDIR/$DIST/main/binary-${architecture}/Packages; then
+        pkg="${pkg:+$pkg,}$p"
+      fi
+    done
+    if [ "$pkg" ]; then
+      ( set -x; $DEBCHECK \
+        --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
+        --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+        --checkonly $pkg ) || EXIT=$?
+    fi
     echo
 
     # exclude packages from further testing
