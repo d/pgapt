@@ -1913,6 +1913,7 @@
 - project: &aptpkg
         name: bordeaux-threads
         apt-suite: sid
+        dist-filter: '(distribution!="sid") && (distribution!="buster") && (distribution!="bionic")'
         arch-filter: '(architecture!="ppc64el")'
         jobs: [apt-packages]
 - project: { <<: *aptpkg, name: buildapp }
