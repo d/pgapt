@@ -1,10 +1,25 @@
 #!/bin/bash
 
+while getopts "u" opt ; do
+  case $opt in
+    u) UNCHANGED="-u" ;;
+  esac
+done
+# shift away args
+shift $(($OPTIND - 1))
+
 BINDIR=$(dirname $0)
 DISTS=$BINDIR/../dists
+DIST=${1:-sid}
 [ -t 1 ] && TO_TERM="-t"
 
-$BINDIR/diff-dists $TO_TERM -m \
-	<(cat /var/lib/apt/lists/*_debian_dists_{sid,experimental}_main_source_Sources) \
-	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2) |
+if [ "$DIST" = "sid" ]; then
+  set -- /var/lib/apt/lists/*_debian_dists_{sid,experimental}_main_source_Sources
+else
+  set -- /home/chroot/$DIST-amd64/var/lib/apt/lists/*_dists_${DIST}_main_source_Sources
+fi
+
+$BINDIR/diff-dists $TO_TERM -m $UNCHANGED \
+	<(cat $@) \
+	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) |
 grep -v -e '^pgdg-buildenv'

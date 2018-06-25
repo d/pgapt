@@ -1,15 +1,19 @@
 #!/bin/bash
 
+while getopts "u" opt ; do
+  case $opt in
+    u) UNCHANGED="-u" ;;
+  esac
+done
+# shift away args
+shift $(($OPTIND - 1))
+
 BINDIR=$(dirname $0)
 DISTS=$BINDIR/../dists
 DIST=${1:-sid}
 [ -t 1 ] && TO_TERM="-t"
 
-$BINDIR/diff-dists $TO_TERM \
+$BINDIR/diff-dists $TO_TERM $UNCHANGED \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) \
 	<(bzcat $DISTS/$DIST-pgdg/main/source/Sources.bz2) |
-grep -v -e '^bordeaux-threads' \
-	-e '^buildapp' \
-	-e '^cffi' \
-	-e '^cl-' \
-	-e '^pgdg-buildenv'
+grep -v -e '^pgdg-buildenv'
