@@ -181,7 +181,15 @@ case $PACKAGE in
   autopkgtest|dh-exec|libdbd-pg-perl|pkg-perl-tools)
     DOT='~' ;;
 
-  pgloader|bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader and build-deps
+  pgloader)
+    case $distribution in jessie|xenial|trusty)
+      sed -i -e '/html/d' debian/pgloader.docs debian/rules
+      TWEAK="${TWEAK:-} Do not build docs because Sphinx is too old."
+      ;;
+    esac
+    ;;
+
+  bordeaux-threads|buildapp|cffi|cl-*|sbcl) # pgloader build-deps
     DOT='~' ;;
 
   # pgadmin4 build-deps
