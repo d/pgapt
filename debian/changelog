@@ -1,3 +1,9 @@
+pgdg-buildenv (24) sid-pgdg; urgency=medium
+
+  * adt-sbuild: Set LC_ALL=C.UTF-8 in old adt-run interface.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 25 Jun 2018 10:55:19 +0200
+
 pgdg-buildenv (23) sid-pgdg; urgency=medium
 
   * Install pkg-perl-autopkgtest.

@@ -52,7 +52,7 @@ if [ -x /usr/bin/autopkgtest ]; then
 else
   # old adt interface
 set -x
-sudo DEB_PG_SUPPORTED_VERSIONS="$DEB_PG_SUPPORTED_VERSIONS" \
+sudo DEB_PG_SUPPORTED_VERSIONS="$DEB_PG_SUPPORTED_VERSIONS" LC_ALL=C.UTF-8 \
   adt-run --summary $ADT_SUMMARY \
 	$SBUILD_BUILD_DIR/*.deb \
 	--built-tree $SBUILD_PKGBUILD_DIR \
