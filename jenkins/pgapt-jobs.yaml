@@ -1916,7 +1916,7 @@
         dist-filter: '(distribution!="sid") && (distribution!="buster") && (distribution!="bionic")'
         arch-filter: '(architecture!="ppc64el")'
         jobs: [apt-packages]
-- project: { <<: *aptpkg, name: buildapp }
+- project: { <<: *aptpkg, name: buildapp, dist-filter: '(distribution=="bionic")' }
 - project: { <<: *aptpkg, name: cffi }
 - project: { <<: *aptpkg, name: cl-abnf }
 - project: { <<: *aptpkg, name: cl-alexandria }
