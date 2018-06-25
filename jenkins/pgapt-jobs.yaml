@@ -1921,7 +1921,7 @@
 - project: { <<: *aptpkg, name: cl-abnf }
 - project: { <<: *aptpkg, name: cl-alexandria }
 - project: { <<: *aptpkg, name: cl-anaphora }
-- project: { <<: *aptpkg, name: cl-asdf }
+- project: { <<: *aptpkg, name: cl-asdf, dist-filter: '(distribution=="bionic")' }
 - project: { <<: *aptpkg, name: cl-asdf-finalizers }
 - project: { <<: *aptpkg, name: cl-asdf-system-connections }
 - project: { <<: *aptpkg, name: cl-chipz }
