@@ -3,6 +3,8 @@
 # Diff two Sources files, comparing version numbers for each package found in the second file.
 # Usage example: ./diff-dists [-m] <debian-sid-main-Sources> <pgapt-sid-pgdg-testing-main-Sources>
 #   -m don't show packages missing in 2nd file
+#   -t force colored output
+#   -u show unchanged packages
 
 use strict;
 use warnings;
@@ -12,10 +14,12 @@ Getopt::Long::config('bundling');
 
 my $show_missing = 1;
 my $to_term = (-t 1);
+my $unchanged = 0;
 
 GetOptions (
   '-m' => sub { $show_missing = 0 },
   '-t' => \$to_term,
+  '-u' => \$unchanged,
 ) or die;
 
 # enable ansi codes if outputting to a terminal
@@ -57,7 +61,7 @@ foreach my $pkg (sort keys %pkg1) {
 	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	#if (($ver1 eq $ver2) or ($ver1 eq $ver2mangled) or ($ver1mangled eq $ver2)) {
 	if ($ver1mangled eq $ver2mangled) {
-		#print "OK: $pkg $ver1 $ver2\n";
+		print "OK: $pkg $ver1 $ver2\n" if ($unchanged);
 		delete $pkg2{$pkg};
 		next;
 	}

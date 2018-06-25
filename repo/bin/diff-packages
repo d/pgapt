@@ -3,6 +3,8 @@
 # Diff two Packages files, comparing version numbers for each package found in the second file.
 # Usage example: ./diff-packages [-m] <debian-sid-main-Packages> <pgapt-sid-pgdg-testing-main-Packages>
 #   -m don't show packages missing in 2nd file
+#   -t force colored output
+#   -u show unchanged packages
 
 use strict;
 use warnings;
@@ -15,6 +17,7 @@ my $to_term = (-t 1);
 GetOptions (
   '-m' => sub { $show_missing = 0 },
   '-t' => \$to_term,
+  '-u' => \$unchanged,
 ) or die;
 
 # enable ansi codes if outputting to a terminal
@@ -65,7 +68,7 @@ foreach my $pkg (sort keys %pkg1) {
 	my $ver2 = my $ver2mangled = $pkg2{$pkg};
 	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	if (($ver1 eq $ver2) or ($ver1 eq $ver2mangled) or ($ver1mangled eq $ver2)) {
-		#print "OK: $pkg $ver1 $ver2\n";
+		print "OK: $pkg $ver1 $ver2\n" if ($unchanged);
 		delete $pkg2{$pkg};
 		next;
 	}
