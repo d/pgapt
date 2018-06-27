@@ -19,5 +19,6 @@ flask-wtf
 htmlmin
 peewee
 psycopg2
+sshtunnel
 wtf-peewee
 flask-login

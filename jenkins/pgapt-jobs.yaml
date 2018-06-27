@@ -1883,6 +1883,7 @@
 - project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://salsa.debian.org/python-team/modules/htmlmin.git' }
 - project: { <<: *pythonpkg, name: peewee,         git-url: 'https://salsa.debian.org/python-team/modules/peewee.git' }
 - project: { <<: *pythonpkg, name: psycopg2,       git-url: 'https://salsa.debian.org/python-team/modules/psycopg2.git' }
+- project: { <<: *pythonpkg, name: sshtunnel,      git-url: 'https://salsa.debian.org/python-team/modules/sshtunnel.git' }
 - project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://salsa.debian.org/python-team/modules/wtf-peewee.git' }
 
 - project:
