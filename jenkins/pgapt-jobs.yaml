@@ -118,7 +118,6 @@
             values:
                     - sid
                     - stretch
-                    - jessie
                     - xenial
                     - trusty # for travis
 
