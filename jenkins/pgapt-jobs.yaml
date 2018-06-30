@@ -533,7 +533,7 @@
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="11" {backports}sbuild-package'
+                - shell: 'DEB_PG_SUPPORTED_VERSIONS="12" {backports}sbuild-package'
 
 # build binaries for a single distribution
 
@@ -1596,13 +1596,13 @@
                 - git-packages-adt
 
 # the PostgreSQL devel version:
-#- project:
-#        name: postgresql-11
-#        git-url: git://git.postgresql.org/git/postgresql.git
-#        git-branch: origin/master
-#        merge-branch: 11
-#        jobs:
-#                - git-packages-adt-with-git
+- project:
+        name: postgresql-12
+        git-url: https://git.postgresql.org/git/postgresql.git
+        git-branch: origin/master
+        merge-branch: 12
+        jobs:
+                - git-packages-adt-with-git
 
 - project:
         name: postgresql-common
