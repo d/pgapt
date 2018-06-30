@@ -310,7 +310,7 @@
                                         ]
                                     ],
                                     submoduleCfg: [],
-                                    userRemoteConfigs: [[url: 'git://git.postgresql.org/git/postgresql.git']]
+                                    userRemoteConfigs: [[url: 'https://git.postgresql.org/git/postgresql.git']]
                                 ])
                             }}
                         }}
@@ -852,7 +852,7 @@
                 - axis: *slaves_axis
         scm: &scm_pgapt
                 - git:
-                        url: git://git.postgresql.org/git/pgapt.git
+                        url: https://git.postgresql.org/git/pgapt.git
                         branches:
                                 - master
                         wipe-workspace: false
@@ -1094,7 +1094,7 @@
         workspace: '$HOME/gitcache.buexcl/postgresql'
         scm:
                 - git:
-                        url: git://git.postgresql.org/git/postgresql.git
+                        url: https://git.postgresql.org/git/postgresql.git
                         branches:
                                 - master
                         sparse-checkout:
@@ -1300,7 +1300,7 @@
 
 - project:
         name: pg-backup-ctl
-        git-url: git://github.com/credativ/pg_backup_ctl.git
+        git-url: https://github.com/credativ/pg_backup_ctl.git
         jobs:
                 - git-packages
 
@@ -1340,7 +1340,7 @@
 
 - project:
         name: pgdg-buildenv
-        git-url: git://git.postgresql.org/git/pgapt.git
+        git-url: https://git.postgresql.org/git/pgapt.git
         jobs:
                 - git-packages
 
@@ -1364,7 +1364,7 @@
 
 - project:
         name: pgfincore
-        git-url: git://git.postgresql.org/git/pgfincore.git
+        git-url: https://git.postgresql.org/git/pgfincore.git
         jobs:
                 - git-packages-with-next
 
@@ -1706,13 +1706,13 @@
 
 - project:
         name: prefix
-        git-url: git://github.com/dimitri/prefix.git
+        git-url: https://github.com/dimitri/prefix.git
         jobs:
                 - git-packages-with-next
 
 - project:
         name: preprepare
-        git-url: git://github.com/dimitri/preprepare.git
+        git-url: https://github.com/dimitri/preprepare.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
