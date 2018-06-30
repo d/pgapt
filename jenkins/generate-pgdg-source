@@ -139,7 +139,7 @@ esac
 
 # tweaks to get packages in older dists working
 case $PACKAGE in
-  postgresql-11)
+  postgresql-1*)
     case $distribution in
       stretch|xenial|trusty) # replace default clang/llvm with (newer) 3.9
         sed -i -e 's/\(llvm\|clang\)/\1-3.9/g' debian/control

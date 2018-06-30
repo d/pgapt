@@ -288,6 +288,11 @@
         triggers:
                 - pollscm:
                         cron: "H */6 * * *"
+        parameters:
+                - string: *revision_string
+                - string: *git_branch
+                - choice: *buildtype_choice_snapshot
+                - choice: *queue_choice
         dsl: |
                 pipeline {{
                     agent {{ label 'master' }}
