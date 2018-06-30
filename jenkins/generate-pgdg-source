@@ -416,6 +416,7 @@ if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; the
     echo "1.0" > debian/source/format
     NO_ORIGTARGZ="1.0"
     test -d debian/patches && QUILT_PATCHES=debian/patches quilt push -a
+    TWEAK="${TWEAK:-} Use source format 1.0 for git snapshot build."
     ;;
   esac
   SHORT_REVISION=$(echo $GIT_COMMIT | cut -c 1-7)
