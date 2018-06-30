@@ -95,6 +95,10 @@ umask 002
 	      echo "deb ${security:-} $distribution/updates main" > /etc/apt/sources.list.d/security.list
 	      echo "deb-src ${security:-} $distribution/updates main" >> /etc/apt/sources.list.d/security.list
 	    fi
+	    # 2018-06: jessie on ppc64el doesn't have security anymore
+	    if [ "$distribution/$architecture" = "jessie/ppc64el" ]; then
+	      rm -f /etc/apt/sources.list.d/security.list
+	    fi
 	    ;;
 	esac
 	if [ "$HAS_BACKPORTS" ]; then
