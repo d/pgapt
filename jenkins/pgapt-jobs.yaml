@@ -1964,7 +1964,7 @@
 - project: { <<: *aptpkg, name: cl-nibbles }
 - project: { <<: *aptpkg, name: cl-parse-number }
 - project: { <<: *aptpkg, name: cl-plus-ssl }
-- project: { <<: *aptpkg, name: cl-postmodern }
+- project: { <<: *aptpkg, name: cl-postmodern, dist-filter: '(distribution=="bionic")' }
 - project: { <<: *aptpkg, name: cl-puri }
 - project: { <<: *aptpkg, name: cl-py-configparser }
 - project: { <<: *aptpkg, name: cl-qmynd }
