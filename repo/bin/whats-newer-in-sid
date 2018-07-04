@@ -16,10 +16,10 @@ DIST=${1:-sid}
 if [ "$DIST" = "sid" ]; then
   set -- /var/lib/apt/lists/*_debian_dists_{sid,experimental}_main_source_Sources
 else
-  set -- /home/chroot/$DIST-amd64/var/lib/apt/lists/*_dists_${DIST}_main_source_Sources
+  set -- /home/chroot/$DIST-amd64/var/lib/apt/lists/*_dists_${DIST}_{main,universe}_source_Sources
 fi
 
 $BINDIR/diff-dists $TO_TERM -m $UNCHANGED \
-	<(cat $@) \
+	<(cat $@ 2>/dev/null) \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) |
 grep -v -e '^pgdg-buildenv'
