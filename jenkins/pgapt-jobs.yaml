@@ -1367,6 +1367,13 @@
                 - git-packages-with-next
 
 - project:
+        name: pgloader
+        git-url: https://github.com/dimitri/pgloader.git
+        arch-filter: '(architecture!="ppc64el")'
+        jobs:
+                - git-packages
+
+- project:
         name: pglogical
         git-url: https://salsa.debian.org/postgresql/pglogical.git
         jobs:
@@ -1898,82 +1905,4 @@
         jobs:
                 - git-packages
 
-## pgloader and dependencies
-
-- project:
-        name: pgloader
-        git-url: https://github.com/dimitri/pgloader.git
-        #apt-suite: sid
-        arch-filter: '(architecture!="ppc64el")'
-        jobs:
-                - git-packages
-                #- apt-packages
-
-- project: &aptpkg
-        name: bordeaux-threads
-        apt-suite: sid
-        dist-filter: '(distribution!="sid") && (distribution!="buster") && (distribution!="bionic")'
-        arch-filter: '(architecture!="ppc64el")'
-        jobs: [apt-packages]
-- project: { <<: *aptpkg, name: buildapp, dist-filter: '(distribution=="bionic")' }
-- project: { <<: *aptpkg, name: cffi }
-- project: { <<: *aptpkg, name: cl-abnf }
-- project: { <<: *aptpkg, name: cl-alexandria }
-- project: { <<: *aptpkg, name: cl-anaphora }
-- project: { <<: *aptpkg, name: cl-asdf, dist-filter: '(distribution=="bionic")' }
-- project: { <<: *aptpkg, name: cl-asdf-finalizers }
-- project: { <<: *aptpkg, name: cl-asdf-system-connections }
-- project: { <<: *aptpkg, name: cl-chipz }
-- project: { <<: *aptpkg, name: cl-chunga }
-- project: { <<: *aptpkg, name: cl-closure-common }
-- project: { <<: *aptpkg, name: cl-command-line-arguments }
-- project: { <<: *aptpkg, name: cl-containers }
-- project: { <<: *aptpkg, name: cl-csv }
-- project: { <<: *aptpkg, name: cl-curry-compose-reader-macros }
-- project: { <<: *aptpkg, name: cl-cxml }
-- project: { <<: *aptpkg, name: cl-daemon }
-- project: { <<: *aptpkg, name: cl-db3 }
-- project: { <<: *aptpkg, name: cl-drakma }
-- project: { <<: *aptpkg, name: cl-dynamic-classes }
-- project: { <<: *aptpkg, name: cl-esrap }
-- project: { <<: *aptpkg, name: cl-fad }
-- project: { <<: *aptpkg, name: cl-fiveam }
-- project: { <<: *aptpkg, name: cl-garbage-pools }
-- project: { <<: *aptpkg, name: cl-github-v3 }
-- project: { <<: *aptpkg, name: cl-graph }
-- project: { <<: *aptpkg, name: cl-ieee-floats }
-- project: { <<: *aptpkg, name: cl-interpol }
-- project: { <<: *aptpkg, name: cl-ironclad }
-- project: { <<: *aptpkg, name: cl-iterate }
-- project: { <<: *aptpkg, name: cl-ixf }
-- project: { <<: *aptpkg, name: cl-local-time }
-- project: { <<: *aptpkg, name: cl-log }
-- project: { <<: *aptpkg, name: cl-lparallel }
-- project: { <<: *aptpkg, name: cl-markdown }
-- project: { <<: *aptpkg, name: cl-md5 }
-- project: { <<: *aptpkg, name: cl-metabang-bind }
-- project: { <<: *aptpkg, name: cl-metatilities-base }
-- project: { <<: *aptpkg, name: cl-mssql }
-- project: { <<: *aptpkg, name: cl-mustache }
-- project: { <<: *aptpkg, name: cl-nibbles }
-- project: { <<: *aptpkg, name: cl-parse-number }
-- project: { <<: *aptpkg, name: cl-plus-ssl, dist-filter: '(distribution=="bionic")' }
-- project: { <<: *aptpkg, name: cl-postmodern, dist-filter: '(distribution=="bionic")' }
-- project: { <<: *aptpkg, name: cl-puri }
-- project: { <<: *aptpkg, name: cl-py-configparser }
-- project: { <<: *aptpkg, name: cl-qmynd }
-- project: { <<: *aptpkg, name: cl-quri }
-- project: { <<: *aptpkg, name: cl-rfc2388 }
-- project: { <<: *aptpkg, name: cl-salza2 }
-- project: { <<: *aptpkg, name: cl-sqlite }
-- project: { <<: *aptpkg, name: cl-trivial-backtrace }
-- project: { <<: *aptpkg, name: cl-trivial-garbage }
-- project: { <<: *aptpkg, name: cl-trivial-utf-8 }
-- project: { <<: *aptpkg, name: cl-unicode }
-- project: { <<: *aptpkg, name: cl-utilities }
-- project: { <<: *aptpkg, name: cl-uuid }
-- project: { <<: *aptpkg, name: cl-who }
-- project: { <<: *aptpkg, name: cl-yason }
-- project: { <<: *aptpkg, name: cl-zip }
-- project: { <<: *aptpkg, name: cl-zs3 }
 ##
