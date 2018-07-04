@@ -1291,12 +1291,6 @@
                 - git-packages
 
 - project:
-        name: pgbackman
-        git-url: https://github.com/rafaelma/pgbackman.git
-        jobs:
-                - git-packages
-
-- project:
         name: pgbackrest
         git-url: https://salsa.debian.org/postgresql/pgbackrest.git
         jobs:
