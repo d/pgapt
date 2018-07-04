@@ -22,10 +22,6 @@ fold () {
   echo "${r:-}"
 }
 
-skip () {
-  MAINPKG=$(echo "$MAINPKG" | grep -v "$1")
-}
-
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
@@ -60,11 +56,6 @@ esac
 
 # list of all packages
 MAINPKG=$(awk '/^Package:/ { print $2 }' $DISTSDIR/$DIST/main/binary-${architecture}/Packages)
-
-# packages not tested in production
-if [ "$stage" = "production" ]; then
-  skip cl-pgloader
-fi
 
 # run debcheck
 DEBCHECK="dose-debcheck -v -f -e"

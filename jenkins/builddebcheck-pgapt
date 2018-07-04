@@ -87,17 +87,6 @@ if [ "$HAS_BACKPORTS" ]; then
     done
 fi
 
-# exclude pgloader on the older dists in production
-if [ "$stage" = "production" ]; then
-  case $distribution in
-    jessie|wheezy|trusty)
-      echo "Excluding pgloader, its build-deps are in -testing only"
-      grep-dctrl --not -S pgloader $MAINSRC > $MAINSRC.tmp
-      mv $MAINSRC.tmp $MAINSRC
-      ;;
-  esac
-fi
-
 # packages not tested on ppc64el
 if [ $architecture = ppc64el ]; then
   for pkg in buildapp cffi cl-unicode pgloader sbcl plv8; do
