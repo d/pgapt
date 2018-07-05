@@ -51,16 +51,11 @@ done
 
 # include pgdg dists
 case $stage in
-  production)
-    DIST="$distribution-pgdg"
-    PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
-    ;;
-  testing)
-    DIST="$distribution-pgdg-testing"
-    PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
-    ;;
+  production) DIST="$distribution-pgdg" ;;
+  testing)    DIST="$distribution-pgdg-testing" ;;
   *) error "Bad stage $stage" ;;
 esac
+PKG="$PKG $DISTSDIR/$DIST/main/binary-${architecture}/Packages"
 
 # packages not depending on backports
 MAINSRC=$(mktemp ${DIST}_main_source_Sources.XXXXXX)
