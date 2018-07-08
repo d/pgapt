@@ -3,13 +3,14 @@
 # Launch sbuild from jenkins
 # Input:
 #  .dsc source package in current directory
-#  JOB_NAME=$pkg-binaries
+#  JOB_NAME=$pkg-binaries or PACKAGE=pkg
 #  architecture=amd64/i386
 #  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
 #  optionally: DEB_PG_SUPPORTED_VERSIONS (defaults to pgdg)
 #  optionally: ADT=skip
 #  optionally: BACKPORTS=true
 #  optionally: wrap= (disables newpid-netns)
+#  optionally: binnmu_reason=text binnmu_version=version
 # Output:
 #  .changes and .deb in current directory
 #  autopkgtest.xml in current directory
@@ -122,6 +123,7 @@ umask 002
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
+    ${binnmu_reason:+--make-binNMU="$binnmu_reason" --binNMU="$binnmu_version" -m "apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"} \
     ${FINISHED_BUILD_COMMAND:+--finished-build-commands="$FINISHED_BUILD_COMMAND"} \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
