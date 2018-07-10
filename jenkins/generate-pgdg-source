@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # The MIT License
 #
@@ -83,12 +83,13 @@ PREVIOUS_VERSION=$(dpkg-parsechangelog -SVersion)
 BASE_VERSION=$(echo $PREVIOUS_VERSION | sed -e 's/[~.]\(pgdg\|pgapt\).*//')
 
 # tweaks shared by several packages
+TWEAK=()
 if grep -q '^#dbg#' debian/rules debian/control*; then
     case ${distribution:-} in
       jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         # Revert to old-style -dbg packages
         sed -i -e 's/^#dbg#//' debian/rules debian/control*
-        TWEAK="${TWEAK:-} Using old-style -dbg packages in debian/control."
+        TWEAK+=("Using old-style -dbg packages in debian/control.")
         ;;
     esac
 fi
@@ -115,8 +116,10 @@ case $PACKAGE in
     PGVERSION=${PACKAGE#postgresql-}
     if dpkg --compare-versions $PGVERSION lt $PG_MAIN_VERSION; then
       set_package_component "Package: lib" "$PGVERSION\/"
+      TWEAK+=("Moving lib packages to component $PGVERSION.")
     elif dpkg --compare-versions $PGVERSION gt $PG_MAIN_VERSION; then
       set_package_component "" "$PGVERSION\/"
+      TWEAK+=("Moving binary packages to component $PGVERSION.")
     else
       set_package_component "" ""
     fi
@@ -125,13 +128,14 @@ case $PACKAGE in
     # enable cassert on sid
     if [ "$distribution" = "sid" ]; then
       sed -i -e 's/^#CASSERT_FLAGS/CASSERT_FLAGS/' debian/rules
+      TWEAK+=("Enabling cassert.")
     fi
 
     case ${distribution:-} in
       jessie|wheezy|squeeze|zesty|xenial|precise|trusty)
         # Revert to old-style PIE config
         sed -i -e 's/^#PIE# //' debian/rules
-        TWEAK="${TWEAK:-} Using old-style PIE config in debian/rules."
+        TWEAK+=("Using old-style PIE config in debian/rules.")
         ;;
     esac
     ;;
@@ -145,11 +149,11 @@ case $PACKAGE in
         # llvm <= 6.0.1 supports x32 only (missing r328687)
         sed -i -e 's/llvm-.*/llvm-3.9-dev [amd64 i386],/' \
                -e 's/clang-.*/clang-3.9 [amd64 i386],/' debian/control
-        TWEAK="${TWEAK:-} Use clang/llvm 3.9 for jit support."
+        TWEAK+=("Use clang/llvm 3.9 for jit support.")
         ;;
       jessie) # newest llvm/clang is 3.5
         sed -i -e '/llvm\|clang\|bitcode/d' debian/control debian/postgresql-*.install
-        TWEAK="${TWEAK:-} Disable llvm jit support."
+        TWEAK+=("Disable llvm jit support.")
         ;;
     esac
     ;;
@@ -160,20 +164,20 @@ case $PACKAGE in
     case ${distribution:-} in
       wheezy|squeeze|precise)
         sed -i -e '/sepgsql\|selinux/d' debian/control debian/rules debian/postgresql-*.install
-        TWEAK="${TWEAK:-} Disable sepgsql support."
+        TWEAK+=("Disable sepgsql support.")
         ;;
     esac
     case ${distribution:-} in
       wheezy|squeeze|precise|trusty)
         sed -i -e '/systemd/d' debian/control debian/rules # applies to postgresql-9.6+ only
-        TWEAK="${TWEAK:-} Disable systemd support."
+        TWEAK+=("Disable systemd support.")
         ;;
     esac
     ;;
 
   postgresql-common)
     case ${distribution:-} in trusty|wheezy)
-      TWEAK="${TWEAK:-} Remove systemd dependency"
+      TWEAK+=("Remove systemd dependency")
       sed -i -e '/dh-systemd/d' debian/control
       sed -i -e '/^WITH_SYSTEMD/d' debian/rules
       ;;
@@ -186,7 +190,7 @@ case $PACKAGE in
   pgloader)
     case $distribution in jessie|xenial|trusty)
       sed -i -e '/html/d' debian/pgloader.docs debian/rules
-      TWEAK="${TWEAK:-} Do not build docs because Sphinx is too old."
+      TWEAK+=("Do not build docs because Sphinx is too old.")
       ;;
     esac
     ;;
@@ -199,7 +203,7 @@ case $PACKAGE in
     case $distribution in stretch|zesty|xenial)
       sed -i -e '/pytest-pep8/d' debian/control
       sed -i -e 's/#0003-no-pep8/0003-no-pep8/' debian/patches/series
-      TWEAK="${TWEAK:-} Removing python(3)-pytest-pep8 dependency."
+      TWEAK+=("Removing python(3)-pytest-pep8 dependency.")
       ;;
     esac
     DOT='~'
@@ -208,12 +212,12 @@ case $PACKAGE in
   flask-security)
     case $distribution in stretch|zesty|xenial)
       sed -i -e '/python3-pytest-pep8/d' debian/control
-      TWEAK="${TWEAK:-} Removing python3-pytest-pep8 dependency."
+      TWEAK+=("Removing python3-pytest-pep8 dependency.")
       ;;
     esac
     case $distribution in xenial)
       sed -i -e '/python3-pytest-runner/d' debian/control
-      TWEAK="${TWEAK:-} Removing python3-pytest-runner dependency."
+      TWEAK+=("Removing python3-pytest-runner dependency.")
       ;;
     esac
     DOT='~'
@@ -224,7 +228,7 @@ case $PACKAGE in
       xenial)
         echo "override_dh_auto_test:" >> debian/rules
         echo "	-override_dh_auto_test" >> debian/rules
-        TWEAK="${TWEAK:-} Ignore CSRF test failure on xenial."
+        TWEAK+=("Ignore CSRF test failure on xenial.")
         ;;
     esac
     DOT='~'
@@ -238,7 +242,7 @@ case $PACKAGE in
       # remove consul/kubernetes modules at test time
       sed -i -e '/^python3/i rm -fv patroni/dcs/consul.py patroni/dcs/kubernetes.py tests/test_consul.py tests/test_kubernetes.py' debian/tests/test
       sed -i -e '/python3-\(consul\|kubernetes\)/d' debian/control debian/tests/control
-      TWEAK="${TWEAK:-} Removing consul and kubernetes support."
+      TWEAK+=("Removing consul and kubernetes support.")
       ;;
     esac
     ;;
@@ -246,32 +250,10 @@ case $PACKAGE in
   cdiff|behave|python-parse-type) # python backports for patroni on stretch
     DOT='~' ;;
 
-  pgadmin4)
-    case $distribution in zesty) # using webengine dies with Project ERROR: Unknown module(s) in QT: positioning
-      sed -i -e 's/.*libqt5webkit5-dev.*/ libqt5webkit5-dev,/' debian/control
-      TWEAK="${TWEAK:-} Forcing usage of Qtwebkit on zesty."
-      ;;
-    esac
-    ;;
-
-  gdal)
-    DOT='~'
-    case ${distribution:-} in
-      precise) # precise's freexl is too old
-        sed -i -e "s/, libfreexl-dev[^,]*,/,/" debian/control
-        sed -i -e "s/--with-freexl=yes/--with-freexl=no/" debian/rules
-      ;;
-    esac
-    ;;
-
-  geos|docbook-xsl)
-    DOT='~'
-    ;;
-
   pgbouncer)
     case ${distribution:-} in
       wheezy|trusty|xenial)
-        TWEAK="Revert switch to c-ares because it is too old on $distribution"
+        TWEAK+=("Revert switch to c-ares because it is too old on $distribution.")
         sed -i -e '/libc-ares-dev/d' debian/control
         sed -i -e 's/--with-cares=yes/--with-cares=no/' debian/rules
         sed -i -e '/1.7.2-3/,/28 Jun 2017/d' debian/NEWS # remove news item about c-ares switch
@@ -283,26 +265,12 @@ case $PACKAGE in
     case ${distribution:-} in
       squeeze|wheezy|lucid|precise|saucy|trusty) # remove systemd dependency
         sed -i -e '/dh-systemd/d' debian/control debian/control.in
-        ;;
-    esac
-    case ${distribution:-} in
-      squeeze|wheezy|lucid|precise) # manually run libtoolize
-        echo "override_dh_autoreconf:" >> debian/rules
-        echo "	libtoolize" >> debian/rules
-        echo "	dh_autoreconf" >> debian/rules
+        TWEAK+=("Disabling systemd support.")
         ;;
     esac
     ;;
 
   postgis)
-    case ${distribution:-} in
-      wheezy) # we do not want libjson-c-dev from bpo, just wheezy's libjson0-dev
-        sed -i -e 's/libjson-c-dev | //' debian/control debian/control.in
-        # disable PIE for wheezy (amd64 needs it, do it for the other archs as well)
-        sed -i -e 's/DEB_BUILD_MAINT_OPTIONS.*/DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie/' debian/rules
-        TWEAK="${TWEAK:-} Disable PIE."
-        ;;
-    esac
     case ${distribution:-} in
       # There's no have libsfcgal-dev before stretch or wily. However,
       # there's a backport to jessie. Pgapt provides libsfcgal for
@@ -310,27 +278,27 @@ case $PACKAGE in
       wheezy|squeeze|wily|trusty|precise)
         sed -i -e '/libsfcgal-dev/d' debian/control debian/control.in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
-        TWEAK="${TWEAK:-} Disable sfcgal."
+        TWEAK+=("Disable sfcgal.")
         ;;
       # March 2018: sfcgal is disabled in unstable, reenable it on dists where
       # it still works (#876521)
       jessie|stretch|xenial)
         sed -i -e '/sfcgal/Is/^#//' debian/liblwgeom-2.4-0.symbols debian/control debian/control.in
         sed -i -e 's/postgis_tiger_geocoder/postgis_sfcgal postgis_tiger_geocoder/' debian/tests/test-extension-creation
-        TWEAK="${TWEAK:-} Enable sfcgal."
+        TWEAK+=("Enable sfcgal.")
         ;;
     esac
     case ${distribution:-} in
       # disable protobuf support
       wheezy|trusty)
         sed -i -e '/protobuf/d' debian/control debian/control.in
-        TWEAK="${TWEAK:-} Disable protobuf support."
+        TWEAK+=("Disable protobuf support.")
         ;;
     esac
     case ${distribution:-} in stretch|jessie)
       # June 2018: Revert fix for #901158 on older dists
       sed -i -e '/rt_gdalwarp.patch/d' debian/patches/series
-      TWEAK="${TWEAK:-} Revert 'Add patch to fix expected test output with GDAL 2.3.0 & PROJ 5.1.0'."
+      TWEAK+=("Revert 'Add patch to fix expected test output with GDAL 2.3.0 & PROJ 5.1.0'.")
       ;;
     esac
     ;;
@@ -339,7 +307,7 @@ case $PACKAGE in
     case ${distribution:-} in
       jessie|stretch|trusty|xenial|zesty) # have older sqlalchemy
         sed -i -e 's/^655e4fb2b854cc004bf93db7a73a825dd49e35b5/#655e4fb2b854cc004bf93db7a73a825dd49e35b5/' debian/patches/series
-        TWEAK="${TWEAK:-} Using old sqlalchemy array api."
+        TWEAK+=("Using old sqlalchemy array api.")
         ;;
     esac
     ;;
@@ -348,40 +316,7 @@ case $PACKAGE in
     case ${distribution:-} in
       wheezy|precise|saucy|trusty) # odbc-postgresql conflicts with libiodbc2, skip iodbc test here
         sed -i -e 's/, iodbc//' debian/tests/control*
-        ;;
-    esac
-    ;;
-
-  skytools3)
-    case ${distribution:-} in
-      squeeze|wheezy|lucid|precise)
-        # remove dh_python2 dependency
-        sed -i -e 's/ dh-python,//' debian/control debian/control.in
-        # switch to standard sequencer
-        sed -i -e 's/ --with python2//' debian/rules
-        ;;
-    esac
-    ;;
-
-  barman)
-    case ${distribution:-} in
-      wheezy|precise)
-        # remove dh_python2 dependency, the python2 sequencer is
-        # provided by python package
-        sed -i -e 's/, dh-python//' debian/control
-	# Remove bash-completion helper that is not available here
-	sed -i -e 's/, \?bash-completion//' debian/control debian/rules
-	TWEAK="${TWEAK:-} Remove bash-completion support."
-        ;;
-    esac
-    ;;
-
-  barman-cli)
-    case ${distribution:-} in
-      wheezy|precise)
-        # remove dh_python2 dependency, the python2 sequencer is
-        # provided by python package
-        sed -i -e 's/, dh-python//' debian/control
+        TWEAK+=("Skip iodbc test.")
         ;;
     esac
     ;;
@@ -389,7 +324,7 @@ case $PACKAGE in
   pgdg-buildenv)
     case ${distribution:-} in
       wheezy|trusty) sed -i -e '/autodep8/d' debian/control
-        TWEAK="${TWEAK:-} Dropping autodep8 dependency."
+        TWEAK+=("Dropping autodep8 dependency.")
         ;;
     esac
     ;;
@@ -418,7 +353,7 @@ if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; the
     echo "1.0" > debian/source/format
     NO_ORIGTARGZ="1.0"
     test -d debian/patches && QUILT_PATCHES=debian/patches quilt push -a
-    TWEAK="${TWEAK:-} Use source format 1.0 for git snapshot build."
+    TWEAK+=("Use source format 1.0 for git snapshot build.")
     ;;
   esac
   SHORT_REVISION=$(echo $GIT_COMMIT | cut -c 1-7)
@@ -438,7 +373,9 @@ $PACKAGE ($VERSION_STRING) $distribution-pgdg; urgency=medium
 EOT
 if [ "${TWEAK:-}" ]; then
   echo "  * Changes applied by generate-pgdg-source:" >> debian/changelog.tmp
-  echo "    $TWEAK" >> debian/changelog.tmp
+  for tweak in "${TWEAK[@]}"; do
+    echo "    + $tweak" >> debian/changelog.tmp
+  done
 else
   echo "  * No source changes." >> debian/changelog.tmp
 fi
