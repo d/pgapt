@@ -69,13 +69,7 @@ done
 # bpo
 if [ "$HAS_BACKPORTS" ]; then
     echo "### Running debcheck: main, packages needing backports"
-    [ -f packages.backports_runtime ] || error "packages.backports_runtime not found"
-    pkg=""
-    for p in $(cat packages.backports_runtime); do # --checkonly wants only packages that exist
-      if grep -q "^Package: $p\$" $DISTSDIR/$DIST/main/binary-${architecture}/Packages; then
-        pkg="${pkg:+$pkg,}$p"
-      fi
-    done
+    pkg=$(fold $(echo "$MAINPKG" | grep -e 'resource-agents-paf' -e 'postgresql-.*-pllua'))
     if [ "$pkg" ]; then
       ( set -x; $DEBCHECK \
         --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
@@ -85,7 +79,7 @@ if [ "$HAS_BACKPORTS" ]; then
     echo
 
     # exclude packages from further testing
-    MAINPKG=$(echo "$MAINPKG" | fgrep -v -f packages.backports_runtime)
+    MAINPKG=$(echo "$MAINPKG" | grep -v -e 'resource-agents-paf' -e 'postgresql-.*-pllua')
 fi
 
 # beta
