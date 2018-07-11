@@ -66,22 +66,6 @@ for FILE in $LISTSDIR/*_dists_${distribution}{,-updates}_*_binary-${architecture
   DEBCHECK="$DEBCHECK --bg $FILE"
 done
 
-# bpo
-if [ "$HAS_BACKPORTS" ]; then
-    echo "### Running debcheck: main, packages needing backports"
-    pkg=$(fold $(echo "$MAINPKG" | grep -e 'resource-agents-paf' -e 'postgresql-.*-pllua'))
-    if [ "$pkg" ]; then
-      ( set -x; $DEBCHECK \
-        --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
-        --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
-        --checkonly $pkg ) || EXIT=$?
-    fi
-    echo
-
-    # exclude packages from further testing
-    MAINPKG=$(echo "$MAINPKG" | grep -v -e 'resource-agents-paf' -e 'postgresql-.*-pllua')
-fi
-
 # beta
 betapkg=$(fold $(echo "$MAINPKG" | fgrep "${PG_BETA_VERSION:-}"))
 if [ "${PG_BETA_VERSION:-}" ] && [ "$betapkg" ]; then
@@ -119,6 +103,22 @@ if [ "${PG_DEVEL_VERSION:-}" ] && [ "$develpkg" ]; then
 
   # exclude packages from further testing
   MAINPKG=$(echo "$MAINPKG" | fgrep -v "$PG_DEVEL_VERSION")
+fi
+
+# bpo
+if [ "$HAS_BACKPORTS" ]; then
+    echo "### Running debcheck: main, packages needing backports"
+    pkg=$(fold $(echo "$MAINPKG" | grep -e 'resource-agents-paf' -e 'postgresql-.*-pllua'))
+    if [ "$pkg" ]; then
+      ( set -x; $DEBCHECK \
+        --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
+        --fg $DISTSDIR/$DIST/main/binary-${architecture}/Packages \
+        --checkonly $pkg ) || EXIT=$?
+    fi
+    echo
+
+    # exclude packages from further testing
+    MAINPKG=$(echo "$MAINPKG" | grep -v -e 'resource-agents-paf' -e 'postgresql-.*-pllua')
 fi
 
 # main
