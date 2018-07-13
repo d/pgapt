@@ -1118,6 +1118,7 @@
 - job:
         name: ping-ppc64el
         description: Check if the ppc64el build host is up
+        node: master
         triggers:
                 - timed: "H */4 * * *"
         builders:
@@ -1126,6 +1127,7 @@
 - job:
         name: scm-sync-status
         description: Reports SCM Sync errors
+        node: master
         triggers:
                 - timed: "H */4 * * *"
         builders:
