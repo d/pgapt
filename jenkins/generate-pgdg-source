@@ -280,13 +280,6 @@ case $PACKAGE in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
         TWEAK+=("Disable sfcgal.")
         ;;
-      # March 2018: sfcgal is disabled in unstable, reenable it on dists where
-      # it still works (#876521)
-      jessie|stretch|xenial)
-        sed -i -e '/sfcgal/Is/^#//' debian/liblwgeom-2.4-0.symbols debian/control debian/control.in
-        sed -i -e 's/postgis_tiger_geocoder/postgis_sfcgal postgis_tiger_geocoder/' debian/tests/test-extension-creation
-        TWEAK+=("Enable sfcgal.")
-        ;;
     esac
     case ${distribution:-} in
       # disable protobuf support
