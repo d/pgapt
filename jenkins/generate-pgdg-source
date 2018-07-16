@@ -307,6 +307,10 @@ case $PACKAGE in
     DOT='~'
     ;;
 
+  sfcgal)
+    DOT='~'
+    ;;
+
   postgresql-multicorn)
     case ${distribution:-} in
       jessie|stretch|trusty|xenial|zesty) # have older sqlalchemy

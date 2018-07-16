@@ -1534,6 +1534,12 @@
         jobs: [apt-packages]
 
 - project:
+        name: sfcgal
+        apt-suite: 'sid'
+        dist-filter: '(distribution=="bionic")'
+        jobs: [apt-packages]
+
+- project:
         name: postgis-java
         git-url: https://salsa.debian.org/debian-gis-team/postgis-java.git
         # needs default-jdk-headless (not available on jessie and trusty)
