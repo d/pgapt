@@ -290,7 +290,7 @@ case $PACKAGE in
         TWEAK+=("Disable protobuf support.")
         ;;
     esac
-    case ${distribution:-} in stretch|jessie)
+    case ${distribution:-} in stretch|jessie|bionic|xenial|trusty)
       # June 2018: Revert fix for #901158 on older dists
       sed -i -e '/rt_gdalwarp.patch/d' debian/patches/series
       TWEAK+=("Revert 'Add patch to fix expected test output with GDAL 2.3.0 & PROJ 5.1.0'.")
