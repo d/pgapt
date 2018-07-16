@@ -1527,6 +1527,12 @@
                 - git-packages-with-next
 
 - project:
+        name: geos
+        apt-suite: 'xenial'
+        dist-filter: '(distribution=="trusty")'
+        jobs: [apt-packages]
+
+- project:
         name: postgis-java
         git-url: https://salsa.debian.org/debian-gis-team/postgis-java.git
         # needs default-jdk-headless (not available on jessie and trusty)

@@ -297,6 +297,8 @@ case $PACKAGE in
     esac
     ;;
 
+  geos) DOT='~' ;;
+
   postgresql-multicorn)
     case ${distribution:-} in
       jessie|stretch|trusty|xenial|zesty) # have older sqlalchemy
