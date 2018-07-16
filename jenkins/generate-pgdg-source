@@ -297,7 +297,11 @@ case $PACKAGE in
     esac
     ;;
 
-  geos) DOT='~' ;;
+  geos)
+    sed -i -e '/ruby2/d' debian/patches/series
+    TWEAK+=("Remove ruby2 support patch.")
+    DOT='~'
+    ;;
 
   postgresql-multicorn)
     case ${distribution:-} in
