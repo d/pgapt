@@ -279,6 +279,7 @@ case $PACKAGE in
       wheezy|squeeze|bionic|wily|trusty|precise)
         sed -i -e '/libsfcgal-dev/d' debian/control debian/control.in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
+        sed -i -e 's/postgis_sfcgal//' debian/tests/test-extension-creation
         TWEAK+=("Disable sfcgal.")
         ;;
     esac
