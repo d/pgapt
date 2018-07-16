@@ -298,8 +298,11 @@ case $PACKAGE in
     ;;
 
   geos)
-    sed -i -e '/ruby2/d' debian/patches/series
-    TWEAK+=("Remove ruby2 support patch.")
+    case ${distribution:-} in trusty)
+      sed -i -e '/ruby2/d' debian/patches/series
+      TWEAK+=("Remove ruby2 support patch.")
+      ;;
+    esac
     DOT='~'
     ;;
 

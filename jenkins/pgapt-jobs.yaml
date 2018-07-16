@@ -1523,6 +1523,7 @@
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
+        dist-filter: '(distribution!="jessie") && (distribution=="trusty")'
         jobs:
                 - git-packages-with-next
 
