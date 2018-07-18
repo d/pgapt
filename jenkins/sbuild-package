@@ -6,6 +6,7 @@
 #  JOB_NAME=$pkg-binaries or PACKAGE=pkg
 #  architecture=amd64/i386
 #  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
+#  optionally: DEB_BUILD_OPTIONS
 #  optionally: DEB_PG_SUPPORTED_VERSIONS (defaults to pgdg)
 #  optionally: ADT=skip
 #  optionally: BACKPORTS=true
@@ -84,7 +85,7 @@ if [ "$HAS_BACKPORTS" ] && [ "${BACKPORTS:-}" ] && [ "$BACKPORTS" != "false" ]; 
 fi
 
 # disable parallel builds
-export DEB_BUILD_OPTIONS="parallel=1"
+export DEB_BUILD_OPTIONS="parallel=1${DEB_BUILD_OPTIONS:+ $DEB_BUILD_OPTIONS}"
 
 # set DEB_PG_SUPPORTED_VERSIONS
 : ${DEB_PG_SUPPORTED_VERSIONS:=pgdg}
