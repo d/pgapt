@@ -1301,6 +1301,10 @@
 - project:
         name: pgagent
         git-url: https://salsa.debian.org/postgresql/pgagent.git
+        # trusty doesn't have cmake 3.3
+        dist-filter: '(distribution!="trusty")'
+        # needs cmake backport on jessie
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

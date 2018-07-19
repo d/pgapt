@@ -2,6 +2,7 @@ libpgjava
 libscram-java
 ora2pg
 resource-agents-paf
+pgagent
 pgbouncer
 pg-cloudconfig
 pgrouting
