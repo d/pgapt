@@ -477,6 +477,13 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        parameters:
+                - string:
+                        name: binnmu_reason
+                        description: 'binNMU changelog text'
+                - string:
+                        name: binnmu_version
+                        description: 'binNMU version (single integer)'
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
