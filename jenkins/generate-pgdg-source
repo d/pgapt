@@ -145,7 +145,13 @@ esac
 case $PACKAGE in
   postgresql-1[12])
     case $distribution in
-      stretch|trusty) # replace clang/llvm-6.0 with 3.9
+      stretch) # replace clang/llvm-6.0 with 4.0
+        # llvm <= 6.0.1 supports x32 only (missing r328687)
+        sed -i -e 's/llvm-.*/llvm-4.0-dev [amd64 i386],/' \
+               -e 's/clang-.*/clang-4.0 [amd64 i386],/' debian/control
+        TWEAK+=("Use clang/llvm 4.0 for jit support.")
+        ;;
+      trusty) # replace clang/llvm-6.0 with 3.9
         # llvm <= 6.0.1 supports x32 only (missing r328687)
         sed -i -e 's/llvm-.*/llvm-3.9-dev [amd64 i386],/' \
                -e 's/clang-.*/clang-3.9 [amd64 i386],/' debian/control
