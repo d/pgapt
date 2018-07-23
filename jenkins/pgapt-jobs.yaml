@@ -1746,6 +1746,8 @@
 - project:
         name: postgresql-q3c
         git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git/
+        # tests fail on trusty/i386
+        arch-filter: '((distribution!="trusty) || (architecture!="i386"))'
         jobs:
                 - git-packages
 
