@@ -1142,7 +1142,7 @@
         workspace: '$JENKINS_HOME'
         builders:
                 - shell: |
-                    ls -l scm-sync-configuration*
+                    ls -l scm-sync-configuration.*
                     if test -f scm-sync-configuration.fail.log; then
                       cat scm-sync-configuration.fail.log
                       test scm-sync-configuration.success.log -nt scm-sync-configuration.fail.log
