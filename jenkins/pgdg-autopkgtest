@@ -56,7 +56,7 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	# python3-multicorn: conflicts with python-multicorn
 	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
 	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
-	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[123]|postgresql-9..-ogr-fdw-dbgsym|postgresql-9.6-repmgr-dbg|python3-multicorn' |
+	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[1234]|postgresql-9..-ogr-fdw-dbgsym|postgresql-9.6-repmgr-dbg|python3-multicorn' |
 	  fgrep \$FILTER | sort -u)
 	
 	# skip PG devel tests if packages have not been built yet
