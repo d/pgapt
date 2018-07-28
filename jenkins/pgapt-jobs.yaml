@@ -1474,6 +1474,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-qualstats
+        git-url: https://github.com/powa-team/pg_qualstats.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
         # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
@@ -1484,9 +1490,15 @@
 
 - project:
         name: pgsphere
-        git-url: https://salsa.debian.org/postgresql/pgsphere.git/
+        git-url: https://salsa.debian.org/postgresql/pgsphere.git
         jobs:
                 - git-packages
+
+- project:
+        name: pg-stat-kcache
+        git-url: https://github.com/powa-team/pg_stat_kcache.git
+        jobs:
+                - git-packages-with-next
 
 - project:
         name: pgsql-asn1oid
@@ -1745,7 +1757,7 @@
 
 - project:
         name: postgresql-q3c
-        git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git/
+        git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git
         # tests fail on trusty/i386
         arch-filter: '((distribution!="trusty") || (architecture!="i386"))'
         jobs:
@@ -1753,7 +1765,7 @@
 
 - project:
         name: postgresql-rum
-        git-url: https://salsa.debian.org/postgresql/postgresql-rum.git/
+        git-url: https://salsa.debian.org/postgresql/postgresql-rum.git
         git-branch: debian
         jobs:
                 - git-packages-with-next
