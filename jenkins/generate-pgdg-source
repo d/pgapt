@@ -405,7 +405,7 @@ sed -ne '1,/^ --/p' debian/changelog
 rm -f ../*.*
 
 # get orig tarball and unpack it in case it's a debian/ only checkout
-[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path ../result --path=$HOME/tarballs --unpack
+[ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path ../result --path=$HOME/tarballs
 
 if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
