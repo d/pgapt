@@ -67,6 +67,9 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	
 	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
 	  BINARIES="\${BINARIES:-} postgresql-\$PG_SUPPORTED_VERSIONS postgresql-server-dev-\$PG_SUPPORTED_VERSIONS"
+	  case $PACKAGE in
+	    mimeo|pg-partman) BINARIES="\$BINARIES postgresql-$PG_SUPPORTED_VERSIONS-pgtap" ;;
+	  esac
 	fi
 	
 	if [ "\$BINARIES" ]; then
