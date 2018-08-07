@@ -118,6 +118,7 @@
             values:
                     - sid
                     - stretch
+                    - bionic
                     - xenial
                     - trusty # for travis
 
