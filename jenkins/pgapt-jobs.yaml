@@ -355,6 +355,12 @@
                 - string: &package_parameter
                         name: PACKAGE
                         description: 'Package to build (without -source suffix)'
+                - string:
+                        name: binnmu_reason
+                        description: 'binNMU changelog text'
+                - string:
+                        name: binnmu_version
+                        description: 'binNMU version (single integer)'
                 - choice: *queue_choice
         concurrent: true
         dsl: |
@@ -366,8 +372,8 @@
                                 addShortText("${params.PACKAGE}-binaries-beta (${params.queue})")
                                 build(job: "${params.PACKAGE}-binaries-beta"
                                     parameters: [
-                                        string(name: 'binnmu_reason', value: "", description: 'binNMU changelog text'),
-                                        string(name: 'binnmu_version', value: "", description: 'binNMU version (single integer)'),
+                                        string(name: 'binnmu_reason', value: ""),
+                                        string(name: 'binnmu_version', value: ""),
                                     ]
                                 )
                                 build(job: 'dput',
