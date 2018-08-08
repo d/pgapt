@@ -372,8 +372,8 @@
                                 addShortText("${params.PACKAGE}-binaries-beta (${params.queue})")
                                 build(job: "${params.PACKAGE}-binaries-beta",
                                     parameters: [
-                                        string(name: 'binnmu_reason', value: ""),
-                                        string(name: 'binnmu_version', value: ""),
+                                        string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
+                                        string(name: 'binnmu_version', value: "${params.binnmu_version}"),
                                     ]
                                 )
                                 build(job: 'dput',
