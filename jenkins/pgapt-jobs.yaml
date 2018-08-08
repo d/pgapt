@@ -370,7 +370,7 @@
                         stage('binaries-beta') {
                             steps {
                                 addShortText("${params.PACKAGE}-binaries-beta (${params.queue})")
-                                build(job: "${params.PACKAGE}-binaries-beta"
+                                build(job: "${params.PACKAGE}-binaries-beta",
                                     parameters: [
                                         string(name: 'binnmu_reason', value: ""),
                                         string(name: 'binnmu_version', value: ""),
