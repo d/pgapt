@@ -57,6 +57,12 @@ esac
 # list of all packages
 MAINPKG=$(awk '/^Package:/ { print $2 }' $DISTSDIR/$DIST/main/binary-${architecture}/Packages)
 
+# postgresql-11-pllua needs both beta and backports on jessie, exclude for now
+if [ "$distribution" = "jessie" ] && [ "${PG_BETA_VERSION:-}" ]; then
+  echo "Skipping test of postgresql-${PG_BETA_VERSION:-}-pllua"
+  MAINPKG=$(echo "$MAINPKG" | grep -v "postgresql-${PG_BETA_VERSION:-}-pllua")
+fi
+
 # run debcheck
 DEBCHECK="dose-debcheck -v -f -e"
 
