@@ -1496,8 +1496,9 @@
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
         # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
-        dist-filter: '(distribution!="trusty")'
-        backports: 'BACKPORTS=yes '
+        # exclude jessie because postgis excludes it
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        #backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 

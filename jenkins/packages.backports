@@ -5,7 +5,6 @@ resource-agents-paf
 pgagent
 pgbouncer
 pg-cloudconfig
-pgrouting
 pgsql-ogr-fdw
 pgtop
 postgresql-pllua
