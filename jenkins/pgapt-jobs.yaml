@@ -1498,7 +1498,7 @@
         # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
         # exclude jessie because postgis excludes it
         dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
-        #backports: 'BACKPORTS=yes '
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 
