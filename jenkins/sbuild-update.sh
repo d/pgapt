@@ -127,7 +127,7 @@ umask 002
 	#case $distribution in
 	#  squeeze) \$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
 	#esac
-	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv
+	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv pgdg-keyring
 	eatmydata apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
 	eatmydata apt-get -y autoremove --purge
 	apt-get clean
