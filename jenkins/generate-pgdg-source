@@ -395,8 +395,8 @@ EOT
 mv debian/changelog.tmp debian/changelog
 sed -ne '1,/^ --/p' debian/changelog
 
-# remove artifacts from last build
-rm -f ../*.*
+# remove artifacts from last build (-r because sometimes uscan leaves temp directories behind)
+rm -rf ../*.*
 
 # get orig tarball and unpack it in case it's a debian/ only checkout
 [ "${NO_ORIGTARGZ:-}" ] || origtargz --tar-only --path ../result --path=$HOME/tarballs
