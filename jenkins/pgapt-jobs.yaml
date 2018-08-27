@@ -1840,6 +1840,9 @@
 - project:
         name: slony1-2
         git-url: https://salsa.debian.org/postgresql/slony1-2.git
+        # needs debhelper 9.20160114 (in jessie-backports)
+        dist-filter: '(distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 

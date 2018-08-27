@@ -10,6 +10,7 @@ pgsql-ogr-fdw
 pgtop
 postgresql-pllua
 prometheus-sql-exporter
+slony1-2
 flask-mail
 flask-babelex
 flask-gravatar
