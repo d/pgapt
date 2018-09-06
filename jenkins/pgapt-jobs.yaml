@@ -1982,12 +1982,16 @@
 - project: { <<: *pythonpkg, name: sshtunnel,      git-url: 'https://salsa.debian.org/python-team/modules/sshtunnel.git' }
 - project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://salsa.debian.org/python-team/modules/wtf-peewee.git' }
 
-- project:
+- project: &pythonbackport
         name: flask-login
         apt-suite: 'bionic'
         dist-filter: '(distribution=="xenial")'
         backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
         jobs: [apt-packages]
+
+- project:
+        <<: *pythonbackport
+        name: sqlparse
 
 - project:
         name: pgadmin4
