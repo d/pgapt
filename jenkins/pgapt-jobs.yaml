@@ -1426,6 +1426,15 @@
                 - git-packages-with-next
 
 - project:
+        name: pgformatter
+        git-url: https://salsa.debian.org/postgresql/pgformatter.git
+        # needs debhelper 10
+        dist-filter: '(distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
+        jobs:
+                - git-packages
+
+- project:
         name: pgloader
         git-url: https://github.com/dimitri/pgloader.git
         arch-filter: '(architecture!="ppc64el")'

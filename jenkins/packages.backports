@@ -6,6 +6,7 @@ pgagent
 pgbadger
 pgbouncer
 pg-cloudconfig
+pgformatter
 pgrouting
 pgsql-ogr-fdw
 pgtop
