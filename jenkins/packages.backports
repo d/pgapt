@@ -3,7 +3,6 @@ libscram-java
 ora2pg
 resource-agents-paf
 pgagent
-pgbadger
 pgbouncer
 pg-cloudconfig
 pgformatter
