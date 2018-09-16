@@ -45,7 +45,7 @@
   - name: apt-get update
     apt:
       update_cache: yes
-    when: pgdg_src|changed
+    when: pgdg_src is changed
 
   - name: Deploy scripts
     copy:
@@ -67,15 +67,16 @@
       user: buildd
       key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEbRuNmXd2MhrSN7RTINoj1kYZQ8iRKvhvGCE8jqgMj1UpKL8XGIiD3ouGqIYt1eDaDvMoSGEwYVYZHbkRz7U9Kpb2n7fenOhRTT9jkE4p4eYnYbhV81ZB487IiKBAkIyGk9+J6XbQO4dnLY+XDufGIKXkPwdYkw2otvxfSI+TjJQ7tRw4BHn9+UsPPKRYSO/i7d/jgZcthVWsRPdDk54dRI2uDClXob7rJjazCWPVBH8VDXbbM2q5xIgVAG812GXAXXksAljdQU05lwOgVo5foPVeV0SKnrVIugf4xmJXkNNtU1l62g5Whkqu9KMk1uzPpopSwyaGk7I0WftPU57J jenkins@pgdgbuild.dus.dg-i.net'
 
-  - name: create {{chroot_dir}}
+  - name: create chroot directory
     file:
       name: '{{chroot_dir}}'
       state: directory
 
-  - name: symlink {{chroot_dir}}
+  - name: symlink chroot directory from /home/chroot
     file:
       name: /home/chroot
       src: '{{chroot_dir}}'
+      state: link
     when: 'chroot_dir != "/home/chroot"'
 
   # FIXME: needs pgapt.conf
@@ -130,7 +131,7 @@
     command: mount -oremount /run
     args:
       warn: off # no we don't want to use the mount module
-    when: fstab|changed
+    when: fstab is changed
 
   - name: /etc/rc.local
     copy:
@@ -155,7 +156,7 @@
     service:
       name: ferm
       state: reloaded
-    when: fermconf|changed
+    when: fermconf is changed
 
   - name: git user name
     git_config:
