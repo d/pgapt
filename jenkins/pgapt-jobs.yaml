@@ -1753,6 +1753,10 @@
 - project:
         name: postgresql-pljava
         git-url: https://salsa.debian.org/postgresql/postgresql-pljava.git
+        # jessie: needs openjdk-8-jdk-headless
+        dist-filter: '(distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
+        backports_runtime: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 

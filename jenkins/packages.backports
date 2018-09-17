@@ -9,6 +9,7 @@ pgformatter
 pgrouting
 pgsql-ogr-fdw
 pgtop
+postgresql-pljava
 postgresql-pllua
 prometheus-sql-exporter
 slony1-2
