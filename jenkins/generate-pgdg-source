@@ -145,7 +145,7 @@ esac
 case $PACKAGE in
   postgresql-1[12]) # use llvm >= 5 (older versions choke on C++ exceptions, breaks PostGIS)
     case $distribution in
-      stretch|bionic|xenial) # replace clang/llvm-7 with 6.0
+      buster|stretch|bionic|xenial) # replace clang/llvm-7 with 6.0
         # llvm <= 6.0.1 supports x32 only (missing r328687)
         sed -i -e 's/llvm-.*/llvm-6.0-dev [amd64 i386],/' \
                -e 's/clang-.*/clang-6.0 [amd64 i386],/' debian/control
