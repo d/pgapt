@@ -1206,6 +1206,12 @@
                 - git-packages-with-next
 
 - project:
+        name: check-pgactivity
+        git-url: https://salsa.debian.org/Krysztophe-guest/check_pgactivity.git
+        jobs:
+                - git-packages
+
+- project:
         name: check-postgres
         git-url: https://salsa.debian.org/postgresql/check-postgres.git
         jobs:
@@ -1514,6 +1520,12 @@
 - project:
         name: pgsphere
         git-url: https://salsa.debian.org/postgresql/pgsphere.git
+        jobs:
+                - git-packages
+
+- project:
+        name: pgstat
+        git-url: https://salsa.debian.org/Krysztophe-guest/pgstat.git
         jobs:
                 - git-packages
 
