@@ -1297,7 +1297,6 @@
 - project:
         name: ora2pg
         git-url: https://salsa.debian.org/postgresql/ora2pg.git
-        git-branch: debian/unstable
         # needs dh 10
         dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
