@@ -238,6 +238,14 @@ case $PACKAGE in
   flask*|*peewee*|sshtunnel)
     DOT='~' ;;
 
+  pgadmin4)
+    case $distribution in stretch|xenial)
+      sed -i -e '/fonts-/d' debian/control
+      TWEAK+=("Not symlinking font files.")
+      ;;
+    esac
+    ;;
+
   patroni)
     case $distribution in stretch|xenial)
       # remove consul/kubernetes modules at test time
