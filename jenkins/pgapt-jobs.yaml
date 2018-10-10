@@ -1573,6 +1573,9 @@
 - project:
         name: pgxnclient
         git-url: https://salsa.debian.org/postgresql/pgxnclient.git
+        # needs DH 11
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial") && (distribution!="trusty")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

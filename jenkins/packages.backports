@@ -11,6 +11,7 @@ pgrouting
 pgstat
 pgsql-ogr-fdw
 pgtop
+pgxnclient
 postgresql-pllua
 prometheus-sql-exporter
 slony1-2
