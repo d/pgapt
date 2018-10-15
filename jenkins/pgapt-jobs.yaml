@@ -15,8 +15,8 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter '(distribution!="cosmic" || architecture!="i386" || architecture!="ppc64el")'
-    filter_pattern: &filter_pattern '{arch-filter} && {dist-filter} && (distribution!="cosmic" || architecture!="i386" || architecture!="ppc64el")'
+    filter: &filter '!(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '{arch-filter} && {dist-filter} && !(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
     git-branch: master
     backports: ''
     backports_runtime: ''
