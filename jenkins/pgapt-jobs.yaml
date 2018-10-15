@@ -15,6 +15,7 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
+    filter: &filter '(distribution!="cosmic" || architecture!="i386" || architecture!="ppc64el")'
     filter_pattern: &filter_pattern '{arch-filter} && {dist-filter} && (distribution!="cosmic" || architecture!="i386" || architecture!="ppc64el")'
     git-branch: master
     backports: ''
@@ -587,6 +588,7 @@
                 - choice: *queue_choice
                 - choice: *upload_choice
         execution-strategy:
+                combination-filter: *filter
                 touchstone:
                         expr: 'architecture=="amd64"'
         axes:
@@ -629,7 +631,7 @@
         id: 'build-binaries-from-apt'
         concurrent: true
         execution-strategy:
-                combination-filter: ''
+                combination-filter: *filter
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         parameters:
@@ -928,6 +930,8 @@
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
         child-workspace: .
+        execution-strategy:
+                combination-filter: *filter
         axes:
                 - axis: *dist_axis
                 - axis: *arch_axis
@@ -985,6 +989,7 @@
         child-workspace: .
         execution-strategy:
                 sequential: true
+                combination-filter: *filter
         axes:
                 - axis: *x86_slaves_axis
                 - axis:
@@ -1049,6 +1054,7 @@
         child-workspace: .
         execution-strategy:
                 sequential: true
+                combination-filter: *filter
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -1108,6 +1114,7 @@
         description: 'Test plperl upgrades.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
+                combination-filter: *filter
                 touchstone:
                         expr: '(distribution=="wheezy") && (architecture=="amd64")'
         axes:
