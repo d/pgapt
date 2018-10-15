@@ -284,8 +284,8 @@ case $PACKAGE in
       # There's no have libsfcgal-dev before stretch or wily. However,
       # there's a backport to jessie. Pgapt provides libsfcgal for
       # jessie as well, so it remains independent of jessie-backports.
-      # bionic does not ship libsfcgal-dev.
-      wheezy|squeeze|bionic|wily|trusty|precise)
+      # bionic has a sfcgal backport in our repo
+      wheezy|squeeze|wily|trusty|precise)
         sed -i -e '/libsfcgal-dev/d' debian/control debian/control.in
         sed -i -e "/sfcgal/Id" debian/liblwgeom-*.symbols
         sed -i -e 's/postgis_sfcgal//' debian/tests/test-extension-creation
