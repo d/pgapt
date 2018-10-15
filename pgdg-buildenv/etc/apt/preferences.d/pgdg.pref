@@ -1,4 +1,11 @@
 # do not edit, file maintained by pgdg-buildenv
+
+# prefer our packages as much as the distro ones
 Package: *
 Pin: release o=apt.postgresql.org
 Pin-Priority: 500
+
+# always use our postgresql-common packages
+Package: postgresql-common postgresql-client-common postgresql-server-dev-all postgresql postgresql-client postgresql-doc postgresql-contrib postgresql-all
+Pin: release o=apt.postgresql.org
+Pin-Priority: 1500
