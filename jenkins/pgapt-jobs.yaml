@@ -15,6 +15,7 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
+    filter_pattern: &filter_pattern '{arch-filter} && {dist-filter} && (distribution!="cosmic" || architecture!="i386" || architecture!="ppc64el")'
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -484,7 +485,7 @@
         description: 'Build Debian binary packages of {name}'
         project-type: matrix
         execution-strategy: &binaries_execution_strategy
-                combination-filter: '{arch-filter} && {dist-filter}'
+                combination-filter: *filter_pattern
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -701,7 +702,7 @@
         description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
-                combination-filter: '{arch-filter} && {dist-filter}'
+                combination-filter: *filter_pattern
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
@@ -770,7 +771,7 @@
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
-                combination-filter: '{arch-filter} && {dist-filter}'
+                combination-filter: *filter_pattern
                 touchstone:
                         expr: '(distribution=="sid") && (architecture=="amd64")'
         axes:
