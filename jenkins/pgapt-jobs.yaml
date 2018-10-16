@@ -125,6 +125,15 @@
                     - xenial
                     - trusty # for travis
 
+    supported_versions_param: &supported_versions_param
+            name: DEB_PG_SUPPORTED_VERSIONS
+            default: 'pgdg'
+            description: 'PostgreSQL versions to target'
+    supported_versions_param: &supported_versions_param_beta
+            name: DEB_PG_SUPPORTED_VERSIONS
+            default: '12'
+            description: 'PostgreSQL versions to target'
+
     ircbot_only_configs: &only_configs
             strategy: any-failure
             message-type: summary
@@ -170,6 +179,7 @@
         parameters:
                 - string: *revision_string
                 - string: *git_branch
+                - string: *supported_versions_param
                 - choice: *buildtype_choice
                 - choice: *queue_choice
         dsl: |
@@ -193,6 +203,7 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: 'all'),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
@@ -228,6 +239,7 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: DEB_PG_SUPPORTED_VERSIONS),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
@@ -241,6 +253,7 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries-beta'),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: DEB_PG_SUPPORTED_VERSIONS),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'extension-only'),
                                     ]
@@ -360,6 +373,7 @@
                 - string: &package_parameter
                         name: PACKAGE
                         description: 'Package to build (without -source suffix)'
+                - string: *supported_versions_param_beta
                 - string:
                         name: binnmu_reason
                         description: 'binNMU changelog text'
@@ -379,6 +393,7 @@
                                     parameters: [
                                         string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
                                         string(name: 'binnmu_version', value: "${params.binnmu_version}"),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
                                     ]
                                 )
                                 build(job: 'dput',
@@ -495,6 +510,7 @@
                 - axis: *arch_axis
                 - axis: *dist_axis
         parameters:
+                - string: *supported_versions_param
                 - string:
                         name: binnmu_reason
                         description: 'binNMU changelog text'
@@ -545,10 +561,14 @@
         <<: *binaries_template
         name: '{name}-binaries-beta'
         id: 'binaries-beta'
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="12" {backports}sbuild-package'
+        parameters:
+                - string: *supported_versions_param_beta
+                - string:
+                        name: binnmu_reason
+                        description: 'binNMU changelog text'
+                - string:
+                        name: binnmu_version
+                        description: 'binNMU version (single integer)'
 
 # binaries for building modules for PostgreSQL devel
 - job-template:
@@ -578,6 +598,7 @@
                         name: distribution
                         choices: *dist_list
                         description: 'Distribution to build for'
+                - string: *supported_versions_param
                 - string:
                         name: binnmu_reason
                         description: 'binNMU changelog text'
@@ -640,10 +661,7 @@
                 - string:
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
-                - string:
-                        name: DEB_PG_SUPPORTED_VERSIONS
-                        default: 'pgdg'
-                        description: 'PostgreSQL versions to target'
+                - string: *supported_versions_param
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
@@ -683,10 +701,7 @@
                 - string:
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
-                - string:
-                        name: DEB_PG_SUPPORTED_VERSIONS
-                        default: 'pgdg'
-                        description: 'PostgreSQL versions to target'
+                - string: *supported_versions_param
                 - choice: *distribution_parameter
                 - node:
                         name: architecture
