@@ -674,6 +674,7 @@
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      cosmic) tag='pgdg18.10+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       trusty) tag='pgdg14.04+' ;;
