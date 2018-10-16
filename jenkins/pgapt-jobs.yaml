@@ -234,18 +234,20 @@
                                 )
                             }}
                         }}
-                        #stage('binaries-beta') {{
-                        #    steps {{
-                        #        build(job: '{name}-binaries-beta')
-                        #        build(job: 'dput',
-                        #            parameters: [
-                        #                string(name: 'binaries', value: '{name}-binaries-beta'),
-                        #                string(name: 'queue', value: queue),
-                        #                string(name: 'upload', value: 'extension-only'),
-                        #            ]
-                        #        )
-                        #    }}
-                        #}}
+                        /*
+                        stage('binaries-beta') {{
+                            steps {{
+                                build(job: '{name}-binaries-beta')
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: '{name}-binaries-beta'),
+                                        string(name: 'queue', value: queue),
+                                        string(name: 'upload', value: 'extension-only'),
+                                    ]
+                                )
+                            }}
+                        }}
+                        */
                     }}
                 }}
 
