@@ -29,8 +29,20 @@ is only about launching the build jobs, the real work is done in the scripts.
 * Rebuild the new default version so its libpq gets added to main (as it was in the extra component before)
 * Possibly update the Jenkins pipeline jobs to stop triggering beta jobs
 * In postgresql-common, update debian/supported-versions
-* To remove obsolete old lib packages, use for dist in sid squeeze wheezy lucid precise; do sudo -u aptuser reprepro -C 9.3 remove $dist-pgdg-testing libpq5 libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq-dev ; done
-* Removing obsolete PG component: for d in sid jessie wheezy xenial trusty precise; do sudo -u aptuser reprepro -C 9.6 remove $d-pgdg-testing libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq5 libpq-dev postgresql-9.6 postgresql-9.6-dbg postgresql-client-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-plperl-9.6 postgresql-plpython3-9.6 postgresql-plpython-9.6 postgresql-pltcl-9.6 postgresql-server-dev-9.6; done
+* To remove obsolete old lib packages, use
+  ```
+  . /srv/apt/apt.postgresql.org/pgapt.conf
+  COMPONENT=11
+  PKGS="libpq5 libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq-dev"
+  for dist in $PG_SUPPORTED_DISTS; do for pkg in $PKGS; do sudo -u aptuser reprepro -C $COMPONENT remove $dist-pgdg-testing $pkg $pkg-dbgsym; done; done
+  ```
+* Removing obsolete PG component:
+  ```
+  . /srv/apt/apt.postgresql.org/pgapt.conf
+  COMPONENT=11
+  PKGS="libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq5 libpq-dev postgresql-$COMPONENT postgresql-$COMPONENT-dbg postgresql-client-$COMPONENT postgresql-contrib-$COMPONENT postgresql-doc-$COMPONENT postgresql-plperl-$COMPONENT postgresql-plpython3-$COMPONENT postgresql-plpython-$COMPONENT postgresql-pltcl-$COMPONENT postgresql-server-dev-$COMPONENT"
+  for dist in $PG_SUPPORTED_DISTS; do for pkg in $PKGS; do sudo -u aptuser reprepro -C $COMPONENT remove $dist-pgdg-testing $pkg $pkg-dbgsym; done; done
+  ```
 
 ## Adding a new distribution
 
