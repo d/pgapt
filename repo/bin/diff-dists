@@ -23,7 +23,7 @@ GetOptions (
 ) or die;
 
 # enable ansi codes if outputting to a terminal
-my ($b, $n) = $to_term ? ("\e[1m", "\e[0m") : ("", "");
+my ($b, $r, $g, $n) = $to_term ? ("\e[1m", "\e[31m", "\e[32m", "\e[0m") : ("", "");
 
 die "Syntax: $0 [-m] <source1> <source2>" unless (@ARGV == 2);
 my ($source1, $source2) = @ARGV;
@@ -53,7 +53,7 @@ foreach my $pkg (sort keys %pkg1) {
 	my $ver1 = my $ver1mangled = $pkg1{$pkg};
 	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
 	if (not exists $pkg2{$pkg}) {
-		print "$pkg $b$ver1$n <missing>\n" if ($show_missing);
+		print "$g$pkg$n $b$ver1$n <missing>\n" if ($show_missing);
 		next;
 	}
 
@@ -67,13 +67,13 @@ foreach my $pkg (sort keys %pkg1) {
 	}
 
 	if ($ver1 > $ver2) {
-		print "$pkg $b$ver1$n $ver2\n";
+		print "$g$pkg$n $b$ver1$n $ver2\n";
 	} else {
-		print "$pkg $ver1 $b$ver2$n\n";
+		print "$r$pkg$n $ver1 $b$ver2$n\n";
 	}
 	delete $pkg2{$pkg};
 }
 
 foreach my $pkg (sort keys %pkg2) {
-	print "$pkg <missing> $b$pkg2{$pkg}$n\n";
+	print "$r$pkg$n <missing> $b$pkg2{$pkg}$n\n";
 }
