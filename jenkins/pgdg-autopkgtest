@@ -51,12 +51,12 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	# (we need this because the source package will likely only list one)
 	# libpgsql-9.3-asn1oid: original package name on trusty, filter out
 	# postgis: old binaries still kept around
-	# postgresql-9..-ogr-fdw-dbgsym: debug packages ship conflicting files on ppc64el
+	# postgresql-.*-ogr-fdw-dbgsym: debug packages ship conflicting files on ppc64el
 	# postgresql-9.6-repmgr-dbg: original package on stretch
 	# python3-multicorn: conflicts with python-multicorn
 	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
 	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
-	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[1234]|postgresql-9..-ogr-fdw-dbgsym|postgresql-9.6-repmgr-dbg|python3-multicorn' |
+	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[1234]|postgresql-.*-ogr-fdw-dbgsym|postgresql-9.6-repmgr-dbg|python3-multicorn' |
 	  fgrep \$FILTER | sort -u)
 	
 	# skip PG devel tests if packages have not been built yet
