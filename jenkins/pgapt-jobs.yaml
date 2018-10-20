@@ -1771,6 +1771,7 @@
 - project:
         name: postgresql-hll
         git-url: https://salsa.debian.org/postgresql/postgresql-hll.git
+        arch-filter: '(architecture!="i386")'
         jobs:
                 - git-packages-with-next
 
