@@ -22,4 +22,4 @@ fi
 $BINDIR/diff-dists $TO_TERM -m $UNCHANGED \
 	<(cat $@ 2>/dev/null) \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) |
-grep -v -e '^pgdg-buildenv'
+egrep -v -e 'pgdg-(buildenv|keyring)|postgresql-(8|9)'

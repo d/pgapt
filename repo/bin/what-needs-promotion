@@ -16,4 +16,4 @@ DIST=${1:-sid}
 $BINDIR/diff-dists $TO_TERM $UNCHANGED \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) \
 	<(bzcat $DISTS/$DIST-pgdg/main/source/Sources.bz2) |
-grep -v -e '^pgdg-buildenv'
+grep -v -e 'pgdg-buildenv'
