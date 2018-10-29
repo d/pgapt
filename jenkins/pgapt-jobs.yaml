@@ -1521,6 +1521,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-snakeoil
+        git-url: https://github.com/credativ/pg_snakeoil.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pg-partman
         git-url: https://salsa.debian.org/postgresql/pg-partman.git
         jobs:
