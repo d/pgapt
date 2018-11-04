@@ -441,11 +441,11 @@
                     stages {
                         stage('source') {
                             steps {
-                                addShortText("${params.PACKAGE} ${params.revision} (${params.distribution}, ${params.queue})")
+                                addShortText("${params.PACKAGE} ${params.branch} (${params.distribution}, ${params.queue})")
                                 build(job: "${params.PACKAGE}-source",
                                     parameters: [
                                         string(name: 'revision', value: revision),
-                                        string(name: 'branch', value: branch),
+                                        string(name: 'branch', value: branch ?: 'master'),
                                         string(name: 'buildtype', value: buildtype),
                                     ]
                                 )
@@ -470,7 +470,7 @@
                                     parameters: [
                                         string(name: 'binaries', value: "build-binaries"),
                                         string(name: 'queue', value: "${params.queue}"),
-                                        string(name: 'upload', value: 'extension-only'),
+                                        string(name: 'upload', value: "${params.upload}"),
                                     ]
                                 )
                             }
