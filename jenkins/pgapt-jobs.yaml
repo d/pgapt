@@ -441,7 +441,7 @@
                     stages {
                         stage('source') {
                             steps {
-                                addShortText("${params.PACKAGE} (${params.queue})")
+                                addShortText("${params.PACKAGE} ${params.revision} (${params.distribution}, ${params.queue})")
                                 build(job: "${params.PACKAGE}-source",
                                     parameters: [
                                         string(name: 'revision', value: revision),
