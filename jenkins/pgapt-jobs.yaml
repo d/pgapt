@@ -134,6 +134,13 @@
             default: '12'
             description: 'PostgreSQL versions to target'
 
+    binnmu_reason_param: &binnmu_reason_param
+            name: binnmu_reason
+            description: 'binNMU changelog text'
+    binnmu_version_param: &binnmu_version_param
+            name: binnmu_version
+            description: 'binNMU version (single integer)'
+
     ircbot_only_configs: &only_configs
             strategy: any-failure
             message-type: summary
@@ -374,12 +381,8 @@
                         name: PACKAGE
                         description: 'Package to build (without -source suffix)'
                 - string: *supported_versions_param_beta
-                - string:
-                        name: binnmu_reason
-                        description: 'binNMU changelog text'
-                - string:
-                        name: binnmu_version
-                        description: 'binNMU version (single integer)'
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
                 - choice: *queue_choice
         concurrent: true
         dsl: |
@@ -399,6 +402,63 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: "${params.PACKAGE}-binaries-beta"),
+                                        string(name: 'queue', value: "${params.queue}"),
+                                        string(name: 'upload', value: 'extension-only'),
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                }
+
+- job:
+        <<: *build_pipeline
+        name: 'build-source-and-one-dist'
+        id: 'build-source-and-one-dist'
+        description: 'Build source, and then binaries for one distribution only, and upload them'
+        parameters:
+                - string: *package_parameter
+                - string: *revision_string
+                - string: *git_branch
+                - choice: *buildtype_choice_snapshot
+                - string: *supported_versions_param
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
+                - choice: *queue_choice
+        concurrent: true
+        dsl: |
+                pipeline {
+                    agent { label 'master' }
+                    stages {
+                        stage('source') {
+                            steps {
+                                addShortText("${params.PACKAGE} (${params.queue})")
+                                build(job: "${params.PACKAGE}-source",
+                                    parameters: [
+                                        string(name: 'revision', value: revision),
+                                        string(name: 'branch', value: branch),
+                                        string(name: 'buildtype', value: buildtype),
+                                    ]
+                                )
+                            }
+                        }
+                        stage('binaries') {
+                            steps {
+                                build(job: "build-binaries",
+                                    parameters: [
+                                        string(name: 'PACKAGE', value: "${params.PACKAGE}"),
+                                        string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
+                                        string(name: 'binnmu_version', value: "${params.binnmu_version}"),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
+                                    ]
+                                )
+                            }
+                        }
+                        stage('dput') {
+                            steps {
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: "build-binaries"),
                                         string(name: 'queue', value: "${params.queue}"),
                                         string(name: 'upload', value: 'extension-only'),
                                     ]
@@ -511,12 +571,8 @@
                 - axis: *dist_axis
         parameters:
                 - string: *supported_versions_param
-                - string:
-                        name: binnmu_reason
-                        description: 'binNMU changelog text'
-                - string:
-                        name: binnmu_version
-                        description: 'binNMU version (single integer)'
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
@@ -563,12 +619,8 @@
         id: 'binaries-beta'
         parameters:
                 - string: *supported_versions_param_beta
-                - string:
-                        name: binnmu_reason
-                        description: 'binNMU changelog text'
-                - string:
-                        name: binnmu_version
-                        description: 'binNMU version (single integer)'
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
 
 # binaries for building modules for PostgreSQL devel
 - job-template:
@@ -589,7 +641,7 @@
         <<: *binaries_template
         name: 'build-binaries'
         id: 'build-binaries'
-        description: 'Build Debian binary packages for a single distribution, and upload them'
+        description: 'Build Debian binary packages for a single distribution'
         concurrent: true
         properties: *properties_more_artifacts
         parameters:
@@ -599,12 +651,8 @@
                         choices: *dist_list
                         description: 'Distribution to build for'
                 - string: *supported_versions_param
-                - string:
-                        name: binnmu_reason
-                        description: 'binNMU changelog text'
-                - string:
-                        name: binnmu_version
-                        description: 'binNMU version (single integer)'
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
@@ -635,14 +683,6 @@
                     matrix-notifier: only-configurations
                 - groovy-postbuild: *add_version_tag_plain
                 - workspace-cleanup
-                - trigger-parameterized-builds:
-                        - project: 'dput'
-                          condition: SUCCESS
-                          predefined-parameters: |
-                                binaries=$JOB_NAME
-                                queue=$queue
-                                upload=$upload
-
 
 # building modules for PostgreSQL beta, get source from apt.
 # useful when the current -source job doesn't have all dists yet because
