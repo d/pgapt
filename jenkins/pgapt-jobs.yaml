@@ -127,6 +127,11 @@
                     - xenial
                     - trusty # for travis
 
+    distribution_parameter: &distribution_parameter
+            name: distribution
+            choices: *dist_list
+            description: 'Distribution to build for'
+
     supported_versions_param: &supported_versions_param
             name: DEB_PG_SUPPORTED_VERSIONS
             default: 'pgdg'
@@ -423,10 +428,12 @@
                 - string: *revision_string
                 - string: *git_branch
                 - choice: *buildtype_choice_snapshot
+                - choice: *distribution_parameter
                 - string: *supported_versions_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *queue_choice
+                - choice: *upload_choice
         concurrent: true
         dsl: |
                 pipeline {
@@ -449,6 +456,7 @@
                                 build(job: "build-binaries",
                                     parameters: [
                                         string(name: 'PACKAGE', value: "${params.PACKAGE}"),
+                                        string(name: 'distribution', value: "${params.distribution}"),
                                         string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
                                         string(name: 'binnmu_version', value: "${params.binnmu_version}"),
                                         string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
@@ -648,18 +656,13 @@
         properties: *properties_more_artifacts
         parameters:
                 - string: *package_parameter
-                - choice: &distribution_parameter
-                        name: distribution
-                        choices: *dist_list
-                        description: 'Distribution to build for'
+                - choice: *distribution_parameter
                 - string: *supported_versions_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
-                - choice: *queue_choice
-                - choice: *upload_choice
         execution-strategy:
                 combination-filter: *filter
                 touchstone:
