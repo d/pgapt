@@ -32,8 +32,10 @@
 
     git_branch: &git_branch
         name: branch
-        default: '{git-branch}'
         description: Git branch, tag, or commit to build
+    git_branch_template: &git_branch_template
+        <<: *git_branch
+        default: '{git-branch}'
 
     queue_choice: &queue_choice
             name: queue
@@ -185,7 +187,7 @@
         project-type: pipeline
         parameters:
                 - string: *revision_string
-                - string: *git_branch
+                - string: *git_branch_template
                 - string: *supported_versions_param
                 - choice: *buildtype_choice
                 - choice: *queue_choice
@@ -316,7 +318,7 @@
                         cron: "H */6 * * *"
         parameters:
                 - string: *revision_string
-                - string: *git_branch
+                - string: *git_branch_template
                 - choice: *buildtype_choice_snapshot
                 - choice: *queue_choice
         dsl: |
@@ -507,7 +509,7 @@
         id: 'source-git'
         description: 'Build Debian source package of {name} from git.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         parameters:
-                - string: *git_branch
+                - string: *git_branch_template
                 - string: *revision_string
                 - choice: *buildtype_choice
         scm:
@@ -529,7 +531,7 @@
         name: '{name}-source'
         id: 'source-git-head'
         parameters:
-                - string: *git_branch
+                - string: *git_branch_template
                 - choice:
                         name: merge
                         choices:
