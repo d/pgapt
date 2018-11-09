@@ -9,7 +9,7 @@ test:
 	@echo "*** Testing $(JOBS) ***"
 	rm -rf output.tmp
 	mkdir output.tmp
-	$(JJB) test -o output.tmp $(JOBS)
+	$(JJB) test --config-xml -o output.tmp $(JOBS)
 	if test -d output.new; then rm -rf output.old; mv output.new output.old; fi
 	mv output.tmp output.new
 	test -d output.old && diff -urp output.old output.new || true
