@@ -1854,6 +1854,8 @@
 - project:
         name: postgresql-pljava
         git-url: https://salsa.debian.org/postgresql/postgresql-pljava.git
+        # Java 7 not fully supported
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages-with-next
 
