@@ -240,8 +240,8 @@ case $PACKAGE in
 
   pgadmin4)
     case $distribution in stretch|xenial)
-      sed -i -e '/fonts-/d' debian/control
-      TWEAK+=("Not symlinking font files.")
+      sed -i -e '/fonts-glewlwyd/d' -e '/fonts-open-sans/d' debian/control
+      TWEAK+=("Not symlinking fonts-glewlwyd and fonts-open-sans files.")
       ;;
     esac
     ;;
