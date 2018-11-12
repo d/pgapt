@@ -1302,6 +1302,14 @@
                 - git-packages-with-next
 
 - project:
+        name: cstore-fdw
+        git-url: https://salsa.debian.org/postgresql/cstore-fdw.git
+        # needs locales-all
+        dist-filter: '(distribution!="trusty")'
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: hypopg
         git-url: https://github.com/HypoPG/hypopg.git
         git-branch: master
