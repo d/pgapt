@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # run autopkgtest in schroot
+# input: $1 (=PACKAGE), PG_SUPPORTED_VERSIONS (optional)
 
 set -eu
 
@@ -43,39 +44,38 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	
 	( set -x; apt-get -y update; apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade )
 	
-	# convert list of supported versions to grep filter
-	for ver in \$(/usr/share/postgresql-common/supported-versions); do
-	  FILTER="\${FILTER:-} -e \$ver"
-	done
-	# find all binaries built from this source matching supported versions
-	# (we need this because the source package will likely only list one)
-	# libpgsql-9.3-asn1oid: original package name on trusty, filter out
-	# postgis: old binaries still kept around
-	# postgresql-10-postgis-scripts: original package from postgis 2.4 on cosmic
-	# postgresql-.*-ogr-fdw-dbgsym: debug packages ship conflicting files on ppc64el
-	# postgresql-9.6-repmgr-dbg: original package on stretch
-	# python3-multicorn: conflicts with python-multicorn
-	BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
-	  grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
-	  egrep -v 'libpgsql-9.3-asn1oid|postgis-2.[1234]|postgresql-.*-ogr-fdw-dbgsym|postgresql-10-postgis-scripts|postgresql-9.6-repmgr-dbg|python3-multicorn' |
-	  fgrep \$FILTER | sort -u)
-	
-	# skip PG devel tests if packages have not been built yet
-	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ] && [ -z "\$BINARIES" ]; then
-	  echo "No version \$PG_SUPPORTED_VERSIONS packages for $PACKAGE found, exiting"
-	  exit 0
-	fi
-	
+	# when testing beta/devel, manually install packages since the source
+	# package doesn't list the binaries
 	if [ "\$PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
-	  BINARIES="\${BINARIES:-} postgresql-\$PG_SUPPORTED_VERSIONS postgresql-server-dev-\$PG_SUPPORTED_VERSIONS"
+	  # convert list of supported versions to grep filter
+	  for ver in \$(/usr/share/postgresql-common/supported-versions); do
+	    FILTER="\${FILTER:-} -e \$ver"
+	  done
+	  # find all binaries built from this source matching supported versions
+	  # python3-multicorn: conflicts with python-multicorn
+	  BINARIES=\$(cat /var/lib/apt/lists/*_Packages |
+	    grep-dctrl --exact-match -S "$PACKAGE" --no-field-names -s Package |
+	    egrep -v 'python3-multicorn' |
+	    fgrep \$FILTER | sort -u)
+	
+	  # skip PG devel tests if packages have not been built yet
+	  if [ -z "\$BINARIES" ]; then
+	    echo "No version \$PG_SUPPORTED_VERSIONS packages for $PACKAGE found, exiting"
+	    exit 0
+	  fi
+	
+	  # extra test dependencies (normally handled by debian/tests/control.in)
 	  case $PACKAGE in
 	    mimeo|pg-partman) BINARIES="\$BINARIES postgresql-$PG_SUPPORTED_VERSIONS-pgtap" ;;
+	    postgresql-multicorn) BINARIES="\$BINARIES postgresql-plpython-$PG_SUPPORTED_VERSIONS" ;;
 	  esac
-	fi
 	
-	if [ "\$BINARIES" ]; then
 	  # prefer our packages over the base distro ones
-	  ( set -x; apt-get install -t $distribution-pgdg-testing -y -o DPkg::Options::=--force-confnew \$BINARIES )
+	  ( set -x;
+	    apt-get install -t $distribution-pgdg-testing -y -o DPkg::Options::=--force-confnew \
+	    postgresql-\$PG_SUPPORTED_VERSIONS postgresql-server-dev-\$PG_SUPPORTED_VERSIONS \
+	    \$BINARIES
+	  )
 	fi
 	
 	# run autopkgtest
