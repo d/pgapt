@@ -41,7 +41,7 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	  echo "Pin-Priority: 500" >> /etc/apt/preferences.d/backports.pref
 	fi
 	
-	( set -x; apt-get -y update; apt-get -y dist-upgrade )
+	( set -x; apt-get -y update; apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade )
 	
 	# convert list of supported versions to grep filter
 	for ver in \$(/usr/share/postgresql-common/supported-versions); do
@@ -75,7 +75,7 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	
 	if [ "\$BINARIES" ]; then
 	  # prefer our packages over the base distro ones
-	  ( set -x; apt-get install -t $distribution-pgdg-testing -y \$BINARIES )
+	  ( set -x; apt-get install -t $distribution-pgdg-testing -y -o DPkg::Options::=--force-confnew \$BINARIES )
 	fi
 	
 	# run autopkgtest
