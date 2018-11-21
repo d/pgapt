@@ -1507,6 +1507,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-fact-loader
+        git-url: https://github.com/enova/pg_fact_loader.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pgfincore
         git-url: https://git.postgresql.org/git/pgfincore.git
         jobs:
@@ -1531,6 +1537,12 @@
 - project:
         name: pglogical
         git-url: https://salsa.debian.org/postgresql/pglogical.git
+        jobs:
+                - git-packages-with-next
+
+- project:
+        name: pglogical-ticker
+        git-url: https://github.com/enova/pglogical_ticker.git
         jobs:
                 - git-packages-with-next
 
