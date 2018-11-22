@@ -420,6 +420,51 @@
 
 - job:
         <<: *build_pipeline
+        name: 'build-one-dist'
+        id: 'build-one-dist'
+        description: 'Build binaries for one distribution only, and upload them'
+        parameters:
+                - string: *package_parameter
+                - choice: *distribution_parameter
+                - string: *supported_versions_param
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
+                - choice: *queue_choice
+                - choice: *upload_choice
+        concurrent: true
+        dsl: |
+                pipeline {
+                    agent { label 'master' }
+                    stages {
+                        stage('binaries') {
+                            steps {
+                                build(job: "build-binaries",
+                                    parameters: [
+                                        string(name: 'PACKAGE', value: "${params.PACKAGE}"),
+                                        string(name: 'distribution', value: "${params.distribution}"),
+                                        string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
+                                        string(name: 'binnmu_version', value: "${params.binnmu_version}"),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
+                                    ]
+                                )
+                            }
+                        }
+                        stage('dput') {
+                            steps {
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: "build-binaries"),
+                                        string(name: 'queue', value: "${params.queue}"),
+                                        string(name: 'upload', value: "${params.upload}"),
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                }
+
+- job:
+        <<: *build_pipeline
         name: 'build-source-and-one-dist'
         id: 'build-source-and-one-dist'
         description: 'Build source, and then binaries for one distribution only, and upload them'
