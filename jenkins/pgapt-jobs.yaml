@@ -1619,6 +1619,12 @@
                 - git-packages-with-next
 
 - project:
+        name: pg-rational
+        git-url: https://salsa.debian.org/postgresql/pg-rational.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pg-repack
         git-url: https://salsa.debian.org/postgresql/pg-repack.git
         jobs:
