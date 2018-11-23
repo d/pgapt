@@ -1621,6 +1621,8 @@
 - project:
         name: pg-rational
         git-url: https://salsa.debian.org/postgresql/pg-rational.git
+        # needs gcc 5 for __builtin_sadd_overflow
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages-with-next
 
