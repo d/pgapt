@@ -16,7 +16,7 @@
     dist-filter: 'true'
     arch-filter: 'true'
     filter: &filter '!(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '{arch-filter} && {dist-filter} && !(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -2166,7 +2166,7 @@
 - project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://salsa.debian.org/python-team/modules/flask-htmlmin.git' }
 - project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://salsa.debian.org/python-team/modules/flask-paranoid.git' }
 - project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://salsa.debian.org/python-team/modules/flask-peewee.git',
-             dist-filter: '(distribution=="stretch") || (distribution!="xenial")' }
+             dist-filter: '(distribution=="stretch") || (distribution=="xenial")' }
 - project: { <<: *pythonpkg, name: flask-security, git-url: 'https://salsa.debian.org/python-team/modules/flask-security.git' }
 - project: { <<: *pythonpkg, name: flask-wtf,      git-url: 'https://salsa.debian.org/python-team/modules/flask-wtf.git' }
 - project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://salsa.debian.org/python-team/modules/htmlmin.git' }
