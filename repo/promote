@@ -86,8 +86,6 @@ if [ -z "${DEBUG:-}" ] && [ "$OLDLSPROD" = "$NEWLSPROD" ]; then
 fi
 
 NEWSHORTVERSION=$(echo "$NEWVERSION" | sed -e 's/.*://')
-FROM="apt.postgresql.org repository <myon@debian.org>"
-TO="$MAILING_LIST"
 
 if [ "$OLDVERSION" ]; then
 	SOMEDEB=$(ls /srv/apt/repo/pool/$COMPONENT/$INITIAL/$PKG/*$NEWSHORTVERSION*deb | head -1)
@@ -101,10 +99,11 @@ else
 	CHANGESTEXT="This is the first version of this package in the repository."
 fi
 
-echo "Sending mail to $TO ..."
+echo "Sending mail to $MAILING_LIST ..."
 
-TEXT="From: $FROM
-To: $TO
+TEXT="From: $MAIL_FROM
+To: $MAILING_LIST
+Reply-To: $MAILING_LIST
 Subject: $PKG updated to version $NEWVERSION
 
 The package $PKG was updated on apt.postgresql.org:
