@@ -49,7 +49,7 @@ for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/
 done
 set_dist_vars $distribution
 
-[ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"
+[ -n "${DEBEMAIL:-}" ] || export DEBEMAIL="$MAILING_LIST"
 
 export PG_SUPPORTED_VERSIONS="pgdg"
 # tell /usr/share/postgresql-common/supported-versions which distro/release we are targeting
@@ -398,7 +398,7 @@ else
 fi
 cat - debian/changelog >> debian/changelog.tmp <<EOT
 
- -- apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>  $DATE
+ -- $MAILING_LIST  $DATE
 
 EOT
 mv debian/changelog.tmp debian/changelog

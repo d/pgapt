@@ -169,7 +169,7 @@
   - name: git user email
     git_config:
       name: user.email
-      value: pgsql-pkg-debian@postgresql.org
+      value: pgsql-pkg-debian@lists.postgresql.org
       scope: global
     become: true
     become_user: buildd

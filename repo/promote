@@ -87,7 +87,7 @@ fi
 
 NEWSHORTVERSION=$(echo "$NEWVERSION" | sed -e 's/.*://')
 FROM="apt.postgresql.org repository <myon@debian.org>"
-TO="PostgreSQL in Debian <pgsql-pkg-debian@postgresql.org>"
+TO="$MAILING_LIST"
 
 if [ "$OLDVERSION" ]; then
 	SOMEDEB=$(ls /srv/apt/repo/pool/$COMPONENT/$INITIAL/$PKG/*$NEWSHORTVERSION*deb | head -1)

@@ -124,7 +124,7 @@ umask 002
   sbuild --nolog --batch \
     -d $distribution-pgdg --arch $architecture ${ARCH_ALL:-} ${RESOLVE_ALTERNATIVES:-} \
     ${BPOREPO:+--extra-repository="$BPOREPO"} \
-    ${binnmu_reason:+--make-binNMU="$binnmu_reason" --binNMU="$binnmu_version" -m "apt.postgresql.org autobuilder <pgsql-pkg-debian@postgresql.org>"} \
+    ${binnmu_reason:+--make-binNMU="$binnmu_reason" --binNMU="$binnmu_version" -m "$MAILING_LIST"} \
     ${FINISHED_BUILD_COMMAND:+--finished-build-commands="$FINISHED_BUILD_COMMAND"} \
     ${ADD_DEPENDS:-} $DSC
 ) 9> $LOCKDIR/$distribution-$architecture.lock
