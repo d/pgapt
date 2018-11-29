@@ -8,6 +8,10 @@ set -eu
 PACKAGE="$1"
 CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
 
+case $PACKAGE in
+  bucardo) echo "Skipping $PACKAGE tests" ; exit ;;
+esac
+
 # read pgapt config
 for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
   test -f $dir/pgapt.conf || continue
