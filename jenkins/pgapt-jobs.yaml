@@ -438,7 +438,7 @@
                     stages {
                         stage('binaries') {
                             steps {
-                                addShortText("${params.PACKAGE} (${params.distribution, ${params.queue})")
+                                addShortText("${params.PACKAGE} (${params.distribution}, ${params.queue})")
                                 build(job: "build-binaries",
                                     parameters: [
                                         string(name: 'PACKAGE', value: "${params.PACKAGE}"),
