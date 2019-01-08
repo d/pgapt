@@ -2033,7 +2033,7 @@
         name: rdkit
         git-url: https://salsa.debian.org/debichem-team/rdkit.git
         jobs:
-                - git-packages
+                - git-packages-with-next
 
 - project:
         name: slony1-2
