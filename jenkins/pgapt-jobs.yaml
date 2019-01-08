@@ -2030,6 +2030,12 @@
                 - git-packages-with-next
 
 - project:
+        name: rdkit
+        git-url: https://salsa.debian.org/debichem-team/rdkit.git
+        jobs:
+                - git-packages
+
+- project:
         name: slony1-2
         git-url: https://salsa.debian.org/postgresql/slony1-2.git
         # needs debhelper 9.20160114 (in jessie-backports)
