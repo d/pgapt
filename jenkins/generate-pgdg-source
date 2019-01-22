@@ -189,6 +189,11 @@ case $PACKAGE in
     DOT='~' ;;
 
   pgloader)
+    case $distribution in trusty)
+      sed -i -e '/python3-sphinx-rtd-theme/d' debian/control
+      TWEAK+=("Remove build-dependency on python3-sphinx-rtd-theme.")
+      ;;
+    esac
     case $distribution in jessie|xenial|trusty)
       sed -i -e '/html/d' debian/pgloader.docs debian/rules
       TWEAK+=("Do not build docs because Sphinx is too old.")
