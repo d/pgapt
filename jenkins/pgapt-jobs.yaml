@@ -15,8 +15,8 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter '!(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(distribution=="cosmic" && (architecture=="i386" || architecture=="ppc64el"))'
+    filter: &filter '!((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el"))'
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -112,6 +112,7 @@
                     - buster
                     - stretch
                     - jessie
+                    - disco
                     - cosmic
                     - bionic
                     - xenial
@@ -765,6 +766,7 @@
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      disco) tag='pgdg19.04+' ;;
                       cosmic) tag='pgdg18.10+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;

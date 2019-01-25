@@ -10,6 +10,7 @@ Allow: sid-pgdg>sid-pgdg-testing
  squeeze-pgdg>squeeze-pgdg-testing
  lenny-pgdg>lenny-pgdg-testing
  etch-pgdg>etch-pgdg-testing
+ disco-pgdg>disco-pgdg-testing
  cosmic-pgdg>cosmic-pgdg-testing
  bionic-pgdg>bionic-pgdg-testing
  zesty-pgdg>zesty-pgdg-testing

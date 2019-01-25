@@ -254,6 +254,38 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
+Codename: disco-pgdg
+Suite: disco-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64
+Components: main 9.4 9.5 9.6 10 11
+SignWith: ACCC4CF8
+Log: disco-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+
+Codename: disco-pgdg-testing
+Suite: disco-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64
+Components: main 9.4 9.5 9.6 10 11
+SignWith: ACCC4CF8
+Log: disco-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
 Codename: cosmic-pgdg
 Suite: cosmic-pgdg
 Origin: apt.postgresql.org
