@@ -44,6 +44,15 @@ is only about launching the build jobs, the real work is done in the scripts.
   for dist in $PG_SUPPORTED_DISTS; do for pkg in $PKGS; do sudo -u aptuser reprepro -C $COMPONENT remove $dist-pgdg-testing $pkg $pkg-dbgsym; done; done
   ```
 
+## Changing the set of supported PostgreSQL versions
+
+* In postgresql-common, update debian/supported-versions
+* Trigger a postgresql-common build
+* Upgrade postgresql-common on pgdgbuild.dus.dg-i.net because
+  generate-pgdg-source uses the list when generating debian/control from
+  debian/control.in
+* Announce change on wiki and the mailing list
+
 ## Adding a new distribution
 
 Update these files:
