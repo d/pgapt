@@ -256,8 +256,9 @@ case $PACKAGE in
       # remove consul/kubernetes modules at test time
       sed -i -e '/^python3/i rm -fv patroni/dcs/consul.py patroni/dcs/kubernetes.py tests/test_consul.py tests/test_kubernetes.py' debian/tests/test
       sed -i -e '/python3-\(consul\|kubernetes\)/d' debian/control debian/tests/control
-      # Do not run the acceptance tests with consul as DCS.
+      # Do not run the acceptance tests with consul or etcd as DCS.
       sed -i -e '/^#.consul/,/^$/d' debian/tests/control
+      sed -i -e '/^#.etcd/,/^$/d' debian/tests/control
       TWEAK+=("Removing consul and kubernetes support.")
       ;;
     esac
