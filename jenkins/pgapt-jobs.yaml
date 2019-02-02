@@ -1828,6 +1828,7 @@
         name: postgresql-9.3
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.3
+        dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-adt
 

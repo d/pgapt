@@ -51,6 +51,7 @@ is only about launching the build jobs, the real work is done in the scripts.
 * Upgrade postgresql-common on pgdgbuild.dus.dg-i.net because
   generate-pgdg-source uses the list when generating debian/control from
   debian/control.in
+* Restrict deprecated version to `dist-filter: '(distribution=="sid")'`
 * Announce change on wiki and the mailing list
 
 ## Adding a new distribution
