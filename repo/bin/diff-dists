@@ -13,11 +13,13 @@ use Getopt::Long;
 Getopt::Long::config('bundling');
 
 my $show_missing = 1;
+my $mangle_pgdg_version = 0;
 my $to_term = (-t 1);
 my $unchanged = 0;
 
 GetOptions (
   '-m' => sub { $show_missing = 0 },
+  '-p' => \$mangle_pgdg_version,
   '-t' => \$to_term,
   '-u' => \$unchanged,
 ) or die;
@@ -51,15 +53,14 @@ close S1;
 
 foreach my $pkg (sort keys %pkg1) {
 	my $ver1 = my $ver1mangled = $pkg1{$pkg};
-	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
+	$ver1mangled =~ s/.pgdg(?:[\d.]+)?\+\d$// if ($mangle_pgdg_version); # remove .pgdg80+1
 	if (not exists $pkg2{$pkg}) {
 		print "$g$pkg$n $b$ver1$n <missing>\n" if ($show_missing);
 		next;
 	}
 
 	my $ver2 = my $ver2mangled = $pkg2{$pkg};
-	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$//; # remove .pgdg80+1
-	#if (($ver1 eq $ver2) or ($ver1 eq $ver2mangled) or ($ver1mangled eq $ver2)) {
+	$ver2mangled =~ s/.pgdg(?:[\d.]+)?\+\d$// if ($mangle_pgdg_version); # remove .pgdg80+1
 	if ($ver1mangled eq $ver2mangled) {
 		print "OK: $pkg $ver1 $ver2\n" if ($unchanged);
 		delete $pkg2{$pkg};

@@ -19,7 +19,7 @@ else
   set -- /home/chroot/$DIST-amd64/var/lib/apt/lists/*_dists_${DIST}_{main,universe}_source_Sources
 fi
 
-$BINDIR/diff-dists $TO_TERM -m $UNCHANGED \
+$BINDIR/diff-dists $TO_TERM -mp $UNCHANGED \
 	<(cat $@ 2>/dev/null) \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) |
 egrep -v -e 'pgdg-(buildenv|keyring)|postgresql-(8|9)'
