@@ -952,6 +952,14 @@
         noadt: ''
 
 - job-group:
+        name: git-packages-no-testsuite
+        jobs:
+                - 'build-pipeline'
+                - 'source-git'
+                - 'binaries'
+        noadt: 'ADT=skip '
+
+- job-group:
         name: git-packages-with-next
         jobs:
                 - 'build-pipeline-with-devel'
@@ -1446,8 +1454,9 @@
         # needs pacemaker backport on jessie
         backports: 'BACKPORTS=yes '
         backports_runtime: 'BACKPORTS=yes '
+        # disable autodep8; fails on jessie
         jobs:
-                - git-packages
+                - git-packages-no-testsuite
 
 - project:
         name: pg-activity
