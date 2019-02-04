@@ -1441,7 +1441,7 @@
 
 - project:
         name: resource-agents-paf
-        git-url: https://github.com/dalibo/PAF.git
+        git-url: https://github.com/ClusterLabs/PAF.git
         dist-filter: '(distribution!="trusty")'
         # needs pacemaker backport on jessie
         backports: 'BACKPORTS=yes '
