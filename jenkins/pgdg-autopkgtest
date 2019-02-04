@@ -9,8 +9,7 @@ PACKAGE="$1"
 CHROOT="chroot:${distribution:=sid}-pgdg-${architecture:=amd64}-sbuild"
 
 case $PACKAGE in
-  # autodep8 getting in the way because these are perl
-  bucardo|resource-agents-paf) echo "Skipping $PACKAGE tests" ; exit ;;
+  bucardo) echo "Skipping $PACKAGE tests" ; exit ;;
 esac
 
 # read pgapt config
