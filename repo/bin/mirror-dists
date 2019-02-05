@@ -2,7 +2,12 @@
 
 TARGET=$(dirname $0)/..
 
-rsync -Pav --delete atalia.postgresql.org:/srv/apt/pub/repos/apt/dists $TARGET
+rsync -Pav --delete \
+  --exclude 'Contents-*' \
+  --exclude 'Packages' \
+  --exclude 'Packages.gz' \
+  --exclude 'Sources.gz' \
+  atalia.postgresql.org:/srv/apt/pub/repos/apt/dists $TARGET
 
 #wget --mirror http://atalia.postgresql.org/dists.tar.gz
 #rm -rf dists
