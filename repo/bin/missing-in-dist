@@ -5,7 +5,8 @@ set -eu
 BINDIR=$(dirname $0)
 DISTS=$BINDIR/../dists
 DIST="$1"
+FROM_DIST="${2:-sid}"
 
-$BINDIR/diff-dists \
-	<(bzcat $DISTS/sid-pgdg-testing/main/source/Sources.bz2) \
+$BINDIR/diff-dists -p \
+	<(bzcat $DISTS/$FROM_DIST-pgdg-testing/main/source/Sources.bz2) \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2)
