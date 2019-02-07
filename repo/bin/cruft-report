@@ -3,15 +3,19 @@
 use strict;
 use warnings;
 
+my $to_term = (-t 1);
+# enable ansi codes if outputting to a terminal
+my ($b, $r, $g, $n) = $to_term ? ("\e[1m", "\e[31m", "\e[32m", "\e[0m") : ("", "", "", "");
+
 my $dist = shift or die "Syntax: $0 <dist>";
-my $packages = "dists/$dist/main/binary-amd64/Packages";
-my $sources = "dists/$dist/main/source/Sources.gz";
+my $packages = "dists/$dist/main/binary-amd64/Packages.bz2";
+my $sources = "dists/$dist/main/source/Sources.bz2";
 
 $/ = ''; # slurp paragraphs
 
 my %srcs;
 
-open S, "zcat $sources |" or die "$sources: $!";
+open S, "bzcat $sources |" or die "$sources: $!";
 while (<S>) {
 	my ($pkg) = /^Package: (.+)/m or die "$sources: paragraph without Package: $_";
 	my ($ver) = /^Version: (.+)/m or die "$sources: paragraph without Version: $_";
@@ -22,7 +26,7 @@ while (<S>) {
 }
 close S;
 
-open P, $packages or die "$packages: $!";
+open P, "bzcat $packages |" or die "$packages: $!";
 while (<P>) {
 	my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
 	my ($ver) = /^Version: (.+)/m or die "$packages: paragraph without Version: $_";
@@ -34,11 +38,11 @@ while (<P>) {
 	}
 
 	if (not exists $srcs{$src}) {
-		print "Package $pkg ($ver) source $src does not exist\n";
+		print "$r$pkg ($ver) source$n $src does not exist\n    rep remove $dist $pkg\n";
 		next;
 	}
 	if ($srcs{$src} ne $srcver) {
-		print "Package $pkg ($ver) source $src ($srcver) has version $srcs{$src}: sudo -u aptuser reprepro remove $dist $pkg\n";
+		print "$b$pkg ($ver)$n source $r$src ($srcver)$n has newer version $g$srcs{$src}$n\n    sudo -u aptuser reprepro remove $dist $pkg\n";
 	}
 }
 close P;

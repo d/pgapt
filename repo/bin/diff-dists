@@ -25,7 +25,7 @@ GetOptions (
 ) or die;
 
 # enable ansi codes if outputting to a terminal
-my ($b, $r, $g, $n) = $to_term ? ("\e[1m", "\e[31m", "\e[32m", "\e[0m") : ("", "");
+my ($b, $r, $g, $n) = $to_term ? ("\e[1m", "\e[31m", "\e[32m", "\e[0m") : ("", "", "", "");
 
 die "Syntax: $0 [-m] <source1> <source2>" unless (@ARGV == 2);
 my ($source1, $source2) = @ARGV;
