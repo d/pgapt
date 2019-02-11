@@ -3,14 +3,15 @@
 # trigger builds for a distribution
 # package and distribution are comma or space-separated lists
 
-# ./trigger-build-source -c debsso.crt:asdf -d stretch,zesty prefix
+# ./build-one-dist -c debsso.p12:asdf -d stretch,zesty prefix
 
 set -eu
+
+cert="${0%/*}/debsso.p12:asdf"
 
 while getopts "d:c:" opt ; do
 	case $opt in
 	d) distribution="$OPTARG" ;;
-	f) from_distribution="$OPTARG" ;;
 	c) cert="$OPTARG" ;;
 	*) exit 5 ;;
 	esac
@@ -24,8 +25,8 @@ set -x
 
 for pkg in "$@"; do
   for dist in $distribution; do
-    curl --cert "$cert" \
-      "https://pgdgbuild.dus.dg-i.net/job/build-source/buildWithParameters" \
-      --data "token=buildnow&PACKAGE=$pkg&from_distribution=${from_distribution:=sid}&distribution=$dist"
+    curl --cert "$cert" --cert-type p12 \
+      "https://pgdgbuild.dus.dg-i.net/job/build-one-dist/buildWithParameters" \
+      --data "token=buildnow&PACKAGE=$pkg&distribution=$dist"
   done
 done

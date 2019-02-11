@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# ./trigger-job -c debsso.p12:asdf apgdiff branch=debian
+
+set -eu
+
+cert="${0%/*}/debsso.p12:asdf"
+
+while getopts "c:" opt ; do
+	case $opt in
+	c) cert="$OPTARG" ;;
+	*) exit 5 ;;
+	esac
+done
+# shift away args
+shift $(($OPTIND - 1))
+
+JOB="$1"
+shift
+
+set -x
+
+curl --cert "$cert" --cert-type p12 \
+  "https://pgdgbuild.dus.dg-i.net/job/$JOB/buildWithParameters" \
+  --data "token=buildnow&$@"
