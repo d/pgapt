@@ -149,6 +149,19 @@
             name: binnmu_version
             description: 'binNMU version (single integer)'
 
+    adt_choice: &adt_choice
+            name: ADT
+            choices:
+                    - run
+                    - skip
+            description: 'Run autopkgtest at build time'
+    noadt_choice: &noadt_choice
+            name: ADT
+            choices:
+                    - skip
+                    - run
+            description: 'Run autopkgtest at build time'
+
     ircbot_only_configs: &only_configs
             strategy: any-failure
             message-type: summary
@@ -575,6 +588,7 @@
                 - string: *supported_versions_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
+                - choice: *adt_choice
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
@@ -584,7 +598,7 @@
                         which-build: upstream-build
                         fallback-to-last-successful: true
                         do-not-fingerprint: true
-                - shell: '{noadt}{backports}sbuild-package'
+                - shell: '{backports}sbuild-package'
         publishers:
                 - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.asc,*.deb,*.dsc,*.changes,*.buildinfo'
@@ -595,21 +609,20 @@
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
+- job-template: &binaries_no_adt
+        <<: *binaries_template
+        id: 'binaries-no-adt'
+        parameters:
+                - string: *supported_versions_param
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
+                - choice: *noadt_choice
+
 # binaries triggered from -source-git-head
 - job-template:
-        <<: *binaries_template
+        <<: *binaries_no_adt
         name: '{name}-binaries'
         id: 'binaries-git-head'
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '{name}-source/distribution=$distribution'
-                        filter: 'result/*'
-                        flatten: true
-                        which-build: upstream-build
-                        fallback-to-last-successful: true
-                        do-not-fingerprint: true
-                - shell: '{noadt}{backports}sbuild-package'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
@@ -882,7 +895,6 @@
                 - 'source-apt'
                 - 'binaries'
                 - 'adt'
-        noadt: ''
 
 - job-group:
         name: apt-packages-with-next
@@ -894,7 +906,6 @@
                 - 'binaries-devel'
                 - 'adt'
                 - 'adt-devel'
-        noadt: ''
 
 - job-group:
         name: git-packages
@@ -903,15 +914,13 @@
                 - 'source-git'
                 - 'binaries'
                 - 'adt'
-        noadt: ''
 
 - job-group:
         name: git-packages-no-testsuite
         jobs:
                 - 'build-pipeline'
                 - 'source-git'
-                - 'binaries'
-        noadt: 'ADT=skip '
+                - 'binaries-no-adt'
 
 - job-group:
         name: git-packages-with-next
@@ -923,17 +932,15 @@
                 - 'binaries-devel'
                 - 'adt'
                 - 'adt-devel'
-        noadt: ''
 
 - job-group:
         name: git-packages-adt
         jobs:
                 - 'build-pipeline-split-adt'
                 - 'source-git'
-                - 'binaries'
+                - 'binaries-no-adt'
                 - '{name}-testsuite'
                 - 'adt'
-        noadt: 'ADT=skip '
 
 - job-group:
         name: git-packages-adt-with-git
@@ -942,7 +949,7 @@
                 - 'source-git-head'
                 - 'binaries-git-head'
                 - 'testsuite-git-head'
-        noadt: 'ADT=skip '
+                - 'adt'
 
 - job-group:
         name: upgrade-job
