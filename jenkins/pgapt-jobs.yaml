@@ -1433,6 +1433,13 @@
                 - git-packages
 
 - project:
+        name: pgadmin4
+        git-url: https://salsa.debian.org/postgresql/pgadmin4.git
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        jobs:
+                - git-packages
+
+- project:
         name: pgagent
         git-url: https://salsa.debian.org/postgresql/pgagent.git
         # trusty doesn't have cmake 3.3
@@ -1726,16 +1733,11 @@
                 - git-packages-with-next
 
 - project:
-        name: geos
-        apt-suite: 'xenial'
-        dist-filter: '(distribution=="trusty")'
-        jobs: [apt-packages]
-
-- project:
-        name: sfcgal
-        apt-suite: 'sid'
-        dist-filter: '(distribution=="bionic")'
-        jobs: [apt-packages]
+        name: patroni
+        git-url: https://salsa.debian.org/postgresql/patroni.git
+        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        jobs:
+                - git-packages
 
 - project:
         name: postgis-java
@@ -2110,65 +2112,6 @@
         git-url: https://salsa.debian.org/postgresql/python-skytools.git
         git-branch: debian
         dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
-        jobs:
-                - git-packages
-
-## patroni and dependencies
-
-- project:
-        name: patroni
-        git-url: https://salsa.debian.org/postgresql/patroni.git
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
-        jobs:
-                - git-packages
-
-- project: &python_stretch_backport
-        name: python-parse-type
-        apt-suite: 'buster'
-        dist-filter: '(distribution=="stretch")'
-        jobs: [apt-packages]
-- project: { <<: *python_stretch_backport, name: behave }
-- project: { <<: *python_stretch_backport, name: cdiff }
-
-## pgadmin4 and dependencies
-
-- project: &pythonpkg
-        name: flask-mail
-        git-url: https://salsa.debian.org/python-team/modules/flask-mail.git
-        git-branch: debian/master
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
-        backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
-        jobs:
-                - git-packages
-- project: { <<: *pythonpkg, name: flask-babelex,  git-url: 'https://salsa.debian.org/python-team/modules/flask-babelex.git' }
-- project: { <<: *pythonpkg, name: flask-gravatar, git-url: 'https://salsa.debian.org/python-team/modules/flask-gravatar.git' }
-- project: { <<: *pythonpkg, name: flask-htmlmin , git-url: 'https://salsa.debian.org/python-team/modules/flask-htmlmin.git' }
-- project: { <<: *pythonpkg, name: flask-paranoid, git-url: 'https://salsa.debian.org/python-team/modules/flask-paranoid.git' }
-- project: { <<: *pythonpkg, name: flask-peewee,   git-url: 'https://salsa.debian.org/python-team/modules/flask-peewee.git',
-             dist-filter: '(distribution=="stretch") || (distribution=="xenial")' }
-- project: { <<: *pythonpkg, name: flask-security, git-url: 'https://salsa.debian.org/python-team/modules/flask-security.git' }
-- project: { <<: *pythonpkg, name: flask-wtf,      git-url: 'https://salsa.debian.org/python-team/modules/flask-wtf.git' }
-- project: { <<: *pythonpkg, name: htmlmin,        git-url: 'https://salsa.debian.org/python-team/modules/htmlmin.git' }
-- project: { <<: *pythonpkg, name: peewee,         git-url: 'https://salsa.debian.org/python-team/modules/peewee.git' }
-- project: { <<: *pythonpkg, name: psycopg2,       git-url: 'https://salsa.debian.org/python-team/modules/psycopg2.git' }
-- project: { <<: *pythonpkg, name: sshtunnel,      git-url: 'https://salsa.debian.org/python-team/modules/sshtunnel.git' }
-- project: { <<: *pythonpkg, name: wtf-peewee,     git-url: 'https://salsa.debian.org/python-team/modules/wtf-peewee.git' }
-
-- project: &pythonbackport
-        name: flask-login
-        apt-suite: 'bionic'
-        dist-filter: '(distribution=="xenial")'
-        backports: 'BACKPORTS=yes ' # make DH 10 available on xenial
-        jobs: [apt-packages]
-
-- project:
-        <<: *pythonbackport
-        name: sqlparse
-
-- project:
-        name: pgadmin4
-        git-url: https://salsa.debian.org/postgresql/pgadmin4.git
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
         jobs:
                 - git-packages
 
