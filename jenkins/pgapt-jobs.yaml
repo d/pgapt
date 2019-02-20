@@ -859,6 +859,8 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
+        triggers:
+                - timed: "H H H * *"
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact:
