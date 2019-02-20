@@ -881,7 +881,8 @@
 
 - job-template:
         <<: *upgrade_template
-        name: 'upgrade-{oldversion}-{newversion}-git-head'
+        name: 'upgrade-{oldversion}-{newversion}'
+        id: 'upgrade-git-head'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
@@ -955,6 +956,11 @@
         name: upgrade-job
         jobs:
                 - 'upgrade-{oldversion}-{newversion}'
+
+- job-group:
+        name: upgrade-job-git-head
+        jobs:
+                - 'upgrade-git-head'
 
 # simple jobs
 
@@ -1171,42 +1177,6 @@
                 - ircbot:
                         strategy: any-failure
                         message-type: summary
-
-#- job:
-#        name: promote
-#        description: 'Promotes packages from the *-pgdg-testing distributions to *-pgdg.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-#        parameters:
-#                - string:
-#                        name: package
-#                        description: 'Name of source package to promote (no "-source" suffix)'
-#                - string:
-#                        name: distributions
-#                        description: 'Distributions to promote (space-separated, default "all")'
-#                        default: 'all'
-#        builders:
-#                - shell: 'ssh atalia.postgresql.org promote -d "$distributions" $package'
-#        publishers:
-#                - ircbot:
-#                        matrix-notifier: all
-#                        message-type: summary-params
-#                - groovy-postbuild: 'manager.addShortText("${manager.build.environment.package} (${manager.build.environment.distributions})")'
-
-- job:
-        name: upgrade-plperl
-        description: 'Test plperl upgrades.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
-        project-type: matrix
-        execution-strategy:
-                combination-filter: *filter
-                touchstone:
-                        expr: '(distribution=="wheezy") && (architecture=="amd64")'
-        axes:
-                - axis: *arch_axis
-                - axis:
-                        type: user-defined
-                        name: distribution
-                        values: [wheezy]
-        builders:
-                - shell: 'sudo cowbuilder --execute $(which upgrade-plperl) --basepath /home/pbuilder/base-$distribution-$architecture.cow'
 
 - job:
         name: gitcache-postgresql
@@ -2041,32 +2011,18 @@
 # upgrade tests
 
 - project:
-        name: upgrade-8.4-9.4
-        oldversion: 8.4
-        newversion: 9.4
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.1-9.4
-        oldversion: 9.1
-        newversion: 9.4
-        jobs:
-                - upgrade-job
-
-- project:
-        name: upgrade-9.4-9.6
+        name: upgrade-9.4-11
         oldversion: 9.4
-        newversion: 9.6
+        newversion: 11
         jobs:
                 - upgrade-job
 
 - project:
-        name: upgrade-9.6-10
-        oldversion: 9.6
-        newversion: 10
+        name: upgrade-11-12
+        oldversion: 11
+        newversion: 12
         jobs:
-                - upgrade-job
+                - upgrade-job-git-head
 
 # PgQ
 
