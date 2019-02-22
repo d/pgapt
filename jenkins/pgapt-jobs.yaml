@@ -1476,6 +1476,8 @@
 - project:
         name: pgcluu
         git-url: https://salsa.debian.org/postgresql/pgcluu.git
+        dist-filter: '(distribution!="trusty")' # DH 9 too old
+        backports: 'BACKPORTS=yes ' # DH 9 too old on xenial
         jobs:
                 - git-packages
 
