@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# diff list of packages in pgapt-jobs.yaml against actual archive contents
+
+set -eu
+set -o pipefail
+
+DIST="${1:-sid-pgdg-testing}"
+SOURCE="dists/$DIST/main/source/Sources.bz2"
+TMPSOURCE="$(mktemp --tmpdir $DIST.XXXXXX)"
+trap "rm -f $TMPSOURCE" EXIT
+
+bzcat $SOURCE | grep '^Package: ' | awk '{ print $2 }' | sort > $TMPSOURCE
+
+diff -u0 ../jenkins/packages $TMPSOURCE | grep -v ^@@
