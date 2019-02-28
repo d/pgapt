@@ -23,9 +23,11 @@ update-pgdgbuild:
 	$(JJB) --conf jenkins_jobs.ini update $(JOBS)
 
 # package lists
-lists: packages.backports packages.backports_runtime
+lists: packages packages.backports packages.backports_runtime
+packages: pgapt-jobs.yaml
+	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} }' | grep -v '^upgrade-' | sort > $@
 packages.%: pgapt-jobs.yaml
-	perl -le 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{$*} or $$p->{project}->{"<<"}->{$*} }' > $@
+	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{$*} or $$p->{project}->{"<<"}->{$*} }' | sort > $@
 
 clean:
 	rm -rf output output.old packages.backports*
