@@ -113,7 +113,8 @@ umask 002
 	export DEBIAN_FRONTEND=noninteractive
 	export UCF_FORCE_CONFFNEW=y UCF_FORCE_CONFFMISS=y
 
-	apt-get update
+	# try update twice because ubuntu mirrors keep acting up
+	apt-get update || apt-get update
 
 	# save backports lists
 	rm -rf /var/lib/apt/backports /etc/apt/sources.list.d/backports.list.disabled
