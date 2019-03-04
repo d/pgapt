@@ -118,6 +118,12 @@
                     - xenial
                     - trusty
 
+    sid_dist_axis: &sid_dist_axis
+            type: user-defined
+            name: distribution
+            values:
+                    - sid
+
     git_head_dist_axis: &git_head_dist_axis
             type: user-defined
             name: distribution
@@ -850,6 +856,7 @@
 
 - job-template: &upgrade_template
         name: 'upgrade-{oldversion}-{newversion}'
+        id: 'upgrade'
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
         execution-strategy:
@@ -880,6 +887,14 @@
         publishers:
                 - ircbot: *only_configs
                 - workspace-cleanup
+
+- job-template:
+        <<: *upgrade_template
+        name: 'upgrade-{oldversion}-{newversion}'
+        id: 'upgrade-sid'
+        axes:
+                - axis: *arch_axis
+                - axis: *sid_dist_axis
 
 - job-template:
         <<: *upgrade_template
@@ -953,16 +968,6 @@
                 - 'binaries-git-head'
                 - 'testsuite-git-head'
                 - 'adt'
-
-- job-group:
-        name: upgrade-job
-        jobs:
-                - 'upgrade-{oldversion}-{newversion}'
-
-- job-group:
-        name: upgrade-job-git-head
-        jobs:
-                - 'upgrade-git-head'
 
 # simple jobs
 
@@ -2014,19 +2019,20 @@
 
 # upgrade tests
 
-- project:
-        name: upgrade-9.4-11
-        oldversion: 9.4
-        newversion: 11
-        jobs:
-                - upgrade-job
+- project: { name: upgrade-8.2-8.3, oldversion: 8.2, newversion: 8.3, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-8.3-8.4, oldversion: 8.3, newversion: 8.4, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-8.4-9.0, oldversion: 8.4, newversion: 9.0, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-9.0-9.1, oldversion: 9.0, newversion: 9.1, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-9.1-9.2, oldversion: 9.1, newversion: 9.2, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-9.2-9.3, oldversion: 9.2, newversion: 9.3, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-9.3-9.4, oldversion: 9.3, newversion: 9.4, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-9.4-9.5, oldversion: 9.4, newversion: 9.5, jobs: [ upgrade ] }
+- project: { name: upgrade-9.5-9.6, oldversion: 9.5, newversion: 9.6, jobs: [ upgrade ] }
+- project: { name: upgrade-9.6-10,  oldversion: 9.6, newversion: 10,  jobs: [ upgrade ] }
+- project: { name: upgrade-10-11,   oldversion: 10,  newversion: 11,  jobs: [ upgrade ] }
+- project: { name: upgrade-11-12,   oldversion: 11,  newversion: 12,  jobs: [ upgrade-git-head ] }
 
-- project:
-        name: upgrade-11-12
-        oldversion: 11
-        newversion: 12
-        jobs:
-                - upgrade-job-git-head
+- project: { name: upgrade-9.4-11,  oldversion: 9.4, newversion: 11,  jobs: [ upgrade ] }
 
 # PgQ
 
