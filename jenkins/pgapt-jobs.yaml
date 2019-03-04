@@ -883,6 +883,7 @@
                         fallback-to-last-successful: true
                         do-not-fingerprint: true
                 - shell: 'rm lib*_{oldversion}*'
+                - shell: 'rm -vf postgresql-{oldversion}-dbg_*' # conflict via /usr/lib/debug/usr/bin/ecpg
                 - shell: 'postgresql-testsuite'
         publishers:
                 - ircbot: *only_configs
