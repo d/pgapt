@@ -852,6 +852,14 @@
         builders:
                 - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=12 pgdg-autopkgtest {name}'
 
+- job-template:
+        <<: *adt_template
+        name: '{name}-adt'
+        id: 'adt-git-head'
+        axes:
+                - axis: *git_head_arch_axis
+                - axis: *git_head_dist_axis
+
 # upgrade test template
 
 - job-template: &upgrade_template
@@ -968,7 +976,7 @@
                 - 'source-git-head'
                 - 'binaries-git-head'
                 - 'testsuite-git-head'
-                - 'adt'
+                - 'adt-git-head'
 
 # simple jobs
 
