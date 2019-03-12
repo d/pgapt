@@ -961,7 +961,7 @@
                 - 'adt-devel'
 
 - job-group:
-        name: git-packages-adt
+        name: git-packages-split-adt
         jobs:
                 - 'build-pipeline-split-adt'
                 - 'source-git'
@@ -970,7 +970,7 @@
                 - 'adt'
 
 - job-group:
-        name: git-packages-adt-with-git
+        name: git-packages-split-adt-with-git
         jobs:
                 - 'build-pipeline-split-adt-with-git'
                 - 'source-git-head'
@@ -1742,7 +1742,7 @@
         git-branch: '8.2-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-8.3
@@ -1750,7 +1750,7 @@
         git-branch: '8.3-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-8.4
@@ -1758,7 +1758,7 @@
         git-branch: '8.4-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.0
@@ -1766,7 +1766,7 @@
         git-branch: '9.0-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.1
@@ -1774,7 +1774,7 @@
         git-branch: 9.1
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.2
@@ -1782,7 +1782,7 @@
         git-branch: 9.2
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.3
@@ -1790,35 +1790,35 @@
         git-branch: 9.3
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.4
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.4
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.5
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.5
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-9.6
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.6
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-10
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 10
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 - project:
         name: postgresql-11
@@ -1826,7 +1826,7 @@
         git-branch: 11
         dist-filter: '(distribution!="wheezy")'
         jobs:
-                - git-packages-adt
+                - git-packages-split-adt
 
 # the PostgreSQL devel version:
 - project:
@@ -1835,7 +1835,7 @@
         git-branch: origin/master
         merge-branch: 12
         jobs:
-                - git-packages-adt-with-git
+                - git-packages-split-adt-with-git
 
 - project:
         name: postgresql-common
