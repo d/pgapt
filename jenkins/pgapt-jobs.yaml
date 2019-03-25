@@ -1313,6 +1313,13 @@
                 - git-packages-with-next
 
 - project:
+        name: first-last-agg
+        git-url: https://salsa.debian.org/postgresql/first-last-agg.git
+        git-branch: debian
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: hypopg
         git-url: https://github.com/HypoPG/hypopg.git
         git-branch: master
