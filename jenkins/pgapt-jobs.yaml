@@ -1900,9 +1900,7 @@
         name: postgresql-pllua
         git-url: https://salsa.debian.org/postgresql/postgresql-pllua.git
         # lua5.3 in jessie-backports and not in trusty
-        dist-filter: '(distribution!="trusty")'
-        backports: 'BACKPORTS=yes '
-        backports_runtime: 'BACKPORTS=yes '
+        dist-filter: '(distribution!="trusty") && (distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
