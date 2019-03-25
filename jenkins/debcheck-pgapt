@@ -57,10 +57,16 @@ esac
 # list of all packages
 MAINPKG=$(awk '/^Package:/ { print $2 }' $DISTSDIR/$DIST/main/binary-${architecture}/Packages)
 
-# postgresql-11-pllua needs both beta and backports on jessie, exclude for now
-if [ "$distribution" = "jessie" ] && [ "${PG_BETA_VERSION:-}" ]; then
-  echo "Skipping test of postgresql-${PG_BETA_VERSION:-}-pllua"
-  MAINPKG=$(echo "$MAINPKG" | grep -v "postgresql-${PG_BETA_VERSION:-}-pllua")
+## postgresql-11-pllua needs both beta and backports on jessie, exclude for now
+#if [ "$distribution" = "jessie" ] && [ "${PG_BETA_VERSION:-}" ]; then
+#  echo "Skipping test of postgresql-${PG_BETA_VERSION:-}-pllua"
+#  MAINPKG=$(echo "$MAINPKG" | grep -v "postgresql-${PG_BETA_VERSION:-}-pllua")
+#fi
+
+# resource-agents-paf needs pacemaker from jessie-backports, which got removed. We keep it in the repository, but don't test it.
+if [ "$distribution" = "jessie" ]; then
+  echo "Skipping test of resource-agents-paf"
+  MAINPKG=$(echo "$MAINPKG" | grep -v "resource-agents-paf")
 fi
 
 # run debcheck
