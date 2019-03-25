@@ -1397,13 +1397,10 @@
 - project:
         name: resource-agents-paf
         git-url: https://github.com/ClusterLabs/PAF.git
-        dist-filter: '(distribution!="trusty")'
-        # needs pacemaker backport on jessie
-        backports: 'BACKPORTS=yes '
-        backports_runtime: 'BACKPORTS=yes '
-        # disable autodep8; fails on jessie
+        dist-filter: '(distribution!="trusty") && (distribution!="jessie")'
+        # needs pacemaker backport on jessie, but jessie-backports is gone
         jobs:
-                - git-packages-no-testsuite
+                - git-packages
 
 - project:
         name: pg-activity

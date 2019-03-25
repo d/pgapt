@@ -13,5 +13,4 @@ pgstat
 pgtop
 pgxnclient
 prometheus-sql-exporter
-resource-agents-paf
 slony1-2
