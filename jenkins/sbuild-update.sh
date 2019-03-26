@@ -107,6 +107,8 @@ umask 002
 	    rm -f /var/lib/apt/lists/*backports* # clean up if last run failed
 	    cp -al /var/lib/apt/backports/* /var/lib/apt/lists
 	  fi
+	else
+	  rm -f /etc/apt/sources.list.d/backports.list*
 	fi
 
 	# tell debconf and ucf not to ask any questions
