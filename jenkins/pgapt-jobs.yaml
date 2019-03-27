@@ -129,6 +129,7 @@
             name: distribution
             values:
                     - sid
+                    - buster
                     - stretch
                     - bionic
                     - xenial
