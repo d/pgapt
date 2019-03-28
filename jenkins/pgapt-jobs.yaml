@@ -1435,8 +1435,6 @@
         git-url: https://salsa.debian.org/postgresql/pgagent.git
         # trusty doesn't have cmake 3.3
         dist-filter: '(distribution!="trusty")'
-        # needs cmake backport on jessie
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
@@ -1467,7 +1465,6 @@
 - project:
         name: pgbouncer
         git-url: https://salsa.debian.org/postgresql/pgbouncer.git
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
@@ -2006,7 +2003,6 @@
         git-url: https://salsa.debian.org/postgresql/slony1-2.git
         # needs debhelper 9.20160114 (in jessie-backports)
         dist-filter: '(distribution!="trusty")'
-        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
 

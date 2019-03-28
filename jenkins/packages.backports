@@ -2,8 +2,6 @@ check-pgactivity
 libpgjava
 libscram-java
 ora2pg
-pgagent
-pgbouncer
 pg-cloudconfig
 pgcluu
 pgformatter
@@ -13,4 +11,3 @@ pgstat
 pgtop
 pgxnclient
 prometheus-sql-exporter
-slony1-2
