@@ -1,6 +1,7 @@
 check-pgactivity
 libpgjava
 libscram-java
+omnidb
 ora2pg
 pg-cloudconfig
 pgcluu

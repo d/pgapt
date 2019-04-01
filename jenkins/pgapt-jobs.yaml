@@ -1390,6 +1390,10 @@
 - project:
         name: omnidb
         git-url: https://salsa.debian.org/postgresql/omnidb.git
+        # needs dh 10
+        dist-filter: '(distribution!="trusty")'
+        # needs dh 10 backport on xenial
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
