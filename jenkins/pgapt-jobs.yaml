@@ -1390,10 +1390,11 @@
 - project:
         name: omnidb
         git-url: https://salsa.debian.org/postgresql/omnidb.git
-        # needs dh 10
-        dist-filter: '(distribution!="trusty")'
-        # needs dh 10 backport on xenial
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial") && (distribution!="trusty")'
+        # needs dh 11 backport on stretch
         backports: 'BACKPORTS=yes '
+        # needs python3-aes on stretch
+        backports_runtime: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
