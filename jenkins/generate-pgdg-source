@@ -245,7 +245,7 @@ case $PACKAGE in
 
   omnidb)
     case $distribution in stretch)
-      sed -i -e '/fonts-glewlwyd/d' debian/control
+      sed -i -e '/fonts-glewlwyd/d' debian/control*
       TWEAK+=("Not symlinking fonts-glewlwyd files.")
       ;;
     esac

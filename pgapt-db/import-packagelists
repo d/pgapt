@@ -31,9 +31,9 @@
 
 import apt_pkg, psycopg2, os, re, sys, time
 
-ftp_prefix = "/home/cbe/projects/postgresql/apt.postgresql.org/repo"
+ftp_prefix = "/home/cbe/projects/postgresql/apt.postgresql.org"
 
-pg = psycopg2.connect('dbname=pgdg')
+pg = psycopg2.connect('dbname=pgweb')
 cur = pg.cursor()
 cur.execute("SET search_path TO apt")
 
