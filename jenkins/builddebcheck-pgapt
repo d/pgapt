@@ -90,6 +90,17 @@ if [ $architecture = ppc64el ]; then
   done
 fi
 
+# packages not tested on certain dists
+# postgresql-pljava needs older java that doesn't exist anymore (2019-04-09)
+case $distribution in
+  sid|buster)
+    for pkg in postgresql-pljava; do
+      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
+      mv $MAINSRC.tmp $MAINSRC
+    done
+    ;;
+esac
+
 # run builddebcheck
 BUILDDEBCHECK="dose-builddebcheck -v -f -e --deb-native-arch=$architecture"
 
