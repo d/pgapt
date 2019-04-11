@@ -257,6 +257,11 @@ case $PACKAGE in
       TWEAK+=("Not symlinking fonts-glewlwyd and fonts-open-sans files.")
       ;;
     esac
+    case $distribution in xenial)
+      sed -i -e 's/^#xenial/xenial/' debian/patches/series
+      TWEAK+=("Dropping :widths: table options from rst documentation.")
+      ;;
+    esac
     ;;
 
   patroni)
