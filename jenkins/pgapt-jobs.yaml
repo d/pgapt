@@ -73,15 +73,17 @@
             type: slave
             name: slave
             values:
-              - pgdgbuild-x86
+              - azure-x86
               - moe-x86
+              - pgdgbuild-x86
               - pgdgbuild-ppc64el
     x86_slaves_axis: &x86_slaves_axis
             type: slave
             name: slave
             values:
-              - pgdgbuild-x86
+              - azure-x86
               - moe-x86
+              - pgdgbuild-x86
     ppc64el_slaves_axis: &ppc64el_slaves_axis
             type: slave
             name: slave
