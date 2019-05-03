@@ -23,6 +23,16 @@
       - postgresql-common # for apt.postgresql.org.sh
       - sbuild
       - schroot
+      - sudo
+      - ubuntu-archive-keyring
+      - vim
+
+  - name: remove packages
+    apt:
+      name:
+      - joe
+      - nano
+      state: absent
 
   - name: apt.postgresql.org repository
     shell: echo yes | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
@@ -56,10 +66,17 @@
       - schroot-config.sh
       - netns-setup
 
+  - name: pgdg-src.list
+    lineinfile:
+      line: '%sudo	ALL=(ALL:ALL) NOPASSWD: ALL'
+      dest: /etc/sudoers
+      regexp: '^%sudo'
+
   - name: buildd user
     user:
       name: buildd
       groups: sbuild,staff,sudo
+      shell: /bin/bash
 
   - name: buildd authorized_keys
     authorized_key:
@@ -78,7 +95,7 @@
       state: link
     when: 'chroot_dir != "/home/chroot"'
 
-  # FIXME: needs pgapt.conf
+  # FIXME: needs to be re-run after pgapt.conf is present
   - name: update schroot config
     shell: /usr/local/bin/schroot-config.sh > /etc/schroot/chroot.d/sbuild.conf
 
@@ -111,6 +128,14 @@
     with_items:
       - default
       - sbuild
+
+  - name: sbuild lock directory
+    file:
+      state: directory
+      dest: /run/lock/sbuild-package
+      mode: 03775
+      owner: buildd
+      group: sbuild
 
   - name: sbuild.conf
     copy:
@@ -156,6 +181,9 @@
       name: ferm
       state: reloaded
     when: fermconf is changed
+
+  - name: run netns-setup
+    shell: /usr/local/bin/netns-setup
 
   - name: git user name
     git_config:
