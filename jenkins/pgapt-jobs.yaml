@@ -238,7 +238,6 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
-                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: 'all'),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
@@ -274,7 +273,6 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
-                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: DEB_PG_SUPPORTED_VERSIONS),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
@@ -288,7 +286,6 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries-beta'),
-                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: DEB_PG_SUPPORTED_VERSIONS),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'extension-only'),
                                     ]

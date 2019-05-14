@@ -6,7 +6,6 @@ ora2pg
 pg-cloudconfig
 pgcluu
 pgformatter
-pgrouting
 pgsql-ogr-fdw
 pgstat
 pgtop
