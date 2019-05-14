@@ -118,7 +118,6 @@
                     - cosmic
                     - bionic
                     - xenial
-                    - trusty
 
     sid_dist_axis: &sid_dist_axis
             type: user-defined
@@ -135,7 +134,6 @@
                     - stretch
                     - bionic
                     - xenial
-                    - trusty # for travis
 
     distribution_parameter: &distribution_parameter
             name: distribution
@@ -746,7 +744,6 @@
                       cosmic) tag='pgdg18.10+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
-                      trusty) tag='pgdg14.04+' ;;
                       *) echo "bad distribution"; exit 1 ;;
                     esac
                     version=$(apt-cache showsrc $PACKAGE | awk '/^Version:/ { print $2 }' | grep $tag)
@@ -1289,7 +1286,6 @@
         name: check-pgactivity
         git-url: https://salsa.debian.org/Krysztophe-guest/check_pgactivity.git
         # needs DH 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1310,8 +1306,6 @@
 - project:
         name: cstore-fdw
         git-url: https://salsa.debian.org/postgresql/cstore-fdw.git
-        # needs locales-all
-        dist-filter: '(distribution!="trusty")'
         jobs:
                 - git-packages-with-next
 
@@ -1345,8 +1339,6 @@
 - project:
         name: libdbd-pg-perl
         git-url: https://salsa.debian.org/perl-team/modules/packages/libdbd-pg-perl.git
-        # Problem with pkg-perl-autopkgtest
-        dist-filter: '(distribution!="trusty")'
         jobs:
                 - git-packages
 
@@ -1362,7 +1354,7 @@
         # needs dh 10
         # jessie: Error configuring: com.igormaznitsa:jcp. Reason: ERROR: Cannot override read-only parameter: destination in goal: jcp:preprocess
         # xenial: [ERROR] Failed to execute goal com.igormaznitsa:jcp:5.3.3:preprocess (preprocessTestSources) on project postgresql: Exception during preprocessor context creation: Can't find source directory [/<<PKGBUILDDIR>>/pgjdbc/target/generated-sources/annotations]
-        dist-filter: '(distribution!="trusty" && distribution!="jessie" && distribution!="xenial")'
+        dist-filter: '(distribution!="jessie" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1377,7 +1369,7 @@
         name: libscram-java
         git-url: https://salsa.debian.org/java-team/libscram-java.git
         # needs dh 11
-        dist-filter: '(distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
+        dist-filter: '(distribution!="jessie" && distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1392,7 +1384,7 @@
 - project:
         name: omnidb
         git-url: https://salsa.debian.org/postgresql/omnidb.git
-        dist-filter: '(distribution!="jessie") && (distribution!="xenial") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
         # needs dh 11 backport on stretch
         backports: 'BACKPORTS=yes '
         # needs python3-aes on stretch
@@ -1404,7 +1396,6 @@
         name: ora2pg
         git-url: https://salsa.debian.org/postgresql/ora2pg.git
         # needs dh 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1418,7 +1409,7 @@
 - project:
         name: resource-agents-paf
         git-url: https://github.com/ClusterLabs/PAF.git
-        dist-filter: '(distribution!="trusty") && (distribution!="jessie")'
+        dist-filter: '(distribution!="jessie")'
         # needs pacemaker backport on jessie, but jessie-backports is gone
         jobs:
                 - git-packages
@@ -1439,15 +1430,13 @@
 - project:
         name: pgadmin4
         git-url: https://salsa.debian.org/postgresql/pgadmin4.git
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages
 
 - project:
         name: pgagent
         git-url: https://salsa.debian.org/postgresql/pgagent.git
-        # trusty doesn't have cmake 3.3
-        dist-filter: '(distribution!="trusty")'
         jobs:
                 - git-packages
 
@@ -1484,7 +1473,6 @@
 - project:
         name: pg-cloudconfig
         git-url: https://github.com/credativ/pg_cloudconfig.git
-        dist-filter: '(distribution!="trusty")' # needs python3-pint
         backports: 'BACKPORTS=yes ' # make DH 10 available on jessie/xenial
         jobs:
                 - git-packages
@@ -1505,7 +1493,6 @@
 - project:
         name: pgcluu
         git-url: https://salsa.debian.org/postgresql/pgcluu.git
-        dist-filter: '(distribution!="trusty")' # DH 9 too old
         backports: 'BACKPORTS=yes ' # DH 9 too old on xenial
         jobs:
                 - git-packages
@@ -1550,7 +1537,6 @@
         name: pgformatter
         git-url: https://salsa.debian.org/postgresql/pgformatter.git
         # needs debhelper 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1589,8 +1575,8 @@
 - project:
         name: pgmodeler
         git-url: https://salsa.debian.org/postgresql/pgmodeler.git
-        # 1.9 excludes jessie/trusty: src/basetableview.cpp:174:88: error: no matching function for call to 'QTimer::singleShot(int, BaseTableView::mousePressEvent(QGraphicsSceneMouseEvent*)::__lambda0)'
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        # 1.9 excludes jessie: src/basetableview.cpp:174:88: error: no matching function for call to 'QTimer::singleShot(int, BaseTableView::mousePressEvent(QGraphicsSceneMouseEvent*)::__lambda0)'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages
 
@@ -1604,7 +1590,7 @@
         name: pg-rational
         git-url: https://salsa.debian.org/postgresql/pg-rational.git
         # needs gcc 5 for __builtin_sadd_overflow
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
@@ -1648,10 +1634,8 @@
 - project:
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
-        # needs cmake >= 3.2 (needs backports on jessie, excludes trusty)
         # exclude jessie because postgis excludes it
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
-        backports: 'BACKPORTS=yes '
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
@@ -1665,7 +1649,6 @@
         name: pgstat
         git-url: https://salsa.debian.org/Krysztophe-guest/pgstat.git
         # needs DH 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1686,7 +1669,6 @@
         name: pgsql-ogr-fdw
         git-url: https://salsa.debian.org/debian-gis-team/pgsql-ogr-fdw.git
         # needs DH 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-next
@@ -1701,7 +1683,6 @@
         name: pgtop
         git-url: https://salsa.debian.org/postgresql/pgtop.git
         # needs DH 10
-        dist-filter: '(distribution!="trusty")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1710,7 +1691,7 @@
         name: pgxnclient
         git-url: https://salsa.debian.org/postgresql/pgxnclient.git
         # needs DH 11
-        dist-filter: '(distribution!="jessie") && (distribution!="xenial") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
@@ -1731,23 +1712,23 @@
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
 - project:
         name: patroni
         git-url: https://salsa.debian.org/postgresql/patroni.git
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
         jobs:
                 - git-packages
 
 - project:
         name: postgis-java
         git-url: https://salsa.debian.org/debian-gis-team/postgis-java.git
-        # needs default-jdk-headless (not available on jessie and trusty)
+        # needs default-jdk-headless (not available on jessie)
         # needs newer libpgjava (xenial: [ERROR] Failed to execute goal on project postgis-jdbc: Could not resolve dependencies for project net.postgis:postgis-jdbc:jar:2.2.1: Cannot access central (https://repo.maven.apache.org/maven2) in offline mode and the artifact org.postgresql:postgresql:jar:debian has not been downloaded from it before.)
-        dist-filter: '(distribution!="jessie" && distribution!="trusty" && distribution!="xenial")'
+        dist-filter: '(distribution!="jessie" && distribution!="xenial")'
         jobs:
                 - git-packages
 
@@ -1907,15 +1888,15 @@
         name: postgresql-pljava
         git-url: https://salsa.debian.org/postgresql/postgresql-pljava.git
         # Java 7 not fully supported
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
 - project:
         name: postgresql-pllua
         git-url: https://salsa.debian.org/postgresql/postgresql-pllua.git
-        # lua5.3 in jessie-backports and not in trusty
-        dist-filter: '(distribution!="trusty") && (distribution!="jessie")'
+        # lua5.3 in jessie-backports
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
@@ -1940,8 +1921,6 @@
 - project:
         name: postgresql-q3c
         git-url: https://salsa.debian.org/postgresql/postgresql-q3c.git
-        # tests fail on trusty/i386
-        arch-filter: '((distribution!="trusty") || (architecture!="i386"))'
         jobs:
                 - git-packages
 
@@ -1982,7 +1961,7 @@
         name: prometheus-sql-exporter
         git-url: https://github.com/credativ/sql_exporter
         git-branch: debian
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty") && (distribution!="xenial")'
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
         backports: 'BACKPORTS=yes ' # golang-* backports
         jobs:
                 - git-packages
@@ -2014,8 +1993,6 @@
 - project:
         name: slony1-2
         git-url: https://salsa.debian.org/postgresql/slony1-2.git
-        # needs debhelper 9.20160114 (in jessie-backports)
-        dist-filter: '(distribution!="trusty")'
         jobs:
                 - git-packages-with-next
 
@@ -2060,7 +2037,7 @@
         name: londiste
         git-url: https://salsa.debian.org/postgresql/londiste.git
         git-branch: debian
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie")' # python3.5
         jobs:
                 - git-packages
 
@@ -2089,7 +2066,7 @@
         name: python-pgq
         git-url: https://salsa.debian.org/postgresql/python-pgq.git
         git-branch: debian
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie")' # python3.5
         jobs:
                 - git-packages
 
@@ -2097,7 +2074,7 @@
         name: python-skytools
         git-url: https://salsa.debian.org/postgresql/python-skytools.git
         git-branch: debian
-        dist-filter: '(distribution!="jessie") && (distribution!="trusty")' # python3.5
+        dist-filter: '(distribution!="jessie")' # python3.5
         jobs:
                 - git-packages
 
