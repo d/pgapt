@@ -23,3 +23,6 @@ set -x
 curl --cert "$cert" --cert-type p12 \
   "https://pgdgbuild.dus.dg-i.net/job/$JOB/buildWithParameters" \
   --data "token=buildnow&$@"
+
+#curl --cert "$cert" --cert-type p12 -X POST \
+#  "https://pgdgbuild.dus.dg-i.net/job/$JOB/doDelete"
