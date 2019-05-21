@@ -17,6 +17,8 @@
     arch-filter: 'true'
     filter: &filter                                                       '!(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
     filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el")) && (distribution!="cosmic")'
+    # don't support PG12 on cosmic, it won't be released before cosmic's EOL
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -636,6 +638,9 @@
         <<: *binaries_template
         name: '{name}-binaries-beta'
         id: 'binaries-beta'
+        execution-strategy:
+                <<: *binaries_execution_strategy
+                combination-filter: *filter_patbeta
         parameters:
                 - string: *supported_versions_param_beta
                 - string: *binnmu_reason_param
