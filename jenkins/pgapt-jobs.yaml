@@ -158,13 +158,13 @@
             name: binnmu_version
             description: 'binNMU version (single integer)'
 
-    adt_choice: &adt_choice
+    autopkgtest_choice: &autopkgtest_choice
             name: ADT
             choices:
                     - run
                     - skip
             description: 'Run autopkgtest at build time'
-    noadt_choice: &noadt_choice
+    noautopkgtest_choice: &noautopkgtest_choice
             name: ADT
             choices:
                     - skip
@@ -252,8 +252,8 @@
 - job-template:
         <<: *build_pipeline
         name: '{name}'
-        id: 'build-pipeline-with-devel'
-        description: 'Build source and binaries for {name}, and upload them, including PostgreSQL devel'
+        id: 'build-pipeline-with-beta'
+        description: 'Build source and binaries for {name}, and upload them, including PostgreSQL beta'
         dsl: |
                 pipeline {{
                     agent {{ label 'master' }}
@@ -281,7 +281,6 @@
                                 )
                             }}
                         }}
-                        /*
                         stage('binaries-beta') {{
                             steps {{
                                 build(job: '{name}-binaries-beta')
@@ -294,14 +293,13 @@
                                 )
                             }}
                         }}
-                        */
                     }}
                 }}
 
-- job-template: &build_pipeline_split_adt
+- job-template: &build_pipeline_split_autopkgtest
         <<: *build_pipeline
         name: '{name}'
-        id: 'build-pipeline-split-adt'
+        id: 'build-pipeline-split-autopkgtest'
         description: 'Build source and binaries for {name}, test, and upload them'
         dsl: |
                 pipeline {{
@@ -335,9 +333,9 @@
                 }}
 
 - job-template:
-        <<: *build_pipeline_split_adt
+        <<: *build_pipeline_split_autopkgtest
         name: '{name}'
-        id: 'build-pipeline-split-adt-with-git'
+        id: 'build-pipeline-split-autopkgtest-with-git'
         triggers:
                 - pollscm:
                         cron: "H */6 * * *"
@@ -402,7 +400,7 @@
         <<: *build_pipeline
         name: 'build-binaries-beta'
         id: 'build-binaries-beta'
-        description: 'Build binaries for some package, and upload them, for PostgreSQL devel'
+        description: 'Build binaries for some package, and upload them, for PostgreSQL beta'
         parameters:
                 - string: &package_parameter
                         name: PACKAGE
@@ -594,7 +592,7 @@
                 - string: *supported_versions_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
-                - choice: *adt_choice
+                - choice: *autopkgtest_choice
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
@@ -615,18 +613,18 @@
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
-- job-template: &binaries_no_adt
+- job-template: &binaries_no_autopkgtest
         <<: *binaries_template
-        id: 'binaries-no-adt'
+        id: 'binaries-no-autopkgtest'
         parameters:
                 - string: *supported_versions_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
-                - choice: *noadt_choice
+                - choice: *noautopkgtest_choice
 
 # binaries triggered from -source-git-head
 - job-template:
-        <<: *binaries_no_adt
+        <<: *binaries_no_autopkgtest
         name: '{name}-binaries'
         id: 'binaries-git-head'
         axes:
@@ -646,18 +644,18 @@
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
 
-# binaries for building modules for PostgreSQL devel
-- job-template:
-        <<: *binaries_template
-        name: '{name}-binaries-devel'
-        id: 'binaries-devel'
-        axes:
-                - axis: *git_head_arch_axis
-                - axis: *git_head_dist_axis
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact: *copysource
-                - shell: 'DEB_PG_SUPPORTED_VERSIONS="12" {backports}sbuild-package'
+## binaries for building modules for PostgreSQL devel
+#- job-template:
+#        <<: *binaries_template
+#        name: '{name}-binaries-devel'
+#        id: 'binaries-devel'
+#        axes:
+#                - axis: *git_head_arch_axis
+#                - axis: *git_head_dist_axis
+#        builders:
+#                - shell: 'rm -rf *'
+#                - copyartifact: *copysource
+#                - shell: 'DEB_PG_SUPPORTED_VERSIONS="12" {backports}sbuild-package'
 
 # build binaries for a single distribution
 
@@ -831,10 +829,10 @@
                 - ircbot: *only_configs
                 - workspace-cleanup
 
-- job-template: &adt_template
+- job-template: &autopkgtest_template
         <<: *testsuite_template
-        name: '{name}-adt'
-        id: 'adt'
+        name: '{name}-autopkgtest'
+        id: 'autopkgtest'
         description: 'Run autopkgtest on {name}'
         workspace: /tmp
         child-workspace: .
@@ -846,18 +844,18 @@
                 - ircbot: *only_configs
 
 - job-template:
-        <<: *adt_template
-        name: '{name}-adt-devel'
-        id: 'adt-devel'
+        <<: *autopkgtest_template
+        name: '{name}-autopkgtest-beta'
+        id: 'autopkgtest-beta'
         triggers:
                 #- timed: "H H H * *"
         builders:
                 - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=12 pgdg-autopkgtest {name}'
 
 - job-template:
-        <<: *adt_template
-        name: '{name}-adt'
-        id: 'adt-git-head'
+        <<: *autopkgtest_template
+        name: '{name}-autopkgtest'
+        id: 'autopkgtest-git-head'
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
@@ -923,18 +921,17 @@
                 - 'build-pipeline'
                 - 'source-apt'
                 - 'binaries'
-                - 'adt'
+                - 'autopkgtest'
 
 - job-group:
         name: apt-packages-with-next
         jobs:
-                - 'build-pipeline-with-devel'
+                - 'build-pipeline-with-beta'
                 - 'source-apt'
                 - 'binaries'
                 - 'binaries-beta'
-                - 'binaries-devel'
-                - 'adt'
-                - 'adt-devel'
+                - 'autopkgtest'
+                - 'autopkgtest-beta'
 
 - job-group:
         name: git-packages
@@ -942,43 +939,42 @@
                 - 'build-pipeline'
                 - 'source-git'
                 - 'binaries'
-                - 'adt'
+                - 'autopkgtest'
 
 - job-group:
         name: git-packages-no-testsuite
         jobs:
                 - 'build-pipeline'
                 - 'source-git'
-                - 'binaries-no-adt'
+                - 'binaries-no-autopkgtest'
 
 - job-group:
         name: git-packages-with-next
         jobs:
-                - 'build-pipeline-with-devel'
+                - 'build-pipeline-with-beta'
                 - 'source-git'
                 - 'binaries'
                 - 'binaries-beta'
-                - 'binaries-devel'
-                - 'adt'
-                - 'adt-devel'
+                - 'autopkgtest'
+                - 'autopkgtest-beta'
 
 - job-group:
-        name: git-packages-split-adt
+        name: git-packages-split-autopkgtest
         jobs:
-                - 'build-pipeline-split-adt'
+                - 'build-pipeline-split-autopkgtest'
                 - 'source-git'
-                - 'binaries-no-adt'
+                - 'binaries-no-autopkgtest'
                 - '{name}-testsuite'
-                - 'adt'
+                - 'autopkgtest'
 
 - job-group:
-        name: git-packages-split-adt-with-git
+        name: git-packages-split-autopkgtest-with-git
         jobs:
-                - 'build-pipeline-split-adt-with-git'
+                - 'build-pipeline-split-autopkgtest-with-git'
                 - 'source-git-head'
                 - 'binaries-git-head'
                 - 'testsuite-git-head'
-                - 'adt-git-head'
+                - 'autopkgtest-git-head'
 
 # simple jobs
 
@@ -1740,7 +1736,7 @@
         git-branch: '8.2-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-8.3
@@ -1748,7 +1744,7 @@
         git-branch: '8.3-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-8.4
@@ -1756,7 +1752,7 @@
         git-branch: '8.4-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.0
@@ -1764,7 +1760,7 @@
         git-branch: '9.0-pgdg'
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.1
@@ -1772,7 +1768,7 @@
         git-branch: 9.1
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.2
@@ -1780,7 +1776,7 @@
         git-branch: 9.2
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.3
@@ -1788,35 +1784,35 @@
         git-branch: 9.3
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.4
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.4
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.5
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.5
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-9.6
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.6
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-10
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 10
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 - project:
         name: postgresql-11
@@ -1824,7 +1820,7 @@
         git-branch: 11
         dist-filter: '(distribution!="wheezy")'
         jobs:
-                - git-packages-split-adt
+                - git-packages-split-autopkgtest
 
 # the PostgreSQL devel version:
 - project:
@@ -1833,7 +1829,7 @@
         git-branch: origin/master
         merge-branch: 12
         jobs:
-                - git-packages-split-adt-with-git
+                - git-packages-split-autopkgtest-with-git
 
 - project:
         name: postgresql-common
