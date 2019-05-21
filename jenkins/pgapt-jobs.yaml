@@ -1268,12 +1268,6 @@
                 - git-packages
 
 - project:
-        name: barman-cli
-        git-url: https://salsa.debian.org/postgresql/barman-cli.git
-        jobs:
-                - git-packages
-
-- project:
         name: bgw-replstatus
         git-url: https://github.com/mhagander/bgw_replstatus.git
         jobs:
