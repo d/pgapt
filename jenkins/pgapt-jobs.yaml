@@ -337,8 +337,8 @@
         name: '{name}'
         id: 'build-pipeline-split-autopkgtest-with-git'
         triggers:
-                - pollscm:
-                        cron: "H */6 * * *"
+                - pollscm: # build every six hours
+                        cron: "#H */6 * * *"
         parameters:
                 - string: *revision_string
                 - string: *git_branch_template
