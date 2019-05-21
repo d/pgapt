@@ -18,7 +18,6 @@
     filter: &filter                                                       '!(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
     filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
     filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el")) && (distribution!="cosmic")'
-    # don't support PG12 on cosmic, it won't be released before cosmic's EOL
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -338,7 +337,7 @@
         id: 'build-pipeline-split-autopkgtest-with-git'
         triggers:
                 - pollscm: # build every six hours
-                        cron: "#H */6 * * *"
+                        cron: "H */6 * * *"
         parameters:
                 - string: *revision_string
                 - string: *git_branch_template
@@ -1818,18 +1817,26 @@
         name: postgresql-11
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 11
-        dist-filter: '(distribution!="wheezy")'
         jobs:
                 - git-packages-split-autopkgtest
 
-# the PostgreSQL devel version:
 - project:
         name: postgresql-12
-        git-url: https://git.postgresql.org/git/postgresql.git
-        git-branch: origin/master
-        merge-branch: 12
+        git-url: https://salsa.debian.org/postgresql/postgresql.git
+        git-branch: 12
+        # don't support PG12 on cosmic, it won't be released before cosmic's EOL
+        dist-filter: '(distribution!="cosmic")'
         jobs:
-                - git-packages-split-autopkgtest-with-git
+                - git-packages-split-autopkgtest
+
+## the PostgreSQL devel version:
+#- project:
+#        name: postgresql-12
+#        git-url: https://git.postgresql.org/git/postgresql.git
+#        git-branch: origin/master
+#        merge-branch: 12
+#        jobs:
+#                - git-packages-split-autopkgtest-with-git
 
 - project:
         name: postgresql-common
