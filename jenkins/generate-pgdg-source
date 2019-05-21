@@ -281,6 +281,16 @@ case $PACKAGE in
     esac
     ;;
 
+  barman)
+    case $distribution in jessie|trusty)
+      # Use Python 2 sequencer and rename all the packages
+      sed -i -e 's/--with python3/--with python2/' debian/rules
+      sed -i -e 's/python3/python/' debian/control debian/rules
+      sed -i -e 's/Python 3/Python 2/' debian/control
+      TWEAK+=("Revert migration to Python 3")
+      ;;
+    esac
+    ;;
 esac
 
 # for binnmu-style rebuilds, add a "revision" parameter to the source job
