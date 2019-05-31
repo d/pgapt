@@ -1626,7 +1626,8 @@
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
         # exclude jessie because postgis excludes it
-        dist-filter: '(distribution!="jessie")'
+        # exclude cosmic because postgis excludes it
+        dist-filter: '(distribution!="jessie") && (distribution!="cosmic")'
         jobs:
                 - git-packages-with-next
 
@@ -1703,7 +1704,8 @@
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
-        dist-filter: '(distribution!="jessie")'
+        # cosmic is EOL soon, don't bother with building postgis because we don't want to build a geos backport for it
+        dist-filter: '(distribution!="jessie") && (distribution!="cosmic")'
         jobs:
                 - git-packages-with-next
 
