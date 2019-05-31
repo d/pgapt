@@ -145,10 +145,15 @@
             name: DEB_PG_SUPPORTED_VERSIONS
             default: 'pgdg'
             description: 'PostgreSQL versions to target'
-    supported_versions_param: &supported_versions_param_beta
+    supported_versions_param_beta: &supported_versions_param_beta
             name: DEB_PG_SUPPORTED_VERSIONS
             default: '12'
             description: 'PostgreSQL versions to target'
+
+    deb_build_options_param: &deb_build_options_param
+            name: DEB_BUILD_OPTIONS
+            default: ''
+            description: 'Extra build options for dpkg-buildpackage'
 
     binnmu_reason_param: &binnmu_reason_param
             name: binnmu_reason
@@ -669,6 +674,7 @@
                 - string: *package_parameter
                 - choice: *distribution_parameter
                 - string: *supported_versions_param
+                - string: *deb_build_options_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *queue_choice
@@ -727,6 +733,7 @@
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
                 - string: *supported_versions_param
+                - string: *deb_build_options_param
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
@@ -768,6 +775,7 @@
                         name: PACKAGE
                         description: 'Package to build binaries for (without -source suffix)'
                 - string: *supported_versions_param
+                - string: *deb_build_options_param
                 - choice: *distribution_parameter
                 - node:
                         name: architecture
