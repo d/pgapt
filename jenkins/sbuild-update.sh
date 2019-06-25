@@ -77,18 +77,18 @@ umask 002
 
 	# write sources lists
 	echo "deb $mirror $distribution main" > /etc/apt/sources.list
-	echo "deb-src $mirror $distribution main" >> /etc/apt/sources.list
+	echo "deb-src $mirror_src $distribution main" >> /etc/apt/sources.list
 	echo "deb $apt1 $distribution-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 	echo "deb $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	echo "deb-src $apt2 $distribution-pgdg-testing main" >> /etc/apt/sources.list.d/pgdg.list
 	case $DISTRO in
 	  ubuntu) # libossp-uuid-dev is in universe on vivid+
 	    echo "deb $mirror $distribution universe" > /etc/apt/sources.list.d/universe.list
-	    echo "deb-src $mirror $distribution universe" >> /etc/apt/sources.list.d/universe.list
+	    echo "deb-src $mirror_src $distribution universe" >> /etc/apt/sources.list.d/universe.list
 	    echo "deb $mirror $distribution-updates main universe" > /etc/apt/sources.list.d/updates.list
-	    echo "deb-src $mirror $distribution-updates main universe" >> /etc/apt/sources.list.d/updates.list
+	    echo "deb-src $mirror_src $distribution-updates main universe" >> /etc/apt/sources.list.d/updates.list
 	    echo "deb $mirror $distribution-security main universe" > /etc/apt/sources.list.d/security.list
-	    echo "deb-src $mirror $distribution-security main universe" >> /etc/apt/sources.list.d/security.list
+	    echo "deb-src $mirror_src $distribution-security main universe" >> /etc/apt/sources.list.d/security.list
 	    ;;
 	  *)
 	    if [ "$distribution" != "sid" ]; then
