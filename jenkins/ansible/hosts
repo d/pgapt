@@ -2,3 +2,6 @@ pgdgbuild.dus.dg-i.net chroot_dir=/home/chroot.buexcl run_opts="size=20G"
 # ppc64el: 24GB is not enough to build postgis with 4 workers (huge B-Ds)
 pgdgbuild-ppc64el chroot_dir=/home/chroot run_opts="size=40G,nr_inodes=800k"
 moe chroot_dir=/var/lib/chroot run_opts="size=20G"
+pgapt1 chroot_dir=/home/chroot run_opts="size=20G"
+pgapt2 chroot_dir=/home/chroot run_opts="size=20G"
+pgapt3 chroot_dir=/home/chroot run_opts="size=20G"

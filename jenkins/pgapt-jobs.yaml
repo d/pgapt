@@ -74,6 +74,9 @@
             type: slave
             name: slave
             values:
+              - credativ-x86-1
+              - credativ-x86-2
+              - credativ-x86-3
               - moe-x86
               - pgdgbuild-x86
               - pgdgbuild-ppc64el
@@ -81,6 +84,9 @@
             type: slave
             name: slave
             values:
+              - credativ-x86-1
+              - credativ-x86-2
+              - credativ-x86-3
               - moe-x86
               - pgdgbuild-x86
     ppc64el_slaves_axis: &ppc64el_slaves_axis
