@@ -143,7 +143,7 @@ esac
 
 # tweaks to get packages in older dists working
 case $PACKAGE in
-  postgresql-1[12]) # use llvm >= 5 (older versions choke on C++ exceptions, breaks PostGIS)
+  postgresql-1[1-9]) # use llvm >= 5 (older versions choke on C++ exceptions, breaks PostGIS)
     case $distribution in
       stretch|bionic|xenial) # replace clang/llvm-7 with 6.0
         # llvm <= 6.0.1 supports x32 only (missing r328687)
