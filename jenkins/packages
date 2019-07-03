@@ -75,6 +75,7 @@ postgis-java
 postgresql-10
 postgresql-11
 postgresql-12
+postgresql-13
 postgresql-8.2
 postgresql-8.3
 postgresql-8.4

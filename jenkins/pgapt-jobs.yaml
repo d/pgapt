@@ -1837,14 +1837,14 @@
         jobs:
                 - git-packages-split-autopkgtest
 
-## the PostgreSQL devel version:
-#- project:
-#        name: postgresql-12
-#        git-url: https://git.postgresql.org/git/postgresql.git
-#        git-branch: origin/master
-#        merge-branch: 12
-#        jobs:
-#                - git-packages-split-autopkgtest-with-git
+# the PostgreSQL devel version:
+- project:
+        name: postgresql-13
+        git-url: https://git.postgresql.org/git/postgresql.git
+        git-branch: origin/master
+        merge-branch: 13
+        jobs:
+                - git-packages-split-autopkgtest-with-git
 
 - project:
         name: postgresql-common
