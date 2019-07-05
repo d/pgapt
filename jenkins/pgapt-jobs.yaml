@@ -2041,9 +2041,12 @@
 - project: { name: upgrade-9.6-10,  oldversion: 9.6, newversion: 10,  jobs: [ upgrade ] }
 - project: { name: upgrade-10-11,   oldversion: 10,  newversion: 11,  jobs: [ upgrade ] }
 - project: { name: upgrade-11-12,   oldversion: 11,  newversion: 12,  jobs: [ upgrade ], dist-filter: 'distribution!="cosmic"' }
-#- project: { name: upgrade-12-13,   oldversion: 12,  newversion: 13,  jobs: [ upgrade-git-head ] }
+- project: { name: upgrade-12-13,   oldversion: 12,  newversion: 13,  jobs: [ upgrade-git-head ] }
 
+# larger jumps:
 - project: { name: upgrade-9.4-11,  oldversion: 9.4, newversion: 11,  jobs: [ upgrade ] }
+- project: { name: upgrade-9.6-12,  oldversion: 9.6, newversion: 12,  jobs: [ upgrade ] }
+- project: { name: upgrade-9.6-13,  oldversion: 9.6, newversion: 13,  jobs: [ upgrade-git-head ] }
 
 # PgQ
 
