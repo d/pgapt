@@ -62,6 +62,7 @@ umask 002
 	test -e /etc/dpkg/dpkg.cfg.d/01unsafeio || echo force-unsafe-io | tee /etc/dpkg/dpkg.cfg.d/01unsafeio
 	test -e /etc/apt/apt.conf.d/20norecommends || echo 'APT::Install-Recommends "false";' | tee /etc/apt/apt.conf.d/20norecommends
 	test -e /etc/apt/apt.conf.d/50i18n || echo 'Acquire::Languages { none; };' | tee /etc/apt/apt.conf.d/50i18n
+	test -e /etc/apt/apt.conf.d/60releaseinfo || echo 'Acquire::AllowReleaseInfoChange "true" { Suite "true"; };' | tee /etc/apt/apt.conf.d/60releaseinfo # don't complain when testing gets released as stable
 	rm -f /var/lib/apt/lists/*_Translation-*
 
 	# run apt.postgresql.org.sh
