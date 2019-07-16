@@ -627,6 +627,7 @@
         id: 'binaries-no-autopkgtest'
         parameters:
                 - string: *supported_versions_param
+                - string: *deb_build_options_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *noautopkgtest_choice
@@ -650,8 +651,10 @@
                 combination-filter: *filter_patbeta
         parameters:
                 - string: *supported_versions_param_beta
+                - string: *deb_build_options_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
+                - choice: *autopkgtest_choice
 
 ## binaries for building modules for PostgreSQL devel
 #- job-template:
