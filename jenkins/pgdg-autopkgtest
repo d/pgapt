@@ -46,7 +46,10 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	  echo "Pin-Priority: 500" >> /etc/apt/preferences.d/backports.pref
 	fi
 	
-	( set -x; apt-get -y update; apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade )
+	( set -x
+	  apt-get -y update || { sleep 60; apt-get -y update; }
+	  apt-get -y -o DPkg::Options::=--force-confnew dist-upgrade
+	)
 	
 	# when testing beta/devel, manually install packages since the source
 	# package doesn't list the binaries
