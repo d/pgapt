@@ -23,7 +23,7 @@ if ($objdump =~ /# ([[:xdigit:]]+) <Pg_magic_data/) {
 	$address = hex($1);
 # 0000000000006880 <Pg_magic_func>:
 #     6880:	48 8d 05 19 06 01 00 	lea    0x10619(%rip),%rax        # 16ea0 <_fini+0x11c>
-} elsif ($objdump =~ /<Pg_magic_func>:\n.* # ([[:xdigit:]]+) </) {
+} elsif ($objdump =~ /<Pg_magic_func(?:\@\@Base)?>:\n.* # ([[:xdigit:]]+) </) {
 	$address = hex($1);
 } else {
 	die "No Pg_magic_data found in objdump -d $so output";
