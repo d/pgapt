@@ -598,6 +598,7 @@
                 - axis: *dist_axis
         parameters:
                 - string: *supported_versions_param
+                - string: *deb_build_options_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *autopkgtest_choice
@@ -681,6 +682,7 @@
                 - string: *deb_build_options_param
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
+                - choice: *autopkgtest_choice
                 - choice: *queue_choice
                 - choice: *upload_choice
                 - bool:
@@ -741,6 +743,7 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
+                - choice: *autopkgtest_choice
         builders:
                 - shell: 'rm -rf *'
                 - shell: |
@@ -791,6 +794,7 @@
                 - bool:
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
+                - choice: *autopkgtest_choice
 
 # testsuite template
 
