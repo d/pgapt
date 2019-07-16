@@ -1,7 +1,24 @@
 #!/usr/bin/perl
 
-# Copyright (C) 2012 Christoph Berg <myon@debian.org>
-# No rights reserved. Do whatever you want with this file.
+# Copyright (C) 2012, 2019 Christoph Berg <myon@debian.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 # Gross hack to read the contents of Pg_magic_data from a .so file
 
@@ -18,12 +35,12 @@ my $so = $ARGV[0] || die "Usage: $0 .so";
 
 my $objdump = `objdump -d $so`;
 my $address;
-# ... # 50a0 <Pg_magic_data.18191>
-if ($objdump =~ /# ([[:xdigit:]]+) <Pg_magic_data/) {
-	$address = hex($1);
 # 0000000000006880 <Pg_magic_func>:
 #     6880:	48 8d 05 19 06 01 00 	lea    0x10619(%rip),%rax        # 16ea0 <_fini+0x11c>
-} elsif ($objdump =~ /<Pg_magic_func(?:\@\@Base)?>:\n.* # ([[:xdigit:]]+) </) {
+if ($objdump =~ /<Pg_magic_func(?:\@\@Base)?>:\n.* # ([[:xdigit:]]+) </) {
+	$address = hex($1);
+# ... # 50a0 <Pg_magic_data.18191>
+} elsif ($objdump =~ /# ([[:xdigit:]]+) <Pg_magic_data/) {
 	$address = hex($1);
 } else {
 	die "No Pg_magic_data found in objdump -d $so output";
