@@ -1425,6 +1425,12 @@
                 - git-packages
 
 - project:
+        name: periods
+        git-url: https://salsa.debian.org/postgresql/periods.git
+        jobs:
+                - git-packages-with-next
+
+- project:
         name: pg-activity
         git-url: https://anonscm.debian.org/git/users/kolter/pg-activity.git
         git-branch: unstable
