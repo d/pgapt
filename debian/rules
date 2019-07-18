@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 include /usr/share/dpkg/vendor.mk
-export VERSION_ID = $(shell . /etc/os-release; echo $${VERSION_ID:-unstable})
+VERSION_ID = $(shell . /etc/os-release; echo $${VERSION_ID:-unstable})
 
 override_dh_gencontrol:
 	case $(DEB_VENDOR) in \
