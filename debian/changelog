@@ -1,3 +1,10 @@
+pgdg-buildenv (27) UNRELEASED; urgency=medium
+
+  * Remove sudoers.d override obsolete since debhelper 8.
+    Thanks to nthykier for pointing this out!
+
+ -- Christoph Berg <myon@debian.org>  Thu, 18 Jul 2019 21:28:19 +0200
+
 pgdg-buildenv (26) sid-pgdg; urgency=medium
 
   * Install lintian in chroots, sbuild installs it anyway.

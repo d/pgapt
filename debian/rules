@@ -3,10 +3,6 @@
 include /usr/share/dpkg/vendor.mk
 export VERSION_ID = $(shell . /etc/os-release; echo $${VERSION_ID:-unstable})
 
-override_dh_install:
-	dh_install
-	chmod 440 debian/pgdg-buildenv/etc/sudoers.d/*
-
 override_dh_gencontrol:
 	case $(DEB_VENDOR) in \
 	  Debian) \
