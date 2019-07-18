@@ -1,3 +1,9 @@
+pgdg-buildenv (26) sid-pgdg; urgency=medium
+
+  * Install lintian in chroots, sbuild installs it anyway.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 18 Jul 2019 16:09:02 +0200
+
 pgdg-buildenv (25) sid-pgdg; urgency=medium
 
   * Always use our postgresql-common packages.
