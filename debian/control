@@ -22,6 +22,7 @@ Depends: ${misc:Depends},
  postgresql-common (>= 117~), lsb-release, dctrl-tools,
 # postgresql
  dpkg-dev (>= 1.16.1~) | hardening-wrapper,
+ ${clang}, ${llvm-dev},
 # testsuite:
  hunspell-en-us, locales, logrotate, net-tools, netcat-openbsd,
 # autopkgtest

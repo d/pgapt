@@ -1,6 +1,7 @@
 pgdg-buildenv (26) sid-pgdg; urgency=medium
 
   * Install lintian in chroots, sbuild installs it anyway.
+  * Install clang and llvm-dev.
 
  -- Christoph Berg <myon@debian.org>  Thu, 18 Jul 2019 16:09:02 +0200
 
