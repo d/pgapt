@@ -120,7 +120,8 @@ fi
 # bpo
 if [ "$HAS_BACKPORTS" ]; then
     echo "### Running debcheck: main, packages needing backports"
-    pkg=$(fold $(echo "$MAINPKG" | grep -e 'resource-agents-paf' -e 'postgresql-.*-pllua'))
+    # pgdg-buildenv: depends on clang-6.0 in stretch (but we include amd64/i386 only in our repository, not ppc64el)
+    pkg=$(fold $(echo "$MAINPKG" | grep -e 'pgdg-buildenv' -e 'resource-agents-paf' -e 'postgresql-.*-pllua'))
     if [ "$pkg" ]; then
       ( set -x; $DEBCHECK \
         --bg $LISTSDIR/../backports/*_dists_${distribution}-backports_main_binary-${architecture}_Packages \
@@ -130,7 +131,7 @@ if [ "$HAS_BACKPORTS" ]; then
     echo
 
     # exclude packages from further testing
-    MAINPKG=$(echo "$MAINPKG" | grep -v -e 'resource-agents-paf' -e 'postgresql-.*-pllua')
+    MAINPKG=$(echo "$MAINPKG" | grep -v -e 'pgdg-buildenv' -e 'resource-agents-paf' -e 'postgresql-.*-pllua')
 fi
 
 # main
