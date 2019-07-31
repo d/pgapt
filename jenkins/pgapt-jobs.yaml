@@ -2005,6 +2005,14 @@
                 - git-packages
 
 - project:
+        name: psycopg2
+        git-url: https://salsa.debian.org/python-team/modules/psycopg2.git
+        git-branch: debian/master
+        dist-filter: '(distribution!="jessie")' # same as pgadmin4
+        jobs:
+                - git-packages
+
+- project:
         name: repmgr
         git-url: https://salsa.debian.org/postgresql/repmgr.git
         jobs:

@@ -208,7 +208,7 @@ case $PACKAGE in
     DOT='~'
     ;;
 
-  flask*|*peewee*|sshtunnel)
+  flask*|*peewee*|sshtunnel|psycopg2)
     DOT='~' ;;
 
   omnidb)

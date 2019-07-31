@@ -109,6 +109,7 @@ preprepare
 prometheus-sql-exporter
 pspg
 psqlodbc
+psycopg2
 python-pgq
 python-skytools
 rdkit
