@@ -30,6 +30,38 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
+Codename: bullseye-pgdg
+Suite: bullseye-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 ppc64el
+Components: main 9.4 9.5 9.6 10 11 12
+SignWith: ACCC4CF8
+Log: bullseye-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+
+Codename: bullseye-pgdg-testing
+Suite: bullseye-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 ppc64el
+Components: main 9.4 9.5 9.6 10 11 12
+SignWith: ACCC4CF8
+Log: bullseye-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
 Codename: buster-pgdg
 Suite: buster-pgdg
 Origin: apt.postgresql.org
@@ -245,6 +277,38 @@ Architectures: source amd64 i386
 Components: main 8.2 8.3 8.4 9.0 9.1 9.2
 SignWith: ACCC4CF8
 Log: etch-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
+Codename: eoan-pgdg
+Suite: eoan-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64
+Components: main 9.4 9.5 9.6 10 11 12
+SignWith: ACCC4CF8
+Log: eoan-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+
+Codename: eoan-pgdg-testing
+Suite: eoan-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64
+Components: main 9.4 9.5 9.6 10 11 12
+SignWith: ACCC4CF8
+Log: eoan-pgdg-testing.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2

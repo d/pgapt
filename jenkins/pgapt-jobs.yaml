@@ -116,9 +116,11 @@
             name: distribution
             values: &dist_list
                     - sid
+                    - bullseye
                     - buster
                     - stretch
                     - jessie
+                    - eoan
                     - disco
                     - cosmic
                     - bionic
@@ -756,6 +758,7 @@
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      eoan) tag='pgdg19.10+' ;;
                       disco) tag='pgdg19.04+' ;;
                       cosmic) tag='pgdg18.10+' ;;
                       bionic) tag='pgdg18.04+' ;;
