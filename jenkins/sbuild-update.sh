@@ -93,8 +93,8 @@ umask 002
 	    ;;
 	  *)
 	    if [ "${dist_security:-}" ]; then
-	      echo "deb ${security:-} $dist_security main" > /etc/apt/sources.list.d/security.list
-	      echo "deb-src ${security:-} $dist_security main" >> /etc/apt/sources.list.d/security.list
+	      echo "deb ${security:-} ${dist_security:-} main" > /etc/apt/sources.list.d/security.list
+	      echo "deb-src ${security:-} ${dist_security:-} main" >> /etc/apt/sources.list.d/security.list
 	    fi
 	    ;;
 	esac
