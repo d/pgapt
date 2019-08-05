@@ -15,9 +15,10 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el")) && (distribution!="cosmic")'
+    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    # patbeta: variant of filter that excludes PostgreSQL-beta packages to be built (was used for cosmic)
     git-branch: master
     backports: ''
     backports_runtime: ''
@@ -122,7 +123,6 @@
                     - jessie
                     - eoan
                     - disco
-                    - cosmic
                     - bionic
                     - xenial
 
@@ -760,7 +760,6 @@
                       jessie) tag='pgdg80+' ;;
                       eoan) tag='pgdg19.10+' ;;
                       disco) tag='pgdg19.04+' ;;
-                      cosmic) tag='pgdg18.10+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       *) echo "bad distribution"; exit 1 ;;
@@ -1654,8 +1653,7 @@
         name: pgrouting
         git-url: https://salsa.debian.org/debian-gis-team/pgrouting.git
         # exclude jessie because postgis excludes it
-        # exclude cosmic because postgis excludes it
-        dist-filter: '(distribution!="jessie") && (distribution!="cosmic")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
@@ -1732,8 +1730,7 @@
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
-        # cosmic is EOL soon, don't bother with building postgis because we don't want to build a geos backport for it
-        dist-filter: '(distribution!="jessie") && (distribution!="cosmic")'
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-next
 
@@ -1849,7 +1846,7 @@
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 12
         # don't support PG12 on cosmic, it won't be released before cosmic's EOL
-        dist-filter: '(distribution!="cosmic")'
+        #dist-filter: '(distribution!="cosmic")'
         jobs:
                 - git-packages-split-autopkgtest
 
@@ -2064,7 +2061,7 @@
 - project: { name: upgrade-9.5-9.6, oldversion: 9.5, newversion: 9.6, jobs: [ upgrade ] }
 - project: { name: upgrade-9.6-10,  oldversion: 9.6, newversion: 10,  jobs: [ upgrade ] }
 - project: { name: upgrade-10-11,   oldversion: 10,  newversion: 11,  jobs: [ upgrade ] }
-- project: { name: upgrade-11-12,   oldversion: 11,  newversion: 12,  jobs: [ upgrade ], dist-filter: 'distribution!="cosmic"' }
+- project: { name: upgrade-11-12,   oldversion: 11,  newversion: 12,  jobs: [ upgrade ] }
 - project: { name: upgrade-12-13,   oldversion: 12,  newversion: 13,  jobs: [ upgrade-git-head ] }
 
 # larger jumps:
