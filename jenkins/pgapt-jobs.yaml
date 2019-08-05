@@ -15,9 +15,9 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="jessie" && architecture=="ppc64el")) && (distribution!="cosmic")'
+    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco" || distribution=="cosmic") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el")) && (distribution!="cosmic")'
     git-branch: master
     backports: ''
     backports_runtime: ''
