@@ -128,6 +128,13 @@ umask 002
 	#case $distribution in
 	#  squeeze) \$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install debhelper/${distribution}-backports ;;
 	#esac
+	# install llvm/clang (not in pgdg-buildenv because it's architecture-specific)
+	case \$distribution in
+	  stretch|bionic|xenial)
+	    case \$architecture in amd64|i386) apt-get -y install llvm-6.0-dev clang-6.0 ;; esac ;;
+	  jessie) ;;
+	  *) apt-get -y install llvm-7-dev clang-7 ;;
+	esac
 	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv pgdg-keyring
 	eatmydata apt-get -y autoremove --purge
 	apt-get clean

@@ -1,22 +1,23 @@
 #!/usr/bin/make -f
 
-include /usr/share/dpkg/vendor.mk
-VERSION_ID = $(shell . /etc/os-release; echo $${VERSION_ID:-unstable})
-
-override_dh_gencontrol:
-	case $(DEB_VENDOR) in \
-	  Debian) \
-	    case $(VERSION_ID) in \
-	      8) dh_gencontrol ;; \
-	      9) dh_gencontrol -- -Vclang=clang-6.0 -Vllvm-dev=llvm-6.0-dev ;; \
-	      *) dh_gencontrol -- -Vclang=clang-7 -Vllvm-dev=llvm-7-dev ;; \
-	    esac ;; \
-	  Ubuntu) \
-	    case $(VERSION_ID) in \
-	      16.04|18.04) dh_gencontrol -- -Vclang=clang-6.0 -Vllvm-dev=llvm-6.0-dev ;; \
-	      *) dh_gencontrol -- -Vclang=clang-7 -Vllvm-dev=llvm-7-dev ;; \
-	    esac ;; \
-	esac
+# disabled until the clang/llvm dependencies are no longer architecture-specific
+#include /usr/share/dpkg/vendor.mk
+#VERSION_ID = $(shell . /etc/os-release; echo $${VERSION_ID:-unstable})
+#
+#override_dh_gencontrol:
+#	case $(DEB_VENDOR) in \
+#	  Debian) \
+#	    case $(VERSION_ID) in \
+#	      8) dh_gencontrol ;; \
+#	      9) dh_gencontrol -- -Vclang=clang-6.0 -Vllvm-dev=llvm-6.0-dev ;; \
+#	      *) dh_gencontrol -- -Vclang=clang-7 -Vllvm-dev=llvm-7-dev ;; \
+#	    esac ;; \
+#	  Ubuntu) \
+#	    case $(VERSION_ID) in \
+#	      16.04|18.04) dh_gencontrol -- -Vclang=clang-6.0 -Vllvm-dev=llvm-6.0-dev ;; \
+#	      *) dh_gencontrol -- -Vclang=clang-7 -Vllvm-dev=llvm-7-dev ;; \
+#	    esac ;; \
+#	esac
 
 %:
 	dh $@
