@@ -44,8 +44,7 @@ test -w ${HOME:-/does/not/exist} || export HOME=/tmp
 apt-get -y update || { sleep 60; apt-get -y update; }
 apt-get -y dist-upgrade
 
-# libkrb5-dev needed for postgresql-9.0 and postgresql-9.1
-apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid libkrb5-dev
+apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid
 if ! dpkg -i *.deb; then
   apt-get install -fy
   dpkg -i *.deb
