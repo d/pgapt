@@ -1,5 +1,6 @@
-pgdg-buildenv (27) UNRELEASED; urgency=medium
+pgdg-buildenv (27) sid-pgdg; urgency=medium
 
+  * Move llvm/clang dependency from pgdg-buildenv to sbuild-update.
   * Remove sudoers.d override obsolete since debhelper 8.
     Thanks to nthykier for pointing this out!
 
