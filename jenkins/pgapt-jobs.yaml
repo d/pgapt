@@ -147,6 +147,10 @@
             choices: *dist_list
             description: 'Distribution to build for'
 
+    matrix_combination_parameter: &matrix_combination_parameter
+            name: matrix
+            description: Distribution/architecture combinations to build
+
     supported_versions_param: &supported_versions_param
             name: DEB_PG_SUPPORTED_VERSIONS
             default: 'pgdg'
@@ -604,6 +608,7 @@
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *autopkgtest_choice
+                - matrix-combinations: *matrix_combination_parameter
         builders:
                 - shell: 'rm -rf *'
                 - copyartifact: &copysource
@@ -633,6 +638,7 @@
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *noautopkgtest_choice
+                - matrix-combinations: *matrix_combination_parameter
 
 # binaries triggered from -source-git-head
 - job-template:
@@ -657,6 +663,7 @@
                 - string: *binnmu_reason_param
                 - string: *binnmu_version_param
                 - choice: *autopkgtest_choice
+                - matrix-combinations: *matrix_combination_parameter
 
 ## binaries for building modules for PostgreSQL devel
 #- job-template:
@@ -749,6 +756,7 @@
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
                 - choice: *autopkgtest_choice
+                - matrix-combinations: *matrix_combination_parameter
         builders:
                 - shell: 'rm -rf *'
                 - shell: |
@@ -800,6 +808,7 @@
                         name: BACKPORTS
                         description: 'Include backports repository in build chroot'
                 - choice: *autopkgtest_choice
+                - matrix-combinations: *matrix_combination_parameter
 
 # testsuite template
 
@@ -832,6 +841,8 @@
         <<: *testsuite_template
         name: '{name}-testsuite'
         id: 'testsuite-git-head'
+        parameters:
+                - matrix-combinations: *matrix_combination_parameter
         axes:
                 - axis: *git_head_arch_axis
                 - axis: *git_head_dist_axis
@@ -887,6 +898,8 @@
         id: 'upgrade'
         description: 'Test upgrades from {oldversion} to {newversion}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
         project-type: matrix
+        parameters:
+                - matrix-combinations: *matrix_combination_parameter
         execution-strategy:
                 combination-filter: *filter_pattern
                 touchstone:
@@ -1052,6 +1065,8 @@
         description: 'Run dose-debcheck on all distributions'
         project-type: matrix
         child-workspace: .
+        parameters:
+                - matrix-combinations: *matrix_combination_parameter
         execution-strategy:
                 combination-filter: *filter
         axes:
@@ -1109,6 +1124,8 @@
         description: 'Update sbuild chroots'
         project-type: matrix
         child-workspace: .
+        parameters:
+                - matrix-combinations: *matrix_combination_parameter
         execution-strategy:
                 sequential: true
                 combination-filter: *filter
@@ -1174,6 +1191,13 @@
         name: dput-matrixreloaded
         project-type: matrix
         child-workspace: .
+        parameters:
+                - string:
+                        name: binaries
+                        description: Name of binaries job to copy artifacts from (including -binaries suffix)
+                - choice: *queue_choice
+                - choice: *upload_choice
+                - matrix-combinations: *matrix_combination_parameter
         execution-strategy:
                 sequential: true
                 combination-filter: *filter

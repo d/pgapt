@@ -9,12 +9,14 @@ Git Plugin
 Green Balls Plugin
 Groovy Postbuild Plugin
 IRC Plugin
+Matrix Combinations Plugin (aka Matrix Configuration Parameter)
 Node and Label parameter plugin
 Parameterized Trigger Plugin
 Priority Sorter Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
 Timestamper Plugin
+Pipeline: Build Step
 Pipeline Model Definition Plugin
 Pipeline Stage View Plugin
 
