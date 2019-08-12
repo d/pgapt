@@ -21,10 +21,11 @@ if [ "${DEBUG:-}" ]; then
 	SUDO="echo"
 fi
 
-while getopts "c:d:fq" opt ; do
+while getopts "c:d:efq" opt ; do
 	case $opt in
 		c) COMPONENT="$OPTARG" ;; # check this component to determine if packages exists
 		d) DISTS="$OPTARG" ;; # promote these dists only
+		e) REPREPRO="$REPREPRO --export=never" ;; # skip "reprepro export"
 		f) FORCE="force" ;; # ignore server packages component mismatch
 		q) QUIET="quiet" ;; # don't send announcement mail
 		*) exit 5 ;;
