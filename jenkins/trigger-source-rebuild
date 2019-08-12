@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Retrieve last git hash built, and rebuild the source package with it.
+# Useful when new distributions have been added and Jenkins doesn't have the
+# source packages for them yet.
+
+set -eu
+
+PACKAGE="$1"
+XML=$(curl -fs https://pgdgbuild.dus.dg-i.net/view/Sources/job/$PACKAGE-source/lastSuccessfulBuild/api/xml?xpath=//lastBuiltRevision/SHA1)
+SHA1=$(echo "$XML" | egrep -o '[0-9a-f]{40}')
+test "$SHA1"
+
+set -x
+./trigger-job "$PACKAGE-source" "branch=$SHA1"
