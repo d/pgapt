@@ -1333,13 +1333,6 @@
                 - git-packages
 
 - project:
-        name: citus
-        git-url: https://github.com/citusdata/packaging.git
-        git-branch: debian
-        jobs:
-                - git-packages-with-next
-
-- project:
         name: cstore-fdw
         git-url: https://salsa.debian.org/postgresql/cstore-fdw.git
         jobs:

@@ -5,7 +5,6 @@ bgw-replstatus
 bucardo
 check-pgactivity
 check-postgres
-citus
 cstore-fdw
 first-last-agg
 hypopg
