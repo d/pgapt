@@ -23,9 +23,11 @@ update-pgdgbuild:
 	$(JJB) --conf jenkins_jobs.ini update $(JOBS)
 
 # package lists
-lists: packages packages.backports packages.backports_runtime
+lists: packages packages.modules packages.backports packages.backports_runtime
 packages: pgapt-jobs.yaml
 	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} }' | grep -v '^upgrade-' | sort > $@
+packages.modules: pgapt-jobs.yaml # packages that build PG modules for "next"
+	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} and $$p->{project}->{jobs}->[0] eq "git-packages-with-next" }' | sort > $@
 packages.%: pgapt-jobs.yaml
 	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{$*} or $$p->{project}->{"<<"}->{$*} }' | sort > $@
 
