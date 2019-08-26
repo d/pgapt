@@ -1444,12 +1444,6 @@
                 - git-packages
 
 - project:
-        name: periods
-        git-url: https://github.com/xocolatl/periods.git
-        jobs:
-                - git-packages-with-next
-
-- project:
         name: pg-activity
         git-url: https://salsa.debian.org/kolter/pg-activity.git
         git-branch: unstable
@@ -1917,6 +1911,12 @@
 - project:
         name: postgresql-numeral
         git-url: https://github.com/df7cb/postgresql-numeral.git
+        jobs:
+                - git-packages-with-next
+
+- project:
+        name: postgresql-periods
+        git-url: https://github.com/xocolatl/periods.git
         jobs:
                 - git-packages-with-next
 

@@ -21,7 +21,6 @@ omnidb
 ora2pg
 orafce
 patroni
-periods
 pg-activity
 pgadmin3
 pgadmin4
@@ -93,6 +92,7 @@ postgresql-hll
 postgresql-multicorn
 postgresql-mysql-fdw
 postgresql-numeral
+postgresql-periods
 postgresql-pgmp
 postgresql-pljava
 postgresql-pllua
