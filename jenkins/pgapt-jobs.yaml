@@ -1445,7 +1445,7 @@
 
 - project:
         name: periods
-        git-url: https://salsa.debian.org/postgresql/periods.git
+        git-url: https://github.com/xocolatl/periods.git
         jobs:
                 - git-packages-with-next
 
