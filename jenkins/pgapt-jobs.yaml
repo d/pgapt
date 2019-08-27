@@ -1265,7 +1265,7 @@
         builders:
                 - shell: |
                         sudo apt-get update
-                        apt list --upgradable | grep -v "^Listing" > upgradable
+                        apt list --upgradable 2>/dev/null | grep -v "^Listing" > upgradable || :
                         cat upgradable
                         ! test -s upgradable
         publishers:
