@@ -1264,8 +1264,8 @@
                 - timed: "H H * * *"
         builders:
                 - shell: |
-                        sudo apt-get upgrade
-                        apt list --upgradable > upgradable
+                        sudo apt-get update
+                        apt list --upgradable | grep -v "^Listing" > upgradable
                         cat upgradable
                         ! test -s upgradable
         publishers:
