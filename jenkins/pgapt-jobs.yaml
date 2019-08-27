@@ -1253,6 +1253,26 @@
                 - pollscm:
                         cron: "H */6 * * *"
 
+- job:
+        name: list-upgradable-packages
+        description: Alert about pending apt upgrades
+        project-type: matrix
+        child-workspace: .
+        axes:
+                - axis: *slaves_axis
+        triggers:
+                - timed: "H H * * *"
+        builders:
+                - shell: |
+                        sudo apt-get upgrade
+                        apt list --upgradable > upgradable
+                        cat upgradable
+                        ! test -s upgradable
+        publishers:
+                - ircbot:
+                        strategy: any-failure
+                        message-type: summary
+
 - job: &ping
         name: ping-ppc64el
         description: Check if the ppc64el build host is up
