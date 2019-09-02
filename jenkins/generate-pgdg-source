@@ -157,10 +157,23 @@ case $PACKAGE in
         TWEAK+=("Disable llvm jit support.")
         ;;
     esac
+    case $distribution in buster|stretch|jessie|disco|bionic|xenial)
+      sed -i -e 's/^#py2#//' debian/control debian/rules
+      TWEAK+=("Re-enable plpython2 packages.")
+      ;;
+    esac
     ;;
 esac
 
 case $PACKAGE in
+  postgresql-common)
+    case $distribution in buster|stretch|jessie|disco|bionic|xenial)
+      sed -i -e 's/^#py2#//' debian/rules PgCommon.pm
+      TWEAK+=("Re-enable plpython2 packages.")
+      ;;
+    esac
+    ;;
+
   autopkgtest|dh-exec|libdbd-pg-perl|pkg-perl-tools)
     DOT='~' ;;
 
