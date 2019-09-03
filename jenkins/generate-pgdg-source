@@ -149,7 +149,7 @@ case $PACKAGE in
         # llvm <= 6.0.1 supports x32 only (missing r328687)
         sed -i -e 's/llvm-.*/llvm-6.0-dev [amd64 i386],/' \
                -e 's/clang-.*/clang-6.0 [amd64 i386],/' debian/control
-        sed -i -e 's/\[.*amd64.*\]/[amd64 i386]/' debian/postgresql-??.install
+        sed -i -e 's/\[.*amd64.*\]/[amd64 i386]/' debian/postgresql-*.install
         TWEAK+=("Use clang/llvm 6.0 for jit support on amd64/i386; disable on ppc64el.")
         ;;
       jessie) # jessie: newest llvm/clang is 3.5
