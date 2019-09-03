@@ -135,6 +135,8 @@ umask 002
 	  jessie) ;;
 	  *) apt-get -y install llvm-7-dev clang-7 ;;
 	esac
+	# bionic-updates has libllvm7, but we don't want that yet (2019-09-03)
+	[ "$distribution" = "bionic" ] && apt-get remove --purge -y libllvm7
 	\$eatmydata apt-get -y -o DPkg::Options::=--force-confnew install pgdg-buildenv pgdg-keyring
 	eatmydata apt-get -y autoremove --purge
 	apt-get clean
