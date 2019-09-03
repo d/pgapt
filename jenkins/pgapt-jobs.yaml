@@ -1261,7 +1261,7 @@
         axes:
                 - axis: *slaves_axis
         triggers:
-                - timed: "H H * * *"
+                - timed: "0 11 * * *"
         builders:
                 - shell: |
                         sudo apt-get update
