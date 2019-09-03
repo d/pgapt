@@ -1289,6 +1289,21 @@
 
 - job:
         <<: *ping
+        name: jenkins-plugin-updates
+        description: Reports pending Jenkins plugin updates
+        triggers:
+                - timed: "1 11 * * *"
+        builders:
+                - shell: |
+                    ssh -i ~/.ssh/slave -p 2222 jenkins@localhost list-plugins > plugins.txt
+                    cat plugins.txt
+                    if grep ')$' plugins.txt; then
+                      echo "There are pending Jenkins plugin updates"
+                      exit 1
+                    fi
+
+- job:
+        <<: *ping
         name: scm-sync-status
         description: Reports SCM Sync errors
         builders:
