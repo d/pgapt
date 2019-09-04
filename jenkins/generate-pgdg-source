@@ -294,6 +294,16 @@ case $PACKAGE in
     esac
     ;;
 
+  psycopg2)
+    case ${distribution:-} in
+      stretch|bionic|xenial)
+        sed -i -e 's/debhelper-compat.*/debhelper (>= 9),/' debian/control
+        echo 9 > debian/compat
+        TWEAK+=("Using old debhelper 9 API.")
+        ;;
+    esac
+    ;;
+
   barman)
     case $distribution in jessie|trusty)
       # Use Python 2 sequencer and rename all the packages
