@@ -157,6 +157,10 @@ case $PACKAGE in
         TWEAK+=("Disable llvm jit support.")
         ;;
     esac
+    ;;
+esac
+case $PACKAGE in
+  postgresql-9.[456]|postgresql-1[01])
     case $distribution in buster|stretch|jessie|disco|bionic|xenial)
       sed -i -e 's/^#py2#//' debian/control debian/rules
       TWEAK+=("Re-enable plpython2 packages.")
