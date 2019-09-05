@@ -185,45 +185,6 @@ case $PACKAGE in
     esac
     ;;
 
-  # pgadmin4 build-deps
-  flask-gravatar)
-    case $distribution in stretch|zesty|xenial)
-      sed -i -e '/pytest-pep8/d' debian/control
-      sed -i -e 's/#0003-no-pep8/0003-no-pep8/' debian/patches/series
-      TWEAK+=("Removing python(3)-pytest-pep8 dependency.")
-      ;;
-    esac
-    DOT='~'
-    ;;
-
-  flask-security)
-    case $distribution in stretch|zesty|xenial)
-      sed -i -e '/python3-pytest-pep8/d' debian/control
-      TWEAK+=("Removing python3-pytest-pep8 dependency.")
-      ;;
-    esac
-    case $distribution in xenial)
-      sed -i -e '/python3-pytest-runner/d' debian/control
-      TWEAK+=("Removing python3-pytest-runner dependency.")
-      ;;
-    esac
-    DOT='~'
-    ;;
-
-  flask-wtf)
-    case $distribution in
-      xenial)
-        echo "override_dh_auto_test:" >> debian/rules
-        echo "	-override_dh_auto_test" >> debian/rules
-        TWEAK+=("Ignore CSRF test failure on xenial.")
-        ;;
-    esac
-    DOT='~'
-    ;;
-
-  flask*|*peewee*|sshtunnel|psycopg2)
-    DOT='~' ;;
-
   omnidb)
     case $distribution in stretch)
       sed -i -e '/fonts-glewlwyd/d' debian/control*
@@ -295,6 +256,7 @@ case $PACKAGE in
     ;;
 
   psycopg2)
+    DOT='~'
     case ${distribution:-} in
       stretch|bionic|xenial)
         sed -i -e 's/debhelper-compat.*/debhelper (>= 9),/' debian/control
