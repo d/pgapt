@@ -178,12 +178,6 @@
                     - run
                     - skip
             description: 'Run autopkgtest at build time'
-    noautopkgtest_choice: &noautopkgtest_choice
-            name: ADT
-            choices:
-                    - skip
-                    - run
-            description: 'Run autopkgtest at build time'
 
     ircbot_only_configs: &only_configs
             strategy: any-failure
@@ -310,46 +304,10 @@
                     }}
                 }}
 
-- job-template: &build_pipeline_split_autopkgtest
+- job-template:
         <<: *build_pipeline
         name: '{name}'
-        id: 'build-pipeline-split-autopkgtest'
-        description: 'Build source and binaries for {name}, test, and upload them'
-        dsl: |
-                pipeline {{
-                    agent {{ label 'master' }}
-                    stages {{
-                        stage('source') {{
-                            steps {{
-                                build(job: '{name}-source',
-                                    parameters: [
-                                        string(name: 'revision', value: revision),
-                                        string(name: 'branch', value: branch),
-                                        string(name: 'buildtype', value: buildtype),
-                                    ]
-                                )
-                            }}
-                        }}
-                        stage('binaries') {{
-                            steps {{
-                                build(job: '{name}-binaries')
-                                build(job: '{name}-testsuite')
-                                build(job: 'dput',
-                                    parameters: [
-                                        string(name: 'binaries', value: '{name}-binaries'),
-                                        string(name: 'queue', value: queue),
-                                        string(name: 'upload', value: 'all'),
-                                    ]
-                                )
-                            }}
-                        }}
-                    }}
-                }}
-
-- job-template:
-        <<: *build_pipeline_split_autopkgtest
-        name: '{name}'
-        id: 'build-pipeline-split-autopkgtest-with-git'
+        id: 'build-pipeline-with-git'
         triggers:
                 - pollscm: # build every six hours
                         cron: "H */6 * * *"
@@ -397,7 +355,6 @@
                         stage('binaries') {{
                             steps {{
                                 build(job: '{name}-binaries')
-                                build(job: '{name}-testsuite')
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
@@ -629,20 +586,9 @@
                 - groovy-postbuild: *add_version_tag
                 - workspace-cleanup
 
-- job-template: &binaries_no_autopkgtest
-        <<: *binaries_template
-        id: 'binaries-no-autopkgtest'
-        parameters:
-                - string: *supported_versions_param
-                - string: *deb_build_options_param
-                - string: *binnmu_reason_param
-                - string: *binnmu_version_param
-                - choice: *noautopkgtest_choice
-                - matrix-combinations: *matrix_combination_parameter
-
 # binaries triggered from -source-git-head
 - job-template:
-        <<: *binaries_no_autopkgtest
+        <<: *binaries_template
         name: '{name}-binaries'
         id: 'binaries-git-head'
         axes:
@@ -810,11 +756,12 @@
                 - choice: *autopkgtest_choice
                 - matrix-combinations: *matrix_combination_parameter
 
-# testsuite template
+# autopkgtest template
 
-- job-template: &testsuite_template
-        name: '{name}-testsuite'
-        description: 'Run the postgresql-common testsuite on {name}.<br />Do not edit this job through the web interface, it is generated via jenkins-job-builder!'
+- job-template: &autopkgtest_template
+        name: '{name}-autopkgtest'
+        id: 'autopkgtest'
+        description: 'Run autopkgtest on {name}'
         project-type: matrix
         execution-strategy:
                 combination-filter: *filter_pattern
@@ -823,48 +770,6 @@
         axes:
                 - axis: *arch_axis
                 - axis: *dist_axis
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '{name}-binaries/architecture=$architecture,distribution=$distribution'
-                        flatten: true
-                        which-build: upstream-build
-                        fallback-to-last-successful: true
-                        do-not-fingerprint: true
-                - shell: 'postgresql-testsuite'
-        publishers:
-                - archive: *binaries_archive
-                - ircbot: *only_configs
-                - workspace-cleanup
-
-- job-template:
-        <<: *testsuite_template
-        name: '{name}-testsuite'
-        id: 'testsuite-git-head'
-        parameters:
-                - matrix-combinations: *matrix_combination_parameter
-        axes:
-                - axis: *git_head_arch_axis
-                - axis: *git_head_dist_axis
-        builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: '{name}-binaries/architecture=$architecture,distribution=$distribution'
-                        flatten: true
-                        which-build: upstream-build
-                        fallback-to-last-successful: true
-                        do-not-fingerprint: true
-                - shell: 'postgresql-testsuite'
-        publishers:
-                - archive: *binaries_archive
-                - ircbot: *only_configs
-                - workspace-cleanup
-
-- job-template: &autopkgtest_template
-        <<: *testsuite_template
-        name: '{name}-autopkgtest'
-        id: 'autopkgtest'
-        description: 'Run autopkgtest on {name}'
         workspace: /tmp
         child-workspace: .
         triggers:
@@ -975,13 +880,6 @@
                 - 'autopkgtest'
 
 - job-group:
-        name: git-packages-no-testsuite
-        jobs:
-                - 'build-pipeline'
-                - 'source-git'
-                - 'binaries-no-autopkgtest'
-
-- job-group:
         name: git-packages-with-next
         jobs:
                 - 'build-pipeline-with-beta'
@@ -992,21 +890,11 @@
                 - 'autopkgtest-beta'
 
 - job-group:
-        name: git-packages-split-autopkgtest
+        name: git-packages-with-git
         jobs:
-                - 'build-pipeline-split-autopkgtest'
-                - 'source-git'
-                - 'binaries-no-autopkgtest'
-                - '{name}-testsuite'
-                - 'autopkgtest'
-
-- job-group:
-        name: git-packages-split-autopkgtest-with-git
-        jobs:
-                - 'build-pipeline-split-autopkgtest-with-git'
+                - 'build-pipeline-with-git'
                 - 'source-git-head'
                 - 'binaries-git-head'
-                - 'testsuite-git-head'
                 - 'autopkgtest-git-head'
 
 # simple jobs
@@ -1802,7 +1690,7 @@
         git-branch: 8.2
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-8.3
@@ -1810,7 +1698,7 @@
         git-branch: 8.3
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-8.4
@@ -1818,7 +1706,7 @@
         git-branch: 8.4
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.0
@@ -1826,7 +1714,7 @@
         git-branch: 9.0
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.1
@@ -1834,7 +1722,7 @@
         git-branch: 9.1
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.2
@@ -1842,7 +1730,7 @@
         git-branch: 9.2
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.3
@@ -1850,42 +1738,42 @@
         git-branch: 9.3
         dist-filter: '(distribution=="sid")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.4
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.4
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.5
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.5
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-9.6
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 9.6
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-10
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 10
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-11
         git-url: https://salsa.debian.org/postgresql/postgresql.git
         git-branch: 11
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 - project:
         name: postgresql-12
@@ -1894,7 +1782,7 @@
         # don't support PG12 on cosmic, it won't be released before cosmic's EOL
         #dist-filter: '(distribution!="cosmic")'
         jobs:
-                - git-packages-split-autopkgtest
+                - git-packages
 
 # the PostgreSQL devel version:
 - project:
@@ -1903,7 +1791,7 @@
         git-branch: origin/master
         merge-branch: 13
         jobs:
-                - git-packages-split-autopkgtest-with-git
+                - git-packages-with-git
 
 - project:
         name: postgresql-common
