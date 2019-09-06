@@ -26,8 +26,8 @@ update-pgdgbuild:
 lists: packages packages.modules packages.backports packages.backports_runtime
 packages: pgapt-jobs.yaml
 	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} }' | grep -v '^upgrade-' | sort > $@
-packages.modules: pgapt-jobs.yaml # packages that build PG modules for "next"
-	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} and $$p->{project}->{jobs}->[0] eq "git-packages-with-next" }' | sort > $@
+packages.modules: pgapt-jobs.yaml # packages that build PG modules for "beta"
+	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{name} and $$p->{project}->{jobs}->[0] eq "git-packages-with-beta" }' | sort > $@
 packages.%: pgapt-jobs.yaml
 	perl -wle 'use YAML::Syck; $$y = LoadFile("pgapt-jobs.yaml"); foreach $$p (@$$y) { print $$p->{project}->{name} if $$p->{project}->{$*} or $$p->{project}->{"<<"}->{$*} }' | sort > $@
 

@@ -852,7 +852,7 @@
                 - 'autopkgtest'
 
 - job-group:
-        name: apt-packages-with-next
+        name: apt-packages-with-beta
         jobs:
                 - 'build-pipeline-with-beta'
                 - 'source-apt'
@@ -870,7 +870,7 @@
                 - 'autopkgtest'
 
 - job-group:
-        name: git-packages-with-next
+        name: git-packages-with-beta
         jobs:
                 - 'build-pipeline-with-beta'
                 - 'source-git'
@@ -1229,7 +1229,7 @@
         name: bgw-replstatus
         git-url: https://github.com/mhagander/bgw_replstatus.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: check-pgactivity
@@ -1249,34 +1249,34 @@
         name: cstore-fdw
         git-url: https://salsa.debian.org/postgresql/cstore-fdw.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: first-last-agg
         git-url: https://salsa.debian.org/postgresql/first-last-agg.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: hypopg
         git-url: https://github.com/HypoPG/hypopg.git
         git-branch: master
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: ip4r
         git-url: https://salsa.debian.org/postgresql/ip4r.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: jsquery
         git-url: https://salsa.debian.org/postgresql/jsquery.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: libdbd-pg-perl
@@ -1321,7 +1321,7 @@
         git-url: https://salsa.debian.org/postgresql/mimeo.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: omnidb
@@ -1346,7 +1346,7 @@
         name: orafce
         git-url: https://salsa.debian.org/postgresql/orafce.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: resource-agents-paf
@@ -1386,7 +1386,7 @@
         name: pgaudit
         git-url: https://salsa.debian.org/postgresql/pgaudit.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgbadger
@@ -1423,14 +1423,14 @@
         name: pg-checksums
         git-url: https://salsa.debian.org/postgresql/pg-checksums.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-cron
         git-url: https://salsa.debian.org/postgresql/pg-cron.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgcluu
@@ -1449,7 +1449,7 @@
         name: pg-dirtyread
         git-url: https://github.com/df7cb/pg_dirtyread.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgespresso
@@ -1461,19 +1461,19 @@
         name: pgextwlist
         git-url: https://github.com/dimitri/pgextwlist.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-fact-loader
         git-url: https://github.com/enova/pg_fact_loader.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgfincore
         git-url: https://git.postgresql.org/git/pgfincore.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgformatter
@@ -1494,25 +1494,25 @@
         name: pglogical
         git-url: https://salsa.debian.org/postgresql/pglogical.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pglogical-ticker
         git-url: https://github.com/enova/pglogical_ticker.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgl-ddl-deploy
         git-url: https://github.com/enova/pgl_ddl_deploy.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgmemcache
         git-url: https://salsa.debian.org/postgresql/pgmemcache.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgmodeler
@@ -1526,7 +1526,7 @@
         name: pg-rage-terminator
         git-url: https://github.com/disco-stu/pg-rage-terminator-pkg.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-rational
@@ -1534,44 +1534,44 @@
         # needs gcc 5 for __builtin_sadd_overflow
         dist-filter: '(distribution!="jessie")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-repack
         git-url: https://salsa.debian.org/postgresql/pg-repack.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-similarity
         git-url: https://salsa.debian.org/postgresql/pg-similarity.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-snakeoil
         git-url: https://github.com/credativ/pg_snakeoil.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-partman
         git-url: https://salsa.debian.org/postgresql/pg-partman.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgpool2
         git-url: https://salsa.debian.org/postgresql/pgpool2.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pg-qualstats
         git-url: https://github.com/powa-team/pg_qualstats.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgrouting
@@ -1579,7 +1579,7 @@
         # exclude jessie because postgis excludes it
         dist-filter: '(distribution!="jessie")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgsphere
@@ -1599,13 +1599,13 @@
         name: pg-stat-kcache
         git-url: https://github.com/powa-team/pg_stat_kcache.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgsql-asn1oid
         git-url: https://github.com/df7cb/pgsql-asn1oid.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgsql-ogr-fdw
@@ -1613,13 +1613,13 @@
         # needs DH 10
         backports: 'BACKPORTS=yes '
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgtap
         git-url: https://salsa.debian.org/postgresql/pgtap.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgtop
@@ -1643,20 +1643,20 @@
         git-url: https://salsa.debian.org/postgresql/pldebugger.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: plr
         git-url: https://salsa.debian.org/postgresql/plr.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgis
         git-url: https://salsa.debian.org/debian-gis-team/postgis.git
         dist-filter: '(distribution!="jessie")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: patroni
@@ -1793,7 +1793,7 @@
         name: postgresql-debversion
         git-url: https://salsa.debian.org/postgresql/postgresql-debversion.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-filedump
@@ -1806,38 +1806,38 @@
         git-url: https://salsa.debian.org/postgresql/postgresql-hll.git
         arch-filter: '(architecture!="i386")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-multicorn
         git-url: https://salsa.debian.org/postgresql/postgresql-multicorn.git
         disable_submodules: true
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-mysql-fdw
         git-url: https://salsa.debian.org/postgresql/postgresql-mysql-fdw.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-numeral
         git-url: https://github.com/df7cb/postgresql-numeral.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-periods
         git-url: https://github.com/xocolatl/periods.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-pgmp
         git-url: https://salsa.debian.org/postgresql/postgresql-pgmp.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-pljava
@@ -1845,7 +1845,7 @@
         # Java 7 not fully supported
         dist-filter: '(distribution!="jessie")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-pllua
@@ -1853,25 +1853,25 @@
         # lua5.3 in jessie-backports
         dist-filter: '(distribution!="jessie")'
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-plproxy
         git-url: https://salsa.debian.org/postgresql/postgresql-plproxy.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-plsh
         git-url: https://salsa.debian.org/postgresql/postgresql-plsh.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-prioritize
         git-url: https://salsa.debian.org/postgresql/postgresql-prioritize.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-q3c
@@ -1884,33 +1884,33 @@
         git-url: https://salsa.debian.org/postgresql/postgresql-rum.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: postgresql-unit
         git-url: https://github.com/df7cb/postgresql-unit.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: powa-archivist
         git-url: https://github.com/powa-team/powa-archivist.git
         git-branch: master
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: prefix
         git-url: https://github.com/dimitri/prefix.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: preprepare
         git-url: https://github.com/dimitri/preprepare.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: prometheus-sql-exporter
@@ -1945,19 +1945,19 @@
         name: repmgr
         git-url: https://salsa.debian.org/postgresql/repmgr.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: rdkit
         git-url: https://salsa.debian.org/debichem-team/rdkit.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: slony1-2
         git-url: https://salsa.debian.org/postgresql/slony1-2.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: sqlsmith
@@ -1970,13 +1970,13 @@
         name: toastinfo
         git-url: https://github.com/credativ/toastinfo.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: wal2json
         git-url: https://salsa.debian.org/postgresql/wal2json.git
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 # upgrade tests
 
@@ -2013,7 +2013,7 @@
         git-url: https://salsa.debian.org/postgresql/pgq.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: pgqd
@@ -2027,7 +2027,7 @@
         git-url: https://salsa.debian.org/postgresql/pgq-node.git
         git-branch: debian
         jobs:
-                - git-packages-with-next
+                - git-packages-with-beta
 
 - project:
         name: python-pgq
