@@ -1799,7 +1799,7 @@
 - project:
         name: postgresql-8.2
         git-url: https://salsa.debian.org/postgresql/postgresql.git
-        git-branch: '8.2-pgdg'
+        git-branch: 8.2
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-split-autopkgtest
@@ -1807,7 +1807,7 @@
 - project:
         name: postgresql-8.3
         git-url: https://salsa.debian.org/postgresql/postgresql.git
-        git-branch: '8.3-pgdg'
+        git-branch: 8.3
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-split-autopkgtest
@@ -1815,7 +1815,7 @@
 - project:
         name: postgresql-8.4
         git-url: https://salsa.debian.org/postgresql/postgresql.git
-        git-branch: '8.4-pgdg'
+        git-branch: 8.4
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-split-autopkgtest
@@ -1823,7 +1823,7 @@
 - project:
         name: postgresql-9.0
         git-url: https://salsa.debian.org/postgresql/postgresql.git
-        git-branch: '9.0-pgdg'
+        git-branch: 9.0
         dist-filter: '(distribution=="sid")'
         jobs:
                 - git-packages-split-autopkgtest
