@@ -838,14 +838,6 @@
 - job-template:
         <<: *upgrade_template
         name: 'upgrade-{oldversion}-{newversion}'
-        id: 'upgrade-sid'
-        axes:
-                - axis: *arch_axis
-                - axis: *sid_dist_axis
-
-- job-template:
-        <<: *upgrade_template
-        name: 'upgrade-{oldversion}-{newversion}'
         id: 'upgrade-git-head'
         axes:
                 - axis: *git_head_arch_axis
@@ -1991,11 +1983,11 @@
 # upgrade tests
 
 # lowest supported "upgrade from" version is 8.4, "upgrade to" 9.2
-- project: { name: upgrade-8.4-9.2, oldversion: 8.4, newversion: 9.2, jobs: [ upgrade-sid ] }
-- project: { name: upgrade-9.0-9.2, oldversion: 9.0, newversion: 9.2, jobs: [ upgrade-sid ] }
-- project: { name: upgrade-9.1-9.2, oldversion: 9.1, newversion: 9.2, jobs: [ upgrade-sid ] }
-- project: { name: upgrade-9.2-9.3, oldversion: 9.2, newversion: 9.3, jobs: [ upgrade-sid ] }
-- project: { name: upgrade-9.3-9.4, oldversion: 9.3, newversion: 9.4, jobs: [ upgrade-sid ] }
+- project: { name: upgrade-8.4-9.2, oldversion: 8.4, newversion: 9.2, jobs: [ upgrade ], dist-filter: 'distribution=="sid"' }
+- project: { name: upgrade-9.0-9.2, oldversion: 9.0, newversion: 9.2, jobs: [ upgrade ], dist-filter: 'distribution=="sid"' }
+- project: { name: upgrade-9.1-9.2, oldversion: 9.1, newversion: 9.2, jobs: [ upgrade ], dist-filter: 'distribution=="sid"' }
+- project: { name: upgrade-9.2-9.3, oldversion: 9.2, newversion: 9.3, jobs: [ upgrade ], dist-filter: 'distribution=="sid"' }
+- project: { name: upgrade-9.3-9.4, oldversion: 9.3, newversion: 9.4, jobs: [ upgrade ], dist-filter: 'distribution=="sid"' }
 - project: { name: upgrade-9.4-9.5, oldversion: 9.4, newversion: 9.5, jobs: [ upgrade ] }
 - project: { name: upgrade-9.5-9.6, oldversion: 9.5, newversion: 9.6, jobs: [ upgrade ] }
 - project: { name: upgrade-9.6-10,  oldversion: 9.6, newversion: 10,  jobs: [ upgrade ] }
