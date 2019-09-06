@@ -783,8 +783,6 @@
         <<: *autopkgtest_template
         name: '{name}-autopkgtest-beta'
         id: 'autopkgtest-beta'
-        triggers:
-                - timed: "H H H * *"
         builders:
                 - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=12 pgdg-autopkgtest {name}'
 
