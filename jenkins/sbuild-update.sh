@@ -118,6 +118,11 @@ umask 002
 	# save backports lists
 	rm -rf /var/lib/apt/backports /etc/apt/sources.list.d/backports.list.disabled
 	if [ "$HAS_BACKPORTS" ]; then
+	  # install lintian from backports (necessary because
+	  # /usr/share/doc/lintian/lintian.html changes filetype in
+	  # stretch/buster/bullseye, and upgrading on overlayfs fails)
+	  apt-get -y install lintian/$distribution-backports
+
 	  mv /etc/apt/sources.list.d/backports.list /etc/apt/sources.list.d/backports.list.disabled
 	  mkdir -p /var/lib/apt/backports
 	  mv /var/lib/apt/lists/*backports* /var/lib/apt/backports
