@@ -1173,6 +1173,7 @@
                 - timed: "1 11 * * *"
         builders:
                 - shell: |
+                    curl -f --netrc -X POST https://pgdgbuild.dus.dg-i.net/pluginManager/checkUpdatesServer
                     ssh -i ~/.ssh/slave -p 2222 jenkins@localhost list-plugins > plugins.txt
                     cat plugins.txt
                     if grep ')$' plugins.txt; then
