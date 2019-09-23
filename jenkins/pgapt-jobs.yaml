@@ -1211,6 +1211,8 @@
 - project:
         name: apgdiff
         git-url: https://salsa.debian.org/postgresql/apgdiff.git
+        # jessie: PgView.java:133: error: cannot find symbol
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages
 
