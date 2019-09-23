@@ -197,6 +197,14 @@ case $PACKAGE in
     esac
     ;;
 
+  ora2pg)
+    case $distribution in eoan)
+      sed -i -e 's/default-mysql-server/mariadb-server/' debian/tests/control
+      TWEAK+=("Using mariadb-server for autopkgtest.")
+      ;;
+    esac
+    ;;
+
   pgadmin4)
     case $distribution in stretch|xenial)
       sed -i -e '/fonts-glewlwyd/d' -e '/fonts-open-sans/d' debian/control
