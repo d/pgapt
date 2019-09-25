@@ -1941,7 +1941,8 @@
         name: psycopg2
         git-url: https://salsa.debian.org/python-team/modules/psycopg2.git
         git-branch: debian/master
-        dist-filter: '(distribution!="jessie")' # same as pgadmin4
+        # xenial: psycopgmodule.c:414: undefined reference to `PyInt_FromLong'
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")' # same as pgadmin4
         jobs:
                 - git-packages
 
