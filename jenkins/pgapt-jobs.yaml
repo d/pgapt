@@ -1170,14 +1170,15 @@
         name: jenkins-plugin-updates
         description: Reports pending Jenkins plugin updates
         triggers:
-                - timed: "1 11 * * *"
+                - timed: "59 10 * * *"
         builders:
                 - shell: |
-                    curl -f --netrc -X POST https://pgdgbuild.dus.dg-i.net/pluginManager/checkUpdatesServer
+                    curl -sf --netrc -X POST https://pgdgbuild.dus.dg-i.net/pluginManager/checkUpdatesServer
                     ssh -i ~/.ssh/slave -p 2222 jenkins@localhost list-plugins > plugins.txt
                     cat plugins.txt
                     if grep ')$' plugins.txt; then
-                      echo "There are pending Jenkins plugin updates"
+                      : There are pending Jenkins plugin updates
+                      : https://pgdgbuild.dus.dg-i.net/updateCenter/
                       exit 1
                     fi
 
