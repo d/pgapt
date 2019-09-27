@@ -1178,7 +1178,7 @@
                     cat plugins.txt
                     if grep ')$' plugins.txt; then
                       : There are pending Jenkins plugin updates
-                      : https://pgdgbuild.dus.dg-i.net/updateCenter/
+                      : https://pgdgbuild.dus.dg-i.net/pluginManager/
                       exit 1
                     fi
 
