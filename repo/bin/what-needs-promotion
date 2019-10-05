@@ -1,7 +1,12 @@
 #!/bin/bash
 
-while getopts "u" opt ; do
+set -e
+
+ARCH=amd64
+
+while getopts "a:u" opt ; do
   case $opt in
+    a) ARCH="$OPTARG" ;;
     u) UNCHANGED="-u" ;;
   esac
 done
@@ -13,6 +18,14 @@ DISTS=$BINDIR/../dists
 DIST=${1:-sid}
 [ -t 1 ] && TO_TERM="-t"
 
+echo "Binaries:"
+$BINDIR/diff-dists $TO_TERM $UNCHANGED \
+	<(bzcat $DISTS/$DIST-pgdg-testing/main/binary-$ARCH/Packages.bz2) \
+	<(bzcat $DISTS/$DIST-pgdg/main/binary-$ARCH/Packages.bz2) |
+grep -v -e 'pgdg-buildenv'
+echo
+
+echo "Source:"
 $BINDIR/diff-dists $TO_TERM $UNCHANGED \
 	<(bzcat $DISTS/$DIST-pgdg-testing/main/source/Sources.bz2) \
 	<(bzcat $DISTS/$DIST-pgdg/main/source/Sources.bz2) |
