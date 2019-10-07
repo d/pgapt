@@ -57,16 +57,15 @@ export DISTRO RELEASE
 
 # prepare 'source' directory
 if [ "${GIT_COMMIT:-}" ]; then # git expects the checkout in 'source' subdir
-  :
+  cd source
 elif [ "${apt_suite:-}" ] ; then # apt-get source specified
   rm -rf $PACKAGE* source
   schroot -c $apt_suite -- apt-get source -d $PACKAGE/$apt_suite
   dpkg-source -x $PACKAGE*.dsc source
-else # use source package in current directory
-  rm -rf source
-  dpkg-source -x $PACKAGE*.dsc source
+  cd source
+else # use source tree in current directory
+  :
 fi
-cd source
 
 # merge with another branch
 if [ "${merge:-}" ]; then
@@ -320,8 +319,8 @@ if [ "${UNRELEASED:-}" ] || echo "$CL_DISTRIBUTION" | grep -q "UNRELEASED" ; the
     TWEAK+=("Use source format 1.0 for git snapshot build.")
     ;;
   esac
-  SHORT_REVISION=$(echo $GIT_COMMIT | cut -c 1-7)
-  SUFFIX="~${BUILD_NUMBER}.git${SHORT_REVISION}"
+  SHORT_REVISION=$(echo ${GIT_COMMIT:-missing} | cut -c 1-7)
+  SUFFIX="~${BUILD_NUMBER:-missing}.git${SHORT_REVISION}"
 else
   SUFFIX=""
 fi
