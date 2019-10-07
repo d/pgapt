@@ -93,6 +93,15 @@ if grep -q '^#dbg#' debian/rules debian/control*; then
     esac
 fi
 
+# use older debhelper version
+debhelper_compat ()
+{
+  local level="$1"
+  sed -i -e "s/debhelper[^,]*/debhelper (>= $level)/" debian/control*
+  echo "$level" > debian/compat
+  TWEAK+=("Using debhelper $level.")
+}
+
 # for postgresql server packages, move packages to a separate components
 # = $PG_MAIN_VERSION: main
 # < $PG_MAIN_VERSION: lib packages to N.N, rest to main
@@ -182,8 +191,15 @@ case $PACKAGE in
     esac
     ;;
 
-  autopkgtest|dh-exec|libdbd-pg-perl|pkg-perl-tools)
+  autopkgtest|dh-exec|pkg-perl-tools)
     DOT='~' ;;
+
+  libdbd-pg-perl)
+    DOT='~'
+    case $distribution in
+      stretch|jessie|bionic|xenial) debhelper_compat 9 ;;
+    esac
+    ;;
 
   pgloader)
     case $distribution in jessie|xenial|trusty)
@@ -274,11 +290,7 @@ case $PACKAGE in
   psycopg2)
     DOT='~'
     case ${distribution:-} in
-      stretch|bionic|xenial)
-        sed -i -e 's/debhelper-compat.*/debhelper (>= 9),/' debian/control
-        echo 9 > debian/compat
-        TWEAK+=("Using old debhelper 9 API.")
-        ;;
+      stretch|bionic|xenial) debhelper_compat 9 ;;
     esac
     ;;
 
