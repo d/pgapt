@@ -33,28 +33,20 @@ umask 002
 
 set -eux
 
-flock --shared $LOCKDIR/$distribution-$architecture.lock \
-schroot -u root -c "chroot:$distribution-$architecture" -- sh <<'EOF'
+flock --shared $LOCKDIR/${distribution:=sid}-${architecture:=amd64}.lock \
+${wrap-newpid-netns} \
+schroot -u root -c "chroot:$distribution-$architecture" -- sh <<EOF
 set -eux
 
 # /var/lib/jenkins will probably not exist
-test -w ${HOME:-/does/not/exist} || export HOME=/tmp
+test -w \${HOME:-/does/not/exist} || export HOME=/tmp
 
 # pick up new packages, most notably postgresql-common might have been updated
 apt-get -y update || { sleep 60; apt-get -y update; }
-apt-get -y dist-upgrade
-
-apt-get install -y locales logrotate netcat-openbsd net-tools hunspell-en-us newpid
-if ! dpkg -i *.deb; then
-  apt-get install -fy
-  dpkg -i *.deb
-fi
-
-dpkg -l 'libpq*' 'postgresql*' | cat
 
 export LC_ALL='en_US.UTF-8'
 cd /usr/share/postgresql-common/
-newnet ./testsuite -V -u 077
+./testsuite -V -u 077 -i -v "$@"
 EOF
 
 # vim:sw=2

@@ -813,22 +813,7 @@
         triggers:
                 - timed: "H H H * *"
         builders:
-                - shell: 'rm -rf *'
-                - copyartifact:
-                        project: 'postgresql-{oldversion}-binaries/architecture=$architecture,distribution=$distribution'
-                        flatten: true
-                        which-build: upstream-build
-                        fallback-to-last-successful: true
-                        do-not-fingerprint: true
-                - copyartifact:
-                        project: 'postgresql-{newversion}-binaries/architecture=$architecture,distribution=$distribution'
-                        flatten: true
-                        which-build: upstream-build
-                        fallback-to-last-successful: true
-                        do-not-fingerprint: true
-                - shell: 'rm lib*_{oldversion}*'
-                - shell: 'rm -vf postgresql-{oldversion}-dbg_*' # conflict via /usr/lib/debug/usr/bin/ecpg
-                - shell: 'postgresql-testsuite'
+                - shell: 'postgresql-testsuite {oldversion} {newversion}'
         publishers:
                 - ircbot: *only_configs
                 - workspace-cleanup
