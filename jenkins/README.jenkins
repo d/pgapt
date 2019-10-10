@@ -15,6 +15,7 @@ Parameterized Trigger Plugin
 Priority Sorter Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
+Text-finder Plugin
 Timestamper Plugin
 Pipeline: Build Step
 Pipeline Model Definition Plugin
