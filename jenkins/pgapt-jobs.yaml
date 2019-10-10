@@ -577,6 +577,9 @@
                         do-not-fingerprint: true
                 - shell: '{backports}sbuild-package'
         publishers:
+                - text-finder: &text_finder_not_built
+                        regexp: '### NOT BUILT ###'
+                        not-built-if-found: true
                 - archive: &binaries_archive
                         artifacts: '*.gz,*.bz2,*.xz,*.asc,*.deb,*.dsc,*.changes,*.buildinfo'
                         latest-only: true
@@ -662,6 +665,7 @@
                         do-not-fingerprint: true
                 - shell: 'sbuild-package'
         publishers:
+                - text-finder: *text_finder_not_built
                 - archive: *binaries_archive
                 - junit:
                         results: autopkgtest.xml
@@ -722,6 +726,7 @@
                     apt-get source -d $PACKAGE=$version
                 - shell: 'sbuild-package'
         publishers:
+                - text-finder: *text_finder_not_built
                 - archive: *binaries_archive
                 - junit:
                         results: autopkgtest.xml
@@ -777,6 +782,7 @@
         builders:
                 - shell: '{backports_runtime}pgdg-autopkgtest {name}'
         publishers:
+                - text-finder: *text_finder_not_built
                 - ircbot: *only_configs
 
 - job-template:

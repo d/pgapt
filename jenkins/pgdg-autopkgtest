@@ -92,7 +92,7 @@ newpid-netns schroot -c $CHROOT -u root sh <<-EOF
 	  ( set -x; adt-run --apt-source "$PACKAGE" --- null ) || EXIT=\$?
 	fi
 	case \${EXIT:-0} in
-	  2|8) exit 0 ;; # tests skipped / no tests in this package
+	  2|8) echo "###" "NOT BUILT" "###"; exit 0 ;; # tests skipped / no tests in this package
 	  *) exit \${EXIT:-0} ;;
 	esac
 EOF
