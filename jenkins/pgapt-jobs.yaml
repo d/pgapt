@@ -1353,6 +1353,13 @@
                 - git-packages
 
 - project:
+        name: patroni
+        git-url: https://salsa.debian.org/postgresql/patroni.git
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
+        jobs:
+                - git-packages
+
+- project:
         name: pg-activity
         git-url: https://salsa.debian.org/kolter/pg-activity.git
         git-branch: unstable
@@ -1662,13 +1669,6 @@
         #dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages-with-beta
-
-- project:
-        name: patroni
-        git-url: https://salsa.debian.org/postgresql/patroni.git
-        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
-        jobs:
-                - git-packages
 
 - project:
         name: postgis-java
