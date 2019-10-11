@@ -50,7 +50,7 @@ while (<>) {
     }
   }
 
-  if ($component ne $expected_component) {
+  if ($component ne $expected_component and "$pkg:$arch ($ver)" ne "libpq5:ppc64el (11.2-2.pgdg80+1)") { # whitelist old libpq5 on jessie/ppc64el
     warn "$pkg:$arch ($ver) is in $component but should be in $expected_component\n";
     $exit = 1;
   } else {
