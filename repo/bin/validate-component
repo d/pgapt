@@ -32,6 +32,8 @@ while (<>) {
   $component ||= 'main';
   my ($ver, $major) = (/^ ?Version: (([\d.]{1,3})[.~].*)/m)
     or die "Paragraph without Version: $_"; # major is 9.x or 1x, followed by . or ~
+  my ($arch) = (m!^ ?Architecture: (.+)!m);
+  die "Paragraph without Architecture: $_" unless ($arch);
 
   my $expected_component;
   if ($major eq $mainversion) { # most recent stable branch -> main
@@ -49,10 +51,10 @@ while (<>) {
   }
 
   if ($component ne $expected_component) {
-    warn "$pkg ($ver) is in $component but should be in $expected_component\n";
+    warn "$pkg:$arch ($ver) is in $component but should be in $expected_component\n";
     $exit = 1;
   } else {
-    print "$pkg ($ver) $component: OK\n";
+    print "$pkg:$arch ($ver) $component: OK\n";
   }
 }
 
