@@ -35,6 +35,7 @@ pgtap
 pldebugger
 plr
 postgis
+postgis-2.5
 postgresql-debversion
 postgresql-hll
 postgresql-multicorn

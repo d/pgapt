@@ -70,6 +70,7 @@ pgxnclient
 pldebugger
 plr
 postgis
+postgis-2.5
 postgis-java
 postgresql-10
 postgresql-11

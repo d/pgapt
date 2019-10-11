@@ -1656,6 +1656,14 @@
                 - git-packages-with-beta
 
 - project:
+        name: postgis-2.5
+        git-url: https://salsa.debian.org/myon/postgis.git
+        git-branch: postgis-2.5
+        #dist-filter: '(distribution!="jessie")'
+        jobs:
+                - git-packages-with-beta
+
+- project:
         name: patroni
         git-url: https://salsa.debian.org/postgresql/patroni.git
         dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
