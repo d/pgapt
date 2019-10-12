@@ -265,6 +265,15 @@ case $PACKAGE in
     esac
     ;;
 
+  postgis-2.5)
+    case ${distribution:-} in
+      jessie)
+        sed -i -e 's/^SKIP_CLIENT_BINARIES/#SKIP_CLIENT_BINARIES/' debian/rules
+        TWEAK+=("Enable building client binaries.")
+        ;;
+    esac
+    ;;
+
   sfcgal)
     DOT='~'
     ;;
