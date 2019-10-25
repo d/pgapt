@@ -157,7 +157,7 @@
             description: 'PostgreSQL versions to target'
     supported_versions_param_beta: &supported_versions_param_beta
             name: DEB_PG_SUPPORTED_VERSIONS
-            default: '12'
+            default: '13'
             description: 'PostgreSQL versions to target'
 
     deb_build_options_param: &deb_build_options_param
@@ -289,6 +289,7 @@
                                 )
                             }}
                         }}
+                        /*
                         stage('binaries-beta') {{
                             steps {{
                                 build(job: '{name}-binaries-beta')
@@ -301,6 +302,7 @@
                                 )
                             }}
                         }}
+                        */
                     }}
                 }}
 
@@ -626,7 +628,7 @@
 #        builders:
 #                - shell: 'rm -rf *'
 #                - copyartifact: *copysource
-#                - shell: 'DEB_PG_SUPPORTED_VERSIONS="12" {backports}sbuild-package'
+#                - shell: 'DEB_PG_SUPPORTED_VERSIONS="13" {backports}sbuild-package'
 
 # build binaries for a single distribution
 
@@ -790,8 +792,10 @@
         <<: *autopkgtest_template
         name: '{name}-autopkgtest-beta'
         id: 'autopkgtest-beta'
+        triggers:
+                #- timed: "H H H * *"
         builders:
-                - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=12 pgdg-autopkgtest {name}'
+                - shell: '{backports_runtime}PG_SUPPORTED_VERSIONS=13 pgdg-autopkgtest {name}'
 
 - job-template:
         <<: *autopkgtest_template
