@@ -51,7 +51,7 @@ DSC="$1"
 
 # exit early if package is arch:all only and we are not on amd64
 if [ "$architecture" != "amd64" ] && egrep -q '^Architecture: all$' $DSC; then
-  echo "Package is arch:all only and we are not on amd64" "###" "NOT BUILT" "###"
+  echo "Package is arch:all only and we are not on amd64" # needs https://issues.jenkins-ci.org/browse/JENKINS-59730 fixed first: "###" "NOT BUILT" "###"
   adtsummary2junit /dev/null > autopkgtest.xml
   exit
 fi
