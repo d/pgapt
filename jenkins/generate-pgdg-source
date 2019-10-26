@@ -372,7 +372,10 @@ if ! [ -f debian/control ] ; then
   make -f debian/rules debian/control
 fi
 if [ -f debian/control.in ]; then
-  pg_buildext checkcontrol
+  case $PACKAGE in
+    postgis|postgis-2.5) debian/rules debian/control ;; # has its own update rule
+    *) pg_buildext checkcontrol ;;
+  esac
 fi
 
 # build source package and move it to 'result' for archiving
