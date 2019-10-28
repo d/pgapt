@@ -22,6 +22,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# read pgapt config
+for dir in . .. /home/jenkins/jenkins/workspace/apt.postgresql.org /home/buildd/workspace/apt.postgresql.org; do
+  test -f $dir/pgapt.conf || continue
+  . $dir/pgapt.conf
+  break
+done
+
 # lock against concurrent apt-get update/upgrade operations on the source chroot
 LOCKDIR="/var/lock/sbuild-package"
 if ! test -d $LOCKDIR; then
@@ -40,6 +47,14 @@ set -eux
 
 # /var/lib/jenkins will probably not exist
 test -w \${HOME:-/does/not/exist} || export HOME=/tmp
+
+# update pgdg.list for devel versions
+case "$@" in
+  *${PG_BETA_VERSION:-unset}*)
+    sed -i -e "s/main/main ${PG_BETA_VERSION:-}/" /etc/apt/sources.list.d/pgdg.list ;;
+  *${PG_DEVEL_VERSION:-unset}*)
+    sed -i -e "s/main/main ${PG_DEVEL_VERSION:-}/" /etc/apt/sources.list.d/pgdg.list ;;
+esac
 
 # pick up new packages, most notably postgresql-common might have been updated
 apt-get -y update || { sleep 60; apt-get -y update; }
