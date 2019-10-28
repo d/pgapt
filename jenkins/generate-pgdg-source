@@ -153,7 +153,7 @@ esac
 case $PACKAGE in
   postgresql-1[1-9]) # use llvm >= 5 (older versions choke on C++ exceptions, breaks PostGIS)
     case $distribution in
-      bullseye|buster|eoan|disco) # use clang-7
+      buster|disco) # use clang-7
         sed -i -e 's/\(llvm\|llvm-config\|clang\)-9/\1-7/g' debian/control debian/rules
         TWEAK+=("Use clang/llvm 7 for jit support.")
         ;;
