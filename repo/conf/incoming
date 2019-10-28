@@ -11,6 +11,7 @@ Allow: sid-pgdg>sid-pgdg-testing
  squeeze-pgdg>squeeze-pgdg-testing
  lenny-pgdg>lenny-pgdg-testing
  etch-pgdg>etch-pgdg-testing
+ focal-pgdg>focal-pgdg-testing
  eoan-pgdg>eoan-pgdg-testing
  disco-pgdg>disco-pgdg-testing
  cosmic-pgdg>cosmic-pgdg-testing

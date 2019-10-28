@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DISTRIBUTIONS="sid bullseye buster stretch jessie wheezy squeeze lenny etch
-	eoan disco cosmic bionic zesty xenial wily utopic trusty saucy precise lucid"
+	focal eoan disco cosmic bionic zesty xenial wily utopic trusty saucy precise lucid"
 FLAVORS="pgdg pgdg-testing"
 
 for DIST in $DISTRIBUTIONS ; do
@@ -51,6 +51,8 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
 			eoan)   ARCHS="amd64"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
+			focal)  ARCHS="amd64 ppc64el"
+				COMPONENTS="main                             9.4 9.5 9.6 10 11 12 13" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
 				exit 1 ;;

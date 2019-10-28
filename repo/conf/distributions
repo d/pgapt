@@ -286,6 +286,38 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
+Codename: focal-pgdg
+Suite: focal-pgdg
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 ppc64el
+Components: main 9.4 9.5 9.6 10 11 12 13
+SignWith: ACCC4CF8
+Log: focal-pgdg.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+
+Codename: focal-pgdg-testing
+Suite: focal-pgdg-testing
+Origin: apt.postgresql.org
+Label: PostgreSQL for Debian/Ubuntu repository
+Architectures: source amd64 ppc64el
+Components: main 9.4 9.5 9.6 10 11 12 13
+SignWith: ACCC4CF8
+Log: focal-pgdg-testing.log
+Uploaders: uploaders
+DebIndices: Packages Release . .gz .bz2
+UDebIndices: Packages . .gz .bz2
+DscIndices: Sources Release .gz .bz2
+Tracking: minimal includebuildinfos keepsources
+Contents: percomponent nocompatsymlink
+NotAutomatic: yes
+ButAutomaticUpgrades: yes
+
 Codename: eoan-pgdg
 Suite: eoan-pgdg
 Origin: apt.postgresql.org

@@ -15,9 +15,9 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || (distribution=="bullseye" && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
     # patbeta: variant of filter that excludes PostgreSQL-beta packages to be built (was used for cosmic)
     git-branch: master
     backports: ''
@@ -121,6 +121,7 @@
                     - buster
                     - stretch
                     - jessie
+                    #- focal
                     - eoan
                     - disco
                     - bionic
@@ -719,6 +720,7 @@
                       buster) tag='pgdg100+' ;;
                       stretch) tag='pgdg90+' ;;
                       jessie) tag='pgdg80+' ;;
+                      focal) tag='pgdg20.04+' ;;
                       eoan) tag='pgdg19.10+' ;;
                       disco) tag='pgdg19.04+' ;;
                       bionic) tag='pgdg18.04+' ;;
