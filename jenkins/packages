@@ -12,6 +12,7 @@ ip4r
 jsquery
 libdbd-pg-perl
 libpgjava
+libpg-perl
 libpqtypes
 libscram-java
 libtap-parser-sourcehandler-pgtap-perl

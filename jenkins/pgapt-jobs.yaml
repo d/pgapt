@@ -1304,6 +1304,12 @@
                 - git-packages
 
 - project:
+        name: libpg-perl
+        git-url: https://salsa.debian.org/postgresql/libpg-perl.git
+        jobs:
+                - git-packages
+
+- project:
         name: libpqtypes
         git-url: https://salsa.debian.org/postgresql/libpqtypes.git
         jobs:
