@@ -194,7 +194,7 @@ case $PACKAGE in
   autopkgtest|dh-exec|pkg-perl-tools)
     DOT='~' ;;
 
-  libdbd-pg-perl)
+  libdbd-pg-perl|libpg-perl)
     DOT='~'
     case $distribution in
       stretch|jessie|bionic|xenial) debhelper_compat 9 ;;
