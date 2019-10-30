@@ -1941,6 +1941,8 @@
 - project:
         name: pspg
         git-url: https://salsa.debian.org/postgresql/pspg.git
+        # uses offsetof
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages
 
