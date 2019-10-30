@@ -135,10 +135,11 @@ umask 002
 	#esac
 	# install llvm/clang (not in pgdg-buildenv because it's architecture-specific)
 	case $distribution in
+	  jessie) ;;
 	  stretch|bionic|xenial)
 	    case $architecture in amd64|i386) apt-get -y install llvm-6.0-dev clang-6.0 ;; esac ;;
-	  jessie) ;;
-	  *) apt-get -y install llvm-7-dev clang-7 ;;
+	  buster|disco) apt-get -y install llvm-7-dev clang-7 ;;
+	  *) apt-get -y install llvm-9-dev clang-9 libllvm7-;;
 	esac
 	# bionic-updates has libllvm7, but we don't want that yet (2019-09-03)
 	[ "$distribution" = "bionic" ] && apt-get remove --purge -y libllvm7
