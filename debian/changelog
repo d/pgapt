@@ -1,3 +1,9 @@
+pgdg-buildenv (28) sid-pgdg; urgency=medium
+
+  * Destroy all schroot sessions on reboot.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 30 Oct 2019 16:24:47 +0100
+
 pgdg-buildenv (27) sid-pgdg; urgency=medium
 
   * Move llvm/clang dependency from pgdg-buildenv to sbuild-update.

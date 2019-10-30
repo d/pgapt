@@ -34,6 +34,12 @@ case $1 in
 				[ "$run" ] && locale-gen
 				;;
 		esac
+
+		# destroy all schroot sessions on reboot
+		cat > /etc/default/schroot <<-EOF
+			STOP_ACTION="end"
+			START_ACTION="end"
+		EOF
 		;;
 esac
 
