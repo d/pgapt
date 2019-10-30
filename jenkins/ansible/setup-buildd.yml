@@ -129,6 +129,12 @@
       - default
       - sbuild
 
+  - name: /etc/default/schroot
+    copy:
+      src: schroot.default
+      dest: /etc/default/schroot
+      mode: 0644
+
   - name: sbuild lock directory
     file:
       state: directory

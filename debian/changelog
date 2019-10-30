@@ -1,3 +1,9 @@
+pgdg-buildenv (29) UNRELEASED; urgency=medium
+
+  * Move "Destroy all schroot sessions on reboot" to ansible.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 30 Oct 2019 16:42:50 +0100
+
 pgdg-buildenv (28) sid-pgdg; urgency=medium
 
   * Destroy all schroot sessions on reboot.
