@@ -65,6 +65,7 @@ case $architecture in
   amd64)
     ARCH_ALL="--arch-all" ;; # always build arch:all binaries here
   *)
+    ARCH_ALL="--no-arch-all"
     if egrep -q '^Testsuite: autopkgtest$' $DSC; then
       echo "Package has Testsuite: autopkgtest, will build arch:all binaries even on $architecture. We'll throw them away at the end."
       ARCH_ALL="--arch-all"
