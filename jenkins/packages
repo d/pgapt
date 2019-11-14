@@ -119,4 +119,5 @@ resource-agents-paf
 slony1-2
 sqlsmith
 toastinfo
+vip-manager
 wal2json

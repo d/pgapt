@@ -1993,6 +1993,12 @@
                 - git-packages-with-beta
 
 - project:
+        name: vip-manager
+        git-url: https://salsa.debian.org/postgresql/vip-manager.git
+        jobs:
+                - git-packages
+
+- project:
         name: wal2json
         git-url: https://salsa.debian.org/postgresql/wal2json.git
         jobs:
