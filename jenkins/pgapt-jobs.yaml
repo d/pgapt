@@ -1995,6 +1995,7 @@
 - project:
         name: vip-manager
         git-url: https://salsa.debian.org/postgresql/vip-manager.git
+        dist-filter: '(distribution!="stretch") && (distribution!="jessie") && (distribution!="xenial") && (distribution!="bionic")'
         jobs:
                 - git-packages
 
