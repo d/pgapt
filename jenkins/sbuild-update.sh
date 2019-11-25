@@ -157,22 +157,5 @@ umask 002
 	# don't create any cluster on PostgreSQL installation
 	grep -q '^create_main_cluster = false' /etc/postgresql-common/createcluster.conf || sed -i -e 's/.*create_main_cluster.*/create_main_cluster = false/' /etc/postgresql-common/createcluster.conf
 
-	# pre-generate autopkgtest signing key
-	if ! test -f /root/.cache/autopkgtest/secring.gpg &&
-	  dpkg --compare-versions \$(dpkg-query -W -f '\${Version}' autopkgtest) lt 3.16; then
-	  umask 077
-	  mkdir -p /root/.cache/autopkgtest
-	  cd /root/.cache/autopkgtest
-	  cat > key-gen-params <<-EOT
-		Key-Type: DSA
-		Key-Length: 1024
-		Key-Usage: sign
-		Name-Real: autopkgtest per-run key
-		Name-Comment: do not trust this key
-		Name-Email: autopkgtest@example.com
-		EOT
-	  gpg --homedir=/root/.cache/autopkgtest --batch --no-random-seed-file --gen-key key-gen-params
-	fi
-
 	EOF
 ) 9> $LOCKDIR/$distribution-$architecture.lock
