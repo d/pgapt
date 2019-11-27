@@ -251,9 +251,6 @@ case $PACKAGE in
     esac
     ;;
 
-  cdiff|behave|python-parse-type|flask-compress) # python backports for patroni on stretch
-    DOT='~' ;;
-
   pgbouncer)
     case ${distribution:-} in
       wheezy|trusty|xenial)

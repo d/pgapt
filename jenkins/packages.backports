@@ -1,5 +1,4 @@
 check-pgactivity
-flask-compress
 libpgjava
 libscram-java
 omnidb
