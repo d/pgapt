@@ -2078,5 +2078,7 @@
         name: flask-compress
         git-url: https://salsa.debian.org/python-team/modules/flask-compress.git
         dist-filter: '(distribution=="xenial")'
+        # needs DH 10
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
