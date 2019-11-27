@@ -251,7 +251,7 @@ case $PACKAGE in
     esac
     ;;
 
-  cdiff|behave|python-parse-type) # python backports for patroni on stretch
+  cdiff|behave|python-parse-type|flask-compress) # python backports for patroni on stretch
     DOT='~' ;;
 
   pgbouncer)
