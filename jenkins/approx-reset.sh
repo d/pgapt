@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo -u approx rm -rf /home/approx/atalia/dists/*
+sudo -u approx rm -rf /home/approx/*/*
