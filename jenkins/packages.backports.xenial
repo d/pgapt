@@ -1,4 +1,5 @@
 flask-babelex
+flask-compress
 flask-login
 flask-mail
 sshtunnel
