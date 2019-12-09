@@ -69,6 +69,7 @@ pgtap
 pgtop
 pgxnclient
 pldebugger
+plpgsql-check
 plr
 postgis
 postgis-2.5

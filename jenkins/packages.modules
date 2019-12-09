@@ -33,6 +33,7 @@ pgsql-ogr-fdw
 pg-stat-kcache
 pgtap
 pldebugger
+plpgsql-check
 plr
 postgis
 postgis-2.5
