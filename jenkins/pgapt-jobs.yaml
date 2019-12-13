@@ -1577,6 +1577,12 @@
                 - git-packages-with-beta
 
 - project:
+        name: pgpointcloud
+        git-url: https://salsa.debian.org/postgresql/pgpointcloud.git
+        jobs:
+                - git-packages-with-beta
+
+- project:
         name: pgpool2
         git-url: https://salsa.debian.org/postgresql/pgpool2.git
         jobs:

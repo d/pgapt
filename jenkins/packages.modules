@@ -18,6 +18,7 @@ pglogical
 pglogical-ticker
 pgmemcache
 pg-partman
+pgpointcloud
 pgpool2
 pgq
 pgq-node

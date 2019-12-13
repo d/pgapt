@@ -49,6 +49,7 @@ pglogical-ticker
 pgmemcache
 pgmodeler
 pg-partman
+pgpointcloud
 pgpool2
 pgq
 pgqd
