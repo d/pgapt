@@ -1268,6 +1268,12 @@
                 - git-packages-with-beta
 
 - project:
+        name: icu-ext
+        git-url: https://salsa.debian.org/postgresql/icu-ext.git
+        jobs:
+                - git-packages-with-beta
+
+- project:
         name: ip4r
         git-url: https://salsa.debian.org/postgresql/ip4r.git
         jobs:

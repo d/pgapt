@@ -8,6 +8,7 @@ check-postgres
 cstore-fdw
 first-last-agg
 hypopg
+icu-ext
 ip4r
 jsquery
 libdbd-pg-perl
