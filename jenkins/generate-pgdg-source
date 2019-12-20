@@ -191,7 +191,7 @@ case $PACKAGE in
     esac
     ;;
 
-  autopkgtest|dh-exec|pkg-perl-tools)
+  autopkgtest|dh-exec|pkg-perl-tools|python-werkzeug)
     DOT='~' ;;
 
   libdbd-pg-perl|libpg-perl)
