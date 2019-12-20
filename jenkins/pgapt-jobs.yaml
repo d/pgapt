@@ -1391,13 +1391,6 @@
         jobs:
                 - git-packages
 
-- project: # backport for pgadmin4
-        name: python-werkzeug
-        git-url: https://salsa.debian.org/python-team/modules/python-werkzeug.git
-        dist-filter: '(distribution=="stretch") || (distribution=="buster") || (distribution=="xenial") || (distribution=="bionic") || (distribution=="disco") || (distribution=="eoan")'
-        jobs:
-                - git-packages
-
 - project:
         name: pgagent
         git-url: https://salsa.debian.org/postgresql/pgagent.git
