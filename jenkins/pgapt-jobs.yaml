@@ -1184,6 +1184,8 @@
         <<: *ping
         name: scm-sync-status
         description: Reports SCM Sync errors
+        triggers:
+                - timed: "59 10 * * *"
         builders:
                 - shell: |
                     ls -l scm-sync-configuration.*
