@@ -95,11 +95,6 @@ if [ $architecture = ppc64el ]; then
 fi
 
 # packages not tested on certain dists
-# postgresql-pljava needs older java (build time only) that doesn't exist anymore (2019-04-09)
-case $distribution in
-  sid|buster|disco)
-    remove_packages $MAINSRC postgresql-pljava ;;
-esac
 # python-werkzeug needs DH 12 and python3-sphinx-issues
 case $distribution in
   buster|stretch|eoan|disco|bionic|xenial)
