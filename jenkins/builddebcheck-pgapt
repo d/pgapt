@@ -100,6 +100,15 @@ case $distribution in
     done
     ;;
 esac
+# python-werkzeug needs DH 12 and python3-sphinx-issues
+case $distribution in
+  buster|stretch|eoan|disco|bionic|xenial)
+    for pkg in python-werkzeug; do
+      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
+      mv $MAINSRC.tmp $MAINSRC
+    done
+    ;;
+esac
 
 # run builddebcheck
 BUILDDEBCHECK="dose-builddebcheck -v -f -e --deb-native-arch=$architecture"
