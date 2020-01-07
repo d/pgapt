@@ -41,6 +41,16 @@ else
   error "No dists directory found."
 fi
 
+remove_packages ()
+{
+  FILE="$1"
+  shift
+  for pkg in "$@"; do
+    grep-dctrl --not -S $pkg $FILE > $FILE.tmp
+    mv $FILE.tmp $FILE
+  done
+}
+
 trap 'rm -f ${MAINSRC:-} ${BPOSRC:-}' 0 2 3 15
 
 # include all Packages files for "distribution" (main, universe, security) and "distribution-updates" (main, universe)
@@ -63,10 +73,7 @@ zcat $DISTSDIR/$DIST/main/source/Sources.gz > $MAINSRC
 
 if [ "$HAS_BACKPORTS" ]; then
     [ -f packages.backports ] || error "packages.backports not found"
-    for pkg in $(cat packages.backports*); do
-      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
-      mv $MAINSRC.tmp $MAINSRC
-    done
+    remove_packages $MAINSRC $(cat packages.backports*)
 
     # packages depending on backports
     BPOSRC=$(mktemp ${DIST}_bpo_source_Sources.XXXXXX)
@@ -84,30 +91,19 @@ fi
 
 # packages not tested on ppc64el
 if [ $architecture = ppc64el ]; then
-  for pkg in buildapp cffi cl-unicode pgloader sbcl plv8; do
-    grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
-    mv $MAINSRC.tmp $MAINSRC
-  done
+  remove_packages $MAINSRC buildapp cffi cl-unicode pgloader sbcl plv8
 fi
 
 # packages not tested on certain dists
 # postgresql-pljava needs older java (build time only) that doesn't exist anymore (2019-04-09)
 case $distribution in
   sid|buster|disco)
-    for pkg in postgresql-pljava; do
-      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
-      mv $MAINSRC.tmp $MAINSRC
-    done
-    ;;
+    remove_packages $MAINSRC postgresql-pljava ;;
 esac
 # python-werkzeug needs DH 12 and python3-sphinx-issues
 case $distribution in
   buster|stretch|eoan|disco|bionic|xenial)
-    for pkg in python-werkzeug; do
-      grep-dctrl --not -S $pkg $MAINSRC > $MAINSRC.tmp
-      mv $MAINSRC.tmp $MAINSRC
-    done
-    ;;
+    remove_packages $MAINSRC python-werkzeug ;;
 esac
 
 # run builddebcheck
