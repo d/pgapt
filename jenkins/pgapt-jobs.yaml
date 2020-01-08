@@ -1272,6 +1272,8 @@
 - project:
         name: icu-ext
         git-url: https://salsa.debian.org/postgresql/icu-ext.git
+        # icu too old
+        dist-filter: '(distribution!="jessie" && distribution!="xenial")'
         jobs:
                 - git-packages-with-beta
 
