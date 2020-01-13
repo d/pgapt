@@ -225,6 +225,14 @@ case $PACKAGE in
     esac
     ;;
 
+  pgadmin3)
+    case $distribution in buster|stretch|jessie|focal|eoan|disco|bionic|xenial)
+      sed -i -e 's/libwxgtk3.0-gtk3-dev | //' debian/control
+      TWEAK+=("Using libwxgtk3.0-dev instead of libwxgtk3.0-gtk3-dev.")
+      ;;
+    esac
+    ;;
+
   pgadmin4)
     case $distribution in stretch|xenial)
       sed -i -e '/fonts-glewlwyd/d' -e '/fonts-open-sans/d' debian/control
