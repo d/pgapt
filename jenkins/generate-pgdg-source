@@ -3,7 +3,7 @@
 # The MIT License
 #
 # Copyright (c) 2011,2012 by Michael Prokop <mika@debian.org>
-# Copyright (c) 2012-2019 by Christoph Berg <myon@debian.org>
+# Copyright (c) 2012-2020 by Christoph Berg <myon@debian.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -177,6 +177,15 @@ case $PACKAGE in
     case $distribution in buster|stretch|jessie|disco|bionic|xenial)
       sed -i -e 's/^#py2#//' debian/control debian/rules
       TWEAK+=("Re-enable plpython2 packages.")
+      ;;
+    esac
+    ;;
+esac
+case $PACKAGE in
+  postgresql-13)
+    case $distribution in xenial)
+      sed -i -e 's/^#xenial#//' debian/rules
+      TWEAK+=("Disable libedit tests on xenial.")
       ;;
     esac
     ;;
