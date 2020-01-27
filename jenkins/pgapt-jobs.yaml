@@ -1293,6 +1293,8 @@
 - project:
         name: libdbd-pg-perl
         git-url: https://salsa.debian.org/perl-team/modules/packages/libdbd-pg-perl.git
+        # uses build profiles
+        dist-filter: '(distribution!="jessie")'
         jobs:
                 - git-packages
 
