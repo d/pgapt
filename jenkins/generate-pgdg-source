@@ -210,7 +210,7 @@ case $PACKAGE in
     esac
     case $distribution in
       buster|stretch|jessie|eoan|disco|bionic|xenial)
-        sed -i -e 's/perl-xs-dev/perl' debian/control
+        sed -i -e 's/perl-xs-dev/perl/' debian/control
         TWEAK+=("Use perl in place of perl-xs-dev.")
         ;;
     esac
