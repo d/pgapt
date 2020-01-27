@@ -198,6 +198,11 @@ case $PACKAGE in
       TWEAK+=("Re-enable plpython2 packages.")
       ;;
     esac
+    case $distribution in jessie)
+      sed -i -e 's/AssertPathExists/ConditionPathExists/' systemd/postgresql@.service
+      TWEAK+=("Use ConditionPathExists instead of AssertPathExists in postgresql@.service.")
+      ;;
+    esac
     ;;
 
   autopkgtest|dh-exec|pkg-perl-tools)
