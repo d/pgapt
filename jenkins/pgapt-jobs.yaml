@@ -15,9 +15,9 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter                                                       '!(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan" || distribution=="disco") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter: &filter                                                       '!(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
     # patbeta: variant of filter that excludes PostgreSQL-beta packages to be built (was used for cosmic)
     git-branch: master
     backports: ''
@@ -123,7 +123,6 @@
                     - jessie
                     #- focal
                     - eoan
-                    - disco
                     - bionic
                     - xenial
 
@@ -722,7 +721,6 @@
                       jessie) tag='pgdg80+' ;;
                       focal) tag='pgdg20.04+' ;;
                       eoan) tag='pgdg19.10+' ;;
-                      disco) tag='pgdg19.04+' ;;
                       bionic) tag='pgdg18.04+' ;;
                       xenial) tag='pgdg16.04+' ;;
                       *) echo "bad distribution"; exit 1 ;;
