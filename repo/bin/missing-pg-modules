@@ -19,7 +19,7 @@ foreach my $dir (qw(. .. /srv/apt/apt.postgresql.org/)) {
 }
 
 my $packages = shift || 'sid-pgdg-testing';
-$packages = "dists/$packages/main/binary-amd64/Packages" unless ($packages =~ m!/!);
+$packages = "dists/$packages/main/binary-amd64/Packages.bz2" unless ($packages =~ m!/!);
 
 my %pkgs; # known binary packages
 my %templates; # binary package templates, e.g. postgresql-*-debversion
@@ -27,7 +27,7 @@ my %pgversions; # all existing PostgreSQL versions
 
 $/ = ''; # slurp paragraphs
 
-open P, $packages or die "$packages: $!";
+open P, "bzcat $packages |" or die "$packages: $!";
 while (<P>) {
 	my ($pkg) = /^Package: (.+)/m or die "$packages: paragraph without Package: $_";
 	if ($pkg =~ /-([89]\.\d|1\d)\b/) {
