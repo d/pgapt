@@ -1440,6 +1440,7 @@
 - project:
         name: pg-catcheck
         git-url: https://salsa.debian.org/postgresql/pg-catcheck.git
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial") && (distribution!="bionic")'
         backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages-with-beta
