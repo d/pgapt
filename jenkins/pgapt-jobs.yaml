@@ -1438,6 +1438,12 @@
                 - git-packages
 
 - project:
+        name: pg-catcheck
+        git-url: https://salsa.debian.org/postgresql/pg-catcheck.git
+        jobs:
+                - git-packages-with-beta
+
+- project:
         name: pg-cloudconfig
         git-url: https://github.com/credativ/pg_cloudconfig.git
         backports: 'BACKPORTS=yes ' # make DH 10 available on jessie/xenial

@@ -32,6 +32,7 @@ pgbackrest
 pg-backup-ctl
 pgbadger
 pgbouncer
+pg-catcheck
 pg-checksums
 pg-cloudconfig
 pgcluu
