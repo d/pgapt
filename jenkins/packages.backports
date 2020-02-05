@@ -3,6 +3,7 @@ libpgjava
 libscram-java
 omnidb
 ora2pg
+pg-catcheck
 pg-cloudconfig
 pgcluu
 pgformatter

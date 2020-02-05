@@ -8,6 +8,7 @@ jsquery
 mimeo
 orafce
 pgaudit
+pg-catcheck
 pg-checksums
 pg-cron
 pg-dirtyread
