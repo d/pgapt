@@ -2033,8 +2033,6 @@
 - project:
         name: wal2json
         git-url: https://salsa.debian.org/postgresql/wal2json.git
-        # https://github.com/eulerto/wal2json/issues/142
-        arch-filter: '(architecture!="i386")'
         jobs:
                 - git-packages-with-beta
 
