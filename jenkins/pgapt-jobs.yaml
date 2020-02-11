@@ -121,7 +121,7 @@
                     - buster
                     - stretch
                     - jessie
-                    #- focal
+                    - focal
                     - eoan
                     - bionic
                     - xenial
