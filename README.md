@@ -66,7 +66,9 @@ Update these files:
 Update repository master host:
 
 * cd /srv/apt/apt.postgresql.org; git pull
-* Seed initial packages: reprepro copysrc $newdist-pgdg-testing $olddist-pgdg-testing postgresql-common pgdg-keyring pgdg-buildenv; postgresql-x.y from sid-pgdg-testing (or whatever seems appropriate)
+* Seed initial packages:
+  * reprepro copysrc $newdist-pgdg-testing $olddist-pgdg-testing postgresql-common pgdg-keyring pgdg-buildenv postgresql-x.y
+  * make sure to copy from a distribution that has all the target architectures (even if the package is arch:all, #926233)
 * possibly: reprepro copymatched $newdist-pgdg $newdist-pgdg-testing \*
 * or: reprepro export $newdist-pgdg (so apt can run update on it even if it's still empty)
 * Wait until the mirror sync has run (xx:17)
