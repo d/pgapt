@@ -1378,6 +1378,7 @@
         name: patroni
         git-url: https://salsa.debian.org/postgresql/patroni.git
         dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 
