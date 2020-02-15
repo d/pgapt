@@ -2,27 +2,19 @@
 
 # ./trigger-job -c debsso.p12:asdf apgdiff branch=debian
 
+# ~/.netrc:
+machine pgdgbuild.dus.dg-i.net login <username> password <your-api-token>
+
 set -eu
-
-cert="${0%/*}/debsso.p12:asdf"
-
-while getopts "c:" opt ; do
-	case $opt in
-	c) cert="$OPTARG" ;;
-	*) exit 5 ;;
-	esac
-done
-# shift away args
-shift $(($OPTIND - 1))
 
 JOB="$1"
 shift
 
 set -x
 
-curl --cert "$cert" --cert-type p12 \
+curl --netrc \
   "https://pgdgbuild.dus.dg-i.net/job/$JOB/buildWithParameters" \
   --data "token=buildnow&$@"
 
-#curl --cert "$cert" --cert-type p12 -X POST \
+#curl --netrc -X POST \
 #  "https://pgdgbuild.dus.dg-i.net/job/$JOB/doDelete"
