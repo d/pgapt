@@ -26,7 +26,7 @@ $$SELECT jsonb_object_agg(lower(m[1]),
 CREATE TABLE architecture (
 	architecture text PRIMARY KEY
 );
-COMMENT ON TABLE architecture IS 'All known architectures, including all, excluding source';
+COMMENT ON TABLE architecture IS 'known architectures, including "all", excluding source';
 
 
 CREATE TABLE srcdistribution (
@@ -37,6 +37,7 @@ CREATE TABLE srcdistribution (
 
 	PRIMARY KEY (distribution, component)
 );
+COMMENT ON TABLE srcdistribution IS 'known distributions by Sources files';
 
 
 CREATE TABLE distribution (
@@ -50,6 +51,7 @@ CREATE TABLE distribution (
 	PRIMARY KEY (distribution, component, architecture),
 	FOREIGN KEY (distribution, component) REFERENCES srcdistribution (distribution, component)
 );
+COMMENT ON TABLE distribution IS 'known distributions by Packages files';
 
 
 -- PACKAGE DATA
@@ -63,6 +65,7 @@ CREATE TABLE source (
 
 	PRIMARY KEY (source, srcversion)
 );
+COMMENT ON TABLE source IS 'source packages including historic ones';
 
 CREATE TABLE sourcefile (
 	source text NOT NULL,
@@ -74,6 +77,7 @@ CREATE TABLE sourcefile (
 	PRIMARY KEY (filename),
 	FOREIGN KEY (source, srcversion) REFERENCES source (source, srcversion)
 );
+COMMENT ON TABLE sourcefile IS 'files belonging to source packages including historic ones';
 
 
 CREATE TABLE package (
@@ -91,6 +95,7 @@ CREATE TABLE package (
 	PRIMARY KEY (package, version, arch)
 );
 --ALTER TABLE package ADD FOREIGN KEY (source, srcversion) REFERENCES source (source, srcversion);
+COMMENT ON TABLE package IS 'binary packages including historic ones';
 
 
 -- SUITE DATA
@@ -106,6 +111,7 @@ CREATE TABLE sourcelist (
 );
 CREATE INDEX ON sourcelist (distribution, component);
 CREATE INDEX ON sourcelist (source);
+COMMENT ON TABLE sourcelist IS 'current Sources files';
 
 CREATE TABLE packagelist (
 	distribution text NOT NULL,
@@ -122,6 +128,7 @@ CREATE TABLE packagelist (
 );
 CREATE INDEX ON packagelist (distribution, component, architecture);
 CREATE INDEX ON packagelist (package);
+COMMENT ON TABLE packagelist IS 'current Packages files';
 
 
 -- HISTORY
@@ -138,6 +145,7 @@ CREATE TABLE sourcehist (
 );
 CREATE INDEX ON sourcehist (distribution, component);
 CREATE INDEX ON sourcehist (source);
+COMMENT ON TABLE sourcehist IS 'current and historic Sources files';
 
 CREATE TABLE packagehist (
 	distribution text NOT NULL,
@@ -155,6 +163,7 @@ CREATE TABLE packagehist (
 );
 CREATE INDEX ON packagehist (distribution, component, architecture);
 CREATE INDEX ON packagehist (package);
+COMMENT ON TABLE packagehist IS 'current and historic Packages files';
 
 
 -- ACLs
