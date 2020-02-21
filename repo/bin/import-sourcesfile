@@ -1,0 +1,118 @@
+#!/usr/bin/python3
+
+# Copyright (c) 2009-2013, 2020 Christoph Berg <myon@debian.org>
+#
+# getdpkginfo by
+# Copyright (C) 2005  Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import apt_pkg, psycopg2, os, re, sys, time
+
+pg = psycopg2.connect('service=pgapt')
+cur = pg.cursor()
+
+def parseSourceFile(distribution, component, packagesfile, ctime):
+    if not os.path.isfile(packagesfile):
+        raise Exception("%s not found" % packagesfile)
+    stdout = os.popen("bzcat '%s'" % packagesfile)
+    #stdout = file(packagesfile)
+    parse = apt_pkg.TagFile(stdout)
+
+    # clear the suite
+    cur.execute("BEGIN")
+    cur.execute("""DELETE FROM sourcelist WHERE
+                   (distribution, component) = (%s, %s)""",
+                   [distribution, component])
+
+    # for every package ...
+    while parse.step():
+        package = parse.section.get('Package')
+        version = parse.section.get('Version')
+        control = "\n".join([ "%s: %s" % (k, parse.section.get(k)) \
+                for k in parse.section.keys() ])
+
+        # store package control file
+        cur.execute("""SELECT 1 FROM source
+                       WHERE (source, srcversion) = (%s, %s)""",
+                       [package, version])
+        found = cur.fetchone()
+        if not found: # this is the first time we see this package
+            cur.execute("""INSERT INTO source (source, srcversion, control, c, time)
+                           VALUES (%s, %s, %s, control2jsonb(%s), %s)""",
+                           [package, version, control, control, ctime])
+
+        # finally, add the package to the suite's package list
+        cur.execute("""INSERT INTO sourcelist
+                       (distribution, component, source, srcversion)
+                       VALUES (%s, %s, %s, %s)""",
+                       [distribution, component, package, version])
+
+    # record info in suite history table
+    cur.execute("""INSERT INTO packagehist
+                         (distribution, component, package, version, time)
+                   SELECT distribution, component, package, version, %s
+                   FROM packagelist l
+                   WHERE (distribution, component) = (%s, %s) AND NOT EXISTS
+                       (SELECT * FROM packagehist h WHERE
+                           (l.distribution, l.component, l.package, l.version) =
+                           (h.distribution, h.component, h.package, h.version))""",
+                   [ctime, distribution, component])
+
+(packagesfile, distribution, component) = (sys.argv[1], sys.argv[2], sys.argv[3])
+if not distribution in packagesfile:
+    raise NameError("distribution is not part of filename")
+if not component in packagesfile:
+    raise NameError("component is not part of filename")
+verbose = sys.argv.__len__() > 3
+
+cur.execute("""SELECT extract (epoch from last_update) AS last_update
+               FROM srcdistribution
+               WHERE (distribution, component) = (%s, %s)
+               FOR UPDATE NOWAIT""", [distribution, component])
+last_update = cur.fetchone()
+
+mtime = os.path.getmtime(packagesfile)
+ctime = time.ctime(mtime)
+if not last_update or mtime > last_update[0]:
+    if verbose:
+        print("Reading %s" % packagesfile)
+
+    update = """INSERT INTO srcdistribution (distribution, component, last_update) VALUES (%s, %s, %s)
+                ON CONFLICT (distribution, component) DO UPDATE SET last_update = %s"""
+    cur.execute(update, [distribution, component, ctime, ctime])
+
+    parseSourceFile(distribution, component, packagesfile, ctime)
+
+    cur.execute("COMMIT")
+else:
+    if verbose:
+        print("Skipping up to date %s" % packagesfile)
+
+# Insert missing source packages:
+# INSERT INTO package_source SELECT p.package_id, s.package_id as source_id from package p JOIN package s ON (p.package = s.package AND p.version = s.version AND s.pkg_architecture='source') where p.package_id not in (select package_id from package_source ) and p.pkg_architecture <> 'source';
+# Insert missing source packages, packages with broken/missing binnmu Source: fieds:
+# INSERT INTO package_source SELECT p.package_id, s.package_id as source_id from package p JOIN package s ON (p.package = s.package AND regexp_replace (p.version, E'\\+b\\d+$', '') = s.version AND s.pkg_architecture='source') where p.package_id not in (select package_id from package_source ) and p.pkg_architecture <> 'source';
+

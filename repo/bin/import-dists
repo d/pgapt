@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -eu
+
+cd $(dirname $0)/..
+
+for distdir in dists/*-pgdg; do
+  distribution=${distdir##*/}
+
+  for componentdir in $distdir/*; do
+    test -d $componentdir || continue
+    component=${componentdir##*/}
+
+    # import Sources.bz2
+    bin/import-sourcesfile $componentdir/source/Sources.bz2 $distribution $component
+
+    for archdir in $componentdir/binary-*; do
+      architecture=${archdir##*/binary-}
+
+      # import Packages.bz2
+      bin/import-packagesfile $archdir/Packages.bz2 $distribution $component $architecture
+    done
+
+  done
+done

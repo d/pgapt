@@ -1,17 +1,24 @@
 BEGIN;
 
 CREATE SCHEMA apt;
-SET search_path TO apt;
+SET search_path TO apt, public;
 
-CREATE EXTENSION debversion;
-CREATE EXTENSION hstore;
+--CREATE EXTENSION debversion;
 
 
-CREATE OR REPLACE FUNCTION control2hstore (control text)
-RETURNS hstore LANGUAGE sql IMMUTABLE AS
-$$SELECT regexp_replace (regexp_replace ($1, '([\\"])', '\\\1', 'g'),
-	E'^([^:]*): (.*(?:\n .*)*)', '"\1"=>"\2",', 'gn')::hstore$$;
--- intentionally no E'' in the first line
+CREATE OR REPLACE FUNCTION list2jsonb (list text)
+RETURNS jsonb LANGUAGE sql IMMUTABLE AS
+$$SELECT jsonb_agg(m) from regexp_split_to_table($1, E'\n ') m$$;
+
+CREATE OR REPLACE FUNCTION control2jsonb (control text)
+RETURNS jsonb LANGUAGE sql IMMUTABLE AS
+$$SELECT jsonb_object_agg(lower(m[1]),
+  CASE WHEN m[1] IN ('Files', 'Checksums-Sha1', 'Checksums-Sha256') THEN
+    list2jsonb(m[2])
+  ELSE
+    to_jsonb(m[2])
+  END)
+  FROM regexp_matches($1||E'\n', E'^([^ :]*): ((.|\n )*)\n?', 'gm') m$$;
 
 
 -- ARCHIVE-WIDE DATA
@@ -51,7 +58,8 @@ CREATE TABLE source (
 	source text NOT NULL,
 	srcversion debversion NOT NULL,
 	control text NOT NULL,
-	c hstore,
+	c jsonb,
+	time timestamptz(0) NOT NULL,
 
 	PRIMARY KEY (source, srcversion)
 );
@@ -62,9 +70,10 @@ CREATE TABLE package (
 	arch text NOT NULL
 		REFERENCES architecture (architecture),
 	control text NOT NULL,
-	c hstore,
+	c jsonb,
 	source text NOT NULL,
 	srcversion debversion NOT NULL,
+	time timestamptz(0) NOT NULL,
 
 	PRIMARY KEY (package, version, arch)
 );
@@ -101,6 +110,41 @@ CREATE TABLE packagelist (
 CREATE INDEX ON packagelist (distribution, component, architecture);
 CREATE INDEX ON packagelist (package);
 
+
+-- HISTORY
+
+CREATE TABLE sourcehist (
+	distribution text NOT NULL,
+	component text NOT NULL,
+	source text NOT NULL,
+	srcversion debversion NOT NULL,
+	time timestamptz(0) NOT NULL,
+
+	FOREIGN KEY (distribution, component) REFERENCES srcdistribution (distribution, component),
+	FOREIGN KEY (source, srcversion) REFERENCES source (source, srcversion)
+);
+CREATE INDEX ON sourcehist (distribution, component);
+CREATE INDEX ON sourcehist (source);
+
+CREATE TABLE packagehist (
+	distribution text NOT NULL,
+	component text NOT NULL,
+	architecture text NOT NULL,
+	package text NOT NULL,
+	version debversion NOT NULL,
+	arch text NOT NULL,
+	time timestamptz(0) NOT NULL,
+	CHECK ((architecture = arch) OR (arch = 'all')),
+
+	FOREIGN KEY (distribution, component, architecture)
+		REFERENCES distribution (distribution, component, architecture),
+	FOREIGN KEY (package, version, arch) REFERENCES package (package, version, arch)
+);
+CREATE INDEX ON packagehist (distribution, component, architecture);
+CREATE INDEX ON packagehist (package);
+
+
+-- ACLs
 
 GRANT USAGE ON SCHEMA apt TO PUBLIC;
 GRANT SELECT ON ALL TABLES IN SCHEMA apt TO PUBLIC;

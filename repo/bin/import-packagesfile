@@ -1,0 +1,143 @@
+#!/usr/bin/python3
+
+# Copyright (c) 2009-2013, 2020 Christoph Berg <myon@debian.org>
+#
+# getdpkginfo by
+# Copyright (C) 2005  Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import apt_pkg, psycopg2, os, re, sys, time
+
+pg = psycopg2.connect('service=pgapt')
+cur = pg.cursor()
+
+def parseFile(distribution, component, architecture, packagesfile, ctime):
+    if not os.path.isfile(packagesfile):
+        raise Exception("%s not found" % packagesfile)
+    stdout = os.popen("bzcat '%s'" % packagesfile)
+    #stdout = file(packagesfile)
+    parse = apt_pkg.TagFile(stdout)
+
+    source_re = re.compile('(.*) \((.*)\)')
+    binnmu_re = re.compile('\+b\d+$')
+
+    # clear the suite
+    cur.execute("BEGIN")
+    cur.execute("""DELETE FROM packagelist WHERE
+                   (distribution, component, architecture) = (%s, %s, %s)""",
+                   [distribution, component, architecture])
+
+    # for every package ...
+    while parse.step():
+        package = parse.section.get('Package')
+        version = parse.section.get('Version')
+        arch = parse.section.get('Architecture')
+        control = "\n".join([ "%s: %s" % (k, parse.section.get(k)) \
+                for k in parse.section.keys() ])
+
+        # store package control file
+        cur.execute("""SELECT 1 FROM package
+                       WHERE (package, version, arch) = (%s, %s, %s)""",
+                       [package, version, arch])
+        found = cur.fetchone()
+        if not found: # this is the first time we see this package
+
+            sourcefield = parse.section.get('Source')
+            if sourcefield:
+                match = source_re.match(sourcefield)
+                if match:
+                    source, source_version = match.group(1), match.group(2)
+                else:
+                    source, source_version = sourcefield, version
+            else:
+                source, source_version = package, version
+            if binnmu_re.search(source_version):
+                print("WARNING: %s %s %s: source %s %s for %s %s (%s) has binnmu version number, fixing" % \
+                    (distribution, component, architecture, source, source_version,
+                            package, version, arch))
+                source_version = binnmu_re.sub('', source_version)
+
+#            # find link to source package
+#            cur.execute("""SELECT 1 FROM source
+#                           WHERE (source, srcversion) = (%s, %s)""",
+#                        [source, source_version])
+#            found = cur.fetchone()
+#            if not found:
+#                print("WARNING: %s %s %s: source %s %s for %s %s (%s) not found" % \
+#                    (distribution, component, architecture, source, source_version,
+#                            package, version, arch))
+
+            cur.execute("""INSERT INTO package (package, version, arch, control, c, source, srcversion, time)
+                           VALUES (%s, %s, %s, %s, control2jsonb(%s), %s, %s, %s)""",
+                           [package, version, arch, control, control, source, source_version, ctime])
+
+        # finally, add the package to the suite's package list
+        cur.execute("""INSERT INTO packagelist
+                       (distribution, component, architecture, package, version, arch)
+                       VALUES (%s, %s, %s, %s, %s, %s)""",
+                       [distribution, component, architecture, package, version, arch])
+
+    cur.execute("""INSERT INTO packagehist
+                         (distribution, component, architecture, package, version, arch, time)
+                   SELECT distribution, component, architecture, package, version, arch, %s
+                   FROM packagelist l
+                   WHERE (distribution, component, architecture) = (%s, %s, %s) AND NOT EXISTS
+                       (SELECT * FROM packagehist h WHERE
+                           (l.distribution, l.component, l.architecture, l.package, l.version, l.arch) =
+                           (h.distribution, h.component, h.architecture, h.package, h.version, h.arch))""",
+                   [ctime, distribution, component, architecture])
+
+(packagesfile, distribution, component, architecture) = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+if not distribution in packagesfile:
+    raise NameError("distribution is not part of filename")
+if not component in packagesfile:
+    raise NameError("component is not part of filename")
+if not architecture in packagesfile:
+    raise NameError("architecture is not part of filename")
+verbose = sys.argv.__len__() > 4
+
+cur.execute("""SELECT extract (epoch from last_update) AS last_update
+               FROM distribution
+               WHERE (distribution, component, architecture) = (%s, %s, %s)
+               FOR UPDATE NOWAIT""", [distribution, component, architecture])
+last_update = cur.fetchone()
+
+mtime = os.path.getmtime(packagesfile)
+ctime = time.ctime(mtime)
+if not last_update or mtime > last_update[0]:
+    if verbose:
+        print("Reading %s" % packagesfile)
+
+    update = """INSERT INTO distribution (distribution, component, architecture, last_update) VALUES (%s, %s, %s, %s)
+                ON CONFLICT (distribution, component, architecture) DO UPDATE SET last_update = %s"""
+    cur.execute(update, [distribution, component, architecture, ctime, ctime])
+
+    parseFile(distribution, component, architecture, packagesfile, ctime)
+
+    cur.execute("COMMIT")
+else:
+    if verbose:
+        print("Skipping up to date %s" % packagesfile)
