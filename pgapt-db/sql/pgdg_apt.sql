@@ -64,6 +64,18 @@ CREATE TABLE source (
 	PRIMARY KEY (source, srcversion)
 );
 
+CREATE TABLE sourcefile (
+	source text NOT NULL,
+	srcversion debversion NOT NULL,
+	directory text NOT NULL,
+	filename text NOT NULL,
+	upload boolean, -- null = to do, t = done, f = error
+
+	PRIMARY KEY (filename),
+	FOREIGN KEY (source, srcversion) REFERENCES source (source, srcversion)
+);
+
+
 CREATE TABLE package (
 	package text NOT NULL,
 	version debversion NOT NULL,
@@ -74,6 +86,7 @@ CREATE TABLE package (
 	source text NOT NULL,
 	srcversion debversion NOT NULL,
 	time timestamptz(0) NOT NULL,
+	upload boolean, -- null = to do, t = done, f = error
 
 	PRIMARY KEY (package, version, arch)
 );

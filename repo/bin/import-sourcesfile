@@ -63,6 +63,11 @@ def parseSourceFile(distribution, component, packagesfile, ctime):
             cur.execute("""INSERT INTO source (source, srcversion, control, c, time)
                            VALUES (%s, %s, %s, control2jsonb(%s), %s)""",
                            [package, version, control, control, ctime])
+            cur.execute("""INSERT INTO sourcefile (source, srcversion, directory, filename)
+                           SELECT %s, %s, c->>'directory', regexp_replace(f, '.* ', '')
+                           FROM control2jsonb(%s) c, jsonb_array_elements_text(c->'files') f
+                           ON CONFLICT DO NOTHING""",
+                           [package, version, control])
 
         # finally, add the package to the suite's package list
         cur.execute("""INSERT INTO sourcelist
@@ -71,14 +76,14 @@ def parseSourceFile(distribution, component, packagesfile, ctime):
                        [distribution, component, package, version])
 
     # record info in suite history table
-    cur.execute("""INSERT INTO packagehist
-                         (distribution, component, package, version, time)
-                   SELECT distribution, component, package, version, %s
-                   FROM packagelist l
+    cur.execute("""INSERT INTO sourcehist
+                         (distribution, component, source, srcversion, time)
+                   SELECT distribution, component, source, srcversion, %s
+                   FROM sourcelist l
                    WHERE (distribution, component) = (%s, %s) AND NOT EXISTS
-                       (SELECT * FROM packagehist h WHERE
-                           (l.distribution, l.component, l.package, l.version) =
-                           (h.distribution, h.component, h.package, h.version))""",
+                       (SELECT * FROM sourcehist h WHERE
+                           (l.distribution, l.component, l.source, l.srcversion) =
+                           (h.distribution, h.component, h.source, h.srcversion))""",
                    [ctime, distribution, component])
 
 (packagesfile, distribution, component) = (sys.argv[1], sys.argv[2], sys.argv[3])
