@@ -170,5 +170,9 @@ COMMENT ON TABLE packagehist IS 'current and historic Packages files';
 
 GRANT USAGE ON SCHEMA apt TO PUBLIC;
 GRANT SELECT ON ALL TABLES IN SCHEMA apt TO PUBLIC;
+GRANT INSERT ON ALL TABLES IN SCHEMA apt TO aptuser;
+GRANT DELETE ON sourcelist, packagelist TO aptuser;
+GRANT UPDATE (last_update) ON srcdistribution, distribution TO aptuser;
+GRANT UPDATE (upload) ON sourcefile, package TO aptuser;
 
 COMMIT;

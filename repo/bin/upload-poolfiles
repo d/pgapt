@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import psycopg2, subprocess, sys
+
+pg = psycopg2.connect('service=pgapt')
+cur = pg.cursor()
+
+while True:
+    cur.execute("""SELECT directory, filename FROM sourcefile WHERE upload IS NULL LIMIT 1 FOR UPDATE SKIP LOCKED""")
+    sourcefile = cur.fetchone()
+    if not sourcefile: # we are done
+        sys.exit(0)
+
+    path = "%s/%s" % (sourcefile[0], sourcefile[1])
+    filename = sourcefile[1]
+
+    print(path, '...')
+
+    success = subprocess.call(['bin/upload-to-s3', path])
+    if success == 0:
+        upload = 't'
+    else:
+        upload = 'f'
+
+    cur.execute("""UPDATE sourcefile SET upload = %s WHERE filename = %s""",
+            [upload, filename])
+
+    pg.commit()
