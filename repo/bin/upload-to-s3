@@ -10,12 +10,14 @@ cd $(dirname $0)/..
 FILE="$1"
 test -f "$FILE"
 
+[ -t 1 ] && echo "$FILE ..."
+
 # upload to S3
-aws s3 cp "$FILE" "$S3/$FILE"
+aws s3 cp --quiet "$FILE" "$S3/$FILE"
 
 # try if we can get the file back
 RESTORE=$(mktemp --tmpdir upload-to-s3.XXXXXX)
 trap "rm -f $RESTORE" EXIT
-aws s3 cp "$S3/$FILE" "$RESTORE"
+aws s3 cp --quiet "$S3/$FILE" "$RESTORE"
 
 cmp "$FILE" "$RESTORE"

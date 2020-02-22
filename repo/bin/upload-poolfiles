@@ -1,28 +1,57 @@
 #!/usr/bin/python3
 
-import psycopg2, subprocess, sys
+import psycopg2, subprocess
 
 pg = psycopg2.connect('service=pgapt')
 cur = pg.cursor()
 
-while True:
-    cur.execute("""SELECT directory, filename FROM sourcefile WHERE upload IS NULL LIMIT 1 FOR UPDATE SKIP LOCKED""")
-    sourcefile = cur.fetchone()
-    if not sourcefile: # we are done
-        sys.exit(0)
+def upload_source_files():
+  while True:
+      cur.execute("""SELECT directory, filename FROM sourcefile WHERE upload IS NULL LIMIT 1 FOR UPDATE SKIP LOCKED""")
+      sourcefile = cur.fetchone()
+      if not sourcefile: # we are done
+          return
 
-    path = "%s/%s" % (sourcefile[0], sourcefile[1])
-    filename = sourcefile[1]
+      path = "%s/%s" % (sourcefile[0], sourcefile[1])
+      filename = sourcefile[1]
 
-    print(path, '...')
+      print(path, '...')
 
-    success = subprocess.call(['bin/upload-to-s3', path])
-    if success == 0:
-        upload = 't'
-    else:
-        upload = 'f'
+      success = subprocess.call(['bin/upload-to-s3', path])
+      if success == 0:
+          upload = 't'
+      else:
+          upload = 'f'
 
-    cur.execute("""UPDATE sourcefile SET upload = %s WHERE filename = %s""",
-            [upload, filename])
+      cur.execute("""UPDATE sourcefile SET upload = %s WHERE filename = %s""",
+              [upload, filename])
 
-    pg.commit()
+      pg.commit()
+
+def upload_binary_files():
+  while True:
+      cur.execute("""SELECT package, version, arch, c->>'filename' FROM package WHERE upload IS NULL LIMIT 1 FOR UPDATE SKIP LOCKED""")
+      packagerow = cur.fetchone()
+      if not packagerow: # we are done
+          return
+
+      package = packagerow[0]
+      version = packagerow[1]
+      arch = packagerow[2]
+      path = packagerow[3]
+
+      print(path, '...')
+
+      success = subprocess.call(['bin/upload-to-s3', path])
+      if success == 0:
+          upload = 't'
+      else:
+          upload = 'f'
+
+      cur.execute("""UPDATE package SET upload = %s WHERE (package, version, arch) = (%s, %s, %s)""",
+              [upload, package, version, arch])
+
+      pg.commit()
+
+upload_source_files()
+upload_binary_files()
