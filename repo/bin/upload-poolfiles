@@ -15,8 +15,6 @@ def upload_source_files():
       path = "%s/%s" % (sourcefile[0], sourcefile[1])
       filename = sourcefile[1]
 
-      print(path, '...')
-
       success = subprocess.call(['bin/upload-to-s3', path])
       if success == 0:
           upload = 't'
@@ -39,8 +37,6 @@ def upload_binary_files():
       version = packagerow[1]
       arch = packagerow[2]
       path = packagerow[3]
-
-      print(path, '...')
 
       success = subprocess.call(['bin/upload-to-s3', path])
       if success == 0:

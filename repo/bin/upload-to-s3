@@ -8,7 +8,17 @@ set -eu
 cd $(dirname $0)/..
 
 FILE="$1"
-test -f "$FILE"
+if ! test -f "$FILE"; then
+  echo "$FILE is missing" >&2
+  exit 1
+fi
+
+case $FILE in
+  pool/*) ;;
+  *) echo "Refusing to upload file outside of pool/" >&2
+     exit 1
+     ;;
+esac
 
 [ -t 1 ] && echo "$FILE ..."
 
