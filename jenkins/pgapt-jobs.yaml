@@ -173,7 +173,7 @@
             description: 'binNMU version (single integer)'
 
     autopkgtest_choice: &autopkgtest_choice
-            name: ADT
+            name: autopkgtest
             choices:
                     - run
                     - skip
@@ -239,7 +239,7 @@
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
                                         string(name: 'buildtype', value: buildtype),
-                                        string(name: 'ADT', value: ADT),
+                                        string(name: 'autopkgtest', value: autopkgtest),
                                     ]
                                 )
                             }}

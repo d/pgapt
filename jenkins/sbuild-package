@@ -8,7 +8,7 @@
 #  distribution=foo (caveat: sbuild -d foo-pgdg will be called)
 #  optionally: DEB_BUILD_OPTIONS
 #  optionally: DEB_PG_SUPPORTED_VERSIONS (defaults to pgdg)
-#  optionally: ADT=skip
+#  optionally: autopkgtest=skip
 #  optionally: BACKPORTS=true
 #  optionally: wrap= (disables newpid-netns)
 #  optionally: binnmu_reason=text binnmu_version=version
@@ -101,7 +101,7 @@ if [ "$DEB_PG_SUPPORTED_VERSIONS" != "pgdg" ]; then
 fi
 
 # prepare temp file for adt-run results
-if [ "${ADT:-}" != "skip" ]; then
+if [ "${autopkgtest:-}" != "skip" ]; then
   export DEB_ADT_SUMMARY=$(mktemp /var/tmp/$PACKAGE.XXXXXX.xml)
   trap "rm -f $DEB_ADT_SUMMARY" 0 2 3 15
   FINISHED_BUILD_COMMAND='adt-sbuild %SBUILD_BUILD_DIR %SBUILD_PKGBUILD_DIR'

@@ -100,14 +100,6 @@ options timeout:1 attempts:1
 #APTCACHE=""
 
 
-/etc/sudoers.d/jenkins
-
-Defaults env_keep += "architecture distribution ADT DEB_BUILD_OPTIONS"
-
-#jenkins ALL=NOPASSWD: /usr/sbin/cowbuilder, /usr/sbin/chroot
-jenkins ALL=NOPASSWD: ALL
-
-
 /etc/jenkins_jobs/jenkins_jobs.ini
 
 [jenkins]
