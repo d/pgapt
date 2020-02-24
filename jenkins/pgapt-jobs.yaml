@@ -245,11 +245,14 @@
                         }}
                         stage('binaries') {{
                             steps {{
-                                build(job: '{name}-binaries')
+                                build(job: '{name}-binaries',
+                                    parameters: [
+                                        string(name: 'autopkgtest', value: autopkgtest),
+                                    ]
+                                )
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
-                                        string(name: 'autopkgtest', value: autopkgtest),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
