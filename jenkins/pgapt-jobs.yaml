@@ -226,6 +226,7 @@
                 - string: *git_branch_template
                 - string: *supported_versions_param
                 - choice: *buildtype_choice
+                - choice: *autopkgtest_choice
                 - choice: *queue_choice
         dsl: |
                 pipeline {{
@@ -238,6 +239,7 @@
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
                                         string(name: 'buildtype', value: buildtype),
+                                        string(name: 'ADT', value: ADT),
                                     ]
                                 )
                             }}
