@@ -239,7 +239,6 @@
                                         string(name: 'revision', value: revision),
                                         string(name: 'branch', value: branch),
                                         string(name: 'buildtype', value: buildtype),
-                                        string(name: 'autopkgtest', value: autopkgtest),
                                     ]
                                 )
                             }}
@@ -250,6 +249,7 @@
                                 build(job: 'dput',
                                     parameters: [
                                         string(name: 'binaries', value: '{name}-binaries'),
+                                        string(name: 'autopkgtest', value: autopkgtest),
                                         string(name: 'queue', value: queue),
                                         string(name: 'upload', value: 'all'),
                                     ]
