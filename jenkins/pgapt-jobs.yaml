@@ -1130,8 +1130,8 @@
 - project:
         name: check-pgactivity
         git-url: https://salsa.debian.org/Krysztophe-guest/check_pgactivity.git
-        # needs DH 10
-        backports: 'BACKPORTS=yes '
+        # needs DH 12
+        dist-filter: '(distribution!="jessie") && (distribution!="xenial")'
         jobs:
                 - git-packages
 
