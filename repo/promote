@@ -5,7 +5,7 @@ set -eu
 #DEBUG=1
 
 # read pgapt config
-for dir in . .. /srv/apt/apt.postgresql.org; do
+for dir in . .. /srv/apt; do
   test -f $dir/pgapt.conf || continue
   . $dir/pgapt.conf
   break
@@ -44,7 +44,7 @@ if [ -z "${FORCE:-}" ]; then
   case $PKG in
     postgresql-?.?|postgresql-??)
       for DIST in $DISTS; do
-	/srv/apt/apt.postgresql.org/repo/bin/validate-component \
+	/srv/apt/repo/bin/validate-component \
 	  /srv/apt/repo/dists/$DIST-pgdg-testing/*/binary-*/Packages
       done
       ;;

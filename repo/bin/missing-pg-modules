@@ -7,7 +7,7 @@ my $PG_OLDEST_VERSION; # oldest version to check
 my $PG_DEVEL_VERSION;  # ignore devel
 
 # read pgapt config
-foreach my $dir (qw(. .. /srv/apt/apt.postgresql.org/)) {
+foreach my $dir (qw(. .. /srv/apt)) {
   next unless (-f "$dir/pgapt.conf");
   open F, "$dir/pgapt.conf";
   while (<F>) {

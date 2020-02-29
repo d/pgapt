@@ -3,13 +3,10 @@
 MAILTO=cb@df7cb.de
 
 # collect statistics about the repository
-0 0 * * *  /srv/apt/apt.postgresql.org/repo/apt-stats
+0 0 * * *  /srv/apt/repo/apt-stats
 
 # update dists tarball for the debcheck jenkins jobs
 13 * * * *  tar -C /srv/apt/pub/repos/apt/ -cf /srv/apt/web/dists.tar.gz dists/
 
-# move morgue files into pool directories
-16 * * * *  /srv/apt/apt.postgresql.org/repo/bin/morguefiles-to-pool
-
-# remove snapshot builds from morgue to save some space
-19 0 * * *  find /srv/apt/repo/morgue/p/postgresql-1[01]/ -name '*~*~*' -mtime +14 | xargs -r rm
+# update apt-archive.postgresql.org
+1 0 * * *  cd /srv/apt/repo && bin/import-dists && bin/upload-poolfiles && bin/generate-archive-lists

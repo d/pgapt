@@ -32,7 +32,7 @@ dcmd rsync -av $CHANGES $HOST:/srv/apt/$QUEUE
 [ "$QUEUE" = "incoming" ] || exit 0
 
 # call processincoming once for all packages uploaded
-if ! ssh $HOST sudo -u aptuser /srv/apt/apt.postgresql.org/repo/processincoming $QUEUE; then
+if ! ssh $HOST sudo -u aptuser /srv/apt/repo/processincoming $QUEUE; then
 	# if processincoming fails, move files to "failed" directory
 	ssh $HOST mv /srv/apt/$QUEUE/* /srv/apt/failed
 	exit 1

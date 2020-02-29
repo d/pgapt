@@ -18,27 +18,27 @@ is only about launching the build jobs, the real work is done in the scripts.
 * Update apt.postgresql.org/repo/conf/distributions.sh and re-generate the distributions file
 * Update `PG_DEVEL_VERSION` in pgapt.conf
 * Possibly update the Jenkins pipeline jobs to include the new version
-* Update the repository master host: cd /srv/apt/apt.postgresql.org; git pull
+* Update the repository master host: cd /srv/apt; sudo -u aptuser git pull
 * Create new Jenkins jobs and build them
 
 ## Changing the default PostgreSQL version
 
 * Update `PG_MAIN_VERSION` in pgapt.conf
-* Update the repository master host: cd /srv/apt/apt.postgresql.org; git pull
+* Update the repository master host: cd /srv/apt; sudo -u aptuser git pull
 * Rebuild the old default version so its libpq gets added to the extra component (as it was in main before)
 * Rebuild the new default version so its libpq gets added to main (as it was in the extra component before)
 * Possibly update the Jenkins pipeline jobs to stop triggering beta jobs
 * In postgresql-common, update debian/supported-versions
 * To remove obsolete old lib packages, use
   ```
-  . /srv/apt/apt.postgresql.org/pgapt.conf
+  . /srv/apt/pgapt.conf
   COMPONENT=11
   PKGS="libpq5 libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq-dev"
   for dist in $PG_SUPPORTED_DISTS; do for pkg in $PKGS; do sudo -u aptuser reprepro -C $COMPONENT remove $dist-pgdg-testing $pkg $pkg-dbgsym; done; done
   ```
 * Removing obsolete PG component:
   ```
-  . /srv/apt/apt.postgresql.org/pgapt.conf
+  . /srv/apt/pgapt.conf
   COMPONENT=11
   PKGS="libecpg6 libecpg-compat3 libecpg-dev libpgtypes3 libpq5 libpq-dev postgresql-$COMPONENT postgresql-$COMPONENT-dbg postgresql-client-$COMPONENT postgresql-contrib-$COMPONENT postgresql-doc-$COMPONENT postgresql-plperl-$COMPONENT postgresql-plpython3-$COMPONENT postgresql-plpython-$COMPONENT postgresql-pltcl-$COMPONENT postgresql-server-dev-$COMPONENT"
   for dist in $PG_SUPPORTED_DISTS; do for pkg in $PKGS; do sudo -u aptuser reprepro -C $COMPONENT remove $dist-pgdg-testing $pkg $pkg-dbgsym; done; done
@@ -56,7 +56,7 @@ is only about launching the build jobs, the real work is done in the scripts.
 
 ## Adding a new distribution
 
-Update these files:
+Update these files in git:
 
 * pgapt.conf
 * repo/conf/distributions.sh and generate repo/conf/distributions from it
@@ -65,7 +65,7 @@ Update these files:
 
 Update repository master host:
 
-* cd /srv/apt/apt.postgresql.org; git pull
+* cd /srv/apt; sudo -u aptuser git pull
 * Seed initial packages:
   * reprepro copysrc $newdist-pgdg-testing $olddist-pgdg-testing postgresql-common pgdg-keyring pgdg-buildenv postgresql-x.y
   * make sure to copy from a distribution that has all the target architectures (even if the package is arch:all, #926233)

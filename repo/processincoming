@@ -9,7 +9,7 @@ REPREPRO_BASE_DIR="/srv/apt/repo"
 # test new .deb files for correct components
 for deb in /srv/apt/incoming/*.deb; do
   test -f "$deb" || continue
-  dpkg-deb -I "$deb" | /srv/apt/apt.postgresql.org/repo/bin/validate-component
+  dpkg-deb -I "$deb" | /srv/apt/repo/bin/validate-component
 done
 
 flock "$REPREPRO_BASE_DIR/db/.lock" \
