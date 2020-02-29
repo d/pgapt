@@ -2,7 +2,7 @@
 
 set -eu
 
-cd $(dirname $0)/..
+cd /srv/apt/repo
 
 for distdir in dists/*-pgdg; do
   distribution=${distdir##*/}
@@ -12,12 +12,15 @@ for distdir in dists/*-pgdg; do
     component=${componentdir##*/}
 
     # import Sources.bz2
-    bin/import-sourcesfile $componentdir/source/Sources.bz2 $distribution $component
+    if find $componentdir/source/Sources.bz2 -mtime -2 | grep -q .; then
+      bin/import-sourcesfile $componentdir/source/Sources.bz2 $distribution $component
+    fi
 
     for archdir in $componentdir/binary-*; do
       architecture=${archdir##*/binary-}
 
       # import Packages.bz2
+      find $archdir/Packages.bz2 -mtime -2 | grep -q . || continue
       bin/import-packagesfile $archdir/Packages.bz2 $distribution $component $architecture
     done
 

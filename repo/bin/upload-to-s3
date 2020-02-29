@@ -1,11 +1,9 @@
 #!/bin/sh
 
 # S3 bucket
-S3="s3://apt-archive.postgresql.org"
+S3="s3://apt-archive.postgresql.org/pub/repos/apt"
 
 set -eu
-
-cd $(dirname $0)/..
 
 FILE="$1"
 if ! test -f "$FILE"; then
@@ -14,8 +12,8 @@ if ! test -f "$FILE"; then
 fi
 
 case $FILE in
-  pool/*) ;;
-  *) echo "Refusing to upload file outside of pool/" >&2
+  dists/*|pool/*) ;;
+  *) echo "Refusing to upload file outside of dists/ or pool/" >&2
      exit 1
      ;;
 esac

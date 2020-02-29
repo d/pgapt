@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
+import os
 import psycopg2, subprocess
+
+os.environ['PATH'] += ':/srv/apt/repo/bin' # path to upload-to-s3
 
 pg = psycopg2.connect('service=pgapt')
 cur = pg.cursor()
@@ -15,7 +18,7 @@ def upload_source_files():
       path = "%s/%s" % (sourcefile[0], sourcefile[1])
       filename = sourcefile[1]
 
-      success = subprocess.call(['bin/upload-to-s3', path])
+      success = subprocess.call(['upload-to-s3', path])
       if success == 0:
           upload = 't'
       else:
@@ -38,7 +41,7 @@ def upload_binary_files():
       arch = packagerow[2]
       path = packagerow[3]
 
-      success = subprocess.call(['bin/upload-to-s3', path])
+      success = subprocess.call(['upload-to-s3', path])
       if success == 0:
           upload = 't'
       else:

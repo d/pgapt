@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+# S3 bucket
+S3="s3://apt-archive.postgresql.org/pub/repos/apt"
+
+PATH=$PATH:$(dirname $0)
+
+cd /srv/apt/archive
+
+export PGSERVICE=pgapt
+
+DIST_ARCHS="SELECT distinct distribution, architecture FROM distribution ORDER BY 1, 2;"
+DISTS="SELECT distinct distribution FROM srcdistribution ORDER BY 1;"
+
+psql -AXt -F ' ' -c "$DIST_ARCHS" | \
+while read distribution architecture; do
+  [ -t 1 ] && echo "$distribution/$architecture ..."
+  DIR="dists/$distribution-archive/main/binary-$architecture"
+  mkdir -p $DIR
+  PACKAGES="SELECT concat_ws(E'\n', format(E'%s\nTimestamp: %s\n', p.control, h.time)) FROM packagehist h JOIN package p ON (h.package, h.version, h.arch) = (p.package, p.version, p.arch) WHERE (h.distribution, h.architecture) = ('$distribution', '$architecture');"
+  psql -AXtc "$PACKAGES" > $DIR/Packages # apt needs the uncompressed checksums (we could delete the file after generating the Release file)
+  rm -f $DIR/Packages.bz2
+  bzip2 --keep $DIR/Packages
+  ls -l $DIR > $DIR/index.html
+done
+
+psql -AXt -F ' ' -c "$DISTS" | \
+while read distribution; do
+  [ -t 1 ] && echo "$distribution/source ..."
+  DIR="dists/$distribution-archive/main/source"
+  mkdir -p $DIR
+  PACKAGES="SELECT concat_ws(E'\n', format(E'%s\nTimestamp: %s\n', s.control, h.time)) FROM sourcehist h JOIN source s ON (h.source, h.srcversion) = (s.source, s.srcversion) WHERE h.distribution = '$distribution';"
+  psql -AXtc "$PACKAGES" > $DIR/Sources
+  rm -f $DIR/Sources.bz2
+  bzip2 --keep $DIR/Sources
+  ls -l $DIR > $DIR/index.html
+
+  DIR="dists/$distribution-archive"
+  (
+    cd $DIR
+    rm -f InRelease
+    RELEASE="$(apt-ftparchive release \
+      -o APT::FTPArchive::Release::Origin=apt.postgresql.org \
+      -o APT::FTPArchive::Release::Label='PostgreSQL for Debian/Ubuntu archive repository' \
+      -o APT::FTPArchive::Release::Suite=$distribution-archive \
+      -o APT::FTPArchive::Release::Codename=$distribution-archive \
+      .)"
+    echo "$RELEASE" | gpg --clearsign > InRelease
+  )
+  ls -l $DIR > $DIR/index.html
+done
+
+aws s3 sync /srv/apt/archive/dists $S3/dists
+
+aws cloudfront create-invalidation --distribution-id E2CPN16I5GL3S7 --path "/pub/repos/apt/dists/*"
