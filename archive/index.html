@@ -1,0 +1,23 @@
+<h1>apt-archive.postgresql.org</h1>
+
+<p>
+This archive hosts historical Debian and Ubuntu packages from
+<a href="https://apt.postgresql.org/pub/repos/apt/">apt.postgresql.org</a>
+since April 2013. The oldest PostgreSQL server versions covered are 8.2.23,
+8.3.23, 8.4.17, 9.0.13, 9.1.9, 9.2.4, 9.3beta1, and everything newer.
+</p>
+
+<p>
+/etc/apt/sources.list entry for the archive repository:
+<b><pre>
+deb https://apt-archive.postgresql.org/pub/repos/apt DIST-pgdg-archive main
+deb-src https://apt-archive.postgresql.org/pub/repos/apt DIST-pgdg-archive main
+</pre></b>
+Replace <em>DIST</em> by the Debian/Ubuntu distribution in question, e.g.
+buster, stretch, focal, bionic, ... Available distributions are listed in
+<a href="/pub/repos/apt/dists/index.html">/pub/repos/apt/dists/</a>.
+</p>
+
+<p>
+To browse directories, be sure to append "/index.html" to the URL.
+</p>

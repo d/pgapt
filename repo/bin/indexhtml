@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eu
+
+cd "$1"
+
+(
+echo "<tt>"
+ls -al | tail -n +2 | while read line; do
+  prefix="${line% *}"
+  file="${line##* }"
+  case $file in
+    .|index.html) continue ;;
+  esac
+  case $line in
+    d*) link="$file/index.html" file="$file/" ;;
+    *) link="$file" ;;
+  esac
+  echo "$prefix <a href=\"$link\">$file</a> <br />"
+done
+echo "</tt>"
+) > index.html

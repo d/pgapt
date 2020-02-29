@@ -6,9 +6,9 @@ set -o pipefail
 # S3 bucket
 S3="s3://apt-archive.postgresql.org/pub/repos/apt"
 
-PATH=$PATH:$(dirname $0)
+PATH=$PATH:/srv/apt/repo/bin
 
-cd /srv/apt/archive
+cd /srv/apt/archive/pub/repos/apt
 
 export PGSERVICE=pgapt
 
@@ -17,42 +17,65 @@ DISTS="SELECT distinct distribution FROM srcdistribution ORDER BY 1;"
 
 psql -AXt -F ' ' -c "$DIST_ARCHS" | \
 while read distribution architecture; do
-  [ -t 1 ] && echo "$distribution/$architecture ..."
+  [ -t 1 ] && echo "$distribution-archive/$architecture ..."
   DIR="dists/$distribution-archive/main/binary-$architecture"
   mkdir -p $DIR
   PACKAGES="SELECT concat_ws(E'\n', format(E'%s\nTimestamp: %s\n', p.control, h.time)) FROM packagehist h JOIN package p ON (h.package, h.version, h.arch) = (p.package, p.version, p.arch) WHERE (h.distribution, h.architecture) = ('$distribution', '$architecture');"
-  psql -AXtc "$PACKAGES" > $DIR/Packages # apt needs the uncompressed checksums (we could delete the file after generating the Release file)
+  psql -AXtc "$PACKAGES" > $DIR/Packages # generate both uncompressed and compressed version
   rm -f $DIR/Packages.bz2
   bzip2 --keep $DIR/Packages
-  ls -l $DIR > $DIR/index.html
 done
 
 psql -AXt -F ' ' -c "$DISTS" | \
 while read distribution; do
-  [ -t 1 ] && echo "$distribution/source ..."
+  [ -t 1 ] && echo "$distribution-archive/source ..."
   DIR="dists/$distribution-archive/main/source"
   mkdir -p $DIR
   PACKAGES="SELECT concat_ws(E'\n', format(E'%s\nTimestamp: %s\n', s.control, h.time)) FROM sourcehist h JOIN source s ON (h.source, h.srcversion) = (s.source, s.srcversion) WHERE h.distribution = '$distribution';"
-  psql -AXtc "$PACKAGES" > $DIR/Sources
+  psql -AXtc "$PACKAGES" > $DIR/Sources # generate both uncompressed and compressed version
   rm -f $DIR/Sources.bz2
   bzip2 --keep $DIR/Sources
-  ls -l $DIR > $DIR/index.html
 
+  # generate InRelease files for this distribution (includes Packages files from above)
   DIR="dists/$distribution-archive"
   (
     cd $DIR
     rm -f InRelease
     RELEASE="$(apt-ftparchive release \
-      -o APT::FTPArchive::Release::Origin=apt.postgresql.org \
+      -o APT::FTPArchive::Release::Origin=apt-archive.postgresql.org \
       -o APT::FTPArchive::Release::Label='PostgreSQL for Debian/Ubuntu archive repository' \
       -o APT::FTPArchive::Release::Suite=$distribution-archive \
       -o APT::FTPArchive::Release::Codename=$distribution-archive \
       .)"
     echo "$RELEASE" | gpg --clearsign > InRelease
+
+    # remove uncompressed files after they have been scanned
+    rm main/source/Sources main/*/Packages
   )
-  ls -l $DIR > $DIR/index.html
+  indexhtml $DIR
+  indexhtml $DIR/main
+  for dir in $DIR/main/*/; do
+    indexhtml $dir
+  done
 done
 
-aws s3 sync /srv/apt/archive/dists $S3/dists
+indexhtml dists
 
+DIRECTORIES="SELECT DISTINCT directory FROM sourcefile;"
+psql -AXtc "$DIRECTORIES" | while read dir; do
+  mkdir -p $dir
+done
+
+for dir in pool/*/*/; do
+  indexhtml $dir
+done
+for dir in pool/*/; do
+  indexhtml $dir
+done
+indexhtml pool
+
+indexhtml .
+
+# upload to S3 and invalidate cache for the dists/ dir
+aws s3 sync /srv/apt/archive/pub/repos/apt/dists $S3/dists
 aws cloudfront create-invalidation --distribution-id E2CPN16I5GL3S7 --path "/pub/repos/apt/dists/*"

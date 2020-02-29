@@ -1,1 +1,6 @@
-dists/
+/db/
+/dists
+/incoming-log/
+/logs/
+/morgue/
+/pool
