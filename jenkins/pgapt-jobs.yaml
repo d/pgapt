@@ -415,6 +415,51 @@
                     }
                 }
 
+- job:
+        <<: *build_pipeline
+        name: 'binnmu'
+        id: 'binnmu'
+        description: 'Build binaries for some package, and upload them'
+        parameters:
+                - string: *package_parameter
+                - string: *deb_build_options_param
+                - string: *supported_versions_param
+                - string: *binnmu_reason_param
+                - string: *binnmu_version_param
+                - choice: *autopkgtest_choice
+                - choice: *queue_choice
+                - matrix-combinations: *matrix_combination_parameter
+        concurrent: true
+        dsl: |
+                pipeline {
+                    agent { label 'master' }
+                    stages {
+                        stage('binaries') {
+                            steps {
+                                addShortText("${params.PACKAGE}-binaries (${params.queue})")
+                                build(job: "${params.PACKAGE}-binaries",
+                                    parameters: [
+                                        string(name: 'binnmu_reason', value: "${params.binnmu_reason}"),
+                                        string(name: 'binnmu_version', value: "${params.binnmu_version}"),
+                                        string(name: 'DEB_BUILD_OPTIONS', value: "${params.DEB_BUILD_OPTIONS}"),
+                                        string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
+                                        string(name: 'autopkgtest', value: "${params.autopkgtest}"),
+                                        new hudson.plugins.matrix_configuration_parameter.MatrixCombinationsParameterValue
+                                            ("matrix", "description", params.matrix),
+                                    ]
+                                )
+                                build(job: 'dput',
+                                    parameters: [
+                                        string(name: 'binaries', value: "${params.PACKAGE}-binaries"),
+                                        string(name: 'queue', value: "${params.queue}"),
+                                        string(name: 'upload', value: 'all'),
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                }
+
 # apt template
 
 - job-template: &apt_source_template
