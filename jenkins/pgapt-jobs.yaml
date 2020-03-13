@@ -428,7 +428,10 @@
                 - string: *binnmu_version_param
                 - choice: *autopkgtest_choice
                 - choice: *queue_choice
-                - matrix-combinations: *matrix_combination_parameter
+                - string:
+                      name: matrix
+                      default: 'distribution="sid"'
+                      description: 'Matrix combinations to build'
         concurrent: true
         dsl: |
                 pipeline {
@@ -445,7 +448,7 @@
                                         string(name: 'DEB_PG_SUPPORTED_VERSIONS', value: "${params.DEB_PG_SUPPORTED_VERSIONS}"),
                                         string(name: 'autopkgtest', value: "${params.autopkgtest}"),
                                         new hudson.plugins.matrix_configuration_parameter.MatrixCombinationsParameterValue
-                                            ("matrix", "description", params.matrix),
+                                            ("matrix", "description", [params.matrix]),
                                     ]
                                 )
                                 build(job: 'dput',
