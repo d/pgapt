@@ -3,7 +3,7 @@
 # ./trigger-job -c debsso.p12:asdf apgdiff branch=debian
 
 # ~/.netrc:
-machine pgdgbuild.dus.dg-i.net login <username> password <your-api-token>
+#machine pgdgbuild.dus.dg-i.net login <username> password <your-api-token>
 
 set -eu
 
