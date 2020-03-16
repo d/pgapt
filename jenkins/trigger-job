@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# ./trigger-job -c debsso.p12:asdf apgdiff branch=debian
+# ./trigger-job apgdiff branch=debian
+# ./trigger-job postgresql-12-binaries 'binnmu_reason=Rebuild against python 3.8.&binnmu_version=1&matrix=distribution%3d%3d"bullseye"'
+# ./trigger-job dput 'binaries=postgresql-12-binaries'
 
 # ~/.netrc:
 #machine pgdgbuild.dus.dg-i.net login <username> password <your-api-token>
