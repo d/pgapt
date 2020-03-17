@@ -1,7 +1,7 @@
 #!/bin/sh
 
-DISTRIBUTIONS="sid bullseye buster stretch jessie wheezy squeeze lenny etch
-	focal eoan disco cosmic bionic zesty xenial wily utopic trusty saucy precise lucid"
+DISTRIBUTIONS="sid bullseye buster stretch jessie wheezy
+	focal eoan disco bionic xenial trusty precise"
 FLAVORS="pgdg pgdg-testing"
 
 for DIST in $DISTRIBUTIONS ; do
@@ -10,10 +10,6 @@ for DIST in $DISTRIBUTIONS ; do
 		ARCHS="amd64 i386"
 		case $DIST in
 			# Debian
-			lenny|etch)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2" ;;
-			squeeze)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
 			wheezy)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			jessie) ARCHS="amd64 i386 ppc64el"
@@ -27,26 +23,14 @@ for DIST in $DISTRIBUTIONS ; do
 			sid)    ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
 			# Ubuntu
-			lucid)
-				COMPONENTS="main     8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			precise)
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
-			saucy)
-				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4" ;;
 			trusty) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
-			utopic)
-				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5" ;;
-			wily)
-				COMPONENTS="main                 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			xenial) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main                 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
-			zesty) ARCHS="amd64 i386 ppc64el"
-				COMPONENTS="main                     9.2 9.3 9.4 9.5 9.6 10" ;;
 			bionic) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main                         9.3 9.4 9.5 9.6 10 11 12 13" ;;
-			cosmic) ARCHS="amd64"
-				COMPONENTS="main                         9.3 9.4 9.5 9.6 10 11" ;;
 			disco)  ARCHS="amd64"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
 			eoan)   ARCHS="amd64"

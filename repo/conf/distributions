@@ -190,102 +190,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: squeeze-pgdg
-Suite: squeeze-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: squeeze-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: squeeze-pgdg-testing
-Suite: squeeze-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: squeeze-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
-Codename: lenny-pgdg
-Suite: lenny-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: lenny-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: lenny-pgdg-testing
-Suite: lenny-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: lenny-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
-Codename: etch-pgdg
-Suite: etch-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: etch-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: etch-pgdg-testing
-Suite: etch-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2
-SignWith: ACCC4CF8
-Log: etch-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
 Codename: focal-pgdg
 Suite: focal-pgdg
 Origin: apt.postgresql.org
@@ -382,38 +286,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: cosmic-pgdg
-Suite: cosmic-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64
-Components: main 9.3 9.4 9.5 9.6 10 11
-SignWith: ACCC4CF8
-Log: cosmic-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: cosmic-pgdg-testing
-Suite: cosmic-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64
-Components: main 9.3 9.4 9.5 9.6 10 11
-SignWith: ACCC4CF8
-Log: cosmic-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
 Codename: bionic-pgdg
 Suite: bionic-pgdg
 Origin: apt.postgresql.org
@@ -437,38 +309,6 @@ Architectures: source amd64 i386 ppc64el
 Components: main 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: bionic-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
-Codename: zesty-pgdg
-Suite: zesty-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6 10
-SignWith: ACCC4CF8
-Log: zesty-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: zesty-pgdg-testing
-Suite: zesty-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
-Components: main 9.2 9.3 9.4 9.5 9.6 10
-SignWith: ACCC4CF8
-Log: zesty-pgdg-testing.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
@@ -510,70 +350,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: wily-pgdg
-Suite: wily-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: wily-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: wily-pgdg-testing
-Suite: wily-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 9.1 9.2 9.3 9.4 9.5 9.6
-SignWith: ACCC4CF8
-Log: wily-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
-Codename: utopic-pgdg
-Suite: utopic-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: utopic-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: utopic-pgdg-testing
-Suite: utopic-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.4 9.0 9.1 9.2 9.3 9.4 9.5
-SignWith: ACCC4CF8
-Log: utopic-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
 Codename: trusty-pgdg
 Suite: trusty-pgdg
 Origin: apt.postgresql.org
@@ -606,38 +382,6 @@ Contents: percomponent nocompatsymlink
 NotAutomatic: yes
 ButAutomaticUpgrades: yes
 
-Codename: saucy-pgdg
-Suite: saucy-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: saucy-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: saucy-pgdg-testing
-Suite: saucy-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: saucy-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
 Codename: precise-pgdg
 Suite: precise-pgdg
 Origin: apt.postgresql.org
@@ -661,38 +405,6 @@ Architectures: source amd64 i386
 Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6
 SignWith: ACCC4CF8
 Log: precise-pgdg-testing.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-NotAutomatic: yes
-ButAutomaticUpgrades: yes
-
-Codename: lucid-pgdg
-Suite: lucid-pgdg
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: lucid-pgdg.log
-Uploaders: uploaders
-DebIndices: Packages Release . .gz .bz2
-UDebIndices: Packages . .gz .bz2
-DscIndices: Sources Release .gz .bz2
-Tracking: minimal includebuildinfos keepsources
-Contents: percomponent nocompatsymlink
-
-Codename: lucid-pgdg-testing
-Suite: lucid-pgdg-testing
-Origin: apt.postgresql.org
-Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386
-Components: main 8.3 8.4 9.0 9.1 9.2 9.3 9.4
-SignWith: ACCC4CF8
-Log: lucid-pgdg-testing.log
 Uploaders: uploaders
 DebIndices: Packages Release . .gz .bz2
 UDebIndices: Packages . .gz .bz2
