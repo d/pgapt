@@ -1329,6 +1329,8 @@
         name: pg-activity
         git-url: https://salsa.debian.org/kolter/pg-activity.git
         git-branch: unstable
+        # needs DH 12
+        backports: 'BACKPORTS=yes '
         jobs:
                 - git-packages
 

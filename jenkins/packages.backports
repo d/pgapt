@@ -3,6 +3,7 @@ libscram-java
 omnidb
 ora2pg
 patroni
+pg-activity
 pg-catcheck
 pg-cloudconfig
 pgcluu
