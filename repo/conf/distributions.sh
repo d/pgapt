@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 DISTRIBUTIONS="sid bullseye buster stretch jessie wheezy
 	focal eoan disco bionic xenial trusty precise"
 FLAVORS="pgdg pgdg-testing"
@@ -7,10 +9,9 @@ FLAVORS="pgdg pgdg-testing"
 for DIST in $DISTRIBUTIONS ; do
 	for FLAVOR in $FLAVORS ; do
 		D="$DIST-$FLAVOR"
-		ARCHS="amd64 i386"
 		case $DIST in
 			# Debian
-			wheezy)
+			wheezy) ARCHS="amd64 i386"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10" ;;
 			jessie) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12" ;;
@@ -23,7 +24,7 @@ for DIST in $DISTRIBUTIONS ; do
 			sid)    ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
 			# Ubuntu
-			precise)
+			precise) ARCHS="amd64 i386"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6" ;;
 			trusty) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
