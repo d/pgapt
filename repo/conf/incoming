@@ -8,22 +8,13 @@ Allow: sid-pgdg>sid-pgdg-testing
  stretch-pgdg>stretch-pgdg-testing
  jessie-pgdg>jessie-pgdg-testing
  wheezy-pgdg>wheezy-pgdg-testing
- squeeze-pgdg>squeeze-pgdg-testing
- lenny-pgdg>lenny-pgdg-testing
- etch-pgdg>etch-pgdg-testing
  focal-pgdg>focal-pgdg-testing
  eoan-pgdg>eoan-pgdg-testing
  disco-pgdg>disco-pgdg-testing
- cosmic-pgdg>cosmic-pgdg-testing
  bionic-pgdg>bionic-pgdg-testing
- zesty-pgdg>zesty-pgdg-testing
  xenial-pgdg>xenial-pgdg-testing
- wily-pgdg>wily-pgdg-testing
- utopic-pgdg>utopic-pgdg-testing
  trusty-pgdg>trusty-pgdg-testing
- saucy-pgdg>saucy-pgdg-testing
  precise-pgdg>precise-pgdg-testing
- lucid-pgdg>lucid-pgdg-testing
 Multiple: yes
 # ignore .buildinfo files
 Permit: unused_files
