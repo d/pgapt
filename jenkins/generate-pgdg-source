@@ -153,15 +153,19 @@ esac
 case $PACKAGE in
   postgresql-1[1-9]) # use llvm >= 5 (older versions choke on C++ exceptions, breaks PostGIS)
     case $distribution in
+      bullseye|focal|eoan) # use clang-9
+        sed -i -e 's/\(llvm\|llvm-config\|clang\)-[0-9]*/\1-9/g' debian/control debian/rules
+        TWEAK+=("Use clang/llvm 9 for jit support.")
+        ;;
       buster|disco) # use clang-7
-        sed -i -e 's/\(llvm\|llvm-config\|clang\)-9/\1-7/g' debian/control debian/rules
+        sed -i -e 's/\(llvm\|llvm-config\|clang\)-[0-9]*/\1-7/g' debian/control debian/rules
         TWEAK+=("Use clang/llvm 7 for jit support.")
         ;;
       stretch|bionic|xenial) # replace clang/llvm with 6.0
         # llvm <= 6.0.1 supports x32 only (missing r328687)
         sed -i -e 's/llvm-.*/llvm-6.0-dev [amd64 i386],/' \
                -e 's/clang-.*/clang-6.0 [amd64 i386],/' debian/control
-        sed -i -e 's/\(llvm\|llvm-config\|clang\)-9/\1-6.0/g' debian/rules
+        sed -i -e 's/\(llvm\|llvm-config\|clang\)-[0-9]*/\1-6.0/g' debian/rules
         sed -i -e 's/\[.*amd64.*\]/[amd64 i386]/' debian/postgresql-*.install
         TWEAK+=("Use clang/llvm 6.0 for jit support on amd64/i386; disable on ppc64el.")
         ;;

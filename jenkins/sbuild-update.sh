@@ -139,7 +139,8 @@ umask 002
 	  stretch|bionic|xenial)
 	    case $architecture in amd64|i386) apt-get -y install llvm-6.0-dev clang-6.0 ;; esac ;;
 	  buster|disco) apt-get -y install llvm-7-dev clang-7 ;;
-	  *) apt-get -y install llvm-9-dev clang-9 libllvm7-;;
+	  bullseye|focal|eoan) apt-get -y install llvm-9-dev clang-9 libllvm[78]- ;;
+	  *) apt-get -y install llvm-10-dev clang-10 libllvm[789]- ;;
 	esac
 	# bionic-updates has libllvm7, but we don't want that yet (2019-09-03)
 	[ "$distribution" = "bionic" ] && apt-get remove --purge -y libllvm7
