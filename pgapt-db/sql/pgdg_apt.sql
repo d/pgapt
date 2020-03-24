@@ -79,6 +79,9 @@ CREATE TABLE sourcefile (
 );
 COMMENT ON TABLE sourcefile IS 'files belonging to source packages including historic ones';
 
+CREATE INDEX ON sourcefile (source, srcversion);
+CREATE INDEX ON sourcefile (upload);
+
 
 CREATE TABLE package (
 	package text NOT NULL,
@@ -96,6 +99,9 @@ CREATE TABLE package (
 );
 --ALTER TABLE package ADD FOREIGN KEY (source, srcversion) REFERENCES source (source, srcversion);
 COMMENT ON TABLE package IS 'binary packages including historic ones';
+
+CREATE INDEX ON package (source);
+CREATE INDEX ON package (upload);
 
 
 -- SUITE DATA
