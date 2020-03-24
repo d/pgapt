@@ -108,7 +108,7 @@ for PACKAGE in $PACKAGES; do
   indexhtml "pool/main/$INITIAL"
   upload-to-s3 "pool/main/$INITIAL/index.html"
 
-  psql -Xqc "UPDATE src SET upload = true WHERE src = '$PACKAGE'"
+  psql -Xqc "UPDATE src SET upload = true WHERE source = '$PACKAGE'"
 done
 
 # alert about any failed uploads
