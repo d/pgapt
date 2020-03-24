@@ -56,8 +56,13 @@ COMMENT ON TABLE distribution IS 'known distributions by Packages files';
 
 -- PACKAGE DATA
 
+CREATE TABLE src (
+	source text PRIMARY KEY,
+	upload boolean -- per-package index.html upload status: null = to do, t = done, f = error
+);
+
 CREATE TABLE source (
-	source text NOT NULL,
+	source text NOT NULL REFERENCES src,
 	srcversion debversion NOT NULL,
 	control text NOT NULL,
 	c jsonb,
@@ -90,7 +95,7 @@ CREATE TABLE package (
 		REFERENCES architecture (architecture),
 	control text NOT NULL,
 	c jsonb,
-	source text NOT NULL,
+	source text NOT NULL REFERENCES src,
 	srcversion debversion NOT NULL,
 	time timestamptz(0) NOT NULL,
 	upload boolean, -- null = to do, t = done, f = error

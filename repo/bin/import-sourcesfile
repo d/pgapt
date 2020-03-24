@@ -60,6 +60,10 @@ def parseSourceFile(distribution, component, packagesfile, ctime):
                        [package, version])
         found = cur.fetchone()
         if not found: # this is the first time we see this package
+            cur.execute("""INSERT INTO src (source) VALUES (%s)
+                           ON CONFLICT (source)
+                           DO UPDATE SET upload = NULL""",
+                           [package])
             cur.execute("""INSERT INTO source (source, srcversion, control, c, time)
                            VALUES (%s, %s, %s, control2jsonb(%s), %s)""",
                            [package, version, control, control, ctime])

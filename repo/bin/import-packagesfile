@@ -80,6 +80,11 @@ def parseFile(distribution, component, architecture, packagesfile, ctime):
                             package, version, arch))
                 source_version = binnmu_re.sub('', source_version)
 
+            cur.execute("""INSERT INTO src (source) VALUES (%s)
+                           ON CONFLICT (source)
+                           DO UPDATE SET upload = NULL""",
+                           [source])
+
 #            # find link to source package
 #            cur.execute("""SELECT 1 FROM source
 #                           WHERE (source, srcversion) = (%s, %s)""",

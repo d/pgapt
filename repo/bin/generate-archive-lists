@@ -12,9 +12,10 @@ cd /srv/apt/archive/pub/repos/apt
 
 export PGSERVICE=pgapt
 
-DIST_ARCHS="SELECT distinct distribution, architecture FROM distribution ORDER BY 1, 2;"
-DISTS="SELECT distinct distribution FROM srcdistribution ORDER BY 1;"
+DIST_ARCHS="SELECT distinct distribution, architecture FROM distribution WHERE last_update > now() - '2 days'::interval ORDER BY 1, 2;"
+DISTS="SELECT distinct distribution FROM srcdistribution WHERE last_update > now() - '2 days'::interval ORDER BY 1;"
 
+# generate Packages files
 psql -AXt -F ' ' -c "$DIST_ARCHS" | \
 while read distribution architecture; do
   [ -t 1 ] && echo "$distribution-archive/$architecture ..."
@@ -26,6 +27,7 @@ while read distribution architecture; do
   bzip2 --keep $DIR/Packages
 done
 
+# generate Sources and InRelease files
 psql -AXt -F ' ' -c "$DISTS" | \
 while read distribution; do
   [ -t 1 ] && echo "$distribution-archive/source ..."
@@ -61,21 +63,57 @@ done
 
 indexhtml dists
 
-DIRECTORIES="SELECT DISTINCT directory FROM sourcefile;"
-psql -AXtc "$DIRECTORIES" | while read dir; do
-  mkdir -p $dir
-done
-
-for dir in pool/*/*/; do
-  indexhtml $dir
-done
-for dir in pool/*/; do
-  indexhtml $dir
-done
-indexhtml pool
-
-indexhtml .
-
 # upload to S3 and invalidate cache for the dists/ dir
-aws s3 sync /srv/apt/archive/pub/repos/apt/dists $S3/dists
-aws cloudfront create-invalidation --distribution-id E2CPN16I5GL3S7 --path "/pub/repos/apt/dists/*"
+aws s3 sync --quiet /srv/apt/archive/pub/repos/apt/dists $S3/dists
+aws cloudfront create-invalidation --distribution-id E2CPN16I5GL3S7 --path "/pub/repos/apt/dists/*" > /dev/null
+
+cd /srv/apt/archive/pub/repos/apt
+
+# generate index files for package pool directories
+PACKAGES=$(psql -XAtc "SELECT source FROM src WHERE upload IS NULL")
+for PACKAGE in $PACKAGES; do
+  case $PACKAGE in
+    lib*) INITIAL="$(echo $PACKAGE | cut -c 1-4)" ;;
+    *)    INITIAL="$(echo $PACKAGE | cut -c 1)" ;;
+  esac
+  DIRECTORY="pool/main/$INITIAL/$PACKAGE"
+  QUERY="SELECT sf.filename, NULL::text AS size, s.time
+    FROM source s
+    JOIN sourcefile sf ON (s.source, s.srcversion) = (sf.source, sf.srcversion)
+    WHERE s.source = '$PACKAGE'
+  UNION ALL SELECT regexp_replace(p.c->>'filename', '.*/', ''), p.c->>'size', p.time
+    FROM package p
+    WHERE p.source = '$PACKAGE'
+  ORDER BY filename"
+  FORMAT="WITH q AS ($QUERY)
+    SELECT format(E'<a href=\"%s\">%s</a> %s %s <br /> \\n',
+      regexp_replace(filename, '\\+', '%2B', 'g'),
+      filename,
+      time,
+      size || ' bytes')
+    FROM q"
+
+  mkdir -p "$DIRECTORY"
+
+  (
+    echo "<tt>"
+    echo "<a href=\"../index.html\">../</a> <br />"
+    psql -XAtc "$FORMAT"
+    echo "</tt>"
+  ) > "$DIRECTORY/index.html"
+
+  upload-to-s3 "$DIRECTORY/index.html"
+  aws cloudfront create-invalidation --distribution-id E2CPN16I5GL3S7 --path "/pub/repos/apt/$DIRECTORY/index.html" > /dev/null
+
+  indexhtml "pool/main/$INITIAL"
+  upload-to-s3 "pool/main/$INITIAL/index.html"
+
+  psql -Xqc "UPDATE src SET upload = true WHERE src = '$PACKAGE'"
+done
+
+# alert about any failed uploads
+psql -XAt <<EOF
+SELECT 'failed sourcefile upload:', * FROM sourcefile WHERE upload IS FALSE;
+SELECT 'failed package upload:', * FROM package WHERE upload IS FALSE;
+SELECT 'failed pool/main/p/package/index.html upload:', * FROM src WHERE upload IS FALSE;
+EOF
