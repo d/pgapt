@@ -39,22 +39,22 @@
     args:
       creates: /etc/apt/sources.list.d/pgdg.list
 
-  - name: pgdg-src.list
-    lineinfile:
-      line: 'deb-src http://atalia.postgresql.org/pub/repos/apt {{item}}-pgdg-testing main'
-      dest: /etc/apt/sources.list.d/pgdg-src.list
-      create: true
-      mode: 0644
-    with_lines:
-      "sh -c '. ../../pgapt.conf; echo $PG_SUPPORTED_DISTS | xargs -n1'"
-    register: pgdg_src
-    tags:
-      - list
-
-  - name: apt-get update
-    apt:
-      update_cache: yes
-    when: pgdg_src is changed
+  #- name: pgdg-src.list
+  #  lineinfile:
+  #    line: 'deb-src http://atalia.postgresql.org/pub/repos/apt {{item}}-pgdg-testing main'
+  #    dest: /etc/apt/sources.list.d/pgdg-src.list
+  #    create: true
+  #    mode: 0644
+  #  with_lines:
+  #    "sh -c '. ../../pgapt.conf; echo $PG_SUPPORTED_DISTS | xargs -n1'"
+  #  register: pgdg_src
+  #  tags:
+  #    - list
+  #
+  #- name: apt-get update
+  #  apt:
+  #    update_cache: yes
+  #  when: pgdg_src is changed
 
   - name: Deploy scripts
     copy:
@@ -66,7 +66,7 @@
       - schroot-config.sh
       - netns-setup
 
-  - name: pgdg-src.list
+  - name: allow sudo for sudo group
     lineinfile:
       line: '%sudo	ALL=(ALL:ALL) NOPASSWD: ALL'
       dest: /etc/sudoers
