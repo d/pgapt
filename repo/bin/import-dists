@@ -2,6 +2,8 @@
 
 set -eu
 
+PATH=$PATH:/srv/apt/repo/bin
+
 cd /srv/apt/repo
 
 for distdir in dists/*-pgdg; do
@@ -13,7 +15,7 @@ for distdir in dists/*-pgdg; do
 
     # import Sources.bz2
     if find $componentdir/source/Sources.bz2 -mtime -2 | grep -q .; then
-      bin/import-sourcesfile $componentdir/source/Sources.bz2 $distribution $component
+      import-sourcesfile $componentdir/source/Sources.bz2 $distribution $component
     fi
 
     for archdir in $componentdir/binary-*; do
@@ -21,7 +23,7 @@ for distdir in dists/*-pgdg; do
 
       # import Packages.bz2
       find $archdir/Packages.bz2 -mtime -2 | grep -q . || continue
-      bin/import-packagesfile $archdir/Packages.bz2 $distribution $component $architecture
+      import-packagesfile $archdir/Packages.bz2 $distribution $component $architecture
     done
 
   done

@@ -132,7 +132,7 @@ last_update = cur.fetchone()
 
 mtime = os.path.getmtime(packagesfile)
 ctime = time.ctime(mtime)
-if not last_update[0] or mtime > last_update[0]:
+if not last_update or mtime > last_update[0]:
     if verbose:
         print("Reading %s" % packagesfile)
 
