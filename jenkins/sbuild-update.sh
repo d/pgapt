@@ -121,7 +121,7 @@ umask 002
 	  # install lintian from backports (necessary because
 	  # /usr/share/doc/lintian/lintian.html changes filetype in
 	  # stretch/buster/bullseye, and upgrading on overlayfs fails)
-	  apt-get -y install -t $distribution-backports lintian
+	  apt-get -y -o DPkg::Options::=--force-confnew install -t $distribution-backports lintian
 
 	  mv /etc/apt/sources.list.d/backports.list /etc/apt/sources.list.d/backports.list.disabled
 	  mkdir -p /var/lib/apt/backports
