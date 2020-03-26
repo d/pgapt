@@ -56,6 +56,14 @@
   #    update_cache: yes
   #  when: pgdg_src is changed
 
+  - name: /usr/local/bin permissions
+    file:
+      state: directory
+      dest: /usr/local/bin
+      mode: 02775
+      owner: root
+      group: staff
+
   - name: Deploy scripts
     copy:
       src: ../{{item}}

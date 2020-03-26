@@ -15,6 +15,7 @@ Parameterized Trigger Plugin
 Priority Sorter Plugin
 Reverse Proxy Auth Plugin
 SCM Sync Plugin
+Strict Crumbs Issuer Plugin ("Check Session ID" off for compatibility with jenkins-job-builder)
 Text-finder Plugin
 Timestamper Plugin
 Pipeline: Build Step
