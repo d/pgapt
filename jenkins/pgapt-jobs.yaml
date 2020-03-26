@@ -15,9 +15,9 @@
         - timestamps
     dist-filter: 'true'
     arch-filter: 'true'
-    filter: &filter                                                       '!(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
-    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el"))'
+    filter: &filter                                                       '!(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el") || ((distribution=="stretch" || distribution=="jessie" || distribution=="eoan" || distribution =="xenial") && architecture=="arm64"))'
+    filter_pattern: &filter_pattern '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el") || ((distribution=="stretch" || distribution=="jessie" || distribution=="eoan" || distribution =="xenial") && architecture=="arm64"))'
+    filter_patbeta: &filter_patbeta '({arch-filter}) && ({dist-filter}) && !(((distribution=="eoan") && (architecture=="i386" || architecture=="ppc64el")) || ((distribution=="focal" || distribution=="bullseye") && architecture=="i386") || (distribution=="jessie" && architecture=="ppc64el") || ((distribution=="stretch" || distribution=="jessie" || distribution=="eoan" || distribution =="xenial") && architecture=="arm64"))'
     # patbeta: variant of filter that excludes PostgreSQL-beta packages to be built (was used for cosmic)
     git-branch: master
     backports: ''
@@ -107,6 +107,7 @@
             name: architecture
             values: &arch_list
                     - amd64
+                    - arm64
                     - i386
                     - ppc64el
     arch_axis_userdefined: &arch_axis_userdefined
