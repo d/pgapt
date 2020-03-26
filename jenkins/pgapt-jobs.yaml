@@ -75,6 +75,7 @@
             type: slave
             name: slave
             values:
+              - arm64-1
               - credativ-x86-1
               - credativ-x86-2
               - credativ-x86-3
@@ -90,6 +91,11 @@
               - credativ-x86-3
               - moe-x86
               - pgdgbuild-x86
+    arm64_slaves_axis: &arm64_slaves_axis
+            type: slave
+            name: slave
+            values:
+              - arm64-1
     ppc64el_slaves_axis: &ppc64el_slaves_axis
             type: slave
             name: slave
@@ -698,6 +704,7 @@
                         name: architecture
                         allowed-slaves:
                            - amd64
+                           - arm64
                            - i386
                            - ppc64el
                         description: 'Architecture to build for'
@@ -961,6 +968,18 @@
                 - shell: 'sbuild-update.sh'
         publishers:
                 - ircbot: *only_configs
+
+- job:
+        <<: *sbuild_update_x86
+        name: 'sbuild-update-arm64'
+        axes:
+                - axis: *arm64_slaves_axis
+                - axis:
+                    type: user-defined
+                    name: architecture
+                    values:
+                      - arm64
+                - axis: *dist_axis
 
 - job:
         <<: *sbuild_update_x86
