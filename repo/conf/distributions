@@ -2,7 +2,7 @@ Codename: sid-pgdg
 Suite: sid-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: sid-pgdg.log
@@ -17,7 +17,7 @@ Codename: sid-pgdg-testing
 Suite: sid-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: sid-pgdg-testing.log
@@ -34,7 +34,7 @@ Codename: bullseye-pgdg
 Suite: bullseye-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 ppc64el
+Architectures: source amd64 arm64 ppc64el
 Components: main 9.4 9.5 9.6 10 11 12
 SignWith: ACCC4CF8
 Log: bullseye-pgdg.log
@@ -49,7 +49,7 @@ Codename: bullseye-pgdg-testing
 Suite: bullseye-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 ppc64el
+Architectures: source amd64 arm64 ppc64el
 Components: main 9.4 9.5 9.6 10 11 12
 SignWith: ACCC4CF8
 Log: bullseye-pgdg-testing.log
@@ -66,7 +66,7 @@ Codename: buster-pgdg
 Suite: buster-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: buster-pgdg.log
@@ -81,7 +81,7 @@ Codename: buster-pgdg-testing
 Suite: buster-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: buster-pgdg-testing.log
@@ -194,7 +194,7 @@ Codename: focal-pgdg
 Suite: focal-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 ppc64el
+Architectures: source amd64 arm64 ppc64el
 Components: main 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: focal-pgdg.log
@@ -209,7 +209,7 @@ Codename: focal-pgdg-testing
 Suite: focal-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 ppc64el
+Architectures: source amd64 arm64 ppc64el
 Components: main 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: focal-pgdg-testing.log
@@ -290,7 +290,7 @@ Codename: bionic-pgdg
 Suite: bionic-pgdg
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: bionic-pgdg.log
@@ -305,7 +305,7 @@ Codename: bionic-pgdg-testing
 Suite: bionic-pgdg-testing
 Origin: apt.postgresql.org
 Label: PostgreSQL for Debian/Ubuntu repository
-Architectures: source amd64 i386 ppc64el
+Architectures: source amd64 arm64 i386 ppc64el
 Components: main 9.3 9.4 9.5 9.6 10 11 12 13
 SignWith: ACCC4CF8
 Log: bionic-pgdg-testing.log

@@ -18,6 +18,7 @@ done
 
 case $(dpkg --print-architecture) in
 	amd64) ARCHS="amd64 i386" ;;
+	arm64) ARCHS="arm64" ;;
 	ppc64el) ARCHS="ppc64el" ;;
 esac
 

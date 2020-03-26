@@ -17,11 +17,11 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12" ;;
 			stretch) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main                     9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
-			buster) ARCHS="amd64 i386 ppc64el"
+			buster) ARCHS="amd64 arm64 i386 ppc64el"
 				COMPONENTS="main                         9.3 9.4 9.5 9.6 10 11 12 13" ;;
-			bullseye) ARCHS="amd64 ppc64el"
+			bullseye) ARCHS="amd64 arm64 ppc64el"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
-			sid)    ARCHS="amd64 i386 ppc64el"
+			sid)    ARCHS="amd64 arm64 i386 ppc64el"
 				COMPONENTS="main 8.2 8.3 8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
 			# Ubuntu
 			precise) ARCHS="amd64 i386"
@@ -30,13 +30,13 @@ for DIST in $DISTRIBUTIONS ; do
 				COMPONENTS="main         8.4 9.0 9.1 9.2 9.3 9.4 9.5 9.6 10 11" ;;
 			xenial) ARCHS="amd64 i386 ppc64el"
 				COMPONENTS="main                 9.1 9.2 9.3 9.4 9.5 9.6 10 11 12 13" ;;
-			bionic) ARCHS="amd64 i386 ppc64el"
+			bionic) ARCHS="amd64 arm64 i386 ppc64el"
 				COMPONENTS="main                         9.3 9.4 9.5 9.6 10 11 12 13" ;;
 			disco)  ARCHS="amd64"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
 			eoan)   ARCHS="amd64"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12" ;;
-			focal)  ARCHS="amd64 ppc64el"
+			focal)  ARCHS="amd64 arm64 ppc64el"
 				COMPONENTS="main                             9.4 9.5 9.6 10 11 12 13" ;;
 			*)
 				echo "$D missing in COMPONENTS list" >&2
